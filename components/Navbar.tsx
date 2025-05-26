@@ -112,7 +112,7 @@ export function NavbarDemo() {
 
 const DummyContent = () => {
   return (
-    <div className="container mx-auto p-8 pt-24">
+    <div className="container mx-auto p-5 pt-24">
       <h1 className="mb-4 text-center text-3xl font-bold">
         Check the navbar at the top of the container
       </h1>

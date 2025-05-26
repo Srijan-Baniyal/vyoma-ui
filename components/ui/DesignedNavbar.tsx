@@ -10,7 +10,7 @@ import {
 } from "motion/react";
 import Image from "next/image";
 import React, { useRef, useState } from "react";
-import V from "@/public/vercel.svg"
+import V from "@/public/VyomaUI.svg"
 import Link from "next/link";
 
 interface NavbarProps {
@@ -238,7 +238,10 @@ export const NavbarLogo = () => {
     >
       <Image
         src={V}
-        alt="logo"
+        alt="Vyoma UI Logo"
+        className="h-20 w-20"
+        priority
+        quality={100}
         width={30}
         height={30}
       />

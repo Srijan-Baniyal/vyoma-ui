@@ -1,11 +1,9 @@
-import Footer from "@/components/Footer";
-import { NavbarDemo } from "@/components/Navbar";
+import Navigation from "@/components/Navigation";
 
 export default function Home() {
   return (
     <>
-      <NavbarDemo />
-      <Footer />
+    <Navigation />
     </>
   );
 }

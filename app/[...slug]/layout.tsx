@@ -17,18 +17,24 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <SidebarProvider>
         <Sidebar>
           <SidebarMenu>
-            {Object.entries(componentMap).map(([category, components]) => (
-              <SidebarGroup key={category}>
-                <SidebarGroupLabel>{category}</SidebarGroupLabel>
-                {components.map((comp) => (
-                  <SidebarMenuItem key={comp.route}>
-                    <SidebarMenuButton asChild>
-                      <Link href={comp.route}>{comp.name}</Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarGroup>
-            ))}
+            {Object.entries(componentMap).map(([category, components]) => {
+              console.log("DEBUG SIDEBAR CATEGORY:", category);
+              return (
+                <SidebarGroup key={category}>
+                  <SidebarGroupLabel>{category}</SidebarGroupLabel>
+                  {components.map((comp) => {
+                    console.log("DEBUG SIDEBAR COMPONENT:", comp.name, comp.route);
+                    return (
+                      <SidebarMenuItem key={comp.route}>
+                        <SidebarMenuButton asChild>
+                          <Link href={comp.route}>{comp.name}</Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    );
+                  })}
+                </SidebarGroup>
+              );
+            })}
           </SidebarMenu>
         </Sidebar>
       </SidebarProvider>

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown } from "lucide-react";
 
 declare global {
   interface Window {
@@ -150,10 +149,6 @@ export default function Background() {
             stand the test of time.
           </p>
         </div>
-      </div>
-
-      <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce z-30">
-        <ChevronDown className="h-6 w-6" />
       </div>
     </section>
   );

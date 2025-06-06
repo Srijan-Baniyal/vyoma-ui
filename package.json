@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@radix-ui/react-collapsible": "^1.1.11",
     "@radix-ui/react-dialog": "^1.1.14",
     "@radix-ui/react-separator": "^1.1.7",
     "@radix-ui/react-slot": "^1.2.3",
@@ -27,7 +28,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "3.3.1",
     "@tailwindcss/postcss": "4.1.8",
-    "@types/node": "^22.15.29",
+    "@types/node": "^22.15.30",
     "@types/react": "19.1.6",
     "@types/react-dom": "19.1.6",
     "eslint": "9.28.0",

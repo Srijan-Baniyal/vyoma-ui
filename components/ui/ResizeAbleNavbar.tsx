@@ -8,8 +8,8 @@ import {
   useMotionValueEvent,
 } from "motion/react";
 import Image from "next/image";
-
 import React, { useRef, useState } from "react";
+import V from "@/public/VyomaUI.svg"
 
 
 interface NavbarProps {
@@ -237,12 +237,12 @@ export const NavbarLogo = () => {
       className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-black"
     >
       <Image
-        src="https://assets.aceternity.com/logo-dark.png"
-        alt="logo"
-        width={30}
-        height={30}
+        src={V}
+        alt="Vyoma UI"
+        width={80}
+        height={80}
       />
-      <span className="font-medium text-black dark:text-white">Startup</span>
+      <span className="font-medium text-black dark:text-white">Vyoma UI</span>
     </a>
   );
 };

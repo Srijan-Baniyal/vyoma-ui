@@ -38,14 +38,15 @@ export default async function Page({ params }: { params: { slug: string[] } }) {
     notFound();
   }
   return (
-    <div>
-      <h1>{componentEntry.name}</h1>
-      <p>Component: {componentEntry.component}</p>
-      <p>Route: {componentEntry.route}</p>
-      <p>
-        This is a valid component route. Replace this with your actual component
-        rendering logic.
-      </p>
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight">{componentEntry.name}</h1>
+        <p className="text-muted-foreground mt-2">Component: {componentEntry.component?.name}</p>
+        <p className="text-muted-foreground">Route: {componentEntry.route}</p>
+      </div>
+      <div className="rounded-lg border bg-card p-6">
+        {componentEntry.component && <componentEntry.component />}
+      </div>
     </div>
   );
 }

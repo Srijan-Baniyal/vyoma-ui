@@ -1,7 +1,11 @@
+import Introduction from "@/components/Indroduction";
+
 export type ComponentEntry = {
   name: string;
-  component: string;
+  component: React.ComponentType;
   route: string;
+  isNew?: boolean;
+  description?: string;
 };
 
 export type ComponentCategoryMap = {
@@ -12,81 +16,86 @@ export const componentMap: ComponentCategoryMap = {
   "Get Started": [
     {
       name: "Introduction",
-      component: "IntroductionComponent",
+      component: Introduction,
       route: "/get-started/introduction",
     },
     {
       name: "Installation",
-      component: "InstallationComponent",
+      component: Introduction,
       route: "/get-started/installation",
     },
     {
       name: "Story Behind",
-      component: "StoryBehindComponent",
+      component: Introduction,
       route: "/get-started/story-behind",
     },
+    {
+      name: "Changelog",
+      component: Introduction,
+      route: "/get-started/changelog",
+    },
   ],
-  "Text Animation":[
+  "Text Animation": [
     {
       name: "Decryption Text",
-      component: "DecryptionTextComponent",
+      component: Introduction,
       route: "/text-animation/decryption-text",
     },
     {
       name: "Typing Text",
-      component: "TypingTextComponent",
+      component: Introduction,
       route: "/text-animation/typing-text",
     },
     {
       name: "Counting Number",
-      component: "CountingNumberComponent",
+      component: Introduction,
       route: "/text-animation/counting-number",
     },
   ],
-  "Components": [
+  Components: [
     {
       name: "Accordion",
-      component: "AccordionComponent",
+      component: Introduction,
       route: "/components/accordion",
     },
     {
       name: "Buttons",
-      component: "ButtonsComponent",
+      component: Introduction,
       route: "/components/buttons",
     },
     {
       name: "Cards",
-      component: "CardsComponent",
+      component: Introduction,
       route: "/components/cards",
     },
     {
       name: "Checkbox",
-      component: "CheckboxComponent",
+      component: Introduction,
       route: "/components/checkbox",
     },
     {
       name: "Card",
-      component: "CardComponent",
+      component: Introduction,
       route: "/components/card",
     },
     {
       name: "Navigation",
-      component: "NavigationComponent",
+      component: Introduction,
       route: "/components/navigation",
     },
     {
       name: "Sheet",
-      component: "SheetComponent",
+      component: Introduction,
       route: "/components/sheet",
     },
     {
       name: "Skeleton",
-      component: "SkeletonComponent",
+      component: Introduction,
       route: "/components/skeleton",
     },
     {
       name: "Tooltip",
-      component: "TooltipComponent",
+      component: Introduction,
       route: "/components/tooltip",
     },
   ],

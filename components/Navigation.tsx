@@ -5,42 +5,55 @@ import {
   NavItems,
   MobileNav,
   NavbarLogo,
-  NavbarButton,
   MobileNavHeader,
   MobileNavToggle,
   MobileNavMenu,
 } from "@/components/ui/ResizeAbleNavbar";
+import Link from "next/link";
 import { useState } from "react";
-import Background from "./Background";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 export default function Navigation() {
   const navItems = [
     {
-      name: "Features",
-      link: "#features",
+      name: "Components",
+      link: "/docs",
     },
     {
-      name: "Pricing",
-      link: "#pricing",
+      name: "Examples",
+      link: "/examples",
     },
     {
-      name: "Contact",
-      link: "#contact",
+      name: "GitHub",
+      link: "https://github.com/Srijan-Baniyal/VyomaUI",
     },
   ];
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <div className="relative w-full mb-11">
+    <div className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <Navbar>
         {/* Desktop Navigation */}
         <NavBody>
           <NavbarLogo />
           <NavItems items={navItems} />
-          <div className="flex items-center gap-4">
-            <NavbarButton variant="secondary">Login</NavbarButton>
-            <NavbarButton variant="primary">Book a call</NavbarButton>
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
+            <a 
+              href="https://github.com/Srijan-Baniyal/VyomaUI" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2"
+            >
+              Star on GitHub
+            </a>
+            <Link 
+              href="/get-started/introduction"
+              className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2"
+            >
+              Get Started
+            </Link>
           </div>
         </NavBody>
 
@@ -48,10 +61,13 @@ export default function Navigation() {
         <MobileNav>
           <MobileNavHeader>
             <NavbarLogo />
-            <MobileNavToggle
-              isOpen={isMobileMenuOpen}
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            />
+            <div className="flex items-center gap-2">
+              <ThemeToggle />
+              <MobileNavToggle
+                isOpen={isMobileMenuOpen}
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              />
+            </div>
           </MobileNavHeader>
 
           <MobileNavMenu
@@ -63,39 +79,34 @@ export default function Navigation() {
                 key={`mobile-link-${idx}`}
                 href={item.link}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="relative text-neutral-600 dark:text-neutral-300"
+                className="relative text-neutral-600 dark:text-neutral-300 hover:text-foreground transition-colors"
+                target={item.link.startsWith('http') ? "_blank" : undefined}
+                rel={item.link.startsWith('http') ? "noopener noreferrer" : undefined}
               >
                 <span className="block">{item.name}</span>
               </a>
             ))}
-            <div className="flex w-full flex-col gap-4">
-              <NavbarButton
+            <div className="flex w-full flex-col gap-4 mt-6">
+              <a 
+                href="https://github.com/Srijan-Baniyal/VyomaUI" 
+                target="_blank" 
+                rel="noopener noreferrer"
                 onClick={() => setIsMobileMenuOpen(false)}
-                variant="primary"
-                className="w-full"
+                className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2 w-full"
               >
-                Login
-              </NavbarButton>
-              <NavbarButton
+                Star on GitHub
+              </a>
+              <Link 
+                href="/get-started/introduction"
                 onClick={() => setIsMobileMenuOpen(false)}
-                variant="primary"
-                className="w-full"
+                className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2 w-full"
               >
-                Book a call
-              </NavbarButton>
+                Get Started
+              </Link>
             </div>
           </MobileNavMenu>
         </MobileNav>
       </Navbar>
-      <HeroSection />
     </div>
   );
 }
-
-const HeroSection = () => {
-  return (
-    <div className="relative pt-10">
-      <Background />
-    </div>
-  );
-};

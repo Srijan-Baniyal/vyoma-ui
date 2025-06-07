@@ -1,4 +1,4 @@
-import Introduction from "@/components/Indroduction";
+import Introduction from "@/components/Introduction";
 
 export type ComponentEntry = {
   name: string;
@@ -64,19 +64,14 @@ export const componentMap: ComponentCategoryMap = {
       route: "/components/buttons",
     },
     {
-      name: "Cards",
+      name: "Card",
       component: Introduction,
-      route: "/components/cards",
+      route: "/components/card",
     },
     {
       name: "Checkbox",
       component: Introduction,
       route: "/components/checkbox",
-    },
-    {
-      name: "Card",
-      component: Introduction,
-      route: "/components/card",
     },
     {
       name: "Navigation",

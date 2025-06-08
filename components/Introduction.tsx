@@ -5,6 +5,7 @@ import Link from "next/link";
 
 export default function Introduction() {
   return (
+    <>
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
@@ -295,5 +296,6 @@ export default function Introduction() {
         </div>
       </div>
     </div>
+    </>
   );
 }

@@ -25,7 +25,7 @@ export default function Copy({ content }: { content: string }) {
       variant="ghost" 
       size="sm" 
       onClick={handleCopy}
-      className="h-8 w-8 p-0 hover:bg-primary/10 transition-all duration-200 group"
+      className="h-8 w-8 p-0 hover:bg-primary/10 transition-all duration-200 group flex items-center justify-center"
       aria-label={isCopied ? "Copied!" : "Copy to clipboard"}
     >
       {isCopied ? (

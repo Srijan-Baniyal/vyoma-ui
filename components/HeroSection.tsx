@@ -187,7 +187,7 @@ export default function HeroSection() {
               className="px-8 py-6 text-lg font-semibold backdrop-blur-sm hover:shadow-xl transition-all duration-300 hover:scale-105"
               asChild
             >
-              <Link href="/docs">View Components</Link>
+              <Link href="/components/accordion">View Components</Link>
             </Button>
           </div>
 

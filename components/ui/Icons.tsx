@@ -217,4 +217,20 @@ export const Icons = {
       />
     </svg>
   ),
+  pnpm: (props: IconProps) => (
+    <svg viewBox="0 0 24 24" {...props}>
+      <path
+        d="M0 0v7.5h7.5V0zm8.25 0v7.5h7.5V0zm8.25 0v7.5H24V0zM0 8.25v7.5h7.5v-7.5zm8.25 0v7.5h7.5v-7.5zM0 16.5V24h7.5v-7.5zm8.25 0V24h7.5v-7.5zm8.25 0V24H24v-7.5z"
+        fill="currentColor"
+      />
+    </svg>
+  ),
+  bun: (props: IconProps) => (
+    <svg viewBox="0 0 24 24" {...props}>
+      <path
+        d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.568 7.568c.256.256.256.671 0 .927L12 14.063 6.432 8.495c-.256-.256-.256-.671 0-.927s.671-.256.927 0L12 12.209l4.641-4.641c.256-.256.671-.256.927 0z"
+        fill="currentColor"
+      />
+    </svg>
+  ),
 };

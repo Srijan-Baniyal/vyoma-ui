@@ -1,3 +1,4 @@
+import Installation from "@/components/Installation";
 import Introduction from "@/components/Introduction";
 
 export type ComponentEntry = {
@@ -21,17 +22,17 @@ export const componentMap: ComponentCategoryMap = {
     },
     {
       name: "Installation",
-      component: Introduction,
+      component: Installation,
       route: "/get-started/installation",
     },
     {
       name: "Story Behind",
-      component: Introduction,
+      component: Installation,
       route: "/get-started/story-behind",
     },
     {
       name: "Changelog",
-      component: Introduction,
+      component: Installation,
       route: "/get-started/changelog",
     },
   ],

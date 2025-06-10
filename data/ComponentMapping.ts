@@ -1,5 +1,6 @@
 import Installation from "@/components/Installation";
 import Introduction from "@/components/Introduction";
+import StoryBehind from "@/components/StoryBehind";
 
 export type ComponentEntry = {
   name: string;
@@ -27,7 +28,7 @@ export const componentMap: ComponentCategoryMap = {
     },
     {
       name: "Story Behind",
-      component: Installation,
+      component: StoryBehind,
       route: "/get-started/story-behind",
     },
     {

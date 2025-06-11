@@ -1,6 +1,7 @@
 import Installation from "@/components/Installation";
 import Introduction from "@/components/Introduction";
 import StoryBehind from "@/components/StoryBehind";
+import Changelog from "@/components/ChangeLog";
 
 export type ComponentEntry = {
   name: string;
@@ -33,7 +34,7 @@ export const componentMap: ComponentCategoryMap = {
     },
     {
       name: "Changelog",
-      component: Installation,
+      component: Changelog,
       route: "/get-started/changelog",
     },
   ],

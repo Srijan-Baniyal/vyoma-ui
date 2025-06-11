@@ -9,10 +9,17 @@ interface PackageManagerContextType {
   setSelectedManager: (manager: PackageManagerType) => void;
 }
 
-const PackageManagerContext = createContext<PackageManagerContextType | undefined>(undefined);
+const PackageManagerContext = createContext<
+  PackageManagerContextType | undefined
+>(undefined);
 
-export function PackageManagerProvider({ children }: { children: React.ReactNode }) {
-  const [selectedManager, setSelectedManager] = useState<PackageManagerType>("npm");
+export function PackageManagerProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const [selectedManager, setSelectedManager] =
+    useState<PackageManagerType>("npm");
 
   // Persist selection in localStorage
   useEffect(() => {
@@ -42,7 +49,9 @@ export function PackageManagerProvider({ children }: { children: React.ReactNode
 export function usePackageManager() {
   const context = useContext(PackageManagerContext);
   if (context === undefined) {
-    throw new Error("usePackageManager must be used within a PackageManagerProvider");
+    throw new Error(
+      "usePackageManager must be used within a PackageManagerProvider"
+    );
   }
   return context;
 }

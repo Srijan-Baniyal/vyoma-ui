@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Pill } from "@/components/ui/pill";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -106,13 +107,13 @@ export default function Introduction() {
                 : "opacity-0 translate-y-4"
             }`}
           >
-            <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full border border-primary/20 bg-primary/5 backdrop-blur-sm mb-8">
-              <BookOpen className="w-5 h-5 text-primary" />
-              <span className="text-primary font-medium">
-                Getting Started Guide
-              </span>
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-            </div>
+            <Pill 
+              icon={<BookOpen className="w-5 h-5" />} 
+              status="active" 
+              className="mb-8"
+            >
+              Getting Started Guide
+            </Pill>
 
             <h1 className="text-5xl md:text-7xl font-black tracking-tight mb-6">
               <span className="bg-gradient-to-r from-foreground via-foreground to-foreground/70 bg-clip-text text-transparent">

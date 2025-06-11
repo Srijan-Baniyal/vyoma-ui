@@ -1,4 +1,5 @@
 import { Card } from "@/components/ui/card";
+import { Pill } from "@/components/ui/pill";
 import { PackageManagerTabs } from "@/components/PackageManagerTabs";
 import { CheckCircle, Terminal, Settings, Rocket, Star, Code, Zap } from "lucide-react";
 import Link from "next/link";
@@ -19,11 +20,12 @@ export default function Installation() {
       <div className="relative z-10 max-w-6xl mx-auto px-6 py-16 space-y-16">
         {/* Header */}
         <div className="text-center space-y-6">
-          <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full border border-primary/20 bg-primary/5 backdrop-blur-sm">
-            <Terminal className="w-5 h-5 text-primary" />
-            <span className="text-primary font-medium">Installation Guide</span>
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-          </div>
+          <Pill 
+            icon={<Terminal className="w-5 h-5" />} 
+            status="active"
+          >
+            Installation Guide
+          </Pill>
           
           <h1 className="text-5xl md:text-7xl font-black tracking-tight">
             <span className="bg-gradient-to-r from-foreground via-foreground to-foreground/70 bg-clip-text text-transparent">

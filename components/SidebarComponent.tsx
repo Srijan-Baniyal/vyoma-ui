@@ -10,6 +10,8 @@ import {
   X,
   ExternalLink,
   Search,
+  Moon,
+  Sun,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
@@ -201,12 +203,12 @@ export default function SidebarComponent({
                 href="/"
                 className="flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-md"
               >
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                <div className="flex aspect-square size-12 items-center justify-center rounded-lg bg-background text-foreground">
                   <Image
-                    src={V || "/placeholder.svg"}
-                    alt="Vyoma UI"
-                    width={32}
-                    height={32}
+                    src={V}
+                    alt="Vyoma UI Logo"
+                    width={40}
+                    height={40}
                   />
                 </div>
                 <div className="flex flex-col gap-0.5 leading-none">
@@ -384,6 +386,20 @@ export default function SidebarComponent({
               className="mr-2 h-4 hidden md:block"
             />
             <BreadcrumbNavigation />
+            <div className="ml-auto flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => {
+                  // Toggle between light and dark mode
+                  document.documentElement.classList.toggle("dark");
+                }}
+                aria-label="Toggle theme"
+              >
+                <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+              </Button>
+            </div>
           </header>
 
           <div className="flex-1 flex flex-col">

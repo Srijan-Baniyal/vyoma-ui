@@ -22,6 +22,7 @@ export default function ThemeProvider({
         defaultTheme="system"
         enableSystem
         disableTransitionOnChange
+        storageKey="vyoma-ui-theme"
       >
         {children}
       </NextThemesProvider>

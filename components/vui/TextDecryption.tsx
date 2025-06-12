@@ -19,7 +19,7 @@ interface TextDecryptionProps extends HTMLMotionProps<"span"> {
   typewriterEffect?: boolean;
 }
 
-export default function TextDecryption({
+function TextDecryption({
   text,
   speed = 50,
   maxIterations = 10,
@@ -303,4 +303,8 @@ export default function TextDecryption({
       </span>
     </motion.span>
   );
+}
+
+export default function TextDecryptionShowcase() {
+  return <TextDecryption text="This is an Testing And ShowCasing Text for the TextDecryption Component" sequential={true}/>;
 }

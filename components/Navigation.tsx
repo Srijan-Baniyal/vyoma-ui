@@ -9,7 +9,6 @@ import {
   MobileNavToggle,
   MobileNavMenu,
 } from "@/components/ui/ResizeAbleNavbar";
-import Link from "next/link";
 import { useState } from "react";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 
@@ -17,15 +16,11 @@ export default function Navigation() {
   const navItems = [
     {
       name: "Components",
-      link: "/docs",
+      link: "/components",
     },
     {
-      name: "Examples",
-      link: "/examples",
-    },
-    {
-      name: "GitHub",
-      link: "https://github.com/Srijan-Baniyal/VyomaUI",
+      name: "Showcase",
+      link: "/showcase",
     },
   ];
 
@@ -47,12 +42,6 @@ export default function Navigation() {
             >
               Star on GitHub
             </a>
-            <Link 
-              href="/get-started/introduction"
-              className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2"
-            >
-              Get Started
-            </Link>
           </div>
         </NavBody>
 
@@ -95,13 +84,6 @@ export default function Navigation() {
               >
                 Star on GitHub
               </a>
-              <Link 
-                href="/get-started/introduction"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2 w-full"
-              >
-                Get Started
-              </Link>
             </div>
           </MobileNavMenu>
         </MobileNav>

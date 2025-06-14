@@ -3,6 +3,8 @@ import Introduction from "@/components/Introduction";
 import StoryBehind from "@/components/StoryBehind";
 import Changelog from "@/components/ChangeLog";
 import TextDecryptionShowcase from "@/components/vui/TextDecryption";
+import CountUpShowcase from "@/components/vui/CountUp";
+import { TypingTextShowcase } from "@/components/vui/TypingText";
 
 export type ComponentEntry = {
   name: string;
@@ -49,15 +51,15 @@ export const componentMap: ComponentCategoryMap = {
     },
     {
       name: "Typing Text",
-      component: Introduction,
+      component: TypingTextShowcase,
       route: "/text-animation/typing-text",
-      path: "components/Introduction.tsx",
+      path: "components/vui/TypingText.tsx",
     },
     {
       name: "Counting Number",
-      component: Introduction,
+      component: CountUpShowcase,
       route: "/text-animation/counting-number",
-      path: "components/Introduction.tsx",
+      path: "components/vui/CountUp.tsx",
     },
   ],
   Components: [

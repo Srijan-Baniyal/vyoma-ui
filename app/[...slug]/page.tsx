@@ -6,6 +6,7 @@ import {
   getComponentUsageExample,
   getDefaultProps,
 } from "@/lib/ComponentSourceReader";
+import type { Metadata } from "next";
 
 function normalize(str: string) {
   return str.replace(/[-_\s]/g, "").toLowerCase();
@@ -113,3 +114,85 @@ export default async function Page({ params }: { params: { slug: string[] } }) {
 }
 
 export const dynamicParams = true;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string[] }>;
+}): Promise<Metadata> {
+  const awaitedParams = await params;
+  if (!awaitedParams.slug || awaitedParams.slug.length !== 2) {
+    return { title: "Not Found" };
+  }
+  const [category, componentName] = awaitedParams.slug;
+  function normalize(str: string) {
+    return str.replace(/[-_\s]/g, "").toLowerCase();
+  }
+  function humanize(str: string) {
+    return str
+      .replace(/[-_]/g, " ")
+      .replace(/\b\w/g, (c) => c.toUpperCase())
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+  function findComponentByCategoryAndName(category: string, name: string) {
+    const normalizedCategory = normalize(category);
+    const actualCategory = Object.keys(componentMap).find(
+      (key) => normalize(key) === normalizedCategory
+    );
+    if (!actualCategory) return null;
+    const components = componentMap[actualCategory];
+    if (!components) return null;
+    const normalizedName = normalize(name);
+    return components.find((c) => normalize(c.name) === normalizedName) || null;
+  }
+  const componentEntry = findComponentByCategoryAndName(
+    category,
+    componentName
+  );
+  if (!componentEntry) {
+    return { title: "Not Found" };
+  }
+  const humanCategory = humanize(category);
+  const humanComponent = humanize(componentEntry.name);
+  const title = `${humanComponent} | ${humanCategory} | VUI React UI Library`;
+  const description =
+    componentEntry.description ||
+    `Discover the ${humanComponent} component in the ${humanCategory} section of VUI. Modern, customizable, and interactive React UI for your next project.`;
+  const canonicalUrl = `https://yourdomain.com${componentEntry.route}`;
+  const keywords = [
+    humanComponent,
+    humanCategory,
+    "React UI",
+    "VUI",
+    "Component",
+    "Open Source",
+    "Modern UI",
+    "Customizable",
+    "Interactive",
+  ];
+  //  const ogImage = "https://yourdomain.com/og-default.png"; // Replace with your default OG image
+  return {
+    title,
+    description,
+    keywords,
+    alternates: {
+      canonical: canonicalUrl,
+    },  
+    openGraph: {
+      title,
+      description,
+      url: canonicalUrl,
+      type: "website",
+      siteName: "VUI React UI Library",
+      // images: [ogImage],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      // images: [ogImage],
+    },
+    category: humanCategory,
+  };
+}

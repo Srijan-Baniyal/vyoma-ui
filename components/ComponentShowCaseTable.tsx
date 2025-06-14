@@ -26,7 +26,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { gruvboxDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 interface ComponentShowcaseProps {
   componentName: string;
@@ -40,9 +39,9 @@ interface ComponentShowCaseTableProps {
   components: ComponentShowcaseProps[];
 }
 
-const ComponentShowCaseTable: React.FC<ComponentShowCaseTableProps> = ({
+export default function ComponentShowCaseTable({
   components,
-}) => {
+}: ComponentShowCaseTableProps) {
   const [refreshKey, setRefreshKey] = useState(0);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const [fullscreenIndex, setFullscreenIndex] = useState<number | null>(null);
@@ -249,26 +248,54 @@ const ComponentShowCaseTable: React.FC<ComponentShowCaseTableProps> = ({
 
                   <div className="relative overflow-hidden">
                     {isClient && (
-                      <SyntaxHighlighter
-                        language="typescript"
-                        style={gruvboxDark}
-                        customStyle={{
-                          margin: 0,
-                          borderRadius: 0,
-                          fontSize: "14px",
-                          lineHeight: "1.5",
-                          padding: "24px",
-                        }}
-                        showLineNumbers={true}
-                        lineNumberStyle={{
-                          minWidth: "3em",
-                          paddingRight: "1em",
-                          color: "#6b7280",
-                          userSelect: "none",
-                        }}
-                      >
-                        {comp.codeString}
-                      </SyntaxHighlighter>
+                      <>
+                        <SyntaxHighlighter
+                          language="typescript"
+                          customStyle={{
+                            margin: 0,
+                            borderRadius: 0,
+                            fontSize: "12px",
+                            lineHeight: "1.5",
+                            padding: "24px",
+                            backgroundColor: "transparent",
+                            color: "var(--foreground)",
+                          }}
+                          showLineNumbers={true}
+                          lineNumberStyle={{
+                            minWidth: "3em",
+                            paddingRight: "1em",
+                            color: "var(--muted-foreground)",
+                            userSelect: "none",
+                          }}
+                          codeTagProps={{
+                            className: "dark:text-white text-black font-mono",
+                            style: {
+                              fontFamily: "JetBrains Mono, monospace",
+                            },
+                          }}
+                          wrapLongLines={true}
+                          PreTag={({ children, ...props }) => (
+                            <pre
+                              {...props}
+                              className="dark:bg-slate-950 bg-slate-50 dark:text-white text-black font-mono transition-colors duration-200"
+                              style={{
+                                fontFamily: "JetBrains Mono, monospace",
+                              }}
+                            >
+                              {children}
+                            </pre>
+                          )}
+                        >
+                          {comp.codeString}
+                        </SyntaxHighlighter>
+                        <style jsx global>{`
+                          pre code span,
+                          .hljs span,
+                          .token {
+                            background: transparent !important;
+                          }
+                        `}</style>
+                      </>
                     )}
                   </div>
                 </div>
@@ -357,6 +384,4 @@ const ComponentShowCaseTable: React.FC<ComponentShowCaseTableProps> = ({
       ))}
     </div>
   );
-};
-
-export default ComponentShowCaseTable;
+}

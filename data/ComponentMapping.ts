@@ -61,12 +61,24 @@ export const componentMap: ComponentCategoryMap = {
       route: "/text-animation/counting-number",
       path: "components/vui/CountUp.tsx",
     },
+    {
+      name: "Animated Number",
+      component: CountUpShowcase,
+      route: "/text-animation/animated-number",
+      path: "components/vui/AnimatedNumber.tsx",
+    },
   ],
   Components: [
     {
       name: "Accordion",
       component: Introduction,
       route: "/components/accordion",
+      path: "components/Introduction.tsx",
+    },
+    {
+      name: "Bento Grid",
+      component: Introduction,
+      route: "/components/bento-grid",
       path: "components/Introduction.tsx",
     },
     {
@@ -109,6 +121,12 @@ export const componentMap: ComponentCategoryMap = {
       name: "Tooltip",
       component: Introduction,
       route: "/components/tooltip",
+      path: "components/Introduction.tsx",
+    },
+    {
+      name: "Wheel Picker",
+      component: Introduction,
+      route: "/components/wheel-picker",
       path: "components/Introduction.tsx",
     },
   ],

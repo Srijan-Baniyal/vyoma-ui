@@ -174,7 +174,7 @@ export default function HeroSection() {
             <div>
               <div className="text-2xl sm:text-3xl font-bold text-foreground mb-1 bg-gradient-to-r from-primary to-secondary bg-clip-text">
                 <CountUp
-                  to={50}
+                  to={10}
                   suffix="+"
                   duration={2.5}
                   delay={0.5}

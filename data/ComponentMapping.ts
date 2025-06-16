@@ -5,6 +5,10 @@ import Changelog from "@/components/ChangeLog";
 import TextDecryptionShowcase from "@/components/vui/TextDecryption";
 import CountUpShowcase from "@/components/vui/CountUp";
 import { TypingTextShowcase } from "@/components/vui/TypingText";
+import { AccordionShowcase } from "@/components/vui/Accordion";
+import { WheelPickerDemo } from "@/components/vui/WheelPicker";
+import { SkeletonShowcase } from "@/components/vui/Skeleton";
+import { CheckboxUpgradedShowcase } from "@/components/vui/CheckboxUpgraded";
 
 export type ComponentEntry = {
   name: string;
@@ -71,9 +75,9 @@ export const componentMap: ComponentCategoryMap = {
   Components: [
     {
       name: "Accordion",
-      component: Introduction,
+      component: AccordionShowcase,
       route: "/components/accordion",
-      path: "components/Introduction.tsx",
+      path: "components/vui/Accordion.tsx",
     },
     {
       name: "Bento Grid",
@@ -94,10 +98,10 @@ export const componentMap: ComponentCategoryMap = {
       path: "components/Introduction.tsx",
     },
     {
-      name: "Checkbox",
-      component: Introduction,
+      name: "Checkbox",   
+      component: CheckboxUpgradedShowcase,
       route: "/components/checkbox",
-      path: "components/Introduction.tsx",
+      path: "components/vui/CheckboxUpgraded.tsx",
     },
     {
       name: "Navigation",
@@ -113,9 +117,9 @@ export const componentMap: ComponentCategoryMap = {
     },
     {
       name: "Skeleton",
-      component: Introduction,
+      component: SkeletonShowcase,
       route: "/components/skeleton",
-      path: "components/Introduction.tsx",
+      path: "components/vui/Skeleton.tsx",
     },
     {
       name: "Tooltip",
@@ -125,9 +129,9 @@ export const componentMap: ComponentCategoryMap = {
     },
     {
       name: "Wheel Picker",
-      component: Introduction,
+      component: WheelPickerDemo,
       route: "/components/wheel-picker",
-      path: "components/Introduction.tsx",
+      path: "components/vui/WheelPicker.tsx",
     },
   ],
 };

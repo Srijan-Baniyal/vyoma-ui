@@ -9,6 +9,7 @@ import { AccordionShowcase } from "@/components/vui/Accordion";
 import { WheelPickerDemo } from "@/components/vui/WheelPicker";
 import { SkeletonShowcase } from "@/components/vui/Skeleton";
 import { CheckboxUpgradedShowcase } from "@/components/vui/CheckboxUpgraded";
+import SheetShowcase from "@/components/vui/Sheet";
 
 export type ComponentEntry = {
   name: string;
@@ -83,7 +84,7 @@ export const componentMap: ComponentCategoryMap = {
       name: "Bento Grid",
       component: Introduction,
       route: "/components/bento-grid",
-      path: "components/Introduction.tsx",
+      path: "components/vui/BentoGrid.tsx",
     },
     {
       name: "Buttons",
@@ -111,9 +112,9 @@ export const componentMap: ComponentCategoryMap = {
     },
     {
       name: "Sheet",
-      component: Introduction,
+      component: SheetShowcase,
       route: "/components/sheet",
-      path: "components/Introduction.tsx",
+      path: "components/vui/Sheet.tsx",
     },
     {
       name: "Skeleton",
@@ -132,6 +133,20 @@ export const componentMap: ComponentCategoryMap = {
       component: WheelPickerDemo,
       route: "/components/wheel-picker",
       path: "components/vui/WheelPicker.tsx",
+    },
+  ],
+  "Backgrounds": [
+    {
+      name: "Tunnel",
+      component: Introduction,
+      route: "/backgrounds/tunnel",
+      path: "components/Introduction.tsx",
+    },
+    {
+      name: "Wavy Tiles",
+      component: Introduction,
+      route: "/backgrounds/wavy-tiles",
+      path: "components/Introduction.tsx",
     },
   ],
 };

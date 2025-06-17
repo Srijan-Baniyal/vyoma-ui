@@ -10,6 +10,8 @@ import { WheelPickerDemo } from "@/components/vui/WheelPicker";
 import { SkeletonShowcase } from "@/components/vui/Skeleton";
 import { CheckboxUpgradedShowcase } from "@/components/vui/CheckboxUpgraded";
 import SheetShowcase from "@/components/vui/Sheet";
+import { AnimatedNumberCountdownShowcase } from "@/components/vui/AnimatedNumber";
+import { BentoGridShowcase } from "@/components/vui/BentoGrid";
 
 export type ComponentEntry = {
   name: string;
@@ -68,7 +70,7 @@ export const componentMap: ComponentCategoryMap = {
     },
     {
       name: "Animated Number",
-      component: CountUpShowcase,
+      component: AnimatedNumberCountdownShowcase,
       route: "/text-animation/animated-number",
       path: "components/vui/AnimatedNumber.tsx",
     },
@@ -82,7 +84,7 @@ export const componentMap: ComponentCategoryMap = {
     },
     {
       name: "Bento Grid",
-      component: Introduction,
+      component: BentoGridShowcase,
       route: "/components/bento-grid",
       path: "components/vui/BentoGrid.tsx",
     },

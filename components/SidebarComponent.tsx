@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -13,7 +13,7 @@ import {
   Moon,
   Sun,
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import {
@@ -60,35 +60,93 @@ import {
 import V from "@/public/VyomaUI.svg";
 import Footer from "@/components/Footer";
 
-export default function SidebarComponent({
-  children,
-}: {
+interface SidebarComponentProps {
   children: React.ReactNode;
-}) {
+}
+
+const ANIMATION_DURATION = 0.15;
+const SEARCH_DEBOUNCE_MS = 150;
+
+// Enhanced animation variants with reduced motion support
+const createAnimationVariants = (shouldReduceMotion: boolean) => ({
+  overlay: {
+    initial: { opacity: 0 },
+    animate: { opacity: 1 },
+    exit: { opacity: 0 },
+    transition: { duration: shouldReduceMotion ? 0 : ANIMATION_DURATION },
+  },
+  pageTransition: {
+    initial: { opacity: 0, y: shouldReduceMotion ? 0 : 8 },
+    animate: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: shouldReduceMotion ? 0 : -8 },
+    transition: { duration: shouldReduceMotion ? 0 : ANIMATION_DURATION },
+  },
+  collapsibleContent: {
+    initial: { opacity: 0, height: 0 },
+    animate: { opacity: 1, height: "auto" },
+    exit: { opacity: 0, height: 0 },
+    transition: {
+      duration: shouldReduceMotion ? 0 : ANIMATION_DURATION,
+    },
+  },
+});
+
+export default function SidebarComponent({ children }: SidebarComponentProps) {
   const pathname = usePathname();
+  const shouldReduceMotion = useReducedMotion();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredComponents, setFilteredComponents] =
-    useState<Record<string, ComponentEntry[]>>(componentMap);
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [openCategories, setOpenCategories] = useState<Record<string, boolean>>(() => {
+    // Try to load from localStorage first, then default to all open
+    if (typeof window !== 'undefined') {
+      try {
+        const saved = localStorage.getItem('sidebar-categories');
+        if (saved) {
+          return JSON.parse(saved);
+        }
+      } catch (error) {
+        console.warn('Failed to load sidebar state:', error);
+      }
+    }
+    
+    // Default: all categories open
+    const initial: Record<string, boolean> = {};
+    Object.keys(componentMap).forEach((category) => {
+      initial[category] = true;
+    });
+    return initial;
+  });
 
-  // Close mobile sidebar when route changes
-  useEffect(() => {
-    setIsMobileOpen(false);
-  }, [pathname]);
+  const animations = useMemo(
+    () => createAnimationVariants(shouldReduceMotion ?? false),
+    [shouldReduceMotion]
+  );
 
-  // Filter components based on search query
+  // Debounced search for better performance
   useEffect(() => {
-    if (!searchQuery.trim()) {
-      setFilteredComponents(componentMap);
-      return;
+    const timer = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, SEARCH_DEBOUNCE_MS);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  // Optimized filtered components with useMemo
+  const filteredComponents = useMemo(() => {
+    if (!debouncedSearchQuery.trim()) {
+      return componentMap;
     }
 
-    const query = searchQuery.toLowerCase();
+    const query = debouncedSearchQuery.toLowerCase();
     const filtered: Record<string, ComponentEntry[]> = {};
 
     Object.entries(componentMap).forEach(([category, components]) => {
-      const matchedComponents = components.filter((comp) =>
-        comp.name.toLowerCase().includes(query)
+      const matchedComponents = components.filter(
+        (comp) =>
+          comp.name.toLowerCase().includes(query) ||
+          comp.description?.toLowerCase().includes(query)
       );
 
       if (matchedComponents.length > 0) {
@@ -96,123 +154,242 @@ export default function SidebarComponent({
       }
     });
 
-    setFilteredComponents(filtered);
-  }, [searchQuery]);
+    return filtered;
+  }, [debouncedSearchQuery]);
 
-  function BreadcrumbNavigation() {
-    // Generate breadcrumb items based on current path
-    const generateBreadcrumbs = () => {
-      const breadcrumbs = [
-        { label: "Home", href: "/", isActive: pathname === "/" },
-      ];
+  // Close mobile sidebar when route changes
+  useEffect(() => {
+    setIsMobileOpen(false);
+  }, [pathname]);
 
-      // Try to find the route in componentMap
-      const getComponentInfo = (route: string) => {
-        for (const [category, components] of Object.entries(componentMap)) {
-          const component = components.find((comp) => comp.route === route);
-          if (component) {
-            return { category, component: component.name };
-          }
-        }
-        return null;
+  // Initialize dark mode state
+  useEffect(() => {
+    setIsDarkMode(document.documentElement.classList.contains("dark"));
+  }, []);
+
+
+
+  // Optimized handlers with useCallback
+  const handleMobileToggle = useCallback(() => {
+    setIsMobileOpen((prev) => !prev);
+  }, []);
+
+  const handleSearchChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchQuery(e.target.value);
+    },
+    []
+  );
+
+  const handleThemeToggle = useCallback(() => {
+    const newDarkMode = !isDarkMode;
+    setIsDarkMode(newDarkMode);
+    document.documentElement.classList.toggle("dark", newDarkMode);
+  }, [isDarkMode]);
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === "Escape" && isMobileOpen) {
+        setIsMobileOpen(false);
+      }
+    },
+    [isMobileOpen]
+  );
+
+  const toggleCategory = useCallback((category: string) => {
+    setOpenCategories((prev) => {
+      const newState = {
+        ...prev,
+        [category]: !prev[category],
       };
-
-      const componentInfo = getComponentInfo(pathname);
-      if (componentInfo) {
-        breadcrumbs.push({
-          label: componentInfo.category,
-          href: "#",
-          isActive: false,
-        });
-        breadcrumbs.push({
-          label: componentInfo.component,
-          href: pathname,
-          isActive: true,
-        });
-      } else {
-        // fallback for unknown routes
-        const segments = pathname.split("/").filter(Boolean);
-        if (segments.length > 0) {
-          breadcrumbs.push({
-            label:
-              segments[segments.length - 1].charAt(0).toUpperCase() +
-              segments[segments.length - 1].slice(1),
-            href: pathname,
-            isActive: true,
-          });
+      
+      // Save to localStorage
+      if (typeof window !== 'undefined') {
+        try {
+          localStorage.setItem('sidebar-categories', JSON.stringify(newState));
+        } catch (error) {
+          console.warn('Failed to save sidebar state:', error);
         }
       }
-      return breadcrumbs;
-    };
+      
+      return newState;
+    });
+  }, []);
 
-    const breadcrumbs = generateBreadcrumbs();
+  // Enhanced breadcrumb generation with memoization
+  const breadcrumbs = useMemo((): {
+    label: string;
+    href: string;
+    isActive: boolean;
+  }[] => {
+    const items: { label: string; href: string; isActive: boolean }[] = [
+      { label: "Home", href: "/", isActive: pathname === "/" },
+    ];
 
-    return (
-      <Breadcrumb>
-        <BreadcrumbList>
-          {breadcrumbs.map((breadcrumb, index) => (
-            <React.Fragment key={breadcrumb.href}>
-              <BreadcrumbItem>
-                {breadcrumb.isActive ? (
-                  <BreadcrumbPage className="flex items-center gap-1 text-primary">
-                    {index === 0 && <Home className="size-4" />}
+    // Find component info more efficiently
+    for (const [category, components] of Object.entries(componentMap)) {
+      const component = components.find((comp) => comp.route === pathname);
+      if (component) {
+        items.push(
+          { label: category, href: "#", isActive: false },
+          { label: component.name, href: pathname, isActive: true }
+        );
+        return items;
+      }
+    }
+
+    // Fallback for unknown routes
+    const segments = pathname.split("/").filter(Boolean);
+    if (segments.length > 0) {
+      const lastSegment = segments[segments.length - 1];
+      items.push({
+        label: lastSegment.charAt(0).toUpperCase() + lastSegment.slice(1),
+        href: pathname,
+        isActive: true,
+      });
+    }
+
+    return items;
+  }, [pathname]);
+
+  const BreadcrumbNavigation = React.memo(() => (
+    <Breadcrumb>
+      <BreadcrumbList>
+        {breadcrumbs.map((breadcrumb, index) => (
+          <React.Fragment key={`${breadcrumb.href}-${index}`}>
+            <BreadcrumbItem>
+              {breadcrumb.isActive ? (
+                <BreadcrumbPage className="flex items-center gap-1.5 text-primary font-medium">
+                  {index === 0 && <Home className="size-3.5" />}
+                  {breadcrumb.label}
+                </BreadcrumbPage>
+              ) : (
+                <BreadcrumbLink
+                  asChild
+                  className="flex items-center gap-1.5 hover:text-primary transition-colors duration-200"
+                >
+                  <Link href={breadcrumb.href}>
+                    {index === 0 && <Home className="size-3.5" />}
                     {breadcrumb.label}
-                  </BreadcrumbPage>
-                ) : (
-                  <BreadcrumbLink
-                    asChild
-                    className="flex items-center gap-1 hover:text-primary transition-colors"
-                  >
-                    <Link href={breadcrumb.href}>
-                      {index === 0 && <Home className="size-4" />}
-                      {breadcrumb.label}
-                    </Link>
-                  </BreadcrumbLink>
+                  </Link>
+                </BreadcrumbLink>
+              )}
+            </BreadcrumbItem>
+            {index < breadcrumbs.length - 1 && <BreadcrumbSeparator />}
+          </React.Fragment>
+        ))}
+      </BreadcrumbList>
+    </Breadcrumb>
+  ));
+
+  BreadcrumbNavigation.displayName = "BreadcrumbNavigation";
+
+  const SidebarMenuItemComponent = React.memo(
+    ({ comp }: { comp: ComponentEntry }) => {
+      const isActive = pathname === comp.route;
+
+      return (
+        <TooltipProvider delayDuration={200}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <SidebarMenuButton
+                asChild
+                className={cn(
+                  "group h-9 px-3 text-sm rounded-lg transition-all duration-200 flex items-center gap-2.5 relative overflow-hidden",
+                  isActive
+                    ? "bg-primary/10 text-primary font-medium shadow-sm border border-primary/20"
+                    : "hover:bg-accent/70 hover:text-accent-foreground hover:shadow-sm"
                 )}
-              </BreadcrumbItem>
-              {index < breadcrumbs.length - 1 && <BreadcrumbSeparator />}
-            </React.Fragment>
-          ))}
-        </BreadcrumbList>
-      </Breadcrumb>
-    );
-  }
+                aria-current={isActive ? "page" : undefined}
+              >
+                <Link
+                  href={comp.route}
+                  className="flex items-center gap-2.5 w-full min-w-0"
+                >
+                  <motion.div
+                    className={cn(
+                      "size-2 rounded-full flex-shrink-0",
+                      isActive
+                        ? "bg-primary shadow-sm"
+                        : "bg-muted-foreground/30 group-hover:bg-muted-foreground/50"
+                    )}
+                    animate={isActive ? { scale: [1, 1.2, 1] } : {}}
+                    transition={{ duration: 0.3 }}
+                  />
+                  <span className="truncate font-medium">{comp.name}</span>
+                  {comp.isNew && (
+                    <Badge className="ml-auto text-[0.65rem] px-1.5 py-0.5 h-5 bg-gradient-to-r from-blue-500 to-purple-600 text-white border-0 shadow-sm">
+                      NEW
+                    </Badge>
+                  )}
+                  {isActive && (
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent rounded-lg"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.2 }}
+                    />
+                  )}
+                </Link>
+              </SidebarMenuButton>
+            </TooltipTrigger>
+            <TooltipContent
+              side="right"
+              className="max-w-[220px] p-3 bg-popover/95 backdrop-blur-sm border shadow-lg"
+              sideOffset={8}
+            >
+              <div className="space-y-1">
+                <p className="font-medium text-sm">{comp.name}</p>
+                {comp.description && (
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    {comp.description}
+                  </p>
+                )}
+              </div>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      );
+    }
+  );
+
+  SidebarMenuItemComponent.displayName = "SidebarMenuItemComponent";
 
   return (
-    <>
+    <div onKeyDown={handleKeyDown}>
       <SidebarProvider>
-        {/* Mobile sidebar overlay */}
+        {/* Enhanced mobile sidebar overlay */}
         <AnimatePresence>
           {isMobileOpen && (
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="fixed inset-0 bg-black/50 z-30 md:hidden"
+              {...animations.overlay}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-30 md:hidden"
               onClick={() => setIsMobileOpen(false)}
               aria-hidden="true"
             />
           )}
         </AnimatePresence>
 
-        <Sidebar className="border-r bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-40">
-          <SidebarHeader className="border-b p-0">
+        <Sidebar className="border-r bg-background/98 backdrop-blur-md supports-[backdrop-filter]:bg-background/95 z-40 shadow-sm">
+          <SidebarHeader className="border-b border-border/50 p-0">
             <div className="flex items-center justify-between p-4">
               <Link
                 href="/"
-                className="flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-md"
+                className="group flex items-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-lg p-1 -m-1 transition-all duration-200 hover:bg-accent/50"
               >
-                <div className="flex aspect-square size-12 items-center justify-center rounded-lg bg-background text-foreground">
+                <div className="flex aspect-square size-12 items-center justify-center rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20 group-hover:border-primary/30 transition-all duration-200">
                   <Image
-                    src={V}
+                    src={V || "/placeholder.svg"}
                     alt="Vyoma UI Logo"
-                    width={40}
-                    height={40}
+                    width={32}
+                    height={32}
+                    className="transition-transform duration-200 group-hover:scale-110"
                   />
                 </div>
                 <div className="flex flex-col gap-0.5 leading-none">
-                  <span className="font-semibold">Vyoma UI</span>
+                  <span className="font-semibold text-base group-hover:text-primary transition-colors duration-200">
+                    Vyoma UI
+                  </span>
                   <span className="text-xs text-muted-foreground">
                     Beautiful components
                   </span>
@@ -221,7 +398,7 @@ export default function SidebarComponent({
               <Button
                 variant="ghost"
                 size="icon"
-                className="md:hidden"
+                className="md:hidden h-8 w-8 hover:bg-accent/70 transition-colors duration-200"
                 onClick={() => setIsMobileOpen(false)}
                 aria-label="Close sidebar"
               >
@@ -229,122 +406,101 @@ export default function SidebarComponent({
               </Button>
             </div>
             <div className="px-4 pb-4">
-              <div className="relative">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <div className="relative group">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors duration-200" />
                 <Input
                   type="search"
                   placeholder="Search components..."
-                  className="w-full pl-9 h-9"
+                  className="w-full pl-10 h-10 bg-background/50 border-border/50 focus:border-primary/50 focus:bg-background transition-all duration-200"
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={handleSearchChange}
+                  aria-label="Search components"
                 />
+                {searchQuery && (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 hover:bg-accent/70"
+                    onClick={() => setSearchQuery("")}
+                    aria-label="Clear search"
+                  >
+                    <X className="size-3" />
+                  </Button>
+                )}
               </div>
             </div>
           </SidebarHeader>
 
           <SidebarContent className="flex flex-col flex-1 p-0">
             <ScrollArea className="flex-1">
-              <div className="p-2">
+              <div className="p-3">
                 {Object.entries(filteredComponents).length === 0 ? (
-                  <div className="px-4 py-8 text-center">
-                    <p className="text-sm text-muted-foreground">
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="px-4 py-12 text-center"
+                  >
+                    <div className="mx-auto w-16 h-16 bg-muted/50 rounded-full flex items-center justify-center mb-4">
+                      <Search className="w-6 h-6 text-muted-foreground" />
+                    </div>
+                    <p className="text-sm font-medium text-foreground mb-1">
                       No components found
                     </p>
-                  </div>
+                    <p className="text-xs text-muted-foreground">
+                      Try adjusting your search terms
+                    </p>
+                  </motion.div>
                 ) : (
                   Object.entries(filteredComponents).map(
                     ([category, components], index) => (
-                      <Collapsible
-                        key={category}
-                        defaultOpen={true}
-                        className="group/collapsible mb-2"
-                      >
+                                             <Collapsible
+                         key={category}
+                         open={openCategories[category] === true}
+                         onOpenChange={() => toggleCategory(category)}
+                         className="group/collapsible mb-3"
+                       >
                         <SidebarGroup className="p-0">
                           <CollapsibleTrigger asChild>
                             <SidebarGroupLabel
-                              className="group/label text-sm font-medium hover:bg-accent hover:text-accent-foreground rounded-md transition-colors cursor-pointer flex items-center justify-between w-full px-3 py-2"
+                              className="group/label text-sm font-semibold hover:bg-accent/60 hover:text-accent-foreground rounded-lg transition-all duration-200 cursor-pointer flex items-center justify-between w-full px-3 py-2.5 border border-transparent hover:border-border/50"
                               aria-label={`${category} category`}
                             >
-                              <span>{category}</span>
-                              <Badge
-                                variant="outline"
-                                className="text-xs font-normal bg-muted"
-                              >
-                                {components.length}
-                              </Badge>
-                              <ChevronRight className="size-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90 ml-1 text-muted-foreground" />
+                              <span className="text-foreground">
+                                {category}
+                              </span>
+                              <div className="flex items-center gap-2">
+                                <Badge
+                                  variant="secondary"
+                                  className="text-xs font-medium bg-muted/70 text-muted-foreground border-0 px-2 py-0.5"
+                                >
+                                  {components.length}
+                                </Badge>
+                                <ChevronRight className="size-4 transition-transform duration-300 group-data-[state=open]/collapsible:rotate-90 text-muted-foreground group-hover/label:text-foreground" />
+                              </div>
                             </SidebarGroupLabel>
                           </CollapsibleTrigger>
 
-                          <CollapsibleContent className="space-y-1 animate-in slide-in-from-top-2 duration-200">
-                            <SidebarGroupContent>
-                              <SidebarMenu className="gap-1">
-                                {components.map((comp) => {
-                                  const isActive = pathname === comp.route;
-                                  return (
+                          <CollapsibleContent className="overflow-hidden">
+                            <motion.div
+                              {...animations.collapsibleContent}
+                              className="space-y-1 pt-1"
+                            >
+                              <SidebarGroupContent>
+                                <SidebarMenu className="gap-1">
+                                  {components.map((comp) => (
                                     <SidebarMenuItem key={comp.route}>
-                                      <TooltipProvider delayDuration={300}>
-                                        <Tooltip>
-                                          <TooltipTrigger asChild>
-                                            <SidebarMenuButton
-                                              asChild
-                                              className={cn(
-                                                "h-8 px-3 text-sm rounded-md transition-colors flex items-center gap-2",
-                                                isActive
-                                                  ? "bg-accent text-accent-foreground font-medium"
-                                                  : "hover:bg-accent/50 hover:text-accent-foreground"
-                                              )}
-                                              aria-current={
-                                                isActive ? "page" : undefined
-                                              }
-                                            >
-                                              <Link
-                                                href={comp.route}
-                                                className="flex items-center gap-2 w-full"
-                                              >
-                                                <div
-                                                  className={cn(
-                                                    "size-1.5 rounded-full",
-                                                    isActive
-                                                      ? "bg-primary"
-                                                      : "bg-muted-foreground/40"
-                                                  )}
-                                                />
-                                                <span className="truncate">
-                                                  {comp.name}
-                                                </span>
-                                                {comp.isNew && (
-                                                  <Badge className="ml-auto text-[0.6rem] px-1 py-0 h-4">
-                                                    NEW
-                                                  </Badge>
-                                                )}
-                                              </Link>
-                                            </SidebarMenuButton>
-                                          </TooltipTrigger>
-                                          <TooltipContent
-                                            side="right"
-                                            className="max-w-[200px]"
-                                          >
-                                            <p>{comp.name}</p>
-                                            {comp.description && (
-                                              <p className="text-xs text-muted-foreground">
-                                                {comp.description}
-                                              </p>
-                                            )}
-                                          </TooltipContent>
-                                        </Tooltip>
-                                      </TooltipProvider>
+                                      <SidebarMenuItemComponent comp={comp} />
                                     </SidebarMenuItem>
-                                  );
-                                })}
-                              </SidebarMenu>
-                            </SidebarGroupContent>
+                                  ))}
+                                </SidebarMenu>
+                              </SidebarGroupContent>
+                            </motion.div>
                           </CollapsibleContent>
                         </SidebarGroup>
 
                         {index <
                           Object.entries(filteredComponents).length - 1 && (
-                          <Separator className="my-2" />
+                          <Separator className="my-3 bg-border/50" />
                         )}
                       </Collapsible>
                     )
@@ -353,15 +509,15 @@ export default function SidebarComponent({
               </div>
             </ScrollArea>
 
-            <div className="border-t p-4 bg-background">
+            <div className="border-t border-border/50 p-4 bg-background/50">
               <Link
                 href="https://github.com/Srijan-Baniyal/VyomaUI"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-between w-full text-sm text-muted-foreground hover:text-foreground transition-colors rounded-md p-2 hover:bg-accent"
+                className="group flex items-center justify-between w-full text-sm text-muted-foreground hover:text-foreground transition-all duration-200 rounded-lg p-3 hover:bg-accent/60 border border-transparent hover:border-border/50"
               >
-                <span>GitHub Repository</span>
-                <ExternalLink className="size-4" />
+                <span className="font-medium">GitHub Repository</span>
+                <ExternalLink className="size-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </Link>
             </div>
           </SidebarContent>
@@ -370,34 +526,32 @@ export default function SidebarComponent({
         </Sidebar>
 
         <SidebarInset className="flex flex-col min-h-screen">
-          <header className="sticky top-0 z-50 flex h-16 shrink-0 items-center gap-2 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4">
+          <header className="sticky top-0 z-50 flex h-16 shrink-0 items-center gap-2 border-b border-border/50 bg-background/98 backdrop-blur-md supports-[backdrop-filter]:bg-background/95 px-4 shadow-sm">
             <Button
               variant="outline"
               size="icon"
-              className="md:hidden mr-2"
-              onClick={() => setIsMobileOpen(true)}
+              className="md:hidden mr-2 h-9 w-9 border-border/50 hover:bg-accent/70 transition-all duration-200"
+              onClick={handleMobileToggle}
               aria-label="Open sidebar"
             >
               <Menu className="size-4" />
             </Button>
-            <SidebarTrigger className="-ml-1 hidden md:flex" />
+            <SidebarTrigger className="-ml-1 hidden md:flex hover:bg-accent/70 transition-colors duration-200" />
             <Separator
               orientation="vertical"
-              className="mr-2 h-4 hidden md:block"
+              className="mr-2 h-4 hidden md:block bg-border/50"
             />
             <BreadcrumbNavigation />
             <div className="ml-auto flex items-center gap-2">
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => {
-                  // Toggle between light and dark mode
-                  document.documentElement.classList.toggle("dark");
-                }}
+                onClick={handleThemeToggle}
+                className="h-9 w-9 hover:bg-accent/70 transition-all duration-200 relative overflow-hidden"
                 aria-label="Toggle theme"
               >
-                <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                <Sun className="h-[1.1rem] w-[1.1rem] rotate-0 scale-100 transition-all duration-300 dark:-rotate-90 dark:scale-0" />
+                <Moon className="absolute h-[1.1rem] w-[1.1rem] rotate-90 scale-0 transition-all duration-300 dark:rotate-0 dark:scale-100" />
               </Button>
             </div>
           </header>
@@ -406,13 +560,7 @@ export default function SidebarComponent({
             <main className="flex-1 p-6 w-full">
               <div className="max-w-7xl mx-auto">
                 <AnimatePresence mode="wait">
-                  <motion.div
-                    key={pathname}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.2 }}
-                  >
+                  <motion.div key={pathname} {...animations.pageTransition}>
                     {children}
                   </motion.div>
                 </AnimatePresence>
@@ -422,6 +570,6 @@ export default function SidebarComponent({
           <Footer />
         </SidebarInset>
       </SidebarProvider>
-    </>
+    </div>
   );
 }

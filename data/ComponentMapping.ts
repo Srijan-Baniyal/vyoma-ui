@@ -12,6 +12,7 @@ import { CheckboxUpgradedShowcase } from "@/components/vui/CheckboxUpgraded";
 import SheetShowcase from "@/components/vui/Sheet";
 import { AnimatedNumberCountdownShowcase } from "@/components/vui/AnimatedNumber";
 import { BentoGridShowcase } from "@/components/vui/BentoGrid";
+import Card from "@/components/vui/Card";
 
 export type ComponentEntry = {
   name: string;
@@ -96,9 +97,9 @@ export const componentMap: ComponentCategoryMap = {
     },
     {
       name: "Card",
-      component: Introduction,
+      component: Card,
       route: "/components/card",
-      path: "components/Introduction.tsx",
+      path: "components/vui/Card.tsx",
     },
     {
       name: "Checkbox",   

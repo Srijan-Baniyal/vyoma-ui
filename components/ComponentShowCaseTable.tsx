@@ -141,7 +141,7 @@ export default function ComponentShowCaseTable({
                   </Badge>
                 </div>
                 <CardDescription
-                  className="text-base opacity-0 animate-in fade-in-50 slide-in-from-left-4 duration-400 delay-300"
+                  className="text-base animate-in fade-in-50 slide-in-from-left-4 duration-400 delay-300"
                   style={{ animationFillMode: "forwards" }}
                 >
                   {comp.description}

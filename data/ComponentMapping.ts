@@ -8,11 +8,13 @@ import { TypingTextShowcase } from "@/components/vui/TypingText";
 import { AccordionShowcase } from "@/components/vui/Accordion";
 import { WheelPickerDemo } from "@/components/vui/WheelPicker";
 import { SkeletonShowcase } from "@/components/vui/Skeleton";
-import { CheckboxUpgradedShowcase } from "@/components/vui/CheckboxUpgraded";
+import { CheckboxRefinedShowcase } from "@/components/vui/CheckboxUpgraded";
 import SheetShowcase from "@/components/vui/Sheet";
 import { AnimatedNumberCountdownShowcase } from "@/components/vui/AnimatedNumber";
 import { BentoGridShowcase } from "@/components/vui/BentoGrid";
-import Card from "@/components/vui/Card";
+import CardShowcase from "@/components/vui/Card";
+import Tunnel from "@/components/vui/Tunnel";
+import { WavyTilesShowcase } from "@/components/vui/WavyTiles";
 
 export type ComponentEntry = {
   name: string;
@@ -97,13 +99,13 @@ export const componentMap: ComponentCategoryMap = {
     },
     {
       name: "Card",
-      component: Card,
+      component: CardShowcase,
       route: "/components/card",
       path: "components/vui/Card.tsx",
     },
     {
-      name: "Checkbox",   
-      component: CheckboxUpgradedShowcase,
+      name: "Checkbox",
+      component: CheckboxRefinedShowcase,
       route: "/components/checkbox",
       path: "components/vui/CheckboxUpgraded.tsx",
     },
@@ -138,18 +140,18 @@ export const componentMap: ComponentCategoryMap = {
       path: "components/vui/WheelPicker.tsx",
     },
   ],
-  "Backgrounds": [
+  Backgrounds: [
     {
       name: "Tunnel",
-      component: Introduction,
+      component: Tunnel,
       route: "/backgrounds/tunnel",
-      path: "components/Introduction.tsx",
+      path: "components/vui/Tunnel.tsx",
     },
     {
       name: "Wavy Tiles",
-      component: Introduction,
+      component: WavyTilesShowcase,
       route: "/backgrounds/wavy-tiles",
-      path: "components/Introduction.tsx",
+      path: "components/vui/WavyTiles.tsx",
     },
   ],
 };

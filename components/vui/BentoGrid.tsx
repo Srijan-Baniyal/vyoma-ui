@@ -1,624 +1,627 @@
 "use client";
 
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { cn } from "@/lib/utils";
-import { useState, useEffect } from "react";
+import Image from "next/image";
+import { RefreshCw, Heart, Download, X, User } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import React from "react";
 
-interface BentoCardProps {
-  className?: string;
-  children: React.ReactNode;
-  delay?: number;
-  hoverable?: boolean;
-}
+// Static Unsplash images - replace these URLs with your preferred images
+const staticImages = [
+  {
+    id: "1",
+    url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80",
+    alt: "Beautiful mountain landscape with reflection in lake",
+    photographer: "John Doe",
+    username: "johndoe",
+    likes: 1240,
+    downloads: 892,
+  },
+  {
+    id: "2",
+    url: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1200&q=80",
+    alt: "Misty forest with tall trees",
+    photographer: "Jane Smith",
+    username: "janesmith",
+    likes: 856,
+    downloads: 634,
+  },
+  {
+    id: "3",
+    url: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1200&q=80",
+    alt: "Serene lake surrounded by mountains",
+    photographer: "Mike Johnson",
+    username: "mikej",
+    likes: 2103,
+    downloads: 1456,
+  },
+  {
+    id: "4",
+    url: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=1200&q=80",
+    alt: "Desert sand dunes at sunset",
+    photographer: "Sarah Wilson",
+    username: "sarahw",
+    likes: 945,
+    downloads: 723,
+  },
+  {
+    id: "5",
+    url: "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?w=1200&q=80",
+    alt: "Rolling green hills countryside",
+    photographer: "Tom Brown",
+    username: "tombrown",
+    likes: 678,
+    downloads: 445,
+  },
+  {
+    id: "6",
+    url: "https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=1200&q=80",
+    alt: "Ocean waves crashing on rocks",
+    photographer: "Lisa Davis",
+    username: "lisad",
+    likes: 1567,
+    downloads: 1203,
+  },
+  {
+    id: "7",
+    url: "https://images.unsplash.com/photo-1519904981063-b0cf448d479e?w=1200&q=80",
+    alt: "Snow-capped mountain peaks",
+    photographer: "Alex Chen",
+    username: "alexc",
+    likes: 892,
+    downloads: 567,
+  },
+  {
+    id: "8",
+    url: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=1200&q=80",
+    alt: "Autumn forest with golden leaves",
+    photographer: "Emma Taylor",
+    username: "emmat",
+    likes: 734,
+    downloads: 489,
+  },
+  {
+    id: "9",
+    url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80",
+    alt: "Peaceful valley with river",
+    photographer: "David Lee",
+    username: "davidl",
+    likes: 1245,
+    downloads: 834,
+  },
+  {
+    id: "10",
+    url: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1200&q=80",
+    alt: "Dramatic cliff overlooking ocean",
+    photographer: "Rachel Green",
+    username: "rachelg",
+    likes: 1876,
+    downloads: 1345,
+  },
+  {
+    id: "11",
+    url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=1200&q=80",
+    alt: "Majestic mountain range with golden sunrise",
+    photographer: "James Rodriguez",
+    username: "jamesrod",
+    likes: 2234,
+    downloads: 1567,
+  },
+  {
+    id: "12",
+    url: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1200&q=80",
+    alt: "Majestic mountain range with golden sunrise",
+    photographer: "James Rodriguez",
+    username: "jamesrod",
+    likes: 2234,
+    downloads: 1567,
+  },
+];
 
-const BentoCard = ({ className, children, delay = 0, hoverable = true }: BentoCardProps) => {
-  const [isHovered, setIsHovered] = useState(false);
-  
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 40, scale: 0.9 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ 
-        duration: 0.8, 
-        delay,
-        type: "spring",
-        bounce: 0.3
-      }}
-      whileHover={hoverable ? { 
-        scale: 1.02, 
-        rotateY: 5,
-        rotateX: 5,
-        z: 50
-      } : {}}
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
-      className={cn(
-        "rounded-3xl border bg-background shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden relative group",
-        "before:absolute before:inset-0 before:bg-gradient-to-br before:from-white/20 before:via-transparent before:to-transparent before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-500",
-        className
-      )}
-      style={{
-        transformStyle: "preserve-3d",
-      }}
-    >
-      <div className="relative z-10 h-full">
-        {children}
-      </div>
-      <AnimatePresence>
-        {isHovered && hoverable && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-pink-500/10 to-blue-500/10 pointer-events-none"
-          />
-        )}
-      </AnimatePresence>
-    </motion.div>
-  );
-};
+const gridItems = [
+  { id: 1, className: "col-span-3 row-span-1" },
+  { id: 2, className: "col-span-3 row-span-1" },
+  { id: 3, className: "col-span-4 row-span-2" },
+  { id: 4, className: "col-span-2 row-span-2" },
+  { id: 5, className: "col-span-6 row-span-1" },
+  { id: 6, className: "col-span-2 row-span-2" },
+  { id: 7, className: "col-span-4 row-span-3" },
+  { id: 8, className: "col-span-2 row-span-1" },
+  { id: 9, className: "col-span-6 row-span-1" },
+  { id: 10, className: "col-span-2 row-span-2" },
+  { id: 11, className: "col-span-2 row-span-2" },
+  { id: 12, className: "col-span-2 row-span-2" },
+];
 
-const FloatingParticles = ({ count = 20 }) => {
-  return (
-    <div className="absolute inset-0 pointer-events-none overflow-hidden">
-      {Array.from({ length: count }).map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute w-1 h-1 bg-white/30 rounded-full"
-          initial={{
-            x: Math.random() * 100 + "%",
-            y: Math.random() * 100 + "%",
-          }}
-          animate={{
-            x: [
-              Math.random() * 100 + "%",
-              Math.random() * 100 + "%",
-              Math.random() * 100 + "%",
-            ],
-            y: [
-              Math.random() * 100 + "%", 
-              Math.random() * 100 + "%",
-              Math.random() * 100 + "%",
-            ],
-          }}
-          transition={{
-            duration: Math.random() * 20 + 10,
-            repeat: Infinity,
-            ease: "linear",
-          }}
-        />
-      ))}
-    </div>
-  );
-};
+// Image Dialog Component
+function ImageDialog({
+  image,
+  isOpen,
+  onClose,
+}: {
+  image: (typeof staticImages)[0] | null;
+  isOpen: boolean;
+  onClose: () => void;
+}) {
+  const [imageLoaded, setImageLoaded] = useState(false);
 
-const AnimatedText = ({ children, delay = 0 }: { children: string; delay?: number }) => {
-  return (
-    <motion.span
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, delay }}
-      className="inline-block"
-    >
-      {children.split("").map((char, i) => (
-        <motion.span
-          key={i}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: delay + i * 0.05 }}
-          className="inline-block"
-        >
-          {char === " " ? "\u00A0" : char}
-        </motion.span>
-      ))}
-    </motion.span>
-  );
-};
-
-const PulsingOrb = ({ size = "w-4 h-4", color = "bg-purple-500" }) => {
-  return (
-    <motion.div
-      className={cn("rounded-full", size, color)}
-      animate={{
-        scale: [1, 1.2, 1],
-        opacity: [0.7, 1, 0.7],
-      }}
-      transition={{
-        duration: 2,
-        repeat: Infinity,
-        ease: "easeInOut",
-      }}
-    />
-  );
-};
-
-export function BentoGridShowcase() {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
+  // ESC key functionality
+  React.useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isOpen) {
+        onClose();
+      }
     };
-    
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
+
+    if (isOpen) {
+      document.addEventListener("keydown", handleEscape);
+      document.body.style.overflow = "hidden"; // Prevent background scroll
+    }
+
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen, onClose]);
+
+  // Reset image loaded state when image changes
+  React.useEffect(() => {
+    setImageLoaded(false);
+  }, [image]);
+
+  if (!image) return null;
 
   return (
-    <div className="w-full max-w-7xl mx-auto p-6 relative">
-      {/* Global ambient lighting effect */}
-      <motion.div
-        className="absolute inset-0 opacity-30 pointer-events-none"
-        style={{
-          background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(255,255,255,0.1), transparent 40%)`,
-        }}
-      />
-      
-      <div className="grid grid-cols-6 gap-6 h-[700px]">
-        {/* Hero Card - "Better Now Closer" */}
-        <BentoCard 
-          className="col-span-3 row-span-2 bg-gradient-to-br from-amber-50 via-orange-50 to-pink-100 border-orange-200/50 p-8 relative overflow-hidden"
-          delay={0.1}
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md"
+          onClick={onClose}
         >
-          <FloatingParticles count={15} />
-          <div className="h-full flex flex-col justify-between relative z-10">
-            <div className="space-y-8">
+          <motion.div
+            initial={{ scale: 0.5, opacity: 0, rotateX: -15 }}
+            animate={{ scale: 1, opacity: 1, rotateX: 0 }}
+            exit={{ scale: 0.5, opacity: 0, rotateX: 15 }}
+            transition={{
+              type: "spring",
+              duration: 0.6,
+              bounce: 0.3,
+              ease: "easeOut",
+            }}
+            className="relative max-w-5xl max-h-[95vh] w-full bg-white dark:bg-gray-900 rounded-3xl overflow-hidden shadow-2xl border border-white/10"
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              transformStyle: "preserve-3d",
+              perspective: "1000px",
+            }}
+          >
+            {/* Enhanced Close Button */}
+            <motion.button
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{ delay: 0.2 }}
+              onClick={onClose}
+              className="absolute top-4 right-4 z-20 p-3 bg-black/30 hover:bg-black/50 text-white rounded-full backdrop-blur-lg transition-all duration-200 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-white/50"
+              aria-label="Close dialog"
+            >
+              <X className="w-5 h-5" />
+            </motion.button>
+
+            {/* Image Container with Loading State */}
+            <div className="relative aspect-[4/3] w-full bg-gray-100 dark:bg-gray-800">
+              {!imageLoaded && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{
+                      duration: 1,
+                      repeat: Infinity,
+                      ease: "linear",
+                    }}
+                    className="w-8 h-8 border-2 border-gray-300 dark:border-gray-600 border-t-blue-500 rounded-full"
+                  />
+                </div>
+              )}
+
               <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 1, delay: 0.3 }}
+                initial={{ opacity: 0, scale: 1.1 }}
+                animate={{ opacity: imageLoaded ? 1 : 0, scale: 1 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
               >
-                <h1 className="text-6xl lg:text-7xl font-black bg-gradient-to-r from-teal-600 via-emerald-600 to-teal-700 bg-clip-text text-transparent leading-[0.85] tracking-tight">
-                  <AnimatedText delay={0.5}>better</AnimatedText>
-                  <br />
-                  <AnimatedText delay={0.8}>now </AnimatedText>
-                  <motion.span 
-                    className="bg-gradient-to-r from-emerald-500 to-teal-600 bg-clip-text text-transparent"
+                <Image
+                  src={image.url}
+                  alt={image.alt}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 1200px"
+                  priority
+                  onLoad={() => setImageLoaded(true)}
+                />
+              </motion.div>
+
+              {/* Image Overlay Gradient */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
+            </div>
+
+            {/* Enhanced Image Info */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.4 }}
+              className="p-8 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800"
+            >
+              <div className="flex items-start justify-between mb-6">
+                <div className="flex-1">
+                  <motion.h3
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.8, delay: 1.2 }}
+                    transition={{ delay: 0.4 }}
+                    className="text-2xl font-bold text-gray-900 dark:text-white mb-3 leading-tight"
                   >
-                    closer
-                  </motion.span>
-                </h1>
-              </motion.div>
-              
-              <motion.div 
-                className="flex space-x-4 mt-12"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 1.5 }}
-              >
-                {[
-                  { bg: "from-yellow-300 to-amber-400", border: "border-amber-500", emoji: "👨‍💻", name: "Dev" },
-                  { bg: "from-rose-300 to-pink-400", border: "border-pink-500", emoji: "👩‍🎨", name: "Designer" },
-                  { bg: "from-blue-300 to-indigo-400", border: "border-indigo-500", emoji: "👨‍💼", name: "Manager" },
-                ].map((person, i) => (
-                  <motion.div
-                    key={i}
-                    className="relative group cursor-pointer"
-                    whileHover={{ y: -5, scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 1.7 + i * 0.1 }}
-                  >
-                    <div className={cn(
-                      "w-20 h-24 bg-gradient-to-b rounded-2xl border-3 shadow-lg flex flex-col items-center justify-center transition-all duration-300 group-hover:shadow-xl",
-                      person.bg,
-                      person.border
-                    )}>
-                      <span className="text-2xl mb-1">{person.emoji}</span>
-                      <span className="text-xs font-bold text-gray-700">{person.name}</span>
-                    </div>
-                    <motion.div
-                      className="absolute -top-2 -right-2 w-4 h-4 bg-green-400 rounded-full border-2 border-white shadow-md"
-                      animate={{ scale: [1, 1.2, 1] }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                    />
-                  </motion.div>
-                ))}
-              </motion.div>
-            </div>
-            
-            {/* Creative bottom decoration */}
-            <motion.div
-              className="absolute -bottom-4 -right-4 w-32 h-32 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-xl"
-              animate={{
-                scale: [1, 1.1, 1],
-                rotate: [0, 180, 360],
-              }}
-              transition={{
-                duration: 20,
-                repeat: Infinity,
-                ease: "linear",
-              }}
-            />
-          </div>
-        </BentoCard>
+                    {image.alt}
+                  </motion.h3>
 
-        {/* Enhanced Handshake Card */}
-        <BentoCard 
-          className="col-span-3 bg-gradient-to-br from-teal-500 via-emerald-600 to-cyan-600 p-8 relative overflow-hidden"
-          delay={0.2}
-        >
-          <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent" />
-          <FloatingParticles count={10} />
-          <div className="h-full flex items-center justify-center relative z-10">
-            <motion.div 
-              className="text-center"
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 300 }}
-            >
-              <motion.div
-                className="text-8xl mb-6 filter drop-shadow-lg"
-                animate={{ 
-                  rotateY: [0, 10, -10, 0],
-                  scale: [1, 1.05, 1]
-                }}
-                transition={{ 
-                  duration: 4, 
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-              >
-                🤝
-              </motion.div>
-              <motion.div 
-                className="flex justify-center space-x-2"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
-              >
-                {Array.from({ length: 5 }).map((_, i) => (
                   <motion.div
-                    key={i}
-                    className="w-2 h-2 bg-white/60 rounded-full"
-                    animate={{ scale: [1, 1.5, 1] }}
-                    transition={{ 
-                      duration: 1.5, 
-                      delay: i * 0.2,
-                      repeat: Infinity 
-                    }}
-                  />
-                ))}
-              </motion.div>
-              <motion.p
-                className="text-white/80 font-medium mt-4 text-lg tracking-wide"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.5 }}
+                    className="flex items-center text-gray-600 dark:text-gray-300 mb-4"
+                  >
+                    <div className="flex items-center bg-gray-100 dark:bg-gray-800 px-3 py-2 rounded-full">
+                      <User className="w-4 h-4 mr-2" />
+                      <span className="font-semibold">
+                        {image.photographer}
+                      </span>
+                      <span className="mx-2 text-gray-400 dark:text-gray-500">
+                        •
+                      </span>
+                      <span className="text-sm opacity-75">
+                        @{image.username}
+                      </span>
+                    </div>
+                  </motion.div>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.6 }}
+                  className="flex items-center space-x-8"
+                >
+                  <div className="flex items-center bg-red-50 dark:bg-red-900/20 px-4 py-2 rounded-full">
+                    <Heart className="w-5 h-5 mr-2 text-red-500" />
+                    <span className="font-bold text-gray-900 dark:text-white">
+                      {image.likes.toLocaleString()}
+                    </span>
+                    <span className="ml-1 text-sm text-gray-500 dark:text-gray-400">
+                      likes
+                    </span>
+                  </div>
+
+                  <div className="flex items-center bg-blue-50 dark:bg-blue-900/20 px-4 py-2 rounded-full">
+                    <Download className="w-5 h-5 mr-2 text-blue-500" />
+                    <span className="font-bold text-gray-900 dark:text-white">
+                      {image.downloads.toLocaleString()}
+                    </span>
+                    <span className="ml-1 text-sm text-gray-500 dark:text-gray-400">
+                      downloads
+                    </span>
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.7 }}
+                >
+                  <Button
+                    className="bg-gray-900 hover:bg-gray-800 dark:bg-white dark:hover:bg-gray-100 text-white dark:text-gray-900 px-8 py-3 rounded-full font-semibold transition-all duration-200 hover:scale-105 hover:shadow-lg focus:ring-2 focus:ring-gray-500 dark:focus:ring-gray-300"
+                    onClick={() =>
+                      window.open(
+                        `https://unsplash.com/@${image.username}`,
+                        "_blank"
+                      )
+                    }
+                  >
+                    View on Unsplash
+                  </Button>
+                </motion.div>
+              </div>
+
+              {/* Additional Info */}
+              <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.8 }}
+                className="mt-6 pt-6 border-t border-gray-100 dark:border-gray-800"
               >
-                Partnership Excellence
-              </motion.p>
-            </motion.div>
-          </div>
-        </BentoCard>
-
-        {/* Creative Team Adaptation Card */}
-        <BentoCard 
-          className="col-span-2 bg-gradient-to-br from-red-500 via-rose-600 to-pink-600 text-white p-6 relative overflow-hidden"
-          delay={0.3}
-        >
-          <div className="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-full -mr-10 -mt-10" />
-          <div className="h-full flex flex-col justify-between relative z-10">
-            <motion.div 
-              className="space-y-4"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.5 }}
-            >
-              <motion.div 
-                className="bg-white/20 backdrop-blur-sm rounded-xl p-4 text-center border border-white/20"
-                whileHover={{ scale: 1.02, backgroundColor: "rgba(255,255,255,0.25)" }}
-              >
-                <motion.div 
-                  className="text-sm font-bold opacity-90"
-                  animate={{ color: ["#fff", "#fbbf24", "#fff"] }}
-                  transition={{ duration: 3, repeat: Infinity }}
-                >
-                  24 Mar
-                </motion.div>
-                <div className="text-xs opacity-75 mt-1">09:00-10:00</div>
-                <div className="flex justify-center mt-2 space-x-1">
-                  {Array.from({ length: 3 }).map((_, i) => (
-                    <PulsingOrb key={i} size="w-2 h-2" color="bg-yellow-300" />
-                  ))}
-                </div>
-              </motion.div>
-              <motion.div 
-                className="space-y-2"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.7 }}
-              >
-                <h3 className="text-2xl font-black italic bg-gradient-to-r from-white to-pink-200 bg-clip-text text-transparent">
-                  Team
-                </h3>
-                <h3 className="text-2xl font-black italic bg-gradient-to-r from-pink-200 to-white bg-clip-text text-transparent">
-                  Adaptation
-                </h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400 text-center">
+                  Press{" "}
+                  <kbd className="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded text-xs font-mono">
+                    ESC
+                  </kbd>{" "}
+                  to close
+                </p>
               </motion.div>
             </motion.div>
-            <motion.div 
-              className="flex items-center justify-between"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.9 }}
-            >
-              <motion.span 
-                className="text-xs bg-white/20 px-3 py-2 rounded-full backdrop-blur-sm font-medium"
-                whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.3)" }}
-              >
-                HR grooming
-              </motion.span>
-              <motion.span 
-                className="text-3xl"
-                animate={{ rotate: [0, 5, -5, 0] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
-                📋
-              </motion.span>
-            </motion.div>
-          </div>
-        </BentoCard>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
 
-        {/* Enhanced Sync Card */}
-        <BentoCard 
-          className="col-span-2 bg-gradient-to-br from-slate-50 to-white border-slate-200 p-6 relative overflow-hidden"
-          delay={0.4}
-        >
-          <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 via-transparent to-blue-500/5" />
-          <div className="h-full flex flex-col justify-center items-center text-center space-y-6 relative z-10">
-            <motion.div 
-              className="flex items-center space-x-3 group cursor-pointer"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <motion.div 
-                className="w-8 h-8 bg-gradient-to-br from-red-500 to-red-600 rounded-lg shadow-lg"
-                animate={{ 
-                  rotate: [0, 90, 180, 270, 360],
-                  scale: [1, 1.1, 1]
+export default function BentoGrid() {
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [refreshing, setRefreshing] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<
+    (typeof staticImages)[0] | null
+  >(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshKey((prev) => prev + 1);
+      setRefreshing(false);
+    }, 800);
+  };
+
+  const openImageDialog = (image: (typeof staticImages)[0]) => {
+    setSelectedImage(image);
+    setDialogOpen(true);
+  };
+
+  const closeImageDialog = () => {
+    setDialogOpen(false);
+    setTimeout(() => setSelectedImage(null), 300);
+  };
+
+  return (
+    <div className="space-y-8">
+      <div className="flex justify-center">
+        <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+          <Button
+            onClick={handleRefresh}
+            disabled={refreshing}
+            className="bg-white hover:bg-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-600 shadow-lg hover:shadow-xl transition-all duration-300 px-6 py-3 rounded-full font-semibold"
+          >
+            <RefreshCw
+              className={`w-4 h-4 mr-2 transition-transform duration-500 ${
+                refreshing ? "animate-spin" : ""
+              }`}
+            />
+            {refreshing ? "Refreshing Gallery..." : "Refresh Gallery"}
+          </Button>
+        </motion.div>
+      </div>
+
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 auto-rows-[200px]">
+        <AnimatePresence mode="wait">
+          {gridItems.map((item, index) => {
+            const image = staticImages[index];
+            if (!image) return null;
+
+            const isHovered = hoveredItem === image.id;
+
+            return (
+              <motion.div
+                key={`${image.id}-${refreshKey}`}
+                className={`${item.className} relative group overflow-hidden rounded-2xl bg-gray-200 dark:bg-gray-700 cursor-pointer`}
+                initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.8, y: -20 }}
+                transition={{
+                  duration: 0.6,
+                  delay: index * 0.08,
+                  ease: [0.4, 0.0, 0.2, 1],
+                  type: "spring",
+                  damping: 20,
+                  stiffness: 300,
                 }}
-                transition={{ 
-                  duration: 8, 
-                  repeat: Infinity,
-                  ease: "linear"
+                whileHover={{
+                  scale: 1.03,
+                  zIndex: 10,
+                  rotateY: 2,
+                  transition: { duration: 0.4, ease: "easeOut" },
                 }}
-              />
-              <h2 className="text-4xl font-black bg-gradient-to-r from-red-600 to-red-700 bg-clip-text text-transparent">
-                sync
-              </h2>
-            </motion.div>
-            <motion.div
-              className="flex space-x-2"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6 }}
-            >
-              {Array.from({ length: 4 }).map((_, i) => (
+                whileTap={{
+                  scale: 0.97,
+                  transition: { duration: 0.1 },
+                }}
+                onHoverStart={() => setHoveredItem(image.id)}
+                onHoverEnd={() => setHoveredItem(null)}
+                onClick={() => openImageDialog(image)}
+                style={{
+                  transformStyle: "preserve-3d",
+                  transformOrigin: "center center",
+                }}
+              >
+                <Image
+                  src={image.url}
+                  alt={image.alt}
+                  fill
+                  className="object-cover transition-all duration-700 group-hover:scale-110 group-hover:brightness-110 group-hover:contrast-110"
+                  sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                />
+
+                {/* Enhanced Overlay with gradient animation */}
                 <motion.div
-                  key={i}
-                  className="w-3 h-3 bg-gradient-to-r from-red-400 to-pink-400 rounded-full"
-                  animate={{ 
-                    y: [0, -10, 0],
-                    opacity: [0.5, 1, 0.5]
+                  className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: isHovered ? 1 : 0 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                />
+
+                {/* Enhanced Content overlay with staggered animations */}
+                <motion.div
+                  className="absolute bottom-0 left-0 right-0 p-4 text-white"
+                  initial={{ y: "100%", opacity: 0 }}
+                  animate={{
+                    y: isHovered ? "0%" : "100%",
+                    opacity: isHovered ? 1 : 0,
                   }}
-                  transition={{ 
-                    duration: 1.5, 
-                    delay: i * 0.2,
-                    repeat: Infinity 
+                  transition={{
+                    duration: 0.4,
+                    ease: [0.4, 0.0, 0.2, 1],
+                    delay: isHovered ? 0.1 : 0,
+                  }}
+                >
+                  <div className="space-y-3">
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{
+                        opacity: isHovered ? 1 : 0,
+                        y: isHovered ? 0 : 10,
+                      }}
+                      transition={{ delay: isHovered ? 0.2 : 0, duration: 0.3 }}
+                    >
+                      <p className="font-bold text-sm truncate mb-1 drop-shadow-lg">
+                        {image.alt}
+                      </p>
+                      <p className="text-xs opacity-90 truncate drop-shadow-md">
+                        by {image.photographer}
+                      </p>
+                    </motion.div>
+
+                    <motion.div
+                      className="flex items-center justify-between text-xs flex-wrap gap-2"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{
+                        opacity: isHovered ? 1 : 0,
+                        y: isHovered ? 0 : 10,
+                      }}
+                      transition={{ delay: isHovered ? 0.3 : 0, duration: 0.3 }}
+                    >
+                      <div className="flex items-center space-x-2 flex-shrink-0">
+                        <motion.span
+                          className="flex items-center bg-white/20 px-2 py-1 rounded-full backdrop-blur-md border border-white/20 text-xs"
+                          whileHover={{
+                            scale: 1.05,
+                            backgroundColor: "rgba(255,255,255,0.3)",
+                          }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          <Heart className="w-3 h-3 mr-1 text-red-400" />
+                          {image.likes}
+                        </motion.span>
+                        <motion.span
+                          className="flex items-center bg-white/20 px-2 py-1 rounded-full backdrop-blur-md border border-white/20 text-xs"
+                          whileHover={{
+                            scale: 1.05,
+                            backgroundColor: "rgba(255,255,255,0.3)",
+                          }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          <Download className="w-3 h-3 mr-1 text-blue-400" />
+                          {image.downloads}
+                        </motion.span>
+                      </div>
+                      <motion.div
+                        className="text-xs bg-white/30 px-2 py-1 rounded-full backdrop-blur-md border border-white/40 font-medium whitespace-nowrap flex-shrink-0"
+                        animate={{
+                          scale: isHovered ? [1, 1.02, 1] : 1,
+                          opacity: isHovered ? [0.9, 1, 0.95] : 0.9,
+                        }}
+                        transition={{
+                          duration: 1.5,
+                          repeat: isHovered ? Infinity : 0,
+                          ease: "easeInOut",
+                        }}
+                      >
+                        Click to expand
+                      </motion.div>
+                    </motion.div>
+                  </div>
+                </motion.div>
+
+                {/* Enhanced Hover border effect with animated gradient */}
+                <motion.div
+                  className="absolute inset-0 rounded-2xl opacity-0 pointer-events-none"
+                  style={{
+                    background:
+                      "linear-gradient(45deg, rgba(255,255,255,0.4), rgba(255,255,255,0.1), rgba(255,255,255,0.4))",
+                    backgroundSize: "200% 200%",
+                  }}
+                  animate={{
+                    opacity: isHovered ? 1 : 0,
+                    backgroundPosition: isHovered
+                      ? ["0% 0%", "100% 100%"]
+                      : "0% 0%",
+                  }}
+                  transition={{
+                    opacity: { duration: 0.3 },
+                    backgroundPosition: {
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "linear",
+                    },
                   }}
                 />
-              ))}
-            </motion.div>
-          </div>
-        </BentoCard>
 
-        {/* Enhanced "Bring People Together" Card */}
-        <BentoCard 
-          className="col-span-2 row-span-2 bg-gradient-to-br from-slate-50 via-white to-blue-50 border-slate-200 p-6 relative overflow-hidden"
-          delay={0.5}
-        >
-          <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-blue-400/10 to-purple-400/10 rounded-full -mr-20 -mt-20" />
-          <div className="h-full flex flex-col justify-between relative z-10">
-            <motion.div 
-              className="space-y-6"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7 }}
-            >
-              <h2 className="text-4xl font-black bg-gradient-to-r from-red-600 via-pink-600 to-red-700 bg-clip-text text-transparent leading-tight">
-                Bring People<br />
-                <motion.span
-                  animate={{ backgroundPosition: ["0%", "100%"] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                  className="bg-gradient-to-r from-red-600 via-purple-600 to-red-600 bg-clip-text text-transparent bg-200%"
-                >
-                  Together
-                </motion.span>
-              </h2>
-              <motion.p 
-                className="text-slate-500 text-sm font-mono tracking-wider"
-                animate={{ opacity: [0.5, 1, 0.5] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
-                [ sync.com ]
-              </motion.p>
-            </motion.div>
-            
-            <motion.div 
-              className="flex justify-center space-x-4"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.9 }}
-            >
-              {[
-                { bg: "from-yellow-300 to-amber-400", border: "border-amber-500", emoji: "👱‍♂️" },
-                { bg: "from-emerald-300 to-green-400", border: "border-green-500", emoji: "👨‍💼" },
-                { bg: "from-blue-300 to-indigo-400", border: "border-indigo-500", emoji: "👩‍💼" }
-              ].map((person, i) => (
+                {/* Shimmer effect on hover - enhanced */}
                 <motion.div
-                  key={i}
-                  className={cn(
-                    "w-16 h-16 rounded-full bg-gradient-to-br border-3 shadow-lg flex items-center justify-center cursor-pointer relative group",
-                    person.bg,
-                    person.border
-                  )}
-                  whileHover={{ 
-                    scale: 1.15, 
-                    y: -5,
-                    rotateY: 15,
-                    rotateX: 10
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none"
+                  initial={{ x: "-100%" }}
+                  animate={{
+                    x: isHovered ? "100%" : "-100%",
                   }}
-                  whileTap={{ scale: 0.9 }}
-                  animate={{ 
-                    y: [0, -2, 0],
+                  transition={{
+                    duration: 1.2,
+                    ease: "easeInOut",
+                    repeat: isHovered ? Infinity : 0,
+                    repeatDelay: 2,
                   }}
-                                     transition={{ 
-                     y: { duration: 2, delay: i * 0.3, repeat: Infinity },
-                     type: "spring", 
-                     stiffness: 300
-                   }}
-                >
-                  <span className="text-xl relative z-10">{person.emoji}</span>
-                  <motion.div
-                    className="absolute inset-0 bg-white/20 rounded-full opacity-0 group-hover:opacity-100"
-                    transition={{ duration: 0.3 }}
-                  />
-                  <motion.div
-                    className="absolute -inset-2 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full opacity-0 group-hover:opacity-100 blur-md"
-                    transition={{ duration: 0.3 }}
-                  />
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </BentoCard>
+                />
 
-        {/* Enhanced Chat Interface Card */}
-        <BentoCard 
-          className="col-span-4 bg-gradient-to-br from-slate-50 via-white to-slate-100 border-slate-200 p-8 relative overflow-hidden"
-          delay={0.6}
-        >
-          <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-emerald-500/5" />
-          <div className="h-full flex flex-col justify-between space-y-6 relative z-10">
-            <motion.div 
-              className="space-y-6"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.8 }}
-            >
-              <motion.div 
-                className="flex items-start space-x-4"
-                initial={{ x: -50, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ delay: 1, type: "spring" }}
-              >
-                <motion.div 
-                  className="bg-gradient-to-r from-teal-500 to-emerald-600 text-white px-6 py-3 rounded-3xl rounded-bl-lg text-sm font-medium shadow-lg relative"
-                  whileHover={{ scale: 1.02 }}
-                >
-                  Hi! Where are you?
-                  <motion.div
-                    className="absolute -bottom-1 left-4 w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent border-t-8 border-t-teal-600"
-                  />
-                </motion.div>
-                <motion.div 
-                  className="w-10 h-10 rounded-full bg-gradient-to-br from-red-300 to-rose-400 border-3 border-white shadow-lg flex-shrink-0 mt-1 relative overflow-hidden"
-                  whileHover={{ scale: 1.1 }}
-                  animate={{ rotate: [0, 5, -5, 0] }}
-                  transition={{ duration: 3, repeat: Infinity }}
-                >
-                  <div className="absolute inset-1 bg-gradient-to-br from-white/30 to-transparent rounded-full" />
-                </motion.div>
+                {/* Corner accent */}
+                <motion.div
+                  className="absolute top-3 left-3 w-2 h-2 bg-white/60 rounded-full backdrop-blur-sm"
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{
+                    scale: isHovered ? 1 : 0,
+                    opacity: isHovered ? 1 : 0,
+                  }}
+                  transition={{ duration: 0.3, delay: isHovered ? 0.4 : 0 }}
+                />
               </motion.div>
-              
-              <motion.div 
-                className="flex items-start space-x-4 justify-end"
-                initial={{ x: 50, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ delay: 1.2, type: "spring" }}
-              >
-                <motion.div 
-                  className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-300 to-green-400 border-3 border-white shadow-lg flex-shrink-0 mt-1 relative overflow-hidden"
-                  whileHover={{ scale: 1.1 }}
-                  animate={{ rotate: [0, -5, 5, 0] }}
-                  transition={{ duration: 3, repeat: Infinity }}
-                >
-                  <div className="absolute inset-1 bg-gradient-to-br from-white/30 to-transparent rounded-full" />
-                </motion.div>
-                <motion.div 
-                  className="bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 px-6 py-3 rounded-3xl rounded-br-lg text-sm font-medium shadow-lg border border-green-200 relative"
-                  whileHover={{ scale: 1.02 }}
-                >
-                  I&apos;ll be in touch
-                  <motion.div
-                    className="absolute -bottom-1 right-4 w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent border-t-8 border-t-green-100"
-                  />
-                </motion.div>
-              </motion.div>
-            </motion.div>
-            
-            <motion.div 
-              className="bg-gradient-to-r from-slate-800 via-slate-700 to-slate-800 text-white px-6 py-4 rounded-3xl shadow-2xl relative overflow-hidden"
-              initial={{ y: 30, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 1.4 }}
-              whileHover={{ scale: 1.01 }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-transparent to-blue-500/10" />
-              <div className="flex items-center justify-between relative z-10">
-                <motion.p 
-                  className="text-sm font-medium"
-                  animate={{ opacity: [0.8, 1, 0.8] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                >
-                  I&apos;ll be in touch
-                </motion.p>
-                <motion.div 
-                  className="flex space-x-3 ml-6"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 1.6 }}
-                >
-                  {[
-                    { bg: "from-yellow-400 to-amber-500", border: "border-yellow-600" },
-                    { bg: "from-emerald-400 to-green-500", border: "border-green-600" },
-                    { bg: "from-blue-400 to-indigo-500", border: "border-indigo-600" }
-                  ].map((avatar, i) => (
-                    <motion.div
-                      key={i}
-                      className={cn(
-                        "w-8 h-8 rounded-full bg-gradient-to-br border-2 flex items-center justify-center cursor-pointer relative overflow-hidden",
-                        avatar.bg,
-                        avatar.border
-                      )}
-                      whileHover={{ scale: 1.2, y: -2 }}
-                      animate={{ 
-                        y: [0, -1, 0],
-                        scale: [1, 1.05, 1]
-                      }}
-                      transition={{ 
-                        y: { duration: 2, delay: i * 0.5, repeat: Infinity },
-                        scale: { duration: 3, delay: i * 0.7, repeat: Infinity }
-                      }}
-                    >
-                      <span className="text-xs relative z-10">👤</span>
-                      <motion.div
-                        className="absolute inset-0 bg-white/20 rounded-full"
-                        animate={{ opacity: [0, 0.3, 0] }}
-                        transition={{ duration: 2, delay: i * 0.3, repeat: Infinity }}
-                      />
-                    </motion.div>
-                  ))}
-                </motion.div>
-              </div>
-            </motion.div>
-          </div>
-        </BentoCard>
+            );
+          })}
+        </AnimatePresence>
       </div>
+
+      {/* Image Dialog */}
+      <ImageDialog
+        image={selectedImage}
+        isOpen={dialogOpen}
+        onClose={closeImageDialog}
+      />
+    </div>
+  );
+}
+
+export function BentoGridShowcase() {
+  return (
+    <div className="space-y-8 p-8 bg-background">
+      <div className="text-center space-y-4">
+        <h2 className="text-3xl font-bold text-foreground">
+          Bento Grid Gallery
+        </h2>
+        <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+          A beautiful masonry grid layout showcasing curated photography with
+          smooth animations and interactive hover effects.
+        </p>
+      </div>
+      <BentoGrid />
     </div>
   );
 }

@@ -100,7 +100,7 @@ export function AnimatedNumberCountdownShowcase() {
   return (
     <div className="flex flex-col items-center justify-center">
       <AnimatedNumberCountdown
-        endDate={new Date("2025-06-30")}
+        endDate={new Date("2025-06-28")}
         className="my-4"
       />
     </div>

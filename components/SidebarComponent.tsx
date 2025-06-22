@@ -98,26 +98,28 @@ export default function SidebarComponent({ children }: SidebarComponentProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [openCategories, setOpenCategories] = useState<Record<string, boolean>>(() => {
-    // Try to load from localStorage first, then default to all open
-    if (typeof window !== 'undefined') {
-      try {
-        const saved = localStorage.getItem('sidebar-categories');
-        if (saved) {
-          return JSON.parse(saved);
+  const [openCategories, setOpenCategories] = useState<Record<string, boolean>>(
+    () => {
+      // Try to load from localStorage first, then default to all open
+      if (typeof window !== "undefined") {
+        try {
+          const saved = localStorage.getItem("sidebar-categories");
+          if (saved) {
+            return JSON.parse(saved);
+          }
+        } catch (error) {
+          console.warn("Failed to load sidebar state:", error);
         }
-      } catch (error) {
-        console.warn('Failed to load sidebar state:', error);
       }
+
+      // Default: all categories open
+      const initial: Record<string, boolean> = {};
+      Object.keys(componentMap).forEach((category) => {
+        initial[category] = true;
+      });
+      return initial;
     }
-    
-    // Default: all categories open
-    const initial: Record<string, boolean> = {};
-    Object.keys(componentMap).forEach((category) => {
-      initial[category] = true;
-    });
-    return initial;
-  });
+  );
 
   const animations = useMemo(
     () => createAnimationVariants(shouldReduceMotion ?? false),
@@ -167,8 +169,6 @@ export default function SidebarComponent({ children }: SidebarComponentProps) {
     setIsDarkMode(document.documentElement.classList.contains("dark"));
   }, []);
 
-
-
   // Optimized handlers with useCallback
   const handleMobileToggle = useCallback(() => {
     setIsMobileOpen((prev) => !prev);
@@ -202,16 +202,16 @@ export default function SidebarComponent({ children }: SidebarComponentProps) {
         ...prev,
         [category]: !prev[category],
       };
-      
+
       // Save to localStorage
-      if (typeof window !== 'undefined') {
+      if (typeof window !== "undefined") {
         try {
-          localStorage.setItem('sidebar-categories', JSON.stringify(newState));
+          localStorage.setItem("sidebar-categories", JSON.stringify(newState));
         } catch (error) {
-          console.warn('Failed to save sidebar state:', error);
+          console.warn("Failed to save sidebar state:", error);
         }
       }
-      
+
       return newState;
     });
   }, []);
@@ -335,11 +335,13 @@ export default function SidebarComponent({ children }: SidebarComponentProps) {
             </TooltipTrigger>
             <TooltipContent
               side="right"
-              className="max-w-[220px] p-3 bg-popover/95 backdrop-blur-sm border shadow-lg"
+              className="max-w-[220px] p-3 bg-background border shadow-lg"
               sideOffset={8}
             >
               <div className="space-y-1">
-                <p className="font-medium text-sm">{comp.name}</p>
+                <p className="font-medium text-sm dark:text-white text-black">
+                  {comp.name}
+                </p>
                 {comp.description && (
                   <p className="text-xs text-muted-foreground leading-relaxed">
                     {comp.description}
@@ -453,12 +455,12 @@ export default function SidebarComponent({ children }: SidebarComponentProps) {
                 ) : (
                   Object.entries(filteredComponents).map(
                     ([category, components], index) => (
-                                             <Collapsible
-                         key={category}
-                         open={openCategories[category] === true}
-                         onOpenChange={() => toggleCategory(category)}
-                         className="group/collapsible mb-3"
-                       >
+                      <Collapsible
+                        key={category}
+                        open={openCategories[category] === true}
+                        onOpenChange={() => toggleCategory(category)}
+                        className="group/collapsible mb-3"
+                      >
                         <SidebarGroup className="p-0">
                           <CollapsibleTrigger asChild>
                             <SidebarGroupLabel

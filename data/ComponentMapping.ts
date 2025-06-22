@@ -15,6 +15,8 @@ import { BentoGridShowcase } from "@/components/vui/BentoGrid";
 import CardShowcase from "@/components/vui/Card";
 import Tunnel from "@/components/vui/Tunnel";
 import { WavyTilesShowcase } from "@/components/vui/WavyTiles";
+import ButtonShowcase from "@/components/vui/Button";
+import ToolTipShowcase from "@/components/vui/ToolTip";
 
 export type ComponentEntry = {
   name: string;
@@ -93,9 +95,9 @@ export const componentMap: ComponentCategoryMap = {
     },
     {
       name: "Buttons",
-      component: Introduction,
+      component: ButtonShowcase,
       route: "/components/buttons",
-      path: "components/Introduction.tsx",
+      path: "components/vui/Button.tsx",
     },
     {
       name: "Card",
@@ -129,9 +131,9 @@ export const componentMap: ComponentCategoryMap = {
     },
     {
       name: "Tooltip",
-      component: Introduction,
+      component: ToolTipShowcase,
       route: "/components/tooltip",
-      path: "components/Introduction.tsx",
+      path: "components/vui/ToolTip.tsx",
     },
     {
       name: "Wheel Picker",

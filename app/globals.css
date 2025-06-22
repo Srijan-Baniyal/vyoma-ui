@@ -231,5 +231,26 @@
   .animate-pulse-border {
     animation: pulse-border 2s ease-in-out infinite;
   }
+
+  /* Shimmer animations for buttons */
+  @keyframes shimmer-slide {
+    to {
+      transform: translate(calc(100cqw - 100%), calc(100cqh - 100%));
+    }
+  }
+
+  @keyframes spin-around {
+    to {
+      transform: rotate(1turn);
+    }
+  }
+
+  .animate-shimmer-slide {
+    animation: shimmer-slide var(--speed) ease-in-out infinite;
+  }
+
+  .animate-spin-around {
+    animation: spin-around calc(var(--speed) * 2) linear infinite;
+  }
 }
 

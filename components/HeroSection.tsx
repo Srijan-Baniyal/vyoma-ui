@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ArrowRight, Sparkles, Layers, Zap } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Pill } from "@/components/ui/pill";
-import { CountUp } from "@/components/vui/CountUp";
+import { CountUp } from "@/components/vui/text/CountUp";
 
 export default function HeroSection() {
   const [gridCells, setGridCells] = useState<boolean[]>([]);
@@ -22,21 +22,21 @@ export default function HeroSection() {
       // Random fill percentage between 65-67% (increased from 60%)
       const targetFillPercentage = 0.65 + Math.random() * 0.02;
       const targetCells = Math.floor(totalCells * targetFillPercentage);
-      
+
       // Random interval timing for more variation (20% faster)
       const baseInterval = 64 + Math.random() * 32; // 64-96ms
-      
+
       const fillInterval = setInterval(() => {
         setGridCells((prev) => {
           const newCells = [...prev];
 
           // Variable number of cells to fill per iteration (2-4 cells)
           const cellsToFill = 2 + Math.floor(Math.random() * 3);
-          
+
           for (let i = 0; i < cellsToFill; i++) {
             let randomIndex;
             let attempts = 0;
-            
+
             // Try to find an empty cell, with fallback to prevent infinite loops
             do {
               randomIndex = Math.floor(Math.random() * totalCells);

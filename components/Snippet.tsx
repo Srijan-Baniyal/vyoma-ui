@@ -34,8 +34,12 @@ export function Snippet({
 
   return (
     <Card
-      className={`relative flex flex-nowrap p-3 w-full transition-all duration-200 group ${variantStyles[variant]} ${
-        width ? "max-w-none" : "max-w-[300px] sm:max-w-[400px] md:max-w-[500px] lg:max-w-[740px]"
+      className={`relative flex flex-nowrap p-3 w-full transition-all duration-200 group ${
+        variantStyles[variant]
+      } ${
+        width
+          ? "max-w-none"
+          : "max-w-[300px] sm:max-w-[400px] md:max-w-[500px] lg:max-w-[740px]"
       }`}
     >
       <div className="flex items-center gap-3 flex-1 min-w-0">

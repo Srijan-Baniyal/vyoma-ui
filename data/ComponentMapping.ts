@@ -2,18 +2,18 @@ import Installation from "@/components/Installation";
 import Introduction from "@/components/Introduction";
 import StoryBehind from "@/components/StoryBehind";
 import Changelog from "@/components/ChangeLog";
-import TextDecryptionShowcase from "@/components/vui/TextDecryption";
-import CountUpShowcase from "@/components/vui/CountUp";
-import { TypingTextShowcase } from "@/components/vui/TypingText";
+import TextDecryptionShowcase from "@/components/vui/text/TextDecryption";
+import CountUpShowcase from "@/components/vui/text/CountUp";
+import { TypingTextShowcase } from "@/components/vui/text/TypingText";
 import { AccordionShowcase } from "@/components/vui/Accordion";
 import { WheelPickerDemo } from "@/components/vui/WheelPicker";
 import { SkeletonShowcase } from "@/components/vui/Skeleton";
 import { CheckboxRefinedShowcase } from "@/components/vui/CheckboxUpgraded";
 import SheetShowcase from "@/components/vui/Sheet";
-import { AnimatedNumberCountdownShowcase } from "@/components/vui/AnimatedNumber";
+import { AnimatedNumberCountdownShowcase } from "@/components/vui/text/AnimatedNumber";
 import { BentoGridShowcase } from "@/components/vui/BentoGrid";
 import CardShowcase from "@/components/vui/Card";
-import Tunnel from "@/components/vui/Tunnel";
+import TunnelShowcase from "@/components/vui/Tunnel";
 import { WavyTilesShowcase } from "@/components/vui/WavyTiles";
 import ButtonShowcase from "@/components/vui/Button";
 import ToolTipShowcase from "@/components/vui/ToolTip";
@@ -59,25 +59,25 @@ export const componentMap: ComponentCategoryMap = {
       name: "Decryption Text",
       component: TextDecryptionShowcase,
       route: "/text-animation/decryption-text",
-      path: "components/vui/TextDecryption.tsx",
+      path: "components/vui/text/TextDecryption.tsx",
     },
     {
       name: "Typing Text",
       component: TypingTextShowcase,
       route: "/text-animation/typing-text",
-      path: "components/vui/TypingText.tsx",
+      path: "components/vui/text/TypingText.tsx",
     },
     {
       name: "Counting Number",
       component: CountUpShowcase,
       route: "/text-animation/counting-number",
-      path: "components/vui/CountUp.tsx",
+      path: "components/vui/text/CountUp.tsx",
     },
     {
       name: "Animated Number",
       component: AnimatedNumberCountdownShowcase,
       route: "/text-animation/animated-number",
-      path: "components/vui/AnimatedNumber.tsx",
+      path: "components/vui/text/AnimatedNumber.tsx",
     },
   ],
   Components: [
@@ -145,7 +145,7 @@ export const componentMap: ComponentCategoryMap = {
   Backgrounds: [
     {
       name: "Tunnel",
-      component: Tunnel,
+      component: TunnelShowcase,
       route: "/backgrounds/tunnel",
       path: "components/vui/Tunnel.tsx",
     },

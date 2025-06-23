@@ -42,7 +42,6 @@ const ButtonShowcase: React.FC<ButtonShowcaseProps> = ({ className }) => {
               frontText="Hover me"
               backText="From Top!"
               from="top"
-              className="bg-gradient-to-r from-blue-500 to-cyan-500"
             />
             <span className="text-xs text-muted-foreground">From Top</span>
           </div>
@@ -51,7 +50,6 @@ const ButtonShowcase: React.FC<ButtonShowcaseProps> = ({ className }) => {
               frontText="Hover me"
               backText="From Bottom!"
               from="bottom"
-              className="bg-gradient-to-r from-green-500 to-emerald-500"
             />
             <span className="text-xs text-muted-foreground">From Bottom</span>
           </div>
@@ -60,7 +58,6 @@ const ButtonShowcase: React.FC<ButtonShowcaseProps> = ({ className }) => {
               frontText="Hover me"
               backText="From Left!"
               from="left"
-              className="bg-gradient-to-r from-purple-500 to-pink-500"
             />
             <span className="text-xs text-muted-foreground">From Left</span>
           </div>
@@ -69,7 +66,6 @@ const ButtonShowcase: React.FC<ButtonShowcaseProps> = ({ className }) => {
               frontText="Hover me"
               backText="From Right!"
               from="right"
-              className="bg-gradient-to-r from-orange-500 to-red-500"
             />
             <span className="text-xs text-muted-foreground">From Right</span>
           </div>

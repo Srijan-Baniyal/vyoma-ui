@@ -1,22 +1,22 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import Link from "next/link"
-import { Icons } from "@/components/ui/Icons"
-import { Button } from "@/components/ui/button"
-import { Github, Linkedin, Twitter, Heart } from "lucide-react"
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { Icons } from "@/components/ui/Icons";
+import { Button } from "@/components/ui/button";
+import { Github, Linkedin, Twitter, Heart } from "lucide-react";
 
 export default function Footer() {
   // This prevents the footer from rendering during initial hydration
-  const [mounted, setMounted] = useState(false)
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true)
-  }, [])
+    setMounted(true);
+  }, []);
 
   // Don't render the footer until client-side hydration is complete
   if (!mounted) {
-    return null
+    return null;
   }
 
   return (
@@ -35,16 +35,17 @@ export default function Footer() {
             </Link>
 
             <p className="text-muted-foreground max-w-md leading-relaxed">
-              A modern UI design system crafted with spatial wisdom and thoughtful design. 
-              Build beautiful interfaces that feel natural and intuitive.
+              A modern UI design system crafted with spatial wisdom and
+              thoughtful design. Build beautiful interfaces that feel natural
+              and intuitive.
             </p>
 
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <span>Built with</span>
               <Heart className="w-4 h-4 text-red-500 fill-current" />
               <span>by</span>
-              <Link 
-                href="https://www.srijanbaniyal.com" 
+              <Link
+                href="https://www.srijanbaniyal.com"
                 target="_blank"
                 className="text-foreground hover:text-primary transition-colors font-medium"
               >
@@ -55,8 +56,8 @@ export default function Footer() {
             {/* Social buttons */}
             <div className="flex items-center gap-3">
               <Button variant="outline" size="sm" asChild>
-                <Link 
-                  href="https://github.com/Srijan-Baniyal/VyomaUI" 
+                <Link
+                  href="https://github.com/Srijan-Baniyal/VyomaUI"
                   target="_blank"
                   className="gap-2"
                 >
@@ -65,8 +66,8 @@ export default function Footer() {
                 </Link>
               </Button>
               <Button variant="outline" size="sm" asChild>
-                <Link 
-                  href="https://www.linkedin.com/in/srijan-baniyal/" 
+                <Link
+                  href="https://www.linkedin.com/in/srijan-baniyal/"
                   target="_blank"
                   className="gap-2"
                 >
@@ -75,8 +76,8 @@ export default function Footer() {
                 </Link>
               </Button>
               <Button variant="outline" size="sm" asChild>
-                <Link 
-                  href="https://x.com/compose/" 
+                <Link
+                  href="https://x.com/compose/"
                   target="_blank"
                   className="gap-2"
                 >
@@ -92,32 +93,32 @@ export default function Footer() {
             <h3 className="font-semibold text-foreground">Documentation</h3>
             <ul className="space-y-3 text-sm">
               <li>
-                <Link 
-                  href="/get-started/introduction" 
+                <Link
+                  href="/get-started/introduction"
                   className="text-muted-foreground hover:text-foreground transition-colors"
                 >
                   Getting Started
                 </Link>
               </li>
               <li>
-                <Link 
-                  href="/docs" 
+                <Link
+                  href="/docs"
                   className="text-muted-foreground hover:text-foreground transition-colors"
                 >
                   Components
                 </Link>
               </li>
               <li>
-                <Link 
-                  href="/examples" 
+                <Link
+                  href="/examples"
                   className="text-muted-foreground hover:text-foreground transition-colors"
                 >
                   Examples
                 </Link>
               </li>
               <li>
-                <Link 
-                  href="/colors" 
+                <Link
+                  href="/colors"
                   className="text-muted-foreground hover:text-foreground transition-colors"
                 >
                   Design Tokens
@@ -131,24 +132,24 @@ export default function Footer() {
             <h3 className="font-semibold text-foreground">Legal</h3>
             <ul className="space-y-3 text-sm">
               <li>
-                <Link 
-                  href="/privacy-policy" 
+                <Link
+                  href="/privacy-policy"
                   className="text-muted-foreground hover:text-foreground transition-colors"
                 >
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link 
-                  href="/tos" 
+                <Link
+                  href="/tos"
                   className="text-muted-foreground hover:text-foreground transition-colors"
                 >
                   Terms of Service
                 </Link>
               </li>
               <li>
-                <Link 
-                  href="/license" 
+                <Link
+                  href="/license"
                   className="text-muted-foreground hover:text-foreground transition-colors"
                 >
                   License
@@ -164,7 +165,7 @@ export default function Footer() {
             <p className="text-sm text-muted-foreground">
               © {new Date().getFullYear()} Vyoma UI. All rights reserved.
             </p>
-            
+
             <div className="text-center">
               <p className="text-xs text-muted-foreground mb-2">Powered by</p>
               <div className="flex items-center gap-4 text-xs text-muted-foreground">
@@ -186,5 +187,5 @@ export default function Footer() {
         </div>
       </div>
     </footer>
-  )
+  );
 }

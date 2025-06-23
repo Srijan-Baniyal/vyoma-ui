@@ -107,9 +107,9 @@ export default function Introduction() {
                 : "opacity-0 translate-y-4"
             }`}
           >
-            <Pill 
-              icon={<BookOpen className="w-5 h-5" />} 
-              status="active" 
+            <Pill
+              icon={<BookOpen className="w-5 h-5" />}
+              status="active"
               className="mb-8"
             >
               Getting Started Guide

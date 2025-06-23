@@ -6,19 +6,36 @@ async function getComponentMappingImports(): Promise<Record<string, string>> {
   try {
     const mappingFilePath = join(process.cwd(), "data/ComponentMapping.ts");
     const mappingContent = await readFile(mappingFilePath, "utf-8");
-    
+
     // Extract import statements and map them
-    const importRegex = /import\s+(\w+)\s+from\s+["'](@\/[^"']+)["']/g;
     const imports: Record<string, string> = {};
-    
+
+    // Handle both default imports and destructured imports
+    const defaultImportRegex = /import\s+(\w+)\s+from\s+["'](@\/[^"']+)["']/g;
+    const destructuredImportRegex = /import\s+\{\s*([^}]+)\s*\}\s+from\s+["'](@\/[^"']+)["']/g;
+
+    // Process default imports
     let match;
-    while ((match = importRegex.exec(mappingContent)) !== null) {
+    while ((match = defaultImportRegex.exec(mappingContent)) !== null) {
       const [, componentName, importPath] = match;
       // Convert @/ path to actual file path
       const actualPath = importPath.replace("@/", "") + ".tsx";
       imports[componentName] = actualPath;
     }
-    
+
+    // Process destructured imports
+    while ((match = destructuredImportRegex.exec(mappingContent)) !== null) {
+      const [, componentNames, importPath] = match;
+      // Convert @/ path to actual file path
+      const actualPath = importPath.replace("@/", "") + ".tsx";
+      
+      // Handle multiple destructured imports
+      const names = componentNames.split(",").map(name => name.trim());
+      names.forEach(name => {
+        imports[name] = actualPath;
+      });
+    }
+
     return imports;
   } catch (error) {
     console.error("Error reading ComponentMapping:", error);
@@ -27,8 +44,10 @@ async function getComponentMappingImports(): Promise<Record<string, string>> {
 }
 
 // Find component file by searching through directories
-async function findComponentFile(componentName: string): Promise<string | null> {
-  const searchDirs = ["components", "components/vui", "components/ui"];
+async function findComponentFile(
+  componentName: string
+): Promise<string | null> {
+  const searchDirs = ["components", "components/vui", "components/ui", "components/vui/text", "components/vui/buttons"];
   const possibleNames = [
     `${componentName}.tsx`,
     `${componentName}.ts`,
@@ -63,42 +82,47 @@ async function getComponentClassName(displayName: string): Promise<string> {
   try {
     const mappingFilePath = join(process.cwd(), "data/ComponentMapping.ts");
     const mappingContent = await readFile(mappingFilePath, "utf-8");
-    
+
     // Find the component entry in the mapping
-    const componentRegex = new RegExp(`name:\\s*["']${displayName}["'][^}]*component:\\s*(\\w+)`, 'i');
+    const componentRegex = new RegExp(
+      `name:\\s*["']${displayName}["'][^}]*component:\\s*(\\w+)`,
+      "i"
+    );
     const match = mappingContent.match(componentRegex);
-    
+
     if (match) {
       return match[1];
     }
-    
+
     // Fallback: convert display name to class name
-    return displayName.replace(/\s+/g, '');
+    return displayName.replace(/\s+/g, "");
   } catch (error) {
     console.error("Error getting component class name:", error);
-    return displayName.replace(/\s+/g, '');
+    return displayName.replace(/\s+/g, "");
   }
 }
 
-export async function getComponentSourceCode(componentName: string): Promise<string> {
+export async function getComponentSourceCode(
+  componentName: string
+): Promise<string> {
   try {
     // First, try to get the component class name and find it in imports
     const componentClassName = await getComponentClassName(componentName);
     const imports = await getComponentMappingImports();
-    
+
     let filePath: string | null = imports[componentClassName] || null;
-    
+
     // If not found in imports, try to find the file dynamically
     if (!filePath) {
       filePath = await findComponentFile(componentClassName);
     }
-    
+
     // If still not found, try with display name
     if (!filePath) {
-      const cleanName = componentName.replace(/\s+/g, '');
+      const cleanName = componentName.replace(/\s+/g, "");
       filePath = await findComponentFile(cleanName);
     }
-    
+
     if (!filePath) {
       return `// Source code not available for ${componentName}
 // Component file could not be located automatically
@@ -120,7 +144,7 @@ export default function ${componentName.replace(/\s+/g, "")}() {
     // Read the source file
     const fullPath = join(process.cwd(), filePath);
     const sourceCode = await readFile(fullPath, "utf-8");
-    
+
     return sourceCode;
   } catch (error) {
     console.error(`Error reading source for ${componentName}:`, error);
@@ -148,8 +172,9 @@ export async function getComponentUsageExample(
 ): Promise<string> {
   const componentClassName = await getComponentClassName(componentName);
   const imports = await getComponentMappingImports();
-  const importPath = imports[componentClassName] || `components/${componentClassName}`;
-  
+  const importPath =
+    imports[componentClassName] || `components/${componentClassName}`;
+
   const propsString =
     defaultProps && Object.keys(defaultProps).length > 0
       ? Object.entries(defaultProps)
@@ -167,7 +192,10 @@ export async function getComponentUsageExample(
           .join(" ")
       : "";
 
-  return `import ${componentClassName} from '@/${importPath.replace('.tsx', '')}';
+  return `import ${componentClassName} from '@/${importPath.replace(
+    ".tsx",
+    ""
+  )}';
 
 export default function Example() {
   return (
@@ -179,43 +207,45 @@ export default function Example() {
 }
 
 // Dynamic props detection based on component analysis
-export async function getDefaultProps(componentName: string): Promise<Record<string, unknown>> {
+export async function getDefaultProps(
+  componentName: string
+): Promise<Record<string, unknown>> {
   try {
     const sourceCode = await getComponentSourceCode(componentName);
-    
+
     // Basic props extraction from TypeScript interfaces and default values
     const propsDefaults: Record<string, unknown> = {};
-    
+
     // Look for common prop patterns in the source code
-    if (componentName.toLowerCase().includes('decryption')) {
+    if (componentName.toLowerCase().includes("decryption")) {
       propsDefaults.text = "Hover to decrypt this text!";
       propsDefaults.speed = 50;
       propsDefaults.sequential = true;
       propsDefaults.animateOn = "hover";
     }
-    
-    if (componentName.toLowerCase().includes('typing')) {
+
+    if (componentName.toLowerCase().includes("typing")) {
       propsDefaults.placeholder = "Start typing...";
       propsDefaults.delay = 100;
     }
-    
-    if (componentName.toLowerCase().includes('counting')) {
+
+    if (componentName.toLowerCase().includes("counting")) {
       propsDefaults.start = 0;
       propsDefaults.end = 100;
       propsDefaults.duration = 2000;
     }
-    
+
     // Extract default values from the source code
     const defaultValueRegex = /(\w+):\s*([^,\n}]+)\s*=/g;
     let match;
     while ((match = defaultValueRegex.exec(sourceCode)) !== null) {
-      const [, propName, defaultValue] = match;
+      const [propName, defaultValue] = match;
       try {
         // Try to parse the default value
         if (defaultValue.includes('"') || defaultValue.includes("'")) {
-          propsDefaults[propName] = defaultValue.replace(/['"]/g, '');
-        } else if (defaultValue === 'true' || defaultValue === 'false') {
-          propsDefaults[propName] = defaultValue === 'true';
+          propsDefaults[propName] = defaultValue.replace(/['"]/g, "");
+        } else if (defaultValue === "true" || defaultValue === "false") {
+          propsDefaults[propName] = defaultValue === "true";
         } else if (!isNaN(Number(defaultValue))) {
           propsDefaults[propName] = Number(defaultValue);
         }
@@ -223,7 +253,7 @@ export async function getDefaultProps(componentName: string): Promise<Record<str
         // Skip if can't parse
       }
     }
-    
+
     return propsDefaults;
   } catch (error) {
     console.error(`Error extracting props for ${componentName}:`, error);

@@ -242,10 +242,10 @@ export default function ComponentShowCaseTable({
 
                   <div className="relative group">
                     <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-700 ease-out"></div>
-                    <div className="relative rounded-xl border-2 border-dashed border-muted-foreground/20 bg-gradient-to-br from-background to-muted/30 p-12 min-h-[300px] flex items-center justify-center backdrop-blur-sm transition-all duration-300 group-hover:border-muted-foreground/40 group-hover:shadow-lg">
+                    <div className={`relative rounded-xl border-2 border-dashed border-muted-foreground/20 bg-gradient-to-br from-background to-muted/30 backdrop-blur-sm transition-all duration-300 group-hover:border-muted-foreground/40 group-hover:shadow-lg`}>
                       <div
                         key={refreshKeys[index] || 0}
-                        className="w-full flex items-center justify-center transition-all duration-500 group-hover:scale-105 animate-in zoom-in-50 fade-in-0"
+                        className="w-full transition-all duration-500 animate-in zoom-in-50 fade-in-0"
                       >
                         {isClient && (
                           <comp.component {...(comp.defaultProps || {})} />

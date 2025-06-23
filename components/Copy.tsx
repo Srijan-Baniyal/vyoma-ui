@@ -16,14 +16,14 @@ export default function Copy({ content }: { content: string }) {
         setIsCopied(false);
       }, 2000);
     } catch (err) {
-      console.error('Failed to copy text: ', err);
+      console.error("Failed to copy text: ", err);
     }
   }
 
   return (
-    <Button 
-      variant="ghost" 
-      size="sm" 
+    <Button
+      variant="ghost"
+      size="sm"
       onClick={handleCopy}
       className="h-8 w-8 p-0 hover:bg-primary/10 transition-all duration-200 group flex items-center justify-center"
       aria-label={isCopied ? "Copied!" : "Copy to clipboard"}

@@ -5,7 +5,10 @@ import { Card } from "@/components/ui/card";
 import { Snippet } from "@/components/Snippet";
 import { motion, AnimatePresence } from "framer-motion";
 import { Icons } from "@/components/ui/Icons";
-import { usePackageManager, PackageManagerType } from "@/contexts/PackageManagerContext";
+import {
+  usePackageManager,
+  PackageManagerType,
+} from "@/contexts/PackageManagerContext";
 
 interface PackageManagerTab {
   id: string;
@@ -82,7 +85,8 @@ export function PackageManagerTabs({
   className = "",
 }: PackageManagerTabsProps) {
   const { selectedManager, setSelectedManager } = usePackageManager();
-  const [activeTab, setActiveTab] = useState<PackageManagerType>(selectedManager);
+  const [activeTab, setActiveTab] =
+    useState<PackageManagerType>(selectedManager);
 
   // Sync with global state
   useEffect(() => {
@@ -91,7 +95,7 @@ export function PackageManagerTabs({
 
   const activeManager =
     packageManagers.find((pm) => pm.id === activeTab) || packageManagers[0];
-  
+
   const getFullCommand = () => {
     switch (activeManager.id) {
       case "yarn":
@@ -109,7 +113,7 @@ export function PackageManagerTabs({
         return `${activeManager.command} ${command}`;
     }
   };
-  
+
   const fullCommand = getFullCommand();
 
   return (
@@ -203,15 +207,24 @@ export function PackageManagerTabs({
                 <div className="mb-4 p-3 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded-lg">
                   <div className="flex items-start gap-2">
                     <div className="flex-shrink-0 w-5 h-5 rounded-full bg-amber-100 dark:bg-amber-900 flex items-center justify-center mt-0.5">
-                      <span className="text-amber-600 dark:text-amber-400 text-xs font-bold">!</span>
+                      <span className="text-amber-600 dark:text-amber-400 text-xs font-bold">
+                        !
+                      </span>
                     </div>
                     <div className="text-sm">
                       <p className="font-medium text-amber-800 dark:text-amber-200 mb-1">
                         Using Yarn v1.22.22
                       </p>
                       <p className="text-amber-700 dark:text-amber-300">
-                        This version does not support <code className="bg-amber-100 dark:bg-amber-900 px-1 rounded text-xs">dlx</code>. 
-                        For tools like shadcn, please run the <code className="bg-amber-100 dark:bg-amber-900 px-1 rounded text-xs">npx</code> command separately.
+                        This version does not support{" "}
+                        <code className="bg-amber-100 dark:bg-amber-900 px-1 rounded text-xs">
+                          dlx
+                        </code>
+                        . For tools like shadcn, please run the{" "}
+                        <code className="bg-amber-100 dark:bg-amber-900 px-1 rounded text-xs">
+                          npx
+                        </code>{" "}
+                        command separately.
                       </p>
                     </div>
                   </div>

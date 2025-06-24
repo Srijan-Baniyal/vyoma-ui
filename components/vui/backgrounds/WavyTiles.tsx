@@ -139,14 +139,20 @@ export default function Background() {
       )}
 
       {/* Content */}
-      <div className="container mx-auto px-6 relative z-30">
-        <div className="max-w-5xl mx-auto text-center">
-          <h1 className="hero-text text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tight mb-6 leading-[0.9] px-4">
-            MINIMALIST
-          </h1>
-          <p className="text-gray-300 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mt-8 px-4">
+      <div className="relative z-30 flex flex-col items-center justify-center min-h-screen p-4 text-center">
+        <div className="mb-8 space-y-6">
+          <div className="inline-block">
+            <h1 className="text-6xl md:text-8xl font-black tracking-tighter bg-gradient-to-r from-white via-gray-200 to-white bg-clip-text text-transparent animate-pulse">
+              MINIMALIST
+            </h1>
+            <div className="h-1 w-full bg-gradient-to-r from-transparent via-white to-transparent mt-4 animate-pulse" />
+          </div>
+          
+          <p className="text-lg md:text-xl text-gray-300 max-w-2xl leading-relaxed font-light">
             We create clean, sophisticated designs that communicate clearly and
-            stand the test of time.
+            stand the test of time with 
+            <span className="text-white font-medium"> interactive waves </span>
+            that respond to your movement.
           </p>
         </div>
       </div>
@@ -241,14 +247,6 @@ export function WavyTilesShowcase() {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h3 className="text-lg font-semibold mb-4">Wavy Tiles Background</h3>
-        <p className="text-sm text-muted-foreground mb-6">
-          An animated 3D wave background effect using Vanta.js. Perfect for hero
-          sections and landing pages.
-        </p>
-      </div>
-
       <div className="space-y-6">
         {/* Showcase Container */}
         <div className="relative w-full h-96 rounded-lg overflow-hidden border">
@@ -280,28 +278,6 @@ export function WavyTilesShowcase() {
                 Move your mouse to interact with the waves
               </p>
             </div>
-          </div>
-        </div>
-
-        {/* Features */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-          <div className="p-4 border rounded-lg">
-            <h4 className="font-medium mb-2">Interactive</h4>
-            <p className="text-sm text-muted-foreground">
-              Responds to mouse and touch interactions
-            </p>
-          </div>
-          <div className="p-4 border rounded-lg">
-            <h4 className="font-medium mb-2">Customizable</h4>
-            <p className="text-sm text-muted-foreground">
-              Adjustable colors, wave height, and speed
-            </p>
-          </div>
-          <div className="p-4 border rounded-lg">
-            <h4 className="font-medium mb-2">Responsive</h4>
-            <p className="text-sm text-muted-foreground">
-              Works on all screen sizes and devices
-            </p>
           </div>
         </div>
       </div>

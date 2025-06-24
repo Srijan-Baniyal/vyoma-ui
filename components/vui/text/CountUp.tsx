@@ -313,11 +313,6 @@ export function CountUp({
 export default function CountUpShowcase() {
   return (
     <div className="space-y-8 p-8">
-      <div className="text-center">
-        <h2 className="text-2xl font-bold mb-4">CountUp Component</h2>
-        <p className="text-muted-foreground mb-8">Animated number counting with various effects and formats</p>
-      </div>
-      
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <div className="text-center">
           <h3 className="text-lg font-semibold mb-2">Basic Count Up</h3>
@@ -329,21 +324,21 @@ export default function CountUpShowcase() {
         <div className="text-center">
           <h3 className="text-lg font-semibold mb-2">With Prefix/Suffix</h3>
           <div className="text-3xl font-bold text-green-600">
-            <CountUp to={50} prefix="$" suffix="K" duration={2.5} />
+            <CountUp to={100} prefix="$" suffix="K" duration={2.5} />
           </div>
         </div>
         
         <div className="text-center">
           <h3 className="text-lg font-semibold mb-2">Percentage</h3>
           <div className="text-3xl font-bold text-blue-600">
-            <CountUp to={85} suffix="%" duration={2} />
+            <CountUp to={100} suffix="%" duration={2} />
           </div>
         </div>
         
         <div className="text-center">
           <h3 className="text-lg font-semibold mb-2">Bounce Effect</h3>
           <div className="text-3xl font-bold text-purple-600">
-            <CountUp to={999} effect="bounce" duration={3} />
+            <CountUp to={1000} effect="bounce" duration={3} />
           </div>
         </div>
         

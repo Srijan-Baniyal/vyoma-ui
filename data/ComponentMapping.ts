@@ -13,8 +13,8 @@ import SheetShowcase from "@/components/vui/Sheet";
 import { AnimatedNumberCountdownShowcase } from "@/components/vui/text/AnimatedNumber";
 import { BentoGridShowcase } from "@/components/vui/BentoGrid";
 import CardShowcase from "@/components/vui/Card";
-import TunnelShowcase from "@/components/vui/Tunnel";
-import { WavyTilesShowcase } from "@/components/vui/WavyTiles";
+import TunnelShowcase from "@/components/vui/backgrounds/Tunnel";
+import { WavyTilesShowcase } from "@/components/vui/backgrounds/WavyTiles";
 import ButtonShowcase from "@/components/vui/Button";
 import ToolTipShowcase from "@/components/vui/ToolTip";
 
@@ -147,13 +147,13 @@ export const componentMap: ComponentCategoryMap = {
       name: "Tunnel",
       component: TunnelShowcase,
       route: "/backgrounds/tunnel",
-      path: "components/vui/Tunnel.tsx",
+      path: "components/vui/backgrounds/Tunnel.tsx",
     },
     {
       name: "Wavy Tiles",
       component: WavyTilesShowcase,
       route: "/backgrounds/wavy-tiles",
-      path: "components/vui/WavyTiles.tsx",
+      path: "components/vui/backgrounds/WavyTiles.tsx",
     },
   ],
 };

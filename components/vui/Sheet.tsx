@@ -591,28 +591,8 @@ export function VUISheetShowcase() {
   const [darkMode, setDarkMode] = React.useState(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30 p-4 md:p-8">
-      <div className="max-w-6xl mx-auto space-y-12">
-        {/* Header */}
-        <motion.div
-          className="text-center space-y-4"
-          initial={{ opacity: 0, y: -30, scale: 0.95 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{
-            duration: 0.8,
-            ease: [0.23, 1, 0.32, 1],
-          }}
-        >
-          <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-            Enhanced VUI Sheet Component
-          </h1>
-          <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
-            Beautiful, accessible sheet components with glassmorphism effects,
-            smooth animations, and flexible configurations. Fully responsive and
-            optimized.
-          </p>
-        </motion.div>
-
+    <div className="min-h-5 bg-gradient-to-br from-background via-background to-muted/30 p-4 md:p-8">
+      <div className="max-w-6xl mx-auto space-y-12 justify-center items-center">
         {/* Sheet Variations */}
         <div className="space-y-12">
           {/* Right Side Sheets */}
@@ -815,7 +795,7 @@ export function VUISheetShowcase() {
             transition={{ delay: 0.6, duration: 0.8, ease: [0.23, 1, 0.32, 1] }}
           >
             <h2 className="text-2xl font-semibold">Bottom Sheets</h2>
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-4 justify-center items-center">
               <VUISheet>
                 <VUISheetTrigger asChild>
                   <EnhancedButton
@@ -900,7 +880,7 @@ export function VUISheetShowcase() {
             transition={{ delay: 0.9, duration: 0.8, ease: [0.23, 1, 0.32, 1] }}
           >
             <h2 className="text-2xl font-semibold">Left Side Sheets</h2>
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-4 justify-center items-center">
               <VUISheet>
                 <VUISheetTrigger asChild>
                   <EnhancedButton

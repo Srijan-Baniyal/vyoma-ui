@@ -9,9 +9,11 @@ import { Label } from "@/components/ui/label";
 const AnimatedCheckIcon = ({
   variant = "default",
   colorScheme = "default",
+  size = "md",
 }: {
   variant?: "default" | "smooth";
   colorScheme?: "default" | "success" | "warning" | "error" | "purple" | "blue";
+  size?: "sm" | "md" | "lg";
 }) => {
   const pathRef = React.useRef<SVGPathElement>(null);
   const [isChecked, setIsChecked] = React.useState(false);
@@ -53,12 +55,40 @@ const AnimatedCheckIcon = ({
     return colors[colorScheme];
   };
 
+  const getSizeProps = () => {
+    const sizes = {
+      sm: {
+        height: "8px",
+        width: "10px",
+        strokeWidth: "2",
+        viewBox: "0 0 10 8",
+        path: "M1 4L3.5 6.5L9 1",
+      },
+      md: {
+        height: "10px",
+        width: "13px",
+        strokeWidth: "2.5",
+        viewBox: "0 0 13 10",
+        path: "M1 5.39437L4.54286 9L12 1",
+      },
+      lg: {
+        height: "12px",
+        width: "16px",
+        strokeWidth: "3",
+        viewBox: "0 0 16 12",
+        path: "M1 6L5 10L15 1",
+      },
+    };
+    return sizes[size];
+  };
+
   const getAnimationStyle = () => {
+    const sizeProps = getSizeProps();
     const baseStyle = {
       strokeDasharray: 20,
       strokeDashoffset: isChecked ? 0 : 20,
       stroke: getTickColor(),
-      strokeWidth: "2.5",
+      strokeWidth: sizeProps.strokeWidth,
       strokeLinecap: "round" as const,
       strokeLinejoin: "round" as const,
       fill: "none",
@@ -80,19 +110,17 @@ const AnimatedCheckIcon = ({
     }
   };
 
+  const sizeProps = getSizeProps();
+
   return (
     <svg
-      viewBox="0 0 13 10"
-      height="10px"
-      width="13px"
+      viewBox={sizeProps.viewBox}
+      height={sizeProps.height}
+      width={sizeProps.width}
       xmlns="http://www.w3.org/2000/svg"
       className="overflow-visible"
     >
-      <path
-        ref={pathRef}
-        d="M1 5.39437L4.54286 9L12 1"
-        style={getAnimationStyle()}
-      />
+      <path ref={pathRef} d={sizeProps.path} style={getAnimationStyle()} />
     </svg>
   );
 };
@@ -228,7 +256,11 @@ const CheckboxRefined = React.forwardRef<
               data-slot="checkbox-indicator"
               className="flex items-center justify-center text-current"
             >
-              <AnimatedCheckIcon variant={variant} colorScheme={colorScheme} />
+              <AnimatedCheckIcon
+                variant={variant}
+                colorScheme={colorScheme}
+                size={size}
+              />
             </CheckboxPrimitive.Indicator>
             {showRipple && <RippleEffect trigger={rippleTrigger} />}
           </CheckboxPrimitive.Root>
@@ -258,29 +290,8 @@ export { CheckboxRefined };
 export function CheckboxRefinedShowcase() {
   const [controlled, setControlled] = React.useState(false);
   return (
-    <div className="text-white overflow-hidden">
-      {/* Background Effects */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000" />
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl animate-pulse delay-2000" />
-      </div>
-
+    <div className="min-h-5 text-white overflow-hidden">
       <div className="relative z-10 max-w-7xl mx-auto px-8 py-16 space-y-32">
-        {/* Hero Section */}
-        <div className="text-center space-y-8">
-          <div className="inline-block">
-            <h1 className="text-6xl font-extralight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent leading-tight">
-              Refined Checkbox
-            </h1>
-            <div className="h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-emerald-500 rounded-full mt-4 animate-pulse" />
-          </div>
-          <p className="text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
-            Experience the next generation of interactive components with fluid
-            animations, elegant design patterns, and seamless user experiences.
-          </p>
-        </div>
-
         {/* Interactive Animation Demo */}
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div className="space-y-8">

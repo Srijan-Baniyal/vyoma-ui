@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { RefreshCw, Heart, Download, X, User } from "lucide-react";
+import { Heart, Download, X, User } from "lucide-react"; 
 import { Button } from "@/components/ui/button";
 import React from "react";
 
@@ -360,21 +360,14 @@ function ImageDialog({
 }
 
 export default function BentoGrid() {
-  const [refreshKey, setRefreshKey] = useState(0);
-  const [refreshing, setRefreshing] = useState(false);
+  const [refreshKey ] = useState(0);
   const [selectedImage, setSelectedImage] = useState<
     (typeof staticImages)[0] | null
   >(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
-  const handleRefresh = () => {
-    setRefreshing(true);
-    setTimeout(() => {
-      setRefreshKey((prev) => prev + 1);
-      setRefreshing(false);
-    }, 800);
-  };
+
 
   const openImageDialog = (image: (typeof staticImages)[0]) => {
     setSelectedImage(image);
@@ -387,23 +380,7 @@ export default function BentoGrid() {
   };
 
   return (
-    <div className="space-y-8">
-      <div className="flex justify-center">
-        <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-          <Button
-            onClick={handleRefresh}
-            disabled={refreshing}
-            className="bg-white hover:bg-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-600 shadow-lg hover:shadow-xl transition-all duration-300 px-6 py-3 rounded-full font-semibold"
-          >
-            <RefreshCw
-              className={`w-4 h-4 mr-2 transition-transform duration-500 ${
-                refreshing ? "animate-spin" : ""
-              }`}
-            />
-            {refreshing ? "Refreshing Gallery..." : "Refresh Gallery"}
-          </Button>
-        </motion.div>
-      </div>
+    <div className="space-y-8"> 
 
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 auto-rows-[200px]">
         <AnimatePresence mode="wait">
@@ -612,15 +589,6 @@ export default function BentoGrid() {
 export function BentoGridShowcase() {
   return (
     <div className="space-y-8 p-8 bg-background">
-      <div className="text-center space-y-4">
-        <h2 className="text-3xl font-bold text-foreground">
-          Bento Grid Gallery
-        </h2>
-        <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-          A beautiful masonry grid layout showcasing curated photography with
-          smooth animations and interactive hover effects.
-        </p>
-      </div>
       <BentoGrid />
     </div>
   );

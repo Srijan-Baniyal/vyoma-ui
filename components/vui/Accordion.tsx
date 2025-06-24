@@ -223,115 +223,95 @@ export default function Accordion({
 
 export function AccordionShowcase() {
   return (
-    <div className="flex items-center justify-center">
-      <div className="w-full max-w-3xl space-y-12">
-        <motion.div
-          className="text-center space-y-4"
-          initial={{ opacity: 0, y: -32 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-        >
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-foreground to-foreground/60 bg-clip-text text-transparent">
-            Accordion Component
-          </h1>
-          <p className="text-xl text-muted-foreground">
-            Beautifully animated and accessible
-          </p>
-        </motion.div>
-
-        <Accordion
-          items={[
-            {
-              id: "item-1",
-              header: "What is VUI?",
-              content: (
-                <>
-                  <p className="mb-3">
-                    VUI is a collection of modern, accessible UI components
-                    built with React & Tailwind CSS. Each component is crafted
-                    with attention to detail and smooth animations.
-                  </p>
-                  <div className="flex flex-wrap gap-1 max-w-full overflow-hidden">
-                    <span className="px-2 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium flex-shrink whitespace-nowrap">
-                      React
-                    </span>
-                    <span className="px-2 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium flex-shrink whitespace-nowrap">
-                      Tailwind
-                    </span>
-                    <span className="px-2 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium flex-shrink whitespace-nowrap">
-                      Framer Motion
-                    </span>
-                  </div>
-                </>
-              ),
-            },
-            {
-              id: "item-2",
-              header: "How does this accordion work?",
-              content: (
-                <>
-                  <p className="mb-3">
-                    Click on the headers to expand or collapse content. The
-                    animations are powered by Framer Motion and follow
-                    accessibility best practices with proper ARIA attributes and
-                    keyboard navigation.
-                  </p>
-                  <div className="bg-muted/50 rounded-lg p-3 border">
-                    <code className="text-xs sm:text-sm text-foreground/80 break-all">
-                      allowMultiple={`{true}`} defaultOpenIds={`{['item-1']}`}
-                    </code>
-                  </div>
-                </>
-              ),
-            },
-            {
-              id: "item-3",
-              header: "Can I keep multiple items open?",
-              content: (
-                <p>
-                  Absolutely! Pass{" "}
-                  <code className="px-2 py-1 bg-muted rounded text-sm font-mono">
-                    allowMultiple
-                  </code>
-                  to enable multiple panels to be open simultaneously. The
-                  component handles all the state management for you.
-                </p>
-              ),
-            },
-            {
-              id: "item-4",
-              header: "Is it accessible?",
-              content: (
-                <>
-                  <p className="mb-3">
-                    Yes! This accordion follows WAI-ARIA guidelines and
-                    includes:
-                  </p>
-                  <ul className="space-y-2 ml-4">
-                    <li className="flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 bg-primary rounded-full flex-shrink-0" />
-                      <span className="break-words">
-                        Proper ARIA attributes and roles
-                      </span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 bg-primary rounded-full flex-shrink-0" />
-                      <span className="break-words">
-                        Keyboard navigation support
-                      </span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 bg-primary rounded-full flex-shrink-0" />
-                      <span className="break-words">
-                        Focus management and indicators
-                      </span>
-                    </li>
-                  </ul>
-                </>
-              ),
-            },
-          ]}
-        />
+    <div className="min-h-5 bg-gradient-to-br from-background via-muted/20 to-background p-8">
+      <div className="max-w-7xl mx-auto space-y-16">
+        <div className="text-center space-y-6">
+          <div className="relative p-8 rounded-3xl bg-card/30 backdrop-blur-sm border border-border/50 shadow-2xl">
+            <div className="flex justify-center">
+              <Accordion
+                items={[
+                  {
+                    id: "demo-1",
+                    header: "🚀 What makes this accordion special?",
+                    content: (
+                      <div className="space-y-4">
+                        <p className="text-muted-foreground">
+                          Built with Framer Motion for smooth animations, full
+                          accessibility support, and beautiful design that
+                          adapts to your theme.
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                          <span className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">
+                            Accessible
+                          </span>
+                          <span className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">
+                            Animated
+                          </span>
+                          <span className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">
+                            Responsive
+                          </span>
+                        </div>
+                      </div>
+                    ),
+                  },
+                  {
+                    id: "demo-2",
+                    header: "✨ Smooth animations powered by Framer Motion",
+                    content: (
+                      <div className="space-y-3">
+                        <p className="text-muted-foreground">
+                          Every interaction is carefully crafted with spring
+                          animations, staggered reveals, and thoughtful
+                          transitions.
+                        </p>
+                        <div className="bg-muted/50 rounded-lg p-4 border">
+                          <code className="text-sm text-foreground/80">
+                            transition: spring(300) + stagger(0.15s)
+                          </code>
+                        </div>
+                      </div>
+                    ),
+                  },
+                  {
+                    id: "demo-3",
+                    header: "🎯 Fully accessible with ARIA support",
+                    content: (
+                      <div className="space-y-3">
+                        <p className="text-muted-foreground">
+                          Built following WAI-ARIA guidelines with proper
+                          keyboard navigation, focus management, and screen
+                          reader support.
+                        </p>
+                        <ul className="space-y-2 ml-4">
+                          <li className="flex items-center gap-2">
+                            <div className="w-1.5 h-1.5 bg-primary rounded-full" />
+                            <span className="text-sm text-muted-foreground">
+                              ARIA attributes and roles
+                            </span>
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <div className="w-1.5 h-1.5 bg-primary rounded-full" />
+                            <span className="text-sm text-muted-foreground">
+                              Keyboard navigation support
+                            </span>
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <div className="w-1.5 h-1.5 bg-primary rounded-full" />
+                            <span className="text-sm text-muted-foreground">
+                              Focus indicators
+                            </span>
+                          </li>
+                        </ul>
+                      </div>
+                    ),
+                  },
+                ]}
+                defaultOpenIds={["demo-1"]}
+                allowMultiple={true}
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

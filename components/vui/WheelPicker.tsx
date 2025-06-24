@@ -13,7 +13,14 @@ const createArray = (length: number, add = 0): WheelPickerOption[] =>
     };
   });
 
-type FocusedPicker = "hours" | "minutes" | null;
+type FocusedPicker =
+  | "hours"
+  | "minutes"
+  | "day"
+  | "month"
+  | "year"
+  | "number"
+  | null;
 
 export function WheelPickerDemo() {
   const [focusedPicker, setFocusedPicker] = useState<FocusedPicker>(null);
@@ -22,9 +29,35 @@ export function WheelPickerDemo() {
   const [inputBuffer, setInputBuffer] = useState("");
   const componentRef = useRef<HTMLDivElement>(null);
 
+  // Date picker states
+  const [dayValue, setDayValue] = useState("1");
+  const [monthValue, setMonthValue] = useState("1");
+  const [yearValue, setYearValue] = useState("2024");
+
+  // Number picker state
+  const [numberValue, setNumberValue] = useState("0");
+
   // Memoized options for performance
   const hourOptions_military = useMemo(() => createArray(24, 0), []);
   const minuteOptions = useMemo(() => createArray(60), []);
+  const dayOptions = useMemo(() => createArray(31, 1), []);
+  const monthOptions = useMemo(
+    () =>
+      Array.from({ length: 12 }, (_, i) => ({
+        label: new Date(2024, i, 1).toLocaleDateString("en", { month: "long" }),
+        value: (i + 1).toString(),
+      })),
+    []
+  );
+  const yearOptions = useMemo(
+    () =>
+      Array.from({ length: 50 }, (_, i) => {
+        const year = 2000 + i;
+        return { label: year.toString(), value: year.toString() };
+      }),
+    []
+  );
+  const numberOptions = useMemo(() => createArray(100, 0), []);
 
   // Formatted time display
   const formattedTime = useMemo(
@@ -32,12 +65,19 @@ export function WheelPickerDemo() {
     [hourValue, minuteValue]
   );
 
+  // Formatted date display
+  const formattedDate = useMemo(() => {
+    const monthName =
+      monthOptions.find((m) => m.value === monthValue)?.label || "January";
+    return `${dayValue.padStart(2, "0")} ${monthName} ${yearValue}`;
+  }, [dayValue, monthValue, yearValue, monthOptions]);
+
   // Handle keyboard events
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
       const key = event.key.toLowerCase();
 
-      // Focus controls
+      // Focus controls for time picker
       if (key === "h") {
         setFocusedPicker("hours");
         setInputBuffer("");
@@ -47,6 +87,37 @@ export function WheelPickerDemo() {
 
       if (key === "m") {
         setFocusedPicker("minutes");
+        setInputBuffer("");
+        event.preventDefault();
+        return;
+      }
+
+      // Focus controls for date picker
+      if (key === "d") {
+        setFocusedPicker("day");
+        setInputBuffer("");
+        event.preventDefault();
+        return;
+      }
+
+      if (key === "o") {
+        // 'o' for month
+        setFocusedPicker("month");
+        setInputBuffer("");
+        event.preventDefault();
+        return;
+      }
+
+      if (key === "y") {
+        setFocusedPicker("year");
+        setInputBuffer("");
+        event.preventDefault();
+        return;
+      }
+
+      // Focus control for number picker
+      if (key === "n") {
+        setFocusedPicker("number");
         setInputBuffer("");
         event.preventDefault();
         return;
@@ -64,6 +135,10 @@ export function WheelPickerDemo() {
       if (key === "c") {
         setHourValue("0");
         setMinuteValue("0");
+        setDayValue("1");
+        setMonthValue("1");
+        setYearValue("2024");
+        setNumberValue("0");
         setFocusedPicker(null);
         setInputBuffer("");
         event.preventDefault();
@@ -74,31 +149,67 @@ export function WheelPickerDemo() {
       if (/[0-9]/.test(key) && focusedPicker) {
         event.preventDefault();
 
-        const newBuffer = (inputBuffer + key).slice(-2); // Keep only last 2 digits
+        const newBuffer = (inputBuffer + key).slice(-4); // Keep only last 4 digits for year
         setInputBuffer(newBuffer);
 
         if (focusedPicker === "hours") {
           const numValue = parseInt(newBuffer);
           if (numValue >= 0 && numValue <= 23) {
             setHourValue(numValue.toString());
+            // Clear buffer after successful selection
+            setInputBuffer("");
           }
         } else if (focusedPicker === "minutes") {
           const numValue = parseInt(newBuffer);
           if (numValue >= 0 && numValue <= 59) {
             setMinuteValue(numValue.toString());
+            // Clear buffer after successful selection
+            setInputBuffer("");
+          }
+        } else if (focusedPicker === "day") {
+          const numValue = parseInt(newBuffer);
+          if (numValue >= 1 && numValue <= 31) {
+            setDayValue(numValue.toString());
+            // Clear buffer after successful selection
+            setInputBuffer("");
+          }
+        } else if (focusedPicker === "month") {
+          const numValue = parseInt(newBuffer);
+          if (numValue >= 1 && numValue <= 12) {
+            setMonthValue(numValue.toString());
+            // Clear buffer after successful month selection to allow immediate new input
+            setInputBuffer("");
+          }
+        } else if (focusedPicker === "year") {
+          const numValue = parseInt(newBuffer);
+          if (numValue >= 2000 && numValue <= 2049) {
+            setYearValue(numValue.toString());
+            // Clear buffer after successful selection
+            setInputBuffer("");
+          }
+        } else if (focusedPicker === "number") {
+          const numValue = parseInt(newBuffer);
+          if (numValue >= 0 && numValue <= 99) {
+            setNumberValue(numValue.toString());
+            // Clear buffer after successful selection
+            setInputBuffer("");
           }
         }
       }
 
-      // Enter to move to next picker (cycle between hours and minutes)
+      // Enter to cycle through pickers
       if (key === "enter") {
-        if (focusedPicker === "hours") {
-          setFocusedPicker("minutes");
-        } else if (focusedPicker === "minutes") {
-          setFocusedPicker("hours");
-        } else {
-          setFocusedPicker("hours");
-        }
+        const pickerCycle = [
+          "hours",
+          "minutes",
+          "day",
+          "month",
+          "year",
+          "number",
+        ];
+        const currentIndex = pickerCycle.indexOf(focusedPicker as string);
+        const nextIndex = (currentIndex + 1) % pickerCycle.length;
+        setFocusedPicker(pickerCycle[nextIndex] as FocusedPicker);
         setInputBuffer("");
         event.preventDefault();
       }
@@ -131,102 +242,56 @@ export function WheelPickerDemo() {
   }, []);
 
   return (
+    <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background p-8">
+      <div className="max-w-7xl mx-auto space-y-16">
+        {/* Hero Section */}
+        <div className="text-center space-y-6">
+          <div className="space-y-2">
+            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+              WheelPicker Component
+            </h1>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Smooth, intuitive wheel pickers with comprehensive keyboard
+              navigation and infinite scrolling
+            </p>
+          </div>
+
+          {/* Main Demo */}
+          <div className="relative p-8 rounded-3xl bg-card/30 backdrop-blur-sm border border-border/50 shadow-2xl">
+            <div className="flex justify-center">
     <div
       ref={componentRef}
-      className="w-64 focus:outline-none group"
+                className="w-72 focus:outline-none group"
       tabIndex={0}
       role="application"
       aria-label="Time picker with keyboard navigation"
     >
-      {/* Instructions */}
-      <div className="text-sm text-zinc-500 dark:text-zinc-400 mb-8 space-y-3 opacity-90 group-focus:opacity-100 transition-opacity duration-300">
-        <div className="font-semibold text-zinc-700 dark:text-zinc-300 mb-4 text-base">
-          Keyboard Controls
-        </div>
-        <div className="grid grid-cols-1 gap-2.5">
-          <div className="flex items-center gap-3">
-            <kbd className="px-2.5 py-1.5 text-xs font-mono bg-gradient-to-b from-zinc-700 to-zinc-800 text-zinc-100 rounded-md shadow-sm border border-zinc-600 min-w-[32px] text-center">
-              H
-            </kbd>
-            <span className="text-zinc-600 dark:text-zinc-400">
-              Select hours
-            </span>
-          </div>
-          <div className="flex items-center gap-3">
-            <kbd className="px-2.5 py-1.5 text-xs font-mono bg-gradient-to-b from-zinc-700 to-zinc-800 text-zinc-100 rounded-md shadow-sm border border-zinc-600 min-w-[32px] text-center">
-              M
-            </kbd>
-            <span className="text-zinc-600 dark:text-zinc-400">
-              Select minutes
-            </span>
-          </div>
-          <div className="flex items-center gap-3">
-            <kbd className="px-2.5 py-1.5 text-xs font-mono bg-gradient-to-b from-zinc-700 to-zinc-800 text-zinc-100 rounded-md shadow-sm border border-zinc-600 min-w-[32px] text-center">
-              0-9
-            </kbd>
-            <span className="text-zinc-600 dark:text-zinc-400">
-              Type numbers
-            </span>
-          </div>
-          <div className="flex items-center gap-3">
-            <kbd className="px-2.5 py-1.5 text-xs font-mono bg-gradient-to-b from-zinc-700 to-zinc-800 text-zinc-100 rounded-md shadow-sm border border-zinc-600 min-w-[32px] text-center">
-              ↵
-            </kbd>
-            <span className="text-zinc-600 dark:text-zinc-400">Next field</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <kbd className="px-2.5 py-1.5 text-xs font-mono bg-gradient-to-b from-zinc-700 to-zinc-800 text-zinc-100 rounded-md shadow-sm border border-zinc-600 min-w-[32px] text-center">
-              Esc
-            </kbd>
-            <span className="text-zinc-600 dark:text-zinc-400">
-              Clear selection
-            </span>
-          </div>
-          <div className="flex items-center gap-3">
-            <kbd className="px-2.5 py-1.5 text-xs font-mono bg-gradient-to-b from-zinc-700 to-zinc-800 text-zinc-100 rounded-md shadow-sm border border-zinc-600 min-w-[32px] text-center">
-              C
-            </kbd>
-            <span className="text-zinc-600 dark:text-zinc-400">Clear all</span>
-          </div>
-        </div>
-      </div>
-
       {/* Current Time Display */}
       <div className="mb-8 text-center">
-        <div className="text-4xl font-bold text-zinc-900 dark:text-zinc-100 mb-4 tracking-wider font-mono transition-all duration-300 transform hover:scale-105">
+                  <div className="text-4xl font-bold text-foreground mb-4 tracking-wider font-mono transition-all duration-300 transform hover:scale-105">
           {formattedTime}
         </div>
 
         <div className="flex gap-3 justify-center">
           <button
             onClick={() => setFocusedPicker("hours")}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                      className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
               focusedPicker === "hours"
-                ? "bg-blue-500 text-white shadow-lg shadow-blue-500/30 scale-105"
-                : "text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700 hover:border-zinc-300 dark:hover:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-800/50"
-            }`}
-          >
-            Hours{" "}
-            {focusedPicker === "hours" && inputBuffer && (
-              <span className="ml-1 opacity-75 animate-pulse">
-                ({inputBuffer})
-              </span>
-            )}
+                          ? "bg-primary text-primary-foreground shadow-lg shadow-primary/30 scale-105"
+                          : "text-muted-foreground border border-border hover:border-primary/50 hover:bg-muted/50"
+                      }`}
+                    >
+                      Hours (H)
           </button>
           <button
             onClick={() => setFocusedPicker("minutes")}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                      className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
               focusedPicker === "minutes"
-                ? "bg-blue-500 text-white shadow-lg shadow-blue-500/30 scale-105"
-                : "text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700 hover:border-zinc-300 dark:hover:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-800/50"
-            }`}
-          >
-            Minutes{" "}
-            {focusedPicker === "minutes" && inputBuffer && (
-              <span className="ml-1 opacity-75 animate-pulse">
-                ({inputBuffer})
-              </span>
-            )}
+                          ? "bg-primary text-primary-foreground shadow-lg shadow-primary/30 scale-105"
+                          : "text-muted-foreground border border-border hover:border-primary/50 hover:bg-muted/50"
+                      }`}
+                    >
+                      Minutes (M)
           </button>
         </div>
       </div>
@@ -242,8 +307,8 @@ export function WheelPickerDemo() {
             classNames={{
               highlightWrapper:
                 focusedPicker === "hours"
-                  ? "bg-gradient-to-br from-blue-50 to-blue-100 text-blue-900 border-2 border-blue-400 dark:from-blue-950 dark:to-blue-900 dark:text-blue-100 dark:border-blue-600 shadow-xl shadow-blue-500/25 transform scale-105 transition-all duration-300"
-                  : "border border-zinc-200 text-zinc-700 dark:border-zinc-700 dark:text-zinc-300 hover:border-zinc-300 dark:hover:border-zinc-600 transition-all duration-200",
+                            ? "bg-gradient-to-br from-primary/20 to-primary/30 text-primary border-2 border-primary shadow-xl shadow-primary/25 transform scale-105 transition-all duration-300"
+                            : "border border-border text-foreground hover:border-primary/50 transition-all duration-200",
             }}
           />
           <WheelPicker
@@ -254,11 +319,276 @@ export function WheelPickerDemo() {
             classNames={{
               highlightWrapper:
                 focusedPicker === "minutes"
-                  ? "bg-gradient-to-br from-blue-50 to-blue-100 text-blue-900 border-2 border-blue-400 dark:from-blue-950 dark:to-blue-900 dark:text-blue-100 dark:border-blue-600 shadow-xl shadow-blue-500/25 transform scale-105 transition-all duration-300"
-                  : "border border-zinc-200 text-zinc-700 dark:border-zinc-700 dark:text-zinc-300 hover:border-zinc-300 dark:hover:border-zinc-600 transition-all duration-200",
+                            ? "bg-gradient-to-br from-primary/20 to-primary/30 text-primary border-2 border-primary shadow-xl shadow-primary/25 transform scale-105 transition-all duration-300"
+                            : "border border-border text-foreground hover:border-primary/50 transition-all duration-200",
+                      }}
+                    />
+                  </WheelPickerWrapper>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Picker Variations */}
+        <div className="space-y-12">
+          <div className="text-center space-y-2">
+            <h2 className="text-3xl font-bold">Picker Variations</h2>
+            <p className="text-muted-foreground">
+              Different types of wheel pickers with keyboard shortcuts
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Date Picker */}
+            <div className="space-y-4">
+              <div className="text-center space-y-2">
+                <h3 className="text-xl font-semibold text-blue-700 dark:text-blue-300">
+                  Date Picker
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  Select day, month, and year
+                </p>
+                                 <p className="text-xs text-blue-600 dark:text-blue-400">
+                   Press D, O, Y for day/month/year
+                 </p>
+                 <p className="text-xs text-blue-500 dark:text-blue-500 mt-1">
+                   Type 1=Jan, 2=Feb, 3=Mar, etc.
+                 </p>
+              </div>
+              <div className="bg-gradient-to-br from-blue-50/30 to-blue-100/20 dark:from-blue-950/20 dark:to-blue-900/10 p-6 rounded-2xl border border-blue-200/30 dark:border-blue-800/20">
+                <div className="text-center mb-4">
+                  <div className="text-lg font-semibold text-blue-700 dark:text-blue-300 mb-2">
+                    {formattedDate}
+                  </div>
+                  <div className="text-xs text-blue-600 dark:text-blue-400 opacity-75">
+                    Month {monthValue} = {monthOptions.find((m) => m.value === monthValue)?.label}
+                  </div>
+                </div>
+                <WheelPickerWrapper>
+                  <WheelPicker
+                    options={dayOptions}
+                    infinite
+                    value={dayValue}
+                    onValueChange={setDayValue}
+                    classNames={{
+                      highlightWrapper:
+                        focusedPicker === "day"
+                          ? "bg-gradient-to-br from-blue-200/50 to-blue-300/30 dark:from-blue-800/50 dark:to-blue-700/30 border-2 border-blue-400 dark:border-blue-600 text-blue-800 dark:text-blue-200 shadow-lg shadow-blue-500/25 transform scale-105 transition-all duration-300"
+                          : "border border-blue-300 dark:border-blue-600 text-blue-700 dark:text-blue-300 hover:border-blue-400 dark:hover:border-blue-500 transition-all duration-200",
+                    }}
+                  />
+                  <WheelPicker
+                    options={monthOptions}
+                    infinite
+                    value={monthValue}
+                    onValueChange={setMonthValue}
+                    classNames={{
+                      highlightWrapper:
+                        focusedPicker === "month"
+                          ? "bg-gradient-to-br from-blue-200/50 to-blue-300/30 dark:from-blue-800/50 dark:to-blue-700/30 border-2 border-blue-400 dark:border-blue-600 text-blue-800 dark:text-blue-200 shadow-lg shadow-blue-500/25 transform scale-105 transition-all duration-300"
+                          : "border border-blue-300 dark:border-blue-600 text-blue-700 dark:text-blue-300 hover:border-blue-400 dark:hover:border-blue-500 transition-all duration-200",
+                    }}
+                  />
+                  <WheelPicker
+                    options={yearOptions}
+                    infinite
+                    value={yearValue}
+                    onValueChange={setYearValue}
+                    classNames={{
+                      highlightWrapper:
+                        focusedPicker === "year"
+                          ? "bg-gradient-to-br from-blue-200/50 to-blue-300/30 dark:from-blue-800/50 dark:to-blue-700/30 border-2 border-blue-400 dark:border-blue-600 text-blue-800 dark:text-blue-200 shadow-lg shadow-blue-500/25 transform scale-105 transition-all duration-300"
+                          : "border border-blue-300 dark:border-blue-600 text-blue-700 dark:text-blue-300 hover:border-blue-400 dark:hover:border-blue-500 transition-all duration-200",
+                    }}
+                  />
+                </WheelPickerWrapper>
+              </div>
+            </div>
+
+            {/* Number Picker */}
+            <div className="space-y-4">
+              <div className="text-center space-y-2">
+                <h3 className="text-xl font-semibold text-green-700 dark:text-green-300">
+                  Number Picker
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  Simple number selection
+                </p>
+                <p className="text-xs text-green-600 dark:text-green-400">
+                  Press N for number selection
+                </p>
+              </div>
+              <div className="bg-gradient-to-br from-green-50/30 to-emerald-100/20 dark:from-green-950/20 dark:to-emerald-900/10 p-6 rounded-2xl border border-green-200/30 dark:border-green-800/20">
+                <div className="text-center mb-4">
+                  <div className="text-lg font-semibold text-green-700 dark:text-green-300 mb-2">
+                    Selected: {numberValue}
+                  </div>
+                </div>
+                <WheelPickerWrapper>
+                  <WheelPicker
+                    options={numberOptions}
+                    infinite
+                    value={numberValue}
+                    onValueChange={setNumberValue}
+                    classNames={{
+                      highlightWrapper:
+                        focusedPicker === "number"
+                          ? "bg-gradient-to-br from-green-200/50 to-emerald-300/30 dark:from-green-800/50 dark:to-emerald-700/30 border-2 border-green-400 dark:border-green-600 text-green-800 dark:text-green-200 shadow-lg shadow-green-500/25 transform scale-105 transition-all duration-300"
+                          : "border border-green-300 dark:border-green-600 text-green-700 dark:text-green-300 hover:border-green-400 dark:hover:border-green-500 transition-all duration-200",
+                    }}
+                  />
+                </WheelPickerWrapper>
+              </div>
+            </div>
+
+            {/* Custom Styled */}
+            <div className="space-y-4">
+              <div className="text-center space-y-2">
+                <h3 className="text-xl font-semibold text-purple-700 dark:text-purple-300">
+                  Custom Styled
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  Enhanced visual design
+                </p>
+                <p className="text-xs text-purple-600 dark:text-purple-400">
+                  Uses same hour picker (H)
+                </p>
+              </div>
+              <div className="bg-gradient-to-br from-purple-50/30 to-violet-100/20 dark:from-purple-950/20 dark:to-violet-900/10 p-6 rounded-2xl border border-purple-200/30 dark:border-purple-800/20">
+                <div className="text-center mb-4">
+                  <div className="text-lg font-semibold text-purple-700 dark:text-purple-300 mb-2">
+                    Hour: {hourValue.padStart(2, "0")}
+                  </div>
+                </div>
+                <WheelPickerWrapper>
+                  <WheelPicker
+                    options={hourOptions_military}
+                    infinite
+                    value={hourValue}
+                    onValueChange={setHourValue}
+                    classNames={{
+                      highlightWrapper:
+                        "bg-gradient-to-br from-purple-100 to-violet-100 dark:from-purple-900 dark:to-violet-900 border-2 border-purple-400 dark:border-purple-600 text-purple-800 dark:text-purple-200 shadow-lg shadow-purple-500/25 transition-all duration-300",
             }}
           />
         </WheelPickerWrapper>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Keyboard Controls */}
+        <div className="space-y-8">
+          <div className="text-center space-y-2">
+            <h2 className="text-3xl font-bold">
+              Comprehensive Keyboard Navigation
+            </h2>
+            <p className="text-muted-foreground">
+              Enhanced accessibility with shortcuts for all picker types
+            </p>
+          </div>
+
+          <div className="bg-gradient-to-br from-muted/50 to-muted/30 p-8 rounded-3xl border border-border/50">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="flex items-center gap-3">
+                <kbd className="px-3 py-2 text-sm font-mono bg-gradient-to-b from-zinc-700 to-zinc-800 text-zinc-100 rounded-lg shadow-sm border border-zinc-600 min-w-[40px] text-center">
+                  H
+                </kbd>
+                <span className="text-muted-foreground">Select hours</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <kbd className="px-3 py-2 text-sm font-mono bg-gradient-to-b from-zinc-700 to-zinc-800 text-zinc-100 rounded-lg shadow-sm border border-zinc-600 min-w-[40px] text-center">
+                  M
+                </kbd>
+                <span className="text-muted-foreground">Select minutes</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <kbd className="px-3 py-2 text-sm font-mono bg-gradient-to-b from-zinc-700 to-zinc-800 text-zinc-100 rounded-lg shadow-sm border border-zinc-600 min-w-[40px] text-center">
+                  D
+                </kbd>
+                <span className="text-muted-foreground">Select day</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <kbd className="px-3 py-2 text-sm font-mono bg-gradient-to-b from-zinc-700 to-zinc-800 text-zinc-100 rounded-lg shadow-sm border border-zinc-600 min-w-[40px] text-center">
+                  O
+                </kbd>
+                <span className="text-muted-foreground">Select month</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <kbd className="px-3 py-2 text-sm font-mono bg-gradient-to-b from-zinc-700 to-zinc-800 text-zinc-100 rounded-lg shadow-sm border border-zinc-600 min-w-[40px] text-center">
+                  Y
+                </kbd>
+                <span className="text-muted-foreground">Select year</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <kbd className="px-3 py-2 text-sm font-mono bg-gradient-to-b from-zinc-700 to-zinc-800 text-zinc-100 rounded-lg shadow-sm border border-zinc-600 min-w-[40px] text-center">
+                  N
+                </kbd>
+                <span className="text-muted-foreground">Select number</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <kbd className="px-3 py-2 text-sm font-mono bg-gradient-to-b from-zinc-700 to-zinc-800 text-zinc-100 rounded-lg shadow-sm border border-zinc-600 min-w-[40px] text-center">
+                  0-9
+                </kbd>
+                <span className="text-muted-foreground">Type numbers</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <kbd className="px-3 py-2 text-sm font-mono bg-gradient-to-b from-zinc-700 to-zinc-800 text-zinc-100 rounded-lg shadow-sm border border-zinc-600 min-w-[40px] text-center">
+                  ↵
+                </kbd>
+                <span className="text-muted-foreground">Cycle pickers</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <kbd className="px-3 py-2 text-sm font-mono bg-gradient-to-b from-zinc-700 to-zinc-800 text-zinc-100 rounded-lg shadow-sm border border-zinc-600 min-w-[40px] text-center">
+                  Esc
+                </kbd>
+                <span className="text-muted-foreground">Clear selection</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <kbd className="px-3 py-2 text-sm font-mono bg-gradient-to-b from-zinc-700 to-zinc-800 text-zinc-100 rounded-lg shadow-sm border border-zinc-600 min-w-[40px] text-center">
+                  C
+                </kbd>
+                <span className="text-muted-foreground">Clear all values</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Key Features */}
+        <div className="space-y-8">
+          <h2 className="text-3xl font-bold text-center">Key Features</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="text-center p-6 rounded-xl bg-card/30 border border-border/50 hover:shadow-lg transition-all duration-300">
+              <div className="text-3xl mb-3">⚡</div>
+              <h4 className="font-semibold mb-2">Infinite Scrolling</h4>
+              <p className="text-sm text-muted-foreground">
+                Smooth infinite scrolling with momentum and snap behavior
+              </p>
+            </div>
+            <div className="text-center p-6 rounded-xl bg-card/30 border border-border/50 hover:shadow-lg transition-all duration-300">
+              <div className="text-3xl mb-3">⌨️</div>
+              <h4 className="font-semibold mb-2">Full Keyboard Support</h4>
+              <p className="text-sm text-muted-foreground">
+                Complete keyboard navigation for all picker types with shortcuts
+              </p>
+            </div>
+            <div className="text-center p-6 rounded-xl bg-card/30 border border-border/50 hover:shadow-lg transition-all duration-300">
+              <div className="text-3xl mb-3">🎨</div>
+              <h4 className="font-semibold mb-2">Visual Feedback</h4>
+              <p className="text-sm text-muted-foreground">
+                Highlighted selection with smooth animations and color themes
+              </p>
+            </div>
+            <div className="text-center p-6 rounded-xl bg-card/30 border border-border/50 hover:shadow-lg transition-all duration-300">
+              <div className="text-3xl mb-3">♿</div>
+              <h4 className="font-semibold mb-2">Accessible</h4>
+              <p className="text-sm text-muted-foreground">
+                Built with ARIA attributes and comprehensive keyboard support
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

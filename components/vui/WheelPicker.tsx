@@ -28,6 +28,7 @@ export function WheelPickerDemo() {
   const [minuteValue, setMinuteValue] = useState("0");
   const [inputBuffer, setInputBuffer] = useState("");
   const componentRef = useRef<HTMLDivElement>(null);
+  const inputTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Date picker states
   const [dayValue, setDayValue] = useState("1");
@@ -37,10 +38,20 @@ export function WheelPickerDemo() {
   // Number picker state
   const [numberValue, setNumberValue] = useState("0");
 
+  // Function to get days in month
+  const getDaysInMonth = useCallback((month: number, year: number) => {
+    return new Date(year, month, 0).getDate();
+  }, []);
+
   // Memoized options for performance
   const hourOptions_military = useMemo(() => createArray(24, 0), []);
   const minuteOptions = useMemo(() => createArray(60), []);
-  const dayOptions = useMemo(() => createArray(31, 1), []);
+  const dayOptions = useMemo(() => {
+    const month = parseInt(monthValue);
+    const year = parseInt(yearValue);
+    const daysInMonth = getDaysInMonth(month, year);
+    return createArray(daysInMonth, 1);
+  }, [monthValue, yearValue, getDaysInMonth]);
   const monthOptions = useMemo(
     () =>
       Array.from({ length: 12 }, (_, i) => ({
@@ -59,6 +70,18 @@ export function WheelPickerDemo() {
   );
   const numberOptions = useMemo(() => createArray(100, 0), []);
 
+  // Adjust day value if it's invalid for the current month/year
+  useEffect(() => {
+    const month = parseInt(monthValue);
+    const year = parseInt(yearValue);
+    const daysInMonth = getDaysInMonth(month, year);
+    const currentDay = parseInt(dayValue);
+    
+    if (currentDay > daysInMonth) {
+      setDayValue(daysInMonth.toString());
+    }
+  }, [monthValue, yearValue, dayValue, getDaysInMonth]);
+
   // Formatted time display
   const formattedTime = useMemo(
     () => `${hourValue.padStart(2, "0")}:${minuteValue.padStart(2, "0")}`,
@@ -72,13 +95,64 @@ export function WheelPickerDemo() {
     return `${dayValue.padStart(2, "0")} ${monthName} ${yearValue}`;
   }, [dayValue, monthValue, yearValue, monthOptions]);
 
+  // Function to commit the buffered input
+  const commitInput = useCallback(
+    (buffer: string, pickerType: FocusedPicker) => {
+      if (!buffer || !pickerType) return;
+
+      const numValue = parseInt(buffer);
+
+      switch (pickerType) {
+        case "hours":
+          if (numValue >= 0 && numValue <= 23) {
+            setHourValue(numValue.toString());
+          }
+          break;
+        case "minutes":
+          if (numValue >= 0 && numValue <= 59) {
+            setMinuteValue(numValue.toString());
+          }
+          break;
+        case "day":
+          if (numValue >= 1 && numValue <= 31) {
+            setDayValue(numValue.toString());
+          }
+          break;
+        case "month":
+          if (numValue >= 1 && numValue <= 12) {
+            setMonthValue(numValue.toString());
+          }
+          break;
+        case "year":
+          if (numValue >= 2000 && numValue <= 2049) {
+            setYearValue(numValue.toString());
+          }
+          break;
+        case "number":
+          if (numValue >= 0 && numValue <= 99) {
+            setNumberValue(numValue.toString());
+          }
+          break;
+      }
+      setInputBuffer("");
+    },
+    []
+  );
+
   // Handle keyboard events
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
       const key = event.key.toLowerCase();
 
+      // Clear any existing timeout
+      if (inputTimeoutRef.current) {
+        clearTimeout(inputTimeoutRef.current);
+        inputTimeoutRef.current = null;
+      }
+
       // Focus controls for time picker
       if (key === "h") {
+        commitInput(inputBuffer, focusedPicker);
         setFocusedPicker("hours");
         setInputBuffer("");
         event.preventDefault();
@@ -86,6 +160,7 @@ export function WheelPickerDemo() {
       }
 
       if (key === "m") {
+        commitInput(inputBuffer, focusedPicker);
         setFocusedPicker("minutes");
         setInputBuffer("");
         event.preventDefault();
@@ -94,6 +169,7 @@ export function WheelPickerDemo() {
 
       // Focus controls for date picker
       if (key === "d") {
+        commitInput(inputBuffer, focusedPicker);
         setFocusedPicker("day");
         setInputBuffer("");
         event.preventDefault();
@@ -102,6 +178,7 @@ export function WheelPickerDemo() {
 
       if (key === "o") {
         // 'o' for month
+        commitInput(inputBuffer, focusedPicker);
         setFocusedPicker("month");
         setInputBuffer("");
         event.preventDefault();
@@ -109,6 +186,7 @@ export function WheelPickerDemo() {
       }
 
       if (key === "y") {
+        commitInput(inputBuffer, focusedPicker);
         setFocusedPicker("year");
         setInputBuffer("");
         event.preventDefault();
@@ -117,6 +195,7 @@ export function WheelPickerDemo() {
 
       // Focus control for number picker
       if (key === "n") {
+        commitInput(inputBuffer, focusedPicker);
         setFocusedPicker("number");
         setInputBuffer("");
         event.preventDefault();
@@ -152,53 +231,64 @@ export function WheelPickerDemo() {
         const newBuffer = (inputBuffer + key).slice(-4); // Keep only last 4 digits for year
         setInputBuffer(newBuffer);
 
-        if (focusedPicker === "hours") {
-          const numValue = parseInt(newBuffer);
-          if (numValue >= 0 && numValue <= 23) {
-            setHourValue(numValue.toString());
-            // Clear buffer after successful selection
-            setInputBuffer("");
+        // Set a timeout to commit the input after 400ms of no typing (faster response)
+        inputTimeoutRef.current = setTimeout(() => {
+          commitInput(newBuffer, focusedPicker);
+        }, 400);
+
+        // Also check if we should commit immediately for certain cases
+        const numValue = parseInt(newBuffer);
+
+        // Immediate commit conditions
+        let shouldCommitImmediately = false;
+
+        if (focusedPicker === "hours" && newBuffer.length === 2) {
+          // For hours, commit if we have 2 digits
+          shouldCommitImmediately = true;
+        } else if (focusedPicker === "minutes" && newBuffer.length === 2) {
+          // For minutes, commit if we have 2 digits
+          shouldCommitImmediately = true;
+        } else if (focusedPicker === "day" && newBuffer.length === 2) {
+          // For day, commit if we have 2 digits
+          shouldCommitImmediately = true;
+        } else if (focusedPicker === "month" && newBuffer.length === 2) {
+          // For month, commit if we have 2 digits
+          shouldCommitImmediately = true;
+        } else if (focusedPicker === "year" && newBuffer.length === 4) {
+          // For year, commit if we have 4 digits
+          shouldCommitImmediately = true;
+        } else if (focusedPicker === "number" && newBuffer.length === 2) {
+          // For number, commit if we have 2 digits
+          shouldCommitImmediately = true;
+        }
+
+        // Also commit immediately if the next digit would make it invalid
+        if (focusedPicker === "hours" && numValue > 2) {
+          // If first digit is >2, commit immediately (can't have >29)
+          shouldCommitImmediately = true;
+        } else if (focusedPicker === "minutes" && numValue > 5) {
+          // If first digit is >5, commit immediately (can't have >59)
+          shouldCommitImmediately = true;
+        } else if (focusedPicker === "day" && numValue > 3) {
+          // If first digit is >3, commit immediately (can't have >31)
+          shouldCommitImmediately = true;
+        } else if (focusedPicker === "month" && numValue > 1) {
+          // If first digit is >1, commit immediately (can't have >12)
+          shouldCommitImmediately = true;
+        }
+
+        if (shouldCommitImmediately) {
+          if (inputTimeoutRef.current) {
+            clearTimeout(inputTimeoutRef.current);
+            inputTimeoutRef.current = null;
           }
-        } else if (focusedPicker === "minutes") {
-          const numValue = parseInt(newBuffer);
-          if (numValue >= 0 && numValue <= 59) {
-            setMinuteValue(numValue.toString());
-            // Clear buffer after successful selection
-            setInputBuffer("");
-          }
-        } else if (focusedPicker === "day") {
-          const numValue = parseInt(newBuffer);
-          if (numValue >= 1 && numValue <= 31) {
-            setDayValue(numValue.toString());
-            // Clear buffer after successful selection
-            setInputBuffer("");
-          }
-        } else if (focusedPicker === "month") {
-          const numValue = parseInt(newBuffer);
-          if (numValue >= 1 && numValue <= 12) {
-            setMonthValue(numValue.toString());
-            // Clear buffer after successful month selection to allow immediate new input
-            setInputBuffer("");
-          }
-        } else if (focusedPicker === "year") {
-          const numValue = parseInt(newBuffer);
-          if (numValue >= 2000 && numValue <= 2049) {
-            setYearValue(numValue.toString());
-            // Clear buffer after successful selection
-            setInputBuffer("");
-          }
-        } else if (focusedPicker === "number") {
-          const numValue = parseInt(newBuffer);
-          if (numValue >= 0 && numValue <= 99) {
-            setNumberValue(numValue.toString());
-            // Clear buffer after successful selection
-            setInputBuffer("");
-          }
+          commitInput(newBuffer, focusedPicker);
         }
       }
 
       // Enter to cycle through pickers
       if (key === "enter") {
+        commitInput(inputBuffer, focusedPicker);
         const pickerCycle = [
           "hours",
           "minutes",
@@ -214,7 +304,7 @@ export function WheelPickerDemo() {
         event.preventDefault();
       }
     },
-    [focusedPicker, inputBuffer]
+    [focusedPicker, inputBuffer, commitInput]
   );
 
   // Add keyboard event listeners
@@ -231,7 +321,13 @@ export function WheelPickerDemo() {
     };
 
     document.addEventListener("keydown", handleKeyDownEvent);
-    return () => document.removeEventListener("keydown", handleKeyDownEvent);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDownEvent);
+      // Clean up timeout on unmount
+      if (inputTimeoutRef.current) {
+        clearTimeout(inputTimeoutRef.current);
+      }
+    };
   }, [handleKeyDown]);
 
   // Auto-focus the component
@@ -242,53 +338,53 @@ export function WheelPickerDemo() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background p-8">
-      <div className="max-w-7xl mx-auto space-y-16">
+    <div className="min-h-screen bg-background p-8">
+      <div className="max-w-6xl mx-auto space-y-12">
         {/* Hero Section */}
         <div className="text-center space-y-6">
           <div className="space-y-2">
-            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+            <h1 className="text-4xl md:text-5xl font-bold text-foreground">
               WheelPicker Component
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Smooth, intuitive wheel pickers with comprehensive keyboard
-              navigation and infinite scrolling
+              navigation
             </p>
           </div>
 
-          {/* Main Demo */}
-          <div className="relative p-8 rounded-3xl bg-card/30 backdrop-blur-sm border border-border/50 shadow-2xl">
+          {/* Main Time Picker Demo */}
+          <div className="bg-card border rounded-lg p-8 shadow-sm">
             <div className="flex justify-center">
               <div
                 ref={componentRef}
-                className="w-72 focus:outline-none group"
+                className="w-full max-w-md focus:outline-none"
                 tabIndex={0}
                 role="application"
                 aria-label="Time picker with keyboard navigation"
               >
                 {/* Current Time Display */}
-                <div className="mb-8 text-center">
-                  <div className="text-4xl font-bold text-foreground mb-4 tracking-wider font-mono transition-all duration-300 transform hover:scale-105">
+                <div className="mb-8 text-center space-y-4">
+                  <div className="text-3xl font-mono font-bold text-foreground transition-all duration-200 ease-out transform hover:scale-105">
                     {formattedTime}
                   </div>
 
-                  <div className="flex gap-3 justify-center">
+                  <div className="flex gap-2 justify-center">
                     <button
                       onClick={() => setFocusedPicker("hours")}
-                      className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
+                      className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                         focusedPicker === "hours"
-                          ? "bg-primary text-primary-foreground shadow-lg shadow-primary/30 scale-105"
-                          : "text-muted-foreground border border-border hover:border-primary/50 hover:bg-muted/50"
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-muted text-muted-foreground hover:bg-muted/80"
                       }`}
                     >
                       Hours (H)
                     </button>
                     <button
                       onClick={() => setFocusedPicker("minutes")}
-                      className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
+                      className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                         focusedPicker === "minutes"
-                          ? "bg-primary text-primary-foreground shadow-lg shadow-primary/30 scale-105"
-                          : "text-muted-foreground border border-border hover:border-primary/50 hover:bg-muted/50"
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-muted text-muted-foreground hover:bg-muted/80"
                       }`}
                     >
                       Minutes (M)
@@ -296,9 +392,9 @@ export function WheelPickerDemo() {
                   </div>
                 </div>
 
-                {/* Wheel Picker */}
-                <div className="transform transition-all duration-500 hover:scale-[1.02]">
-                  <WheelPickerWrapper>
+                {/* Time Wheel Picker */}
+                <div className="flex justify-center">
+                  <WheelPickerWrapper className="w-auto">
                     <WheelPicker
                       options={hourOptions_military}
                       infinite
@@ -307,8 +403,8 @@ export function WheelPickerDemo() {
                       classNames={{
                         highlightWrapper:
                           focusedPicker === "hours"
-                            ? "bg-gradient-to-br from-primary/20 to-primary/30 text-primary border-2 border-primary shadow-xl shadow-primary/25 transform scale-105 transition-all duration-300"
-                            : "border border-border text-foreground hover:border-primary/50 transition-all duration-200",
+                            ? "bg-primary text-primary-foreground border-primary transition-all duration-150 ease-out animate-pulse"
+                            : "bg-muted text-foreground border-border transition-all duration-150 ease-out",
                       }}
                     />
                     <WheelPicker
@@ -319,8 +415,8 @@ export function WheelPickerDemo() {
                       classNames={{
                         highlightWrapper:
                           focusedPicker === "minutes"
-                            ? "bg-gradient-to-br from-primary/20 to-primary/30 text-primary border-2 border-primary shadow-xl shadow-primary/25 transform scale-105 transition-all duration-300"
-                            : "border border-border text-foreground hover:border-primary/50 transition-all duration-200",
+                            ? "bg-primary text-primary-foreground border-primary transition-all duration-150 ease-out animate-pulse"
+                            : "bg-muted text-foreground border-border transition-all duration-150 ease-out",
                       }}
                     />
                   </WheelPickerWrapper>
@@ -331,7 +427,7 @@ export function WheelPickerDemo() {
         </div>
 
         {/* Picker Variations */}
-        <div className="space-y-12">
+        <div className="space-y-8">
           <div className="text-center space-y-2">
             <h2 className="text-3xl font-bold">Picker Variations</h2>
             <p className="text-muted-foreground">
@@ -339,34 +435,26 @@ export function WheelPickerDemo() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Date Picker */}
-            <div className="space-y-4">
+            <div className="bg-card border rounded-lg p-6 space-y-4">
               <div className="text-center space-y-2">
-                <h3 className="text-xl font-semibold text-blue-700 dark:text-blue-300">
-                  Date Picker
-                </h3>
+                <h3 className="text-xl font-semibold">Date Picker</h3>
                 <p className="text-sm text-muted-foreground">
                   Select day, month, and year
                 </p>
                 <p className="text-xs text-blue-600 dark:text-blue-400">
                   Press D, O, Y for day/month/year
                 </p>
-                <p className="text-xs text-blue-500 dark:text-blue-500 mt-1">
-                  Type 1=Jan, 2=Feb, 3=Mar, etc.
-                </p>
               </div>
-              <div className="bg-gradient-to-br from-blue-50/30 to-blue-100/20 dark:from-blue-950/20 dark:to-blue-900/10 p-6 rounded-2xl border border-blue-200/30 dark:border-blue-800/20">
-                <div className="text-center mb-4">
-                  <div className="text-lg font-semibold text-blue-700 dark:text-blue-300 mb-2">
-                    {formattedDate}
-                  </div>
-                  <div className="text-xs text-blue-600 dark:text-blue-400 opacity-75">
-                    Month {monthValue} ={" "}
-                    {monthOptions.find((m) => m.value === monthValue)?.label}
-                  </div>
+
+              <div className="text-center mb-4">
+                <div className="text-lg font-semibold text-foreground mb-2 transition-all duration-200 ease-out transform hover:scale-105">
+                  {formattedDate}
                 </div>
-                <WheelPickerWrapper>
+              </div>  
+              <div className="flex justify-center">
+                <WheelPickerWrapper className="w-auto">
                   <WheelPicker
                     options={dayOptions}
                     infinite
@@ -375,8 +463,8 @@ export function WheelPickerDemo() {
                     classNames={{
                       highlightWrapper:
                         focusedPicker === "day"
-                          ? "bg-gradient-to-br from-blue-200/50 to-blue-300/30 dark:from-blue-800/50 dark:to-blue-700/30 border-2 border-blue-400 dark:border-blue-600 text-blue-800 dark:text-blue-200 shadow-lg shadow-blue-500/25 transform scale-105 transition-all duration-300"
-                          : "border border-blue-300 dark:border-blue-600 text-blue-700 dark:text-blue-300 hover:border-blue-400 dark:hover:border-blue-500 transition-all duration-200",
+                          ? "bg-blue-500 text-white border-blue-500 transition-all duration-150 ease-out animate-pulse"
+                          : "bg-muted text-foreground border-border transition-all duration-150 ease-out",
                     }}
                   />
                   <WheelPicker
@@ -387,8 +475,8 @@ export function WheelPickerDemo() {
                     classNames={{
                       highlightWrapper:
                         focusedPicker === "month"
-                          ? "bg-gradient-to-br from-blue-200/50 to-blue-300/30 dark:from-blue-800/50 dark:to-blue-700/30 border-2 border-blue-400 dark:border-blue-600 text-blue-800 dark:text-blue-200 shadow-lg shadow-blue-500/25 transform scale-105 transition-all duration-300"
-                          : "border border-blue-300 dark:border-blue-600 text-blue-700 dark:text-blue-300 hover:border-blue-400 dark:hover:border-blue-500 transition-all duration-200",
+                          ? "bg-blue-500 text-white border-blue-500 transition-all duration-150 ease-out animate-pulse"
+                          : "bg-muted text-foreground border-border transition-all duration-150 ease-out",
                     }}
                   />
                   <WheelPicker
@@ -399,8 +487,8 @@ export function WheelPickerDemo() {
                     classNames={{
                       highlightWrapper:
                         focusedPicker === "year"
-                          ? "bg-gradient-to-br from-blue-200/50 to-blue-300/30 dark:from-blue-800/50 dark:to-blue-700/30 border-2 border-blue-400 dark:border-blue-600 text-blue-800 dark:text-blue-200 shadow-lg shadow-blue-500/25 transform scale-105 transition-all duration-300"
-                          : "border border-blue-300 dark:border-blue-600 text-blue-700 dark:text-blue-300 hover:border-blue-400 dark:hover:border-blue-500 transition-all duration-200",
+                          ? "bg-blue-500 text-white border-blue-500 transition-all duration-150 ease-out animate-pulse"
+                          : "bg-muted text-foreground border-border transition-all duration-150 ease-out",
                     }}
                   />
                 </WheelPickerWrapper>
@@ -408,11 +496,9 @@ export function WheelPickerDemo() {
             </div>
 
             {/* Number Picker */}
-            <div className="space-y-4">
+            <div className="bg-card border rounded-lg p-6 space-y-4">
               <div className="text-center space-y-2">
-                <h3 className="text-xl font-semibold text-green-700 dark:text-green-300">
-                  Number Picker
-                </h3>
+                <h3 className="text-xl font-semibold">Number Picker</h3>
                 <p className="text-sm text-muted-foreground">
                   Simple number selection
                 </p>
@@ -420,13 +506,15 @@ export function WheelPickerDemo() {
                   Press N for number selection
                 </p>
               </div>
-              <div className="bg-gradient-to-br from-green-50/30 to-emerald-100/20 dark:from-green-950/20 dark:to-emerald-900/10 p-6 rounded-2xl border border-green-200/30 dark:border-green-800/20">
-                <div className="text-center mb-4">
-                  <div className="text-lg font-semibold text-green-700 dark:text-green-300 mb-2">
-                    Selected: {numberValue}
-                  </div>
+
+              <div className="text-center mb-4">
+                <div className="text-lg font-semibold text-foreground transition-all duration-200 ease-out transform hover:scale-105">
+                  Selected: {numberValue}
                 </div>
-                <WheelPickerWrapper>
+              </div>
+
+              <div className="flex justify-center">
+                <WheelPickerWrapper className="w-auto">
                   <WheelPicker
                     options={numberOptions}
                     infinite
@@ -435,34 +523,34 @@ export function WheelPickerDemo() {
                     classNames={{
                       highlightWrapper:
                         focusedPicker === "number"
-                          ? "bg-gradient-to-br from-green-200/50 to-emerald-300/30 dark:from-green-800/50 dark:to-emerald-700/30 border-2 border-green-400 dark:border-green-600 text-green-800 dark:text-green-200 shadow-lg shadow-green-500/25 transform scale-105 transition-all duration-300"
-                          : "border border-green-300 dark:border-green-600 text-green-700 dark:text-green-300 hover:border-green-400 dark:hover:border-green-500 transition-all duration-200",
+                          ? "bg-green-500 text-white border-green-500 transition-all duration-150 ease-out animate-pulse"
+                          : "bg-muted text-foreground border-border transition-all duration-150 ease-out",
                     }}
                   />
                 </WheelPickerWrapper>
               </div>
             </div>
 
-            {/* Custom Styled */}
-            <div className="space-y-4">
+            {/* Hour Picker (Styled) */}
+            <div className="bg-card border rounded-lg p-6 space-y-4">
               <div className="text-center space-y-2">
-                <h3 className="text-xl font-semibold text-purple-700 dark:text-purple-300">
-                  Custom Styled
-                </h3>
+                <h3 className="text-xl font-semibold">Hour Picker</h3>
                 <p className="text-sm text-muted-foreground">
-                  Enhanced visual design
+                  24-hour format selection
                 </p>
                 <p className="text-xs text-purple-600 dark:text-purple-400">
                   Uses same hour picker (H)
                 </p>
               </div>
-              <div className="bg-gradient-to-br from-purple-50/30 to-violet-100/20 dark:from-purple-950/20 dark:to-violet-900/10 p-6 rounded-2xl border border-purple-200/30 dark:border-purple-800/20">
-                <div className="text-center mb-4">
-                  <div className="text-lg font-semibold text-purple-700 dark:text-purple-300 mb-2">
-                    Hour: {hourValue.padStart(2, "0")}
-                  </div>
+
+              <div className="text-center mb-4">
+                <div className="text-lg font-semibold text-foreground transition-all duration-200 ease-out transform hover:scale-105">
+                  Hour: {hourValue.padStart(2, "0")}
                 </div>
-                <WheelPickerWrapper>
+              </div>
+
+              <div className="flex justify-center">
+                <WheelPickerWrapper className="w-auto">
                   <WheelPicker
                     options={hourOptions_military}
                     infinite
@@ -470,7 +558,7 @@ export function WheelPickerDemo() {
                     onValueChange={setHourValue}
                     classNames={{
                       highlightWrapper:
-                        "bg-gradient-to-br from-purple-100 to-violet-100 dark:from-purple-900 dark:to-violet-900 border-2 border-purple-400 dark:border-purple-600 text-purple-800 dark:text-purple-200 shadow-lg shadow-purple-500/25 transition-all duration-300",
+                        "bg-purple-500 text-white border-purple-500 transition-all duration-150 ease-out animate-pulse",
                     }}
                   />
                 </WheelPickerWrapper>
@@ -480,113 +568,76 @@ export function WheelPickerDemo() {
         </div>
 
         {/* Keyboard Controls */}
-        <div className="space-y-8">
+        <div className="space-y-6">
           <div className="text-center space-y-2">
-            <h2 className="text-3xl font-bold">
-              Comprehensive Keyboard Navigation
-            </h2>
+            <h2 className="text-3xl font-bold">Keyboard Navigation</h2>
             <p className="text-muted-foreground">
               Enhanced accessibility with shortcuts for all picker types
             </p>
           </div>
 
-          <div className="bg-gradient-to-br from-muted/50 to-muted/30 p-8 rounded-3xl border border-border/50">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <div className="flex items-center gap-3">
-                <kbd className="px-3 py-2 text-sm font-mono bg-gradient-to-b from-zinc-700 to-zinc-800 text-zinc-100 rounded-lg shadow-sm border border-zinc-600 min-w-[40px] text-center">
+          <div className="bg-card border rounded-lg p-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+              <div className="flex items-center gap-2">
+                <kbd className="px-2 py-1 text-xs font-mono bg-muted border rounded">
                   H
                 </kbd>
-                <span className="text-muted-foreground">Select hours</span>
+                <span className="text-sm text-muted-foreground">Hours</span>
               </div>
-              <div className="flex items-center gap-3">
-                <kbd className="px-3 py-2 text-sm font-mono bg-gradient-to-b from-zinc-700 to-zinc-800 text-zinc-100 rounded-lg shadow-sm border border-zinc-600 min-w-[40px] text-center">
+              <div className="flex items-center gap-2">
+                <kbd className="px-2 py-1 text-xs font-mono bg-muted border rounded">
                   M
                 </kbd>
-                <span className="text-muted-foreground">Select minutes</span>
+                <span className="text-sm text-muted-foreground">Minutes</span>
               </div>
-              <div className="flex items-center gap-3">
-                <kbd className="px-3 py-2 text-sm font-mono bg-gradient-to-b from-zinc-700 to-zinc-800 text-zinc-100 rounded-lg shadow-sm border border-zinc-600 min-w-[40px] text-center">
+              <div className="flex items-center gap-2">
+                <kbd className="px-2 py-1 text-xs font-mono bg-muted border rounded">
                   D
                 </kbd>
-                <span className="text-muted-foreground">Select day</span>
+                <span className="text-sm text-muted-foreground">Day</span>
               </div>
-              <div className="flex items-center gap-3">
-                <kbd className="px-3 py-2 text-sm font-mono bg-gradient-to-b from-zinc-700 to-zinc-800 text-zinc-100 rounded-lg shadow-sm border border-zinc-600 min-w-[40px] text-center">
+              <div className="flex items-center gap-2">
+                <kbd className="px-2 py-1 text-xs font-mono bg-muted border rounded">
                   O
                 </kbd>
-                <span className="text-muted-foreground">Select month</span>
+                <span className="text-sm text-muted-foreground">Month</span>
               </div>
-              <div className="flex items-center gap-3">
-                <kbd className="px-3 py-2 text-sm font-mono bg-gradient-to-b from-zinc-700 to-zinc-800 text-zinc-100 rounded-lg shadow-sm border border-zinc-600 min-w-[40px] text-center">
+              <div className="flex items-center gap-2">
+                <kbd className="px-2 py-1 text-xs font-mono bg-muted border rounded">
                   Y
                 </kbd>
-                <span className="text-muted-foreground">Select year</span>
+                <span className="text-sm text-muted-foreground">Year</span>
               </div>
-              <div className="flex items-center gap-3">
-                <kbd className="px-3 py-2 text-sm font-mono bg-gradient-to-b from-zinc-700 to-zinc-800 text-zinc-100 rounded-lg shadow-sm border border-zinc-600 min-w-[40px] text-center">
+              <div className="flex items-center gap-2">
+                <kbd className="px-2 py-1 text-xs font-mono bg-muted border rounded">
                   N
                 </kbd>
-                <span className="text-muted-foreground">Select number</span>
+                <span className="text-sm text-muted-foreground">Number</span>
               </div>
-              <div className="flex items-center gap-3">
-                <kbd className="px-3 py-2 text-sm font-mono bg-gradient-to-b from-zinc-700 to-zinc-800 text-zinc-100 rounded-lg shadow-sm border border-zinc-600 min-w-[40px] text-center">
+              <div className="flex items-center gap-2">
+                <kbd className="px-2 py-1 text-xs font-mono bg-muted border rounded">
                   0-9
                 </kbd>
-                <span className="text-muted-foreground">Type numbers</span>
+                <span className="text-sm text-muted-foreground">Type</span>
               </div>
-              <div className="flex items-center gap-3">
-                <kbd className="px-3 py-2 text-sm font-mono bg-gradient-to-b from-zinc-700 to-zinc-800 text-zinc-100 rounded-lg shadow-sm border border-zinc-600 min-w-[40px] text-center">
+              <div className="flex items-center gap-2">
+                <kbd className="px-2 py-1 text-xs font-mono bg-muted border rounded">
                   ↵
                 </kbd>
-                <span className="text-muted-foreground">Cycle pickers</span>
+                <span className="text-sm text-muted-foreground">Cycle</span>
               </div>
-              <div className="flex items-center gap-3">
-                <kbd className="px-3 py-2 text-sm font-mono bg-gradient-to-b from-zinc-700 to-zinc-800 text-zinc-100 rounded-lg shadow-sm border border-zinc-600 min-w-[40px] text-center">
+              <div className="flex items-center gap-2">
+                <kbd className="px-2 py-1 text-xs font-mono bg-muted border rounded">
                   Esc
                 </kbd>
-                <span className="text-muted-foreground">Clear selection</span>
+                <span className="text-sm text-muted-foreground">Clear</span>
               </div>
-              <div className="flex items-center gap-3">
-                <kbd className="px-3 py-2 text-sm font-mono bg-gradient-to-b from-zinc-700 to-zinc-800 text-zinc-100 rounded-lg shadow-sm border border-zinc-600 min-w-[40px] text-center">
+              <div className="flex items-center gap-2">
+                <kbd className="px-2 py-1 text-xs font-mono bg-muted border rounded">
                   C
                 </kbd>
-                <span className="text-muted-foreground">Clear all values</span>
+                <span className="text-sm text-muted-foreground">Reset</span>
               </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Key Features */}
-        <div className="space-y-8">
-          <h2 className="text-3xl font-bold text-center">Key Features</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="text-center p-6 rounded-xl bg-card/30 border border-border/50 hover:shadow-lg transition-all duration-300">
-              <div className="text-3xl mb-3">⚡</div>
-              <h4 className="font-semibold mb-2">Infinite Scrolling</h4>
-              <p className="text-sm text-muted-foreground">
-                Smooth infinite scrolling with momentum and snap behavior
-              </p>
-            </div>
-            <div className="text-center p-6 rounded-xl bg-card/30 border border-border/50 hover:shadow-lg transition-all duration-300">
-              <div className="text-3xl mb-3">⌨️</div>
-              <h4 className="font-semibold mb-2">Full Keyboard Support</h4>
-              <p className="text-sm text-muted-foreground">
-                Complete keyboard navigation for all picker types with shortcuts
-              </p>
-            </div>
-            <div className="text-center p-6 rounded-xl bg-card/30 border border-border/50 hover:shadow-lg transition-all duration-300">
-              <div className="text-3xl mb-3">🎨</div>
-              <h4 className="font-semibold mb-2">Visual Feedback</h4>
-              <p className="text-sm text-muted-foreground">
-                Highlighted selection with smooth animations and color themes
-              </p>
-            </div>
-            <div className="text-center p-6 rounded-xl bg-card/30 border border-border/50 hover:shadow-lg transition-all duration-300">
-              <div className="text-3xl mb-3">♿</div>
-              <h4 className="font-semibold mb-2">Accessible</h4>
-              <p className="text-sm text-muted-foreground">
-                Built with ARIA attributes and comprehensive keyboard support
-              </p>
             </div>
           </div>
         </div>

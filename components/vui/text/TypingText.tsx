@@ -255,9 +255,16 @@ export function TypingTextShowcase() {
                 </p>
                 <div className="h-16 flex items-center">
                   <TypingText
-                    text="⚡ Super fast typing effect! Ready in milliseconds!"
+                    text={[
+                      "⚡ Super fast typing effect!",
+                      "Ready in milliseconds!",
+                      "Lightning speed performance!",
+                      "Blazing fast animations!"
+                    ]}
                     speed={25}
-                    loop={false}
+                    deleteSpeed={15}
+                    waitTime={1500}
+                    loop={true}
                     className="text-green-800 dark:text-green-200 font-semibold"
                     cursorChar="●"
                     cursorClassName="text-green-500 animate-pulse"
@@ -277,9 +284,16 @@ export function TypingTextShowcase() {
                 </p>
                 <div className="h-16 flex items-center">
                   <TypingText
-                    text="Elegance in every keystroke... ✨"
+                    text={[
+                      "Elegance in every keystroke... ✨",
+                      "Beauty in simplicity... 💫",
+                      "Graceful animations... 🌸",
+                      "Thoughtful design... 🎭"
+                    ]}
                     speed={120}
-                    loop={false}
+                    deleteSpeed={80}
+                    waitTime={2200}
+                    loop={true}
                     initialDelay={500}
                     className="text-purple-800 dark:text-purple-200 font-medium italic"
                     cursorChar="│"
@@ -308,7 +322,7 @@ export function TypingTextShowcase() {
                     speed={70}
                     deleteSpeed={35}
                     waitTime={2500}
-                    loop
+                    loop={true}
                     className="font-mono text-sm text-slate-800 dark:text-slate-200 bg-slate-100/50 dark:bg-slate-800/50 px-3 py-1 rounded"
                     cursorChar="_"
                     cursorClassName="text-slate-600 dark:text-slate-400"
@@ -328,10 +342,17 @@ export function TypingTextShowcase() {
                 </p>
                 <div className="h-16 flex items-center">
                   <TypingText
-                    text="Pure text, no distractions"
+                    text={[
+                      "Pure text, no distractions",
+                      "Clean and minimal design",
+                      "Focus on the content",
+                      "Less is more"
+                    ]}
                     speed={90}
+                    deleteSpeed={60}
+                    waitTime={1800}
                     showCursor={false}
-                    loop={false}
+                    loop={true}
                     className="text-orange-800 dark:text-orange-200 font-medium"
                   />
                 </div>
@@ -349,9 +370,16 @@ export function TypingTextShowcase() {
                 </p>
                 <div className="h-16 flex items-center">
                   <TypingText
-                    text="Creativity knows no bounds! 🎨"
-                    speed={75}
-                    loop={false}
+                    text={[
+                      "Creativity knows no bounds! 🎨",
+                      "Express your unique style! 🌈",
+                      "Make it your own! 🚀",
+                      "Endless possibilities! ✨"
+                    ]}
+                    speed={80}
+                    deleteSpeed={100}
+                    waitTime={1700}
+                    loop={true}
                     cursorChar="✨"
                     cursorClassName="text-rose-500 text-lg"
                     className="text-rose-800 dark:text-rose-200 font-semibold"

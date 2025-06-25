@@ -29,6 +29,8 @@ import {
   TrendingUp,
   Award,
 } from "lucide-react";
+import Image from "next/image";
+import M from "@/public/sb.jpeg";
 
 export default function StoryBehind() {
   const [isVisible, setIsVisible] = useState(false);
@@ -40,10 +42,10 @@ export default function StoryBehind() {
   const journeySteps = [
     {
       icon: <Lightbulb className="w-6 h-6" />,
-      title: "The Spark",
-      period: "Early 2024",
+      title: "Research & Discovery",
+      period: "Q4 2024",
       description:
-        "Frustrated with repetitive design decisions and inconsistent UI patterns, the idea of VUI was born during late-night coding sessions.",
+        "Analyzed team workflows across multiple organizations to identify recurring pain points in design system adoption and maintenance. Discovered the critical gap between design intent and developer implementation.",
       color: "from-yellow-500/20 to-orange-500/10",
       borderColor: "border-yellow-500/20",
       iconBg: "bg-gradient-to-br from-yellow-500/20 to-orange-500/10",
@@ -51,10 +53,10 @@ export default function StoryBehind() {
     },
     {
       icon: <Code className="w-6 h-6" />,
-      title: "The Foundation",
-      period: "Mid 2024",
+      title: "Foundation Building",
+      period: "Q1 2025",
       description:
-        "Building upon shadcn/ui's excellent foundation while addressing its design gaps and enhancing developer experience.",
+        "Established semantic versioning, documentation standards, and automated changelog generation. Built upon shadcn/ui's component architecture while implementing governance best practices.",
       color: "from-blue-500/20 to-cyan-500/10",
       borderColor: "border-blue-500/20",
       iconBg: "bg-gradient-to-br from-blue-500/20 to-cyan-500/10",
@@ -62,10 +64,10 @@ export default function StoryBehind() {
     },
     {
       icon: <Heart className="w-6 h-6" />,
-      title: "The Passion",
-      period: "Late 2024",
+      title: "Iteration & Testing",
+      period: "Q2 2025",
       description:
-        "Countless hours refining every pixel, testing every interaction, and crafting a design system that developers would love to use.",
+        "Conducted extensive user testing with development teams, refined component APIs based on feedback, and established clear contribution guidelines for sustainable growth.",
       color: "from-pink-500/20 to-red-500/10",
       borderColor: "border-pink-500/20",
       iconBg: "bg-gradient-to-br from-pink-500/20 to-red-500/10",
@@ -73,10 +75,10 @@ export default function StoryBehind() {
     },
     {
       icon: <Rocket className="w-6 h-6" />,
-      title: "The Launch",
-      period: "Now",
+      title: "Production Ready",
+      period: "Q2 2025",
       description:
-        "VUI goes live, empowering developers worldwide to build beautiful interfaces with confidence and speed.",
+        "VUI reaches production maturity with comprehensive documentation, automated tooling, and proven scalability across multiple team environments.",
       color: "from-purple-500/20 to-indigo-500/10",
       borderColor: "border-purple-500/20",
       iconBg: "bg-gradient-to-br from-purple-500/20 to-indigo-500/10",
@@ -98,16 +100,16 @@ export default function StoryBehind() {
       description: "Inconsistent margins and padding across components",
     },
     {
-      problem: "Complex Setup",
-      solution: "Simplified Integration",
+      problem: "Fragmented Ecosystem",
+      solution: "Unified Design System",
       icon: <Zap className="w-5 h-5" />,
-      description: "Time-consuming component library setup and configuration",
+      description: "Scattered tools and libraries creating development complexity",
     },
     {
-      problem: "Limited Examples",
-      solution: "Comprehensive Documentation",
+      problem: "Designing Direction Issues",
+      solution: "Clear Design Patterns",
       icon: <BookOpen className="w-5 h-5" />,
-      description: "Lack of real-world implementation examples",
+      description: "Unclear design direction leading to inconsistent interfaces",
     },
   ];
 
@@ -127,7 +129,7 @@ export default function StoryBehind() {
       color: "from-pink-500/20 to-rose-500/10",
     },
     {
-      metric: "100+",
+      metric: "10+",
       label: "Components & Variants",
       description: "Production-ready UI elements",
       icon: <Building className="w-6 h-6" />,
@@ -189,10 +191,10 @@ export default function StoryBehind() {
             </h1>
 
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mb-8">
-              Every great design system has a story. VUI was born from the
-              frustration of countless developers who wanted to build beautiful
-              interfaces without the hassle. This is our journey from problem to
-              solution.
+              Every great design system addresses real-world challenges. VUI emerged from 
+              observing how teams struggle with fragmented design ecosystems, inconsistent 
+              documentation, and the gap between design intent and developer implementation. 
+              This is our journey from identifying these industry-wide problems to crafting solutions.
             </p>
 
             <div className="flex flex-wrap gap-4 justify-center">
@@ -204,7 +206,7 @@ export default function StoryBehind() {
                 </Link>
               </Button>
               <Button variant="outline" size="lg" asChild>
-                <Link href="/components">Explore Components</Link>
+                <Link href="/components/accordion">Explore Components</Link>
               </Button>
             </div>
           </div>
@@ -233,12 +235,11 @@ export default function StoryBehind() {
 
             <div className="space-y-6">
               <p className="text-muted-foreground leading-relaxed text-lg">
-                Picture this: It&apos;s 2 AM, you&apos;re on your third cup of
-                coffee, and you&apos;re still tweaking margins and deciding
-                between 16px or 20px spacing. Sound familiar? We&apos;ve all
-                been there. Despite having excellent tools like shadcn/ui,
-                developers were still spending too much time on design decisions
-                instead of building features.
+                Research shows that teams without proper design systems spend up to 40% of their 
+                development time on repetitive design decisions and inconsistent implementations. 
+                Even with excellent foundations like shadcn/ui, teams struggled with maintaining 
+                documentation, managing component versions, and ensuring design-development alignment. 
+                The missing piece wasn&apos;t just components—it was a cohesive system with clear governance.
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -379,24 +380,24 @@ export default function StoryBehind() {
                 <div>
                   <h3 className="text-xl font-semibold mb-3 flex items-center gap-2">
                     <Zap className="w-5 h-5 text-yellow-500" />
-                    Spatial Wisdom
+                    Documentation-Driven Development
                   </h3>
                   <p className="text-muted-foreground leading-relaxed">
-                    Every component understands space. We&apos;ve eliminated the
-                    guesswork around margins, padding, and spacing by embedding
-                    spatial intelligence into each element.
+                    Following industry best practices, every component includes comprehensive 
+                    documentation, usage examples, and semantic versioning to ensure teams 
+                    can confidently adopt and maintain the system.
                   </p>
                 </div>
 
                 <div>
                   <h3 className="text-xl font-semibold mb-3 flex items-center gap-2">
                     <Users className="w-5 h-5 text-blue-500" />
-                    Developer First
+                    Team Collaboration Focus
                   </h3>
                   <p className="text-muted-foreground leading-relaxed">
-                    Built by developers, for developers. Every API decision,
-                    every prop name, and every pattern is designed to feel
-                    intuitive and powerful.
+                    Built to bridge the gap between designers and developers. Clear contribution 
+                    guidelines, automated changelogs, and version management ensure smooth 
+                    collaboration across growing teams.
                   </p>
                 </div>
               </div>
@@ -420,9 +421,8 @@ export default function StoryBehind() {
                     Universal Accessibility
                   </h3>
                   <p className="text-muted-foreground leading-relaxed">
-                    Accessibility isn&apos;t an afterthought—it&apos;s built
-                    into the foundation. Every component meets WCAG standards
-                    and goes beyond where possible.
+                    Accessibility isn&apos;t an afterthought—it&apos;s built into the foundation. 
+                    Every component meets WCAG standards and goes beyond where possible.
                   </p>
                 </div>
               </div>
@@ -579,23 +579,25 @@ export default function StoryBehind() {
 
             <div className="space-y-6">
               <blockquote className="text-lg text-muted-foreground leading-relaxed italic border-l-4 border-primary/30 pl-6">
-                &quot;VUI isn&apos;t just another component library—it&apos;s my
-                love letter to the developer community. Every late-night coding
-                session, every pixel-perfect adjustment, and every API decision
-                was made with one goal: to help you build beautiful things
-                without the friction.
+                &quot;VUI represents a systematic approach to solving real design system challenges. 
+                By studying how successful design teams maintain consistency and scale their systems, 
+                we&apos;ve implemented proven patterns for documentation, versioning, and team collaboration 
+                that actually work in production environments.
               </blockquote>
 
               <blockquote className="text-lg text-muted-foreground leading-relaxed italic border-l-4 border-primary/30 pl-6">
-                I believe that great tools should feel invisible. They should
-                amplify your creativity, not constrain it. VUI is my attempt at
-                creating that perfect balance between opinionated design and
-                unlimited possibility.&
+                The goal isn&apos;t just beautiful components—it&apos;s sustainable design system governance. 
+                VUI combines the flexibility teams need with the structure that prevents design debt and 
+                ensures long-term maintainability across growing organizations.&quot;
               </blockquote>
 
               <div className="flex items-center gap-4 pt-4">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center">
-                  <span className="text-primary font-bold">SB</span>
+                <div className="w-12 h-12 rounded-full overflow-hidden">
+                  <Image
+                    src={M} 
+                    alt="Srijan Baniyal's profile picture"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div>
                   <div className="font-semibold">Srijan Baniyal</div>

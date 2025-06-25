@@ -1,5 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Pill } from "@/components/ui/pill";
+import Copy from "@/components/Copy";
 import { PackageManagerTabs } from "@/components/PackageManagerTabs";
 import {
   CheckCircle,
@@ -47,8 +48,8 @@ export default function Installation() {
 
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               Transform your development workflow with our modern component
-              library. Follow these steps to integrate Vyoma UI into your
-              Next.js project.
+              library. Follow these simple steps to integrate Vyoma UI into your
+              Next.js project in minutes.
             </p>
           </div>
 
@@ -81,8 +82,7 @@ export default function Installation() {
                   <div className="space-y-6">
                     <p className="text-muted-foreground leading-relaxed">
                       Begin your journey by creating a fresh Next.js project
-                      with TypeScript, Tailwind CSS, and ESLint. Choose your
-                      preferred package manager below for the best development
+                      with TypeScript, Tailwind CSS, and ESLint for the best development
                       experience.
                     </p>
 
@@ -163,7 +163,17 @@ export default function Installation() {
                     </p>
 
                     <div className="space-y-4">
-                      <PackageManagerTabs command="shadcn@latest init" />
+                      <div className="relative">
+                        <div className="bg-muted/50 rounded-lg p-4 font-mono text-sm border">
+                          <div className="flex items-center justify-between">
+                            <span className="text-muted-foreground">Terminal</span>
+                            <Copy content="npx shadcn@latest init" />
+                          </div>
+                          <div className="mt-2 text-foreground">
+                            npx shadcn@latest init
+                          </div>
+                        </div>
+                      </div>
 
                       <Card className="p-6 bg-gradient-to-r from-blue-50/50 to-indigo-50/50 dark:from-blue-950/20 dark:to-indigo-950/20 border-blue-200/50 dark:border-blue-800/50">
                         <div className="flex items-start gap-4">
@@ -178,7 +188,17 @@ export default function Installation() {
                                 defaults:
                               </p>
                             </div>
-                            <PackageManagerTabs command="shadcn@latest init -d" />
+                            <div className="relative">
+                              <div className="bg-muted/50 rounded-lg p-4 font-mono text-sm border">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-muted-foreground">Terminal</span>
+                                                                     <Copy content="npx shadcn@latest init -d" />
+                                </div>
+                                <div className="mt-2 text-foreground">
+                                  npx shadcn@latest init -d
+                                </div>
+                              </div>
+                            </div>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
                               <div className="flex items-center gap-2 p-2 rounded bg-background/50">
                                 <Star className="w-3 h-3 text-yellow-500" />

@@ -259,66 +259,66 @@ export function WheelPickerDemo() {
           {/* Main Demo */}
           <div className="relative p-8 rounded-3xl bg-card/30 backdrop-blur-sm border border-border/50 shadow-2xl">
             <div className="flex justify-center">
-    <div
-      ref={componentRef}
+              <div
+                ref={componentRef}
                 className="w-72 focus:outline-none group"
-      tabIndex={0}
-      role="application"
-      aria-label="Time picker with keyboard navigation"
-    >
-      {/* Current Time Display */}
-      <div className="mb-8 text-center">
+                tabIndex={0}
+                role="application"
+                aria-label="Time picker with keyboard navigation"
+              >
+                {/* Current Time Display */}
+                <div className="mb-8 text-center">
                   <div className="text-4xl font-bold text-foreground mb-4 tracking-wider font-mono transition-all duration-300 transform hover:scale-105">
-          {formattedTime}
-        </div>
+                    {formattedTime}
+                  </div>
 
-        <div className="flex gap-3 justify-center">
-          <button
-            onClick={() => setFocusedPicker("hours")}
+                  <div className="flex gap-3 justify-center">
+                    <button
+                      onClick={() => setFocusedPicker("hours")}
                       className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
-              focusedPicker === "hours"
+                        focusedPicker === "hours"
                           ? "bg-primary text-primary-foreground shadow-lg shadow-primary/30 scale-105"
                           : "text-muted-foreground border border-border hover:border-primary/50 hover:bg-muted/50"
                       }`}
                     >
                       Hours (H)
-          </button>
-          <button
-            onClick={() => setFocusedPicker("minutes")}
+                    </button>
+                    <button
+                      onClick={() => setFocusedPicker("minutes")}
                       className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
-              focusedPicker === "minutes"
+                        focusedPicker === "minutes"
                           ? "bg-primary text-primary-foreground shadow-lg shadow-primary/30 scale-105"
                           : "text-muted-foreground border border-border hover:border-primary/50 hover:bg-muted/50"
                       }`}
                     >
                       Minutes (M)
-          </button>
-        </div>
-      </div>
+                    </button>
+                  </div>
+                </div>
 
-      {/* Wheel Picker */}
-      <div className="transform transition-all duration-500 hover:scale-[1.02]">
-        <WheelPickerWrapper>
-          <WheelPicker
-            options={hourOptions_military}
-            infinite
-            value={hourValue}
-            onValueChange={setHourValue}
-            classNames={{
-              highlightWrapper:
-                focusedPicker === "hours"
+                {/* Wheel Picker */}
+                <div className="transform transition-all duration-500 hover:scale-[1.02]">
+                  <WheelPickerWrapper>
+                    <WheelPicker
+                      options={hourOptions_military}
+                      infinite
+                      value={hourValue}
+                      onValueChange={setHourValue}
+                      classNames={{
+                        highlightWrapper:
+                          focusedPicker === "hours"
                             ? "bg-gradient-to-br from-primary/20 to-primary/30 text-primary border-2 border-primary shadow-xl shadow-primary/25 transform scale-105 transition-all duration-300"
                             : "border border-border text-foreground hover:border-primary/50 transition-all duration-200",
-            }}
-          />
-          <WheelPicker
-            options={minuteOptions}
-            infinite
-            value={minuteValue}
-            onValueChange={setMinuteValue}
-            classNames={{
-              highlightWrapper:
-                focusedPicker === "minutes"
+                      }}
+                    />
+                    <WheelPicker
+                      options={minuteOptions}
+                      infinite
+                      value={minuteValue}
+                      onValueChange={setMinuteValue}
+                      classNames={{
+                        highlightWrapper:
+                          focusedPicker === "minutes"
                             ? "bg-gradient-to-br from-primary/20 to-primary/30 text-primary border-2 border-primary shadow-xl shadow-primary/25 transform scale-105 transition-all duration-300"
                             : "border border-border text-foreground hover:border-primary/50 transition-all duration-200",
                       }}
@@ -349,12 +349,12 @@ export function WheelPickerDemo() {
                 <p className="text-sm text-muted-foreground">
                   Select day, month, and year
                 </p>
-                                 <p className="text-xs text-blue-600 dark:text-blue-400">
-                   Press D, O, Y for day/month/year
-                 </p>
-                 <p className="text-xs text-blue-500 dark:text-blue-500 mt-1">
-                   Type 1=Jan, 2=Feb, 3=Mar, etc.
-                 </p>
+                <p className="text-xs text-blue-600 dark:text-blue-400">
+                  Press D, O, Y for day/month/year
+                </p>
+                <p className="text-xs text-blue-500 dark:text-blue-500 mt-1">
+                  Type 1=Jan, 2=Feb, 3=Mar, etc.
+                </p>
               </div>
               <div className="bg-gradient-to-br from-blue-50/30 to-blue-100/20 dark:from-blue-950/20 dark:to-blue-900/10 p-6 rounded-2xl border border-blue-200/30 dark:border-blue-800/20">
                 <div className="text-center mb-4">
@@ -362,7 +362,8 @@ export function WheelPickerDemo() {
                     {formattedDate}
                   </div>
                   <div className="text-xs text-blue-600 dark:text-blue-400 opacity-75">
-                    Month {monthValue} = {monthOptions.find((m) => m.value === monthValue)?.label}
+                    Month {monthValue} ={" "}
+                    {monthOptions.find((m) => m.value === monthValue)?.label}
                   </div>
                 </div>
                 <WheelPickerWrapper>
@@ -470,9 +471,9 @@ export function WheelPickerDemo() {
                     classNames={{
                       highlightWrapper:
                         "bg-gradient-to-br from-purple-100 to-violet-100 dark:from-purple-900 dark:to-violet-900 border-2 border-purple-400 dark:border-purple-600 text-purple-800 dark:text-purple-200 shadow-lg shadow-purple-500/25 transition-all duration-300",
-            }}
-          />
-        </WheelPickerWrapper>
+                    }}
+                  />
+                </WheelPickerWrapper>
               </div>
             </div>
           </div>

@@ -102,7 +102,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/docs"
+                  href="/components/accordion"
                   className="text-muted-foreground hover:text-foreground transition-colors"
                 >
                   Components
@@ -110,18 +110,18 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/examples"
+                  href="/showcase"
                   className="text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  Examples
+                  Showcase
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/colors"
+                  href="/themes "
                   className="text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  Design Tokens
+                  Themes
                 </Link>
               </li>
             </ul>
@@ -171,9 +171,21 @@ export default function Footer() {
               <div className="flex items-center gap-4 text-xs text-muted-foreground">
                 <span>Next.js</span>
                 <span>•</span>
+                <span>TypeScript</span>
+                <span>•</span>
                 <span>Tailwind CSS</span>
                 <span>•</span>
-                <span>TypeScript</span>
+                <span>Shadcn UI</span>
+                <span>•</span>
+                <span>GSAP</span>
+                <span>•</span>
+                <span>Motion</span>
+                <span>•</span>
+                <span>Three.js</span>
+                <span>•</span>
+                <span>Vanta.js</span>
+                <span>•</span>
+                <span>Animate.js</span>
               </div>
             </div>
           </div>

@@ -16,11 +16,15 @@ export default function Navigation() {
   const navItems = [
     {
       name: "Components",
-      link: "/components",
+      link: "/components/accordion",
     },
     {
       name: "Showcase",
       link: "/showcase",
+    },
+    {
+      name: "Themes",
+      link: "/themes",
     },
   ];
 

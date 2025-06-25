@@ -286,7 +286,7 @@ export const MobileNavToggle = ({
 export const NavbarLogo = () => {
   return (
     <motion.a
-      href="#"
+      href="/"
       className="relative z-20 flex items-center space-x-3 px-2 py-1 text-sm font-normal"
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}

@@ -17,17 +17,6 @@ interface ButtonShowcaseProps {
 const ButtonShowcase: React.FC<ButtonShowcaseProps> = ({ className }) => {
   return (
     <div className={`w-full max-w-7xl mx-auto p-8 space-y-12 ${className}`}>
-      {/* Header */}
-      <div className="text-center space-y-4">
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
-          VUI Button Collection
-        </h1>
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-          A curated collection of beautiful, interactive button components with
-          stunning animations and effects.
-        </p>
-      </div>
-
       {/* Flip Buttons Section */}
       <section className="space-y-6">
         <div className="text-center">

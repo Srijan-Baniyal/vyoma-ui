@@ -17,6 +17,7 @@ import TunnelShowcase from "@/components/vui/backgrounds/Tunnel";
 import { WavyTilesShowcase } from "@/components/vui/backgrounds/WavyTiles";
 import ButtonShowcase from "@/components/vui/Button";
 import ToolTipShowcase from "@/components/vui/ToolTip";
+import NavigationShowcase from "@/components/vui/Navigation";
 
 export type ComponentEntry = {
   name: string;
@@ -113,9 +114,9 @@ export const componentMap: ComponentCategoryMap = {
     },
     {
       name: "Navigation",
-      component: Introduction,
+      component: NavigationShowcase,
       route: "/components/navigation",
-      path: "components/Introduction.tsx",
+      path: "components/vui/Navigation.tsx",
     },
     {
       name: "Sheet",

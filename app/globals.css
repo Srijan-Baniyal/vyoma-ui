@@ -170,6 +170,102 @@
   button:focus-visible {
     @apply outline-2 outline-ring outline-offset-2;
   }
+
+  /* Custom slider styles */
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: hsl(var(--primary));
+    cursor: pointer;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    border: 2px solid hsl(var(--background));
+  }
+
+  input[type="range"]::-webkit-slider-thumb:hover {
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  }
+
+  input[type="range"]::-moz-range-thumb {
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: hsl(var(--primary));
+    cursor: pointer;
+    border: 2px solid hsl(var(--background));
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  }
+
+  input[type="range"]::-moz-range-thumb:hover {
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  }
+
+  input[type="range"]:focus::-webkit-slider-thumb {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+
+  input[type="range"]:focus::-moz-range-thumb {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+
+  /* Theme customizer specific styles */
+  [data-theme-customizer] .theme-scalable {
+    /* Apply component scale if defined */
+    transform: scale(var(--component-scale, 1));
+    transform-origin: center;
+  }
+
+  [data-theme-customizer] *:not(input[type="color"], input[type="range"]) {
+    /* Apply dynamic border radius to all elements within theme customizer except color/range inputs */
+    border-radius: var(--radius, 0.375rem);
+  }
+
+  [data-theme-customizer] .rounded-sm {
+    border-radius: var(--radius-sm, 0.125rem);
+  }
+
+  [data-theme-customizer] .rounded-md {
+    border-radius: var(--radius-md, 0.375rem);
+  }
+
+  [data-theme-customizer] .rounded-lg {
+    border-radius: var(--radius-lg, 0.5rem);
+  }
+
+  [data-theme-customizer] .rounded-xl {
+    border-radius: var(--radius-xl, 0.75rem);
+  }
+
+  /* Apply shadow intensity to elements with shadows */
+  [data-theme-customizer] .shadow-xs {
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, calc(0.05 * var(--shadow-intensity, 0.5)));
+  }
+
+  [data-theme-customizer] .shadow-sm {
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, calc(0.05 * var(--shadow-intensity, 0.5))), 0 1px 3px 0 rgba(0, 0, 0, calc(0.1 * var(--shadow-intensity, 0.5)));
+  }
+
+  /* Ensure color inputs are properly visible */
+  [data-theme-customizer] input[type="color"] {
+    min-width: 2.5rem !important;
+    min-height: 2rem !important;
+    border: 1px solid hsl(var(--border)) !important;
+    border-radius: 0.375rem !important;
+  }
+
+  /* Debug: Add red border to color inputs */
+  [data-theme-customizer] input[type="color"] {
+    border: 2px solid red !important;
+  }
 }
 
 @layer utilities {

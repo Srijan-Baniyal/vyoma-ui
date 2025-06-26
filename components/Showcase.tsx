@@ -7,62 +7,17 @@ import { ExternalLink, Mail } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 
-const showcaseProjects = [
-  {
-    id: 1,
-    name: "TechCorp Solutions",
-    description: "Modern SaaS platform for project management with real-time collaboration features.",
-    image: "/placeholder.svg?height=200&width=300",
-    url: "https://techcorp-solutions.com",
-    category: "SaaS Platform",
-    technologies: ["Next.js", "TypeScript", "Tailwind CSS"],
-  },
-  {
-    id: 2,
-    name: "EcoGreen Marketplace",
-    description: "E-commerce platform connecting eco-friendly brands with conscious consumers.",
-    image: "/placeholder.svg?height=200&width=300",
-    url: "https://ecogreen-marketplace.com",
-    category: "E-commerce",
-    technologies: ["React", "Node.js", "Stripe"],
-  },
-  {
-    id: 3,
-    name: "HealthTracker Pro",
-    description: "Comprehensive health monitoring dashboard for healthcare professionals.",
-    image: "/placeholder.svg?height=200&width=300",
-    url: "https://healthtracker-pro.com",
-    category: "Healthcare",
-    technologies: ["Next.js", "PostgreSQL", "Chart.js"],
-  },
-  {
-    id: 4,
-    name: "EduLearn Platform",
-    description: "Interactive learning management system with AI-powered personalization.",
-    image: "/placeholder.svg?height=200&width=300",
-    url: "https://edulearn-platform.com",
-    category: "Education",
-    technologies: ["React", "Python", "AI/ML"],
-  },
-  {
-    id: 5,
-    name: "FinanceFlow",
-    description: "Personal finance management app with automated expense tracking.",
-    image: "/placeholder.svg?height=200&width=300",
-    url: "https://financeflow.com",
-    category: "Fintech",
-    technologies: ["Next.js", "Prisma", "Plaid API"],
-  },
-  {
-    id: 6,
-    name: "CreativeStudio",
-    description: "Portfolio website for a digital design agency showcasing their creative work.",
-    image: "/placeholder.svg?height=200&width=300",
-    url: "https://creativestudio.com",
-    category: "Portfolio",
-    technologies: ["Next.js", "Framer Motion", "Sanity CMS"],
-  },
-]
+type Project = {
+  id: number
+  name: string
+  description: string
+  image: string
+  url: string
+  category: string
+  technologies: string[]
+}
+
+const showcaseProjects: Project[] = []
 
 export default function Showcase() {
   return (
@@ -77,52 +32,60 @@ export default function Showcase() {
       </div>
 
       {/* Showcase Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-        {showcaseProjects.map((project) => (
-          <Card key={project.id} className="group hover:shadow-lg transition-shadow duration-300">
-            <CardHeader className="p-0">
-              <div className="relative overflow-hidden rounded-t-lg">
-                <Image
-                  src={project.image || "/placeholder.svg"}
-                  alt={project.name}
-                  width={300}
-                  height={200}
-                  className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <div className="absolute top-3 right-3">
-                  <Badge variant="secondary" className="bg-white/90 text-black">
-                    {project.category}
-                  </Badge>
+      {showcaseProjects.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-24">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primary mb-6" />
+          <h3 className="text-2xl font-semibold mb-2">Cooking something delicious...</h3>
+          <p className="text-muted-foreground text-lg">Stay tuned! We are preparing some amazing showcases for you.</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          {showcaseProjects.map((project) => (
+            <Card key={project.id} className="group hover:shadow-lg transition-shadow duration-300">
+              <CardHeader className="p-0">
+                <div className="relative overflow-hidden rounded-t-lg">
+                  <Image
+                    src={project.image || "/placeholder.svg"}
+                    alt={project.name}
+                    width={300}
+                    height={200}
+                    className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="absolute top-3 right-3">
+                    <Badge variant="secondary" className="bg-white/90 text-black">
+                      {project.category}
+                    </Badge>
+                  </div>
                 </div>
-              </div>
-            </CardHeader>
-            <CardContent className="p-6">
-              <CardTitle className="text-xl mb-2 group-hover:text-primary transition-colors">{project.name}</CardTitle>
-              <CardDescription className="text-sm mb-4 line-clamp-2">{project.description}</CardDescription>
+              </CardHeader>
+              <CardContent className="p-6">
+                <CardTitle className="text-xl mb-2 group-hover:text-primary transition-colors">{project.name}</CardTitle>
+                <CardDescription className="text-sm mb-4 line-clamp-2">{project.description}</CardDescription>
 
-              {/* Technologies */}
-              <div className="flex flex-wrap gap-1 mb-4">
-                {project.technologies.map((tech) => (
-                  <Badge key={tech} variant="outline" className="text-xs">
-                    {tech}
-                  </Badge>
-                ))}
-              </div>
+                {/* Technologies */}
+                <div className="flex flex-wrap gap-1 mb-4">
+                  {project.technologies.map((tech: string) => (
+                    <Badge key={tech} variant="outline" className="text-xs">
+                      {tech}
+                    </Badge>
+                  ))}
+                </div>
 
-              {/* Visit Link */}
-              <Link
-                href={project.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center text-sm text-primary hover:underline"
-              >
-                Visit Website
-                <ExternalLink className="ml-1 h-3 w-3" />
-              </Link>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+                {/* Visit Link */}
+                <Link
+                  href={project.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center text-sm text-primary hover:underline"
+                >
+                  Visit Website
+                  <ExternalLink className="ml-1 h-3 w-3" />
+                </Link>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
 
       {/* Call to Action Section */}
       <div className="bg-gradient-to-r from-primary/10 to-primary/5 rounded-2xl p-8 md:p-12 text-center">

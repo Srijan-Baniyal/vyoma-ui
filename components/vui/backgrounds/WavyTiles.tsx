@@ -202,7 +202,7 @@ export function WavyTilesShowcase() {
             });
           }
 
-          // Initialize Vanta effect with full window dimensions
+          // Initialize Vanta effect
           if (window.VANTA && window.THREE && vantaRef.current) {
             vantaEffect.current = window.VANTA.WAVES({
               el: vantaRef.current,
@@ -232,41 +232,8 @@ export function WavyTilesShowcase() {
 
     const timer = setTimeout(loadVanta, 100);
 
-    // Handle window resize
-    const handleResize = () => {
-      if (vantaEffect.current && vantaRef.current) {
-        // Trigger resize for Vanta effect
-        vantaEffect.current.destroy();
-        vantaEffect.current = null;
-        setTimeout(() => {
-          if (window.VANTA && window.THREE && vantaRef.current) {
-            vantaEffect.current = window.VANTA.WAVES({
-              el: vantaRef.current,
-              mouseControls: true,
-              touchControls: true,
-              gyroControls: false,
-              minHeight: 200.0,
-              minWidth: 200.0,
-              scale: 1.0,
-              scaleMobile: 1.0,
-              color: 0x1a1a2e,
-              backgroundColor: 0x0f0f23,
-              shininess: 30.0,
-              waveHeight: 20.0,
-              waveSpeed: 1.0,
-              zoom: 0.9,
-              forceAnimate: true,
-            });
-          }
-        }, 100);
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-
     return () => {
       clearTimeout(timer);
-      window.removeEventListener("resize", handleResize);
       if (vantaEffect.current) {
         try {
           vantaEffect.current.destroy();
@@ -279,42 +246,39 @@ export function WavyTilesShowcase() {
   }, []);
 
   return (
-    <div className="bg-black text-white min-h-screen overflow-hidden relative">
-      {/* Fallback background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 to-slate-800"></div>
+    <div className="space-y-8">
+      <div className="space-y-6">
+        {/* Showcase Container */}
+        <div className="relative w-full h-96 rounded-lg overflow-hidden border">
+          {/* Fallback background */}
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-900 to-slate-800"></div>
 
-      {/* Vanta.js container - full screen */}
-      <div
-        ref={vantaRef}
-        className="fixed top-0 left-0 w-full h-full"
-        style={{
-          width: "100%",
-          height: "100%",
-        }}
-      ></div>
+          {/* Vanta.js container */}
+          <div
+            ref={vantaRef}
+            className="absolute inset-0"
+            style={{
+              width: "100%",
+              height: "100%",
+            }}
+          ></div>
 
-      {/* Loading indicator */}
-      {!vantaLoaded && (
-        <div className="absolute inset-0 flex items-center justify-center z-20">
-          <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-        </div>
-      )}
+          {/* Loading indicator */}
+          {!vantaLoaded && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          )}
 
-      {/* Overlay content */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-4 text-center">
-        <div className="mb-8 space-y-6">
-          <div className="inline-block">
-            <h1 className="text-6xl md:text-8xl font-black tracking-tighter bg-gradient-to-r from-white via-gray-200 to-white bg-clip-text text-transparent animate-pulse">
-              WAVY TILES
-            </h1>
-            <div className="h-1 w-full bg-gradient-to-r from-transparent via-white to-transparent mt-4 animate-pulse" />
+          {/* Overlay content */}
+          <div className="absolute inset-0 flex items-center justify-center z-10">
+            <div className="text-center text-white">
+              <h2 className="text-4xl font-bold mb-4">Interactive Waves</h2>
+              <p className="text-lg opacity-80">
+                Move your mouse to interact with the waves
+              </p>
+            </div>
           </div>
-          
-          <p className="text-lg md:text-xl text-gray-300 max-w-2xl leading-relaxed font-light">
-            Experience mesmerizing interactive waves that respond to your movement with 
-            <span className="text-white font-medium"> Vanta.js </span> 
-            powered dynamic effects
-          </p>
         </div>
       </div>
     </div>

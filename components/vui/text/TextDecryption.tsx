@@ -117,57 +117,44 @@ function TextDecryption({
       ? Array.from(new Set(text.split(""))).filter((char) => char !== " ")
       : characters.split("");
 
-    // Helper function to check if a character is an emoji or special Unicode character
-    const isEmojiOrSpecial = (char: string): boolean => {
-      const emojiRegex = /[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/u;
-      return emojiRegex.test(char) || char.charCodeAt(0) > 127;
-    };
-
-    // Use Array.from for proper Unicode character handling
-    const getTextChars = (text: string): string[] => {
-      return Array.from(text);
-    };
-
     const shuffleText = (
       originalText: string,
       currentRevealed: Set<number>
     ): string => {
-      const textChars = getTextChars(originalText);
-
       if (useOriginalCharsOnly) {
-        const positions = textChars.map((char, i) => ({
+        const positions = originalText.split("").map((char, i) => ({
           char,
           isSpace: char === " ",
-          isEmoji: isEmojiOrSpecial(char),
           index: i,
           isRevealed: currentRevealed.has(i),
         }));
 
-        const nonSpecialChars = positions
-          .filter((p) => !p.isSpace && !p.isEmoji && !p.isRevealed)
+        const nonSpaceChars = positions
+          .filter((p) => !p.isSpace && !p.isRevealed)
           .map((p) => p.char);
 
-        for (let i = nonSpecialChars.length - 1; i > 0; i--) {
+        for (let i = nonSpaceChars.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
-          [nonSpecialChars[i], nonSpecialChars[j]] = [
-            nonSpecialChars[j],
-            nonSpecialChars[i],
+          [nonSpaceChars[i], nonSpaceChars[j]] = [
+            nonSpaceChars[j],
+            nonSpaceChars[i],
           ];
         }
 
         let charIndex = 0;
         return positions
           .map((p) => {
-            if (p.isSpace || p.isEmoji) return p.char; // Preserve spaces and emojis
-            if (p.isRevealed) return textChars[p.index];
-            return nonSpecialChars[charIndex++] || p.char;
+            if (p.isSpace) return " ";
+            if (p.isRevealed) return originalText[p.index];
+            return nonSpaceChars[charIndex++] || p.char;
           })
           .join("");
       } else {
-        return textChars
+        return originalText
+          .split("")
           .map((char, i) => {
-            if (char === " " || isEmojiOrSpecial(char)) return char; // Preserve spaces and emojis
-            if (currentRevealed.has(i)) return textChars[i];
+            if (char === " ") return " ";
+            if (currentRevealed.has(i)) return originalText[i];
             return availableChars[
               Math.floor(Math.random() * availableChars.length)
             ];
@@ -328,7 +315,7 @@ function TextDecryption({
 
       {/* Visual text with scramble effect */}
       <span aria-hidden="true" className="relative">
-        {Array.from(displayText).map((char, index) => {
+        {displayText.split("").map((char, index) => {
           const isRevealedOrDone =
             revealedIndices.has(index) || !isScrambling || !isHovering;
 
@@ -790,6 +777,42 @@ export default function TextDecryptionShowcase() {
   encryptedClassName="text-red-500 opacity-60"
 />`}
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Props Reference */}
+      <section className="space-y-8">
+        <div className="text-center">
+          <h2 className="text-3xl font-semibold text-primary mb-3">
+            Props Reference
+          </h2>
+          <p className="text-muted-foreground">
+            Complete API documentation for the TextDecryption component
+          </p>
+        </div>
+
+        <div className="bg-card rounded-xl p-8 border border-border">
+          <div className="font-mono text-sm overflow-x-auto">
+            <pre className="text-foreground leading-relaxed">
+              {`interface TextDecryptionProps {
+  text: string;                           // The text to display
+  speed?: number;                         // Animation speed in ms (default: 50)
+  maxIterations?: number;                 // Max scramble iterations (default: 10)
+  sequential?: boolean;                   // Sequential vs random reveal (default: false)
+  revealDirection?: "start" | "end" | "center"; // Direction of reveal (default: "start")
+  useOriginalCharsOnly?: boolean;         // Use only chars from original text (default: false)
+  characters?: string;                    // Custom character set for scrambling
+  className?: string;                     // Styles for revealed text
+  encryptedClassName?: string;            // Styles for encrypted text
+  parentClassName?: string;               // Styles for container
+  animateOn?: "view" | "hover";          // Trigger condition (default: "hover")
+  glowEffect?: boolean;                   // Add glow effect (default: false)
+  typewriterEffect?: boolean;             // Add typewriter effect (default: false)
+  loop?: boolean;                         // Enable infinite loop for "view" animations (default: false)
+  loopDelay?: number;                     // Delay between loops in ms (default: 2000)
+}`}
+            </pre>
           </div>
         </div>
       </section>

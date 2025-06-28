@@ -1,360 +1,211 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { useThemeCustomizer } from "@/contexts/ThemeCustomizerContext";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import type React from "react";
+import { useState } from "react";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { ColorPicker } from "@/components/ui/color-picker";
-import { Slider } from "@/components/ui/slider";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { Copy, RotateCcw, Palette, Type, RulerIcon } from "lucide-react";
-import { ThemePresets } from "./ThemePresets";
 import { componentMap, type ComponentEntry } from "@/data/ComponentMapping";
 
-// Simple component preview wrapper with error handling
-function ComponentPreview({ component: Component, name }: { component: React.ComponentType; name: string }) {
+// Enhanced component preview wrapper with better containment
+function ComponentPreview({
+  component: Component,
+  name,
+  isActive = false,
+}: {
+  component: React.ComponentType;
+  name: string;
+  isActive?: boolean;
+}) {
   try {
-    return <Component />;
+    return (
+      <div
+        className={`
+          transform transition-all duration-500 ease-out
+          ${isActive ? "scale-105" : "scale-100"}
+          hover:scale-110 origin-center
+          w-full h-full flex items-center justify-center
+          overflow-hidden
+        `}
+      >
+        {/* Natural component preview container */}
+        <div className="relative overflow-hidden rounded-md flex items-center justify-center w-full h-full min-h-[100px] p-2">
+          <Component />
+        </div>
+      </div>
+    );
   } catch (error) {
     console.error(`Error rendering ${name}:`, error);
     return (
-      <div className="text-sm text-muted-foreground p-4 text-center">
-        <p>Component Preview</p>
-        <p className="text-xs">({name})</p>
+      <div className="text-sm text-muted-foreground p-3 text-center">
+        <div className="w-6 h-6 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-full mx-auto mb-2" />
+        <p className="font-medium text-xs">Preview</p>
+        <p className="text-xs opacity-60">({name})</p>
       </div>
     );
   }
 }
 
-export function ThemeSwitcher() {
-  const { theme, updateTheme, resetTheme, exportTheme, applyTheme } = useThemeCustomizer();
-  const [activeTab, setActiveTab] = useState("colors");
+export default function ThemeSwitcher() {
+  const [activeCard, setActiveCard] = useState<number | null>(null);
 
-  // Ensure theme is applied when component mounts
-  useEffect(() => {
-    applyTheme();
-  }, [applyTheme]);
+  // Flatten all components
+  const allComponents = Object.entries(componentMap)
+    .filter(([category]) => category !== "Get Started")
+    .flatMap(([category, components]) =>
+      components.map((component: ComponentEntry) => ({
+        ...component,
+        category,
+        id: `${category}-${component.name}`,
+      }))
+    );
 
-  const handleExport = () => {
-    const themeData = exportTheme();
-    navigator.clipboard.writeText(themeData);
-  };
-
-  const updateBorderRadius = (key: keyof typeof theme.borderRadius, value: string) => {
-    updateTheme({
-      borderRadius: {
-        ...theme.borderRadius,
-        [key]: value
-      }
-    });
-  };
-
-  const updateFontSize = (key: keyof typeof theme.fontSize, value: string) => {
-    updateTheme({
-      fontSize: {
-        ...theme.fontSize,
-        [key]: value
-      }
-    });
-  };
+  // Perfect bento grid pattern - optimized for tight layout
+  const gridClasses = [
+    "col-span-5 row-span-10", // 0
+    "col-span-2 row-span-1", // 1
+    "col-span-1 row-span-2", // 2
+    "col-span-2 row-span-1", // 3
+    "col-span-1 row-span-1", // 4
+    "col-span-2 row-span-2", // 5
+    "col-span-1 row-span-1", // 6
+    "col-span-1 row-span-1", // 7
+    "col-span-1 row-span-2", // 8
+    "col-span-2 row-span-1", // 9
+    "col-span-1 row-span-1", // 10
+    "col-span-1 row-span-1", // 11
+  ];
 
   return (
-    <div className="min-h-screen bg-background" data-theme-customizer>
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight">Theme Customizer</h1>
-            <p className="text-muted-foreground mt-1">
-              Customize your theme colors, typography, and spacing
-            </p>
-          </div>
-          <div className="flex gap-2">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="outline" size="sm" onClick={resetTheme}>
-                  <RotateCcw className="w-4 h-4 mr-2" />
-                  Reset
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>Reset to default theme</TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="outline" size="sm" onClick={handleExport}>
-                  <Copy className="w-4 h-4 mr-2" />
-                  Export
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>Copy theme to clipboard</TooltipContent>
-            </Tooltip>
-          </div>
+    <div className="bg-gradient-to-br from-background to-muted/30">
+      <div className="container mx-auto px-2 py-4 max-w-7xl">
+        {/* Compact Header */}
+        <div className="text-center mb-6">
+          <h1 className="text-3xl md:text-5xl font-bold tracking-tight bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent mb-2">
+            VUI Component Gallery
+          </h1>
+          <p className="text-muted-foreground text-sm max-w-xl mx-auto">
+            Beautiful, responsive components for modern applications
+          </p>
         </div>
 
-        {/* Theme Presets */}
-        <div className="mb-8">
-          <ThemePresets />
-        </div>
+        {/* Ultra-tight Bento Grid - No gaps */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-1 auto-rows-min">
+          {allComponents.slice(0, 12).map((component, index) => {
+            const ComponentToRender = component.component;
+            const gridClass = gridClasses[index % gridClasses.length];
+            const isLarge =
+              gridClass.includes("row-span-2") &&
+              gridClass.includes("col-span-2");
+            const isTall =
+              gridClass.includes("row-span-2") &&
+              !gridClass.includes("col-span-2");
+            const isWide =
+              gridClass.includes("col-span-2") &&
+              !gridClass.includes("row-span-2");
 
-        {/* Main Content */}
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-          {/* Controls Panel */}
-          <div className="xl:col-span-2">
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="grid w-full grid-cols-3 mb-6">
-                <TabsTrigger value="colors" className="flex items-center gap-2">
-                  <Palette className="w-4 h-4" />
-                  Colors
-                </TabsTrigger>
-                <TabsTrigger value="typography" className="flex items-center gap-2">
-                  <Type className="w-4 h-4" />
-                  Typography
-                </TabsTrigger>
-                <TabsTrigger value="spacing" className="flex items-center gap-2">
-                  <RulerIcon className="w-4 h-4" />
-                  Spacing
-                </TabsTrigger>
-              </TabsList>
+            return (
+              <Card
+                key={component.id}
+                className={`
+                  ${gridClass}
+                  ${
+                    isLarge
+                      ? "min-h-[260px]"
+                      : isTall
+                      ? "min-h-[220px]"
+                      : isWide
+                      ? "min-h-[130px]"
+                      : "min-h-[150px]"
+                  }
+                  group relative overflow-hidden
+                  border transition-all duration-500 ease-out
+                  hover:border-primary/50 hover:shadow-lg hover:shadow-primary/5
+                  bg-card/95 backdrop-blur-sm
+                  hover:bg-card
+                  transform hover:-translate-y-0.5
+                  ${
+                    activeCard === index
+                      ? "ring-1 ring-primary/30 shadow-md shadow-primary/10"
+                      : ""
+                  }
+                  rounded-lg
+                `}
+                onMouseEnter={() => setActiveCard(index)}
+                onMouseLeave={() => setActiveCard(null)}
+              >
+                {/* Subtle shimmer effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/2 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
 
-              <TabsContent value="colors" className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Theme Colors</CardTitle>
-                    <CardDescription>
-                      Customize the main colors used throughout your interface
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                      {/* Primary Colors */}
-                      <div className="space-y-4">
-                        <h4 className="font-semibold text-sm uppercase tracking-wide text-muted-foreground">Primary</h4>
-                        <div className="space-y-3">
-                          <ColorPicker
-                            label="Primary"
-                            value={theme.primary}
-                            onChange={(value) => updateTheme({ primary: value })}
-                          />
-                          <ColorPicker
-                            label="Primary Foreground"
-                            value={theme.primaryForeground}
-                            onChange={(value) => updateTheme({ primaryForeground: value })}
-                          />
-                        </div>
-                      </div>
-                      
-                      {/* Secondary Colors */}
-                      <div className="space-y-4">
-                        <h4 className="font-semibold text-sm uppercase tracking-wide text-muted-foreground">Secondary</h4>
-                        <div className="space-y-3">
-                          <ColorPicker
-                            label="Secondary"
-                            value={theme.secondary}
-                            onChange={(value) => updateTheme({ secondary: value })}
-                          />
-                          <ColorPicker
-                            label="Secondary Foreground"
-                            value={theme.secondaryForeground}
-                            onChange={(value) => updateTheme({ secondaryForeground: value })}
-                          />
-                        </div>
-                      </div>
+                {/* Ultra-compact Category Badge */}
+                <div className="absolute top-1.5 right-1.5 z-10">
+                  <Badge
+                    variant="secondary"
+                    className="text-xs bg-background/95 backdrop-blur-sm border-0 px-1.5 py-0.5 group-hover:bg-primary/10 transition-colors"
+                  >
+                    {component.category}
+                  </Badge>
+                </div>
 
-                      {/* Background Colors */}
-                      <div className="space-y-4">
-                        <h4 className="font-semibold text-sm uppercase tracking-wide text-muted-foreground">Background</h4>
-                        <div className="space-y-3">
-                          <ColorPicker
-                            label="Background"
-                            value={theme.background}
-                            onChange={(value) => updateTheme({ background: value })}
-                          />
-                          <ColorPicker
-                            label="Foreground"
-                            value={theme.foreground}
-                            onChange={(value) => updateTheme({ foreground: value })}
-                          />
-                        </div>
-                      </div>
-
-                      {/* Accent Colors */}
-                      <div className="space-y-4">
-                        <h4 className="font-semibold text-sm uppercase tracking-wide text-muted-foreground">Accent</h4>
-                        <div className="space-y-3">
-                          <ColorPicker
-                            label="Accent"
-                            value={theme.accent}
-                            onChange={(value) => updateTheme({ accent: value })}
-                          />
-                          <ColorPicker
-                            label="Border"
-                            value={theme.border}
-                            onChange={(value) => updateTheme({ border: value })}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              <TabsContent value="typography" className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Font Sizes</CardTitle>
-                    <CardDescription>
-                      Adjust the font sizes for different text elements
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {Object.entries(theme.fontSize).map(([key, value]) => (
-                        <div key={key} className="space-y-2">
-                          <Label className="capitalize text-sm font-medium">{key}</Label>
-                          <Input
-                            value={value}
-                            onChange={(e) => updateFontSize(key as keyof typeof theme.fontSize, e.target.value)}
-                            placeholder="1rem"
-                            className="font-mono text-sm"
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              <TabsContent value="spacing" className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Border Radius</CardTitle>
-                    <CardDescription>
-                      Adjust border radius for different components
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {Object.entries(theme.borderRadius).map(([key, value]) => (
-                        <div key={key} className="space-y-2">
-                          <Label className="capitalize text-sm font-medium">{key}</Label>
-                          <Input
-                            value={value}
-                            onChange={(e) => updateBorderRadius(key as keyof typeof theme.borderRadius, e.target.value)}
-                            placeholder="0.375rem"
-                            className="font-mono text-sm"
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Component Scale</CardTitle>
-                    <CardDescription>
-                      Adjust the overall scale of components
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="max-w-md">
-                      <Slider
-                        label="Scale"
-                        value={theme.componentScale}
-                        onChange={(value) => updateTheme({ componentScale: value })}
-                        min={0.8}
-                        max={1.2}
-                        step={0.1}
-                        unit="x"
-                      />
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-            </Tabs>
-          </div>
-
-          {/* Preview Panel */}
-          <div className="xl:col-span-1">
-            <div className="sticky top-8">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Live Preview</CardTitle>
-                  <CardDescription>
-                    See your theme changes in real-time
-                  </CardDescription>
+                {/* Minimal Header */}
+                <CardHeader className="pb-1 pt-2 px-2">
+                  <CardTitle className="text-xs font-semibold group-hover:text-primary transition-colors leading-tight truncate">
+                    {component.name}
+                  </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-6">
-                  {/* Basic Elements */}
-                  <div className="space-y-4">
-                    <h4 className="font-semibold text-sm">Basic Elements</h4>
-                    <div className="grid grid-cols-2 gap-2 theme-scalable">
-                      <Button size="sm">Primary</Button>
-                      <Button size="sm" variant="secondary">Secondary</Button>
-                      <Button size="sm" variant="outline">Outline</Button>
-                      <Button size="sm" variant="destructive">Destructive</Button>
-                    </div>
 
-                    <div className="flex flex-wrap gap-2 theme-scalable">
-                      <Badge>Badge</Badge>
-                      <Badge variant="secondary">Secondary</Badge>
-                      <Badge variant="outline">Outline</Badge>
-                    </div>
+                {/* Optimized Preview Area with perfect containment */}
+                <div className="flex-1 flex items-center justify-center">
+                  <div
+                    className="
+                      w-full h-full 
+                      bg-gradient-to-br from-muted/10 to-muted/5 
+                      group-hover:bg-gradient-to-br group-hover:from-muted/20 group-hover:to-muted/10
+                      group-hover:border-primary/15
+                      transition-all duration-500
+                    "
+                  >
+                    {/* Minimal inner glow */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/1 via-transparent to-secondary/1 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                    <div className="space-y-2 theme-scalable">
-                      <Input placeholder="Input field" className="text-sm" />
-                      <div className="flex items-center space-x-2">
-                        <Checkbox id="preview-check" />
-                        <Label htmlFor="preview-check" className="text-sm">Checkbox</Label>
-                      </div>
-                    </div>
+                    <ComponentPreview
+                      component={ComponentToRender}
+                      name={component.name}
+                      isActive={activeCard === index}
+                    />
                   </div>
+                </div>
 
-                  <Separator />
-
-                  {/* VUI Components */}
-                  <div className="space-y-4">
-                    <h4 className="font-semibold text-sm">VUI Components</h4>
-                    <div className="space-y-3">
-                      {Object.entries(componentMap).slice(0, 2).map(([category, components]) => {
-                        if (category === "Get Started") return null;
-                        
-                        return components.slice(0, 1).map((component: ComponentEntry) => {
-                          const ComponentToRender = component.component;
-                          
-                          return (
-                            <Card key={component.name} className="border theme-scalable">
-                              <CardHeader className="pb-2">
-                                <CardTitle className="text-xs">{component.name}</CardTitle>
-                              </CardHeader>
-                              <CardContent className="pt-0">
-                                <div className="border rounded p-3 bg-muted/30 min-h-[80px] flex items-center justify-center">
-                                  <div className="scale-75 origin-center">
-                                    <ComponentPreview 
-                                      component={ComponentToRender} 
-                                      name={component.name} 
-                                    />
-                                  </div>
-                                </div>
-                              </CardContent>
-                            </Card>
-                          );
-                        });
-                      })}
-                    </div>
-                  </div>
-                </CardContent>
+                {/* Subtle hover glow */}
+                <div className="absolute inset-0 bg-gradient-to-t from-primary/3 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
               </Card>
-            </div>
+            );
+          })}
+        </div>
+
+        {/* Compact Stats */}
+        <div className="mt-8 text-center">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">
+            {[
+              { value: allComponents.length, label: "Components" },
+              { value: Object.keys(componentMap).length, label: "Categories" },
+              { value: "100%", label: "Responsive" },
+              { value: "∞", label: "Customizable" },
+            ].map((stat) => (
+              <div
+                key={stat.label}
+                className="group cursor-pointer transform hover:scale-105 transition-all duration-300"
+              >
+                <div className="text-xl font-bold text-primary group-hover:text-secondary transition-colors">
+                  {stat.value}
+                </div>
+                <div className="text-xs text-muted-foreground group-hover:text-foreground transition-colors">
+                  {stat.label}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
     </div>
   );
-} 
+}

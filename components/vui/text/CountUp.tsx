@@ -1,15 +1,15 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import { 
-  useInView, 
-  useMotionValue, 
-  useSpring, 
-  motion
-} from "framer-motion";
+import { useInView, useMotionValue, useSpring, motion } from "framer-motion";
 
 // Enhanced types for better developer experience
-type NumberFormat = "default" | "currency" | "percentage" | "compact" | "scientific";
+type NumberFormat =
+  | "default"
+  | "currency"
+  | "percentage"
+  | "compact"
+  | "scientific";
 
 type AnimationEffect = "none" | "fade" | "slide" | "bounce" | "elastic";
 
@@ -20,17 +20,17 @@ interface CountUpProps {
   direction?: "up" | "down";
   delay?: number;
   duration?: number;
-  
+
   // Styling
   className?: string;
   style?: React.CSSProperties;
-  
+
   // Animation controls
   startWhen?: boolean;
   effect?: AnimationEffect;
   stiffness?: number;
   damping?: number;
-  
+
   // Formatting
   format?: NumberFormat;
   separator?: string;
@@ -39,22 +39,22 @@ interface CountUpProps {
   decimals?: number;
   locale?: string;
   currency?: string;
-  
+
   // Advanced features
   enableGlow?: boolean;
   colorTransition?: boolean;
   hoverEffect?: boolean;
-  
+
   // Accessibility
   ariaLabel?: string;
   announceValue?: boolean;
   reducedMotion?: boolean;
-  
+
   // Callbacks
   onStart?: () => void;
   onEnd?: () => void;
   onUpdate?: (value: number) => void;
-  
+
   // Advanced customization
   renderValue?: (value: number, formattedValue: string) => React.ReactNode;
   debug?: boolean;
@@ -91,18 +91,23 @@ export function CountUp({
   debug = false,
 }: CountUpProps) {
   const ref = useRef<HTMLSpanElement>(null);
-  const [currentValue, setCurrentValue] = useState(direction === "down" ? to : from);
+  const [currentValue, setCurrentValue] = useState(
+    direction === "down" ? to : from
+  );
   const [isHovered, setIsHovered] = useState(false);
-  
+
   const motionValue = useMotionValue(direction === "down" ? to : from);
 
   // Respect user's reduced motion preference
-  const shouldReduceMotion = reducedMotion || (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  const shouldReduceMotion =
+    reducedMotion ||
+    (typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches);
 
   // Dynamic spring configuration
   const springConfig = {
-    damping: damping || (20 + 40 * (1 / duration)),
-    stiffness: stiffness || (100 * (1 / duration)),
+    damping: damping || 20 + 40 * (1 / duration),
+    stiffness: stiffness || 100 * (1 / duration),
     ...(shouldReduceMotion && { duration: 0.1 }),
   };
 
@@ -111,54 +116,59 @@ export function CountUp({
   const isInView = useInView(ref, { once: true, margin: "0px" });
 
   // Enhanced number formatting
-  const formatNumber = useCallback((value: number): string => {
-    const roundedValue = Number(value.toFixed(decimals));
-    
-    let formattedValue: string;
-    
-    switch (format) {
-      case "currency":
-        formattedValue = new Intl.NumberFormat(locale, {
-          style: "currency",
-          currency,
-          minimumFractionDigits: decimals,
-          maximumFractionDigits: decimals,
-        }).format(roundedValue);
-        break;
-      
-      case "percentage":
-        formattedValue = new Intl.NumberFormat(locale, {
-          style: "percent",
-          minimumFractionDigits: decimals,
-          maximumFractionDigits: decimals,
-        }).format(roundedValue / 100);
-        break;
-      
-      case "compact":
-        formattedValue = new Intl.NumberFormat(locale, {
-          notation: "compact",
-          minimumFractionDigits: decimals,
-          maximumFractionDigits: decimals,
-        }).format(roundedValue);
-        break;
-      
-      default:
-        const options: Intl.NumberFormatOptions = {
-          useGrouping: !!separator,
-          minimumFractionDigits: decimals,
-          maximumFractionDigits: decimals,
-        };
-        
-        formattedValue = new Intl.NumberFormat(locale, options).format(roundedValue);
-        
-        if (separator && separator !== ",") {
-          formattedValue = formattedValue.replace(/,/g, separator);
-        }
-        break;
-    }
-    
-    return `${prefix}${formattedValue}${suffix}`;
-  }, [format, locale, currency, decimals, separator, prefix, suffix]);
+  const formatNumber = useCallback(
+    (value: number): string => {
+      const roundedValue = Number(value.toFixed(decimals));
+
+      let formattedValue: string;
+
+      switch (format) {
+        case "currency":
+          formattedValue = new Intl.NumberFormat(locale, {
+            style: "currency",
+            currency,
+            minimumFractionDigits: decimals,
+            maximumFractionDigits: decimals,
+          }).format(roundedValue);
+          break;
+
+        case "percentage":
+          formattedValue = new Intl.NumberFormat(locale, {
+            style: "percent",
+            minimumFractionDigits: decimals,
+            maximumFractionDigits: decimals,
+          }).format(roundedValue / 100);
+          break;
+
+        case "compact":
+          formattedValue = new Intl.NumberFormat(locale, {
+            notation: "compact",
+            minimumFractionDigits: decimals,
+            maximumFractionDigits: decimals,
+          }).format(roundedValue);
+          break;
+
+        default:
+          const options: Intl.NumberFormatOptions = {
+            useGrouping: !!separator,
+            minimumFractionDigits: decimals,
+            maximumFractionDigits: decimals,
+          };
+
+          formattedValue = new Intl.NumberFormat(locale, options).format(
+            roundedValue
+          );
+
+          if (separator && separator !== ",") {
+            formattedValue = formattedValue.replace(/,/g, separator);
+          }
+          break;
+      }
+
+      return `${prefix}${formattedValue}${suffix}`;
+    },
+    [format, locale, currency, decimals, separator, prefix, suffix]
+  );
 
   // Initialize display value
   useEffect(() => {
@@ -212,12 +222,12 @@ export function CountUp({
     const unsubscribe = springValue.on("change", (latest) => {
       const newValue = Number(latest);
       setCurrentValue(newValue);
-      
+
       if (ref.current && !renderValue) {
         const formattedValue = formatNumber(newValue);
         ref.current.textContent = formattedValue;
       }
-      
+
       if (typeof onUpdate === "function") {
         onUpdate(newValue);
       }
@@ -232,31 +242,31 @@ export function CountUp({
       case "fade":
         return {
           opacity: 1,
-          transition: { duration: 0.5 }
+          transition: { duration: 0.5 },
         };
-      
+
       case "slide":
         return {
           x: 0,
-          transition: { duration: 0.5 }
+          transition: { duration: 0.5 },
         };
-      
+
       case "bounce":
         return {
           y: 0,
-          transition: { 
-            duration: 0.6
-          }
+          transition: {
+            duration: 0.6,
+          },
         };
-      
+
       case "elastic":
         return {
           scale: 1,
-          transition: { 
-            duration: 1
-          }
+          transition: {
+            duration: 1,
+          },
         };
-      
+
       default:
         return {};
     }
@@ -265,7 +275,7 @@ export function CountUp({
   // Accessibility attributes
   const accessibilityProps = {
     "aria-label": ariaLabel || `Count ${direction} from ${from} to ${to}`,
-    "aria-live": announceValue ? "polite" as const : undefined,
+    "aria-live": announceValue ? ("polite" as const) : undefined,
     "aria-atomic": announceValue ? true : undefined,
     role: "status" as const,
   };
@@ -276,13 +286,18 @@ export function CountUp({
     filter: enableGlow ? `drop-shadow(0 0 10px currentColor)` : style.filter,
     transition: hoverEffect ? "all 0.3s ease" : style.transition,
     cursor: hoverEffect ? "pointer" : style.cursor,
-    ...(isHovered && hoverEffect && {
-      transform: `scale(1.05)`,
-      filter: `brightness(1.2) ${enableGlow ? 'drop-shadow(0 0 10px currentColor)' : ''}`,
-    }),
+    ...(isHovered &&
+      hoverEffect && {
+        transform: `scale(1.05)`,
+        filter: `brightness(1.2) ${
+          enableGlow ? "drop-shadow(0 0 10px currentColor)" : ""
+        }`,
+      }),
   };
 
-  const content = renderValue ? renderValue(currentValue, formatNumber(currentValue)) : formatNumber(currentValue);
+  const content = renderValue
+    ? renderValue(currentValue, formatNumber(currentValue))
+    : formatNumber(currentValue);
 
   if (debug) {
     console.log("CountUp Debug:", {
@@ -320,40 +335,40 @@ export default function CountUpShowcase() {
             <CountUp to={100} duration={2} />
           </div>
         </div>
-        
+
         <div className="text-center">
           <h3 className="text-lg font-semibold mb-2">With Prefix/Suffix</h3>
           <div className="text-3xl font-bold text-green-600">
             <CountUp to={100} prefix="$" suffix="K" duration={2.5} />
           </div>
         </div>
-        
+
         <div className="text-center">
           <h3 className="text-lg font-semibold mb-2">Percentage</h3>
           <div className="text-3xl font-bold text-blue-600">
             <CountUp to={100} suffix="%" duration={2} />
           </div>
         </div>
-        
+
         <div className="text-center">
           <h3 className="text-lg font-semibold mb-2">Bounce Effect</h3>
           <div className="text-3xl font-bold text-purple-600">
             <CountUp to={1000} effect="bounce" duration={3} />
           </div>
         </div>
-        
+
         <div className="text-center">
           <h3 className="text-lg font-semibold mb-2">Elastic Effect</h3>
           <div className="text-3xl font-bold text-orange-600">
             <CountUp to={1000} effect="elastic" duration={2.5} />
           </div>
         </div>
-        
+
         <div className="text-center">
           <h3 className="text-lg font-semibold mb-2">Custom Render</h3>
           <div className="text-3xl font-bold">
-            <CountUp 
-              to={999} 
+            <CountUp
+              to={999}
               duration={2}
               renderValue={() => (
                 <span className="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 bg-clip-text text-transparent">

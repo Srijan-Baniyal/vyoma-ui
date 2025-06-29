@@ -382,3 +382,11 @@ export default function CountUpShowcase() {
     </div>
   );
 }
+
+export function CountUpTheme() {
+  return (
+    <>
+      <CountUp to={100} duration={2} />
+    </>
+  );
+}

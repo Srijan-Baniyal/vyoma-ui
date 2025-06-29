@@ -797,3 +797,18 @@ export default function TextDecryptionShowcase() {
     </div>
   );
 }
+
+export function TextDecryptionTheme() {
+  return (
+      <TextDecryption
+        text="I decrypt when you see me"
+        sequential={true}
+        revealDirection="start"
+        speed={120}
+        animateOn="view"
+        loop={true}
+        loopDelay={1000}
+        className="text-blue-600 dark:text-blue-400 text-xl"
+      />
+  );
+}

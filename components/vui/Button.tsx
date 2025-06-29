@@ -235,3 +235,11 @@ const ButtonShowcase: React.FC<ButtonShowcaseProps> = ({ className }) => {
 
 export default ButtonShowcase;
 export { ButtonShowcase };
+
+export function ButtonTheme() {
+  return (
+    <>
+      <ButtonShowcase />
+    </>
+  );
+}

@@ -205,10 +205,22 @@ export function AnimatedNumberCountdownShowcase() {
   return (
     <div className="flex flex-col p-4 bg-background">
       <AnimatedNumberCountdown
-        endDate={new Date("2025-07-18")}
+        endDate={new Date("2025-07-09")}
         className="my-4"
         compactPreview={true}
       />
     </div>
+  );
+}
+
+export function AnimatedNumberCountdownTheme() {
+  return (
+    <>
+      <AnimatedNumberCountdown
+        endDate={new Date("2025-07-09")}
+        className="my-4"
+        compactPreview={true}
+      />
+    </>
   );
 }

@@ -2,26 +2,35 @@ import Installation from "@/components/Installation";
 import Introduction from "@/components/Introduction";
 import StoryBehind from "@/components/StoryBehind";
 import Changelog from "@/components/ChangeLog";
-import TextDecryptionShowcase from "@/components/vui/text/TextDecryption";
-import CountUpShowcase from "@/components/vui/text/CountUp";
-import { TypingTextShowcase } from "@/components/vui/text/TypingText";
-import { AccordionShowcase } from "@/components/vui/Accordion";
+import TextDecryptionShowcase, {
+  TextDecryptionTheme,
+} from "@/components/vui/text/TextDecryption";
+import CountUpShowcase, { CountUpTheme } from "@/components/vui/text/CountUp";
+import {
+  TypingTextShowcase,
+  TypingTextTheme,
+} from "@/components/vui/text/TypingText";
+import { AccordionShowcase, AccordionTheme } from "@/components/vui/Accordion";
 import { WheelPickerDemo } from "@/components/vui/WheelPicker";
 import { SkeletonShowcase } from "@/components/vui/Skeleton";
 import { CheckboxRefinedShowcase } from "@/components/vui/CheckboxUpgraded";
 import SheetShowcase from "@/components/vui/Sheet";
-import { AnimatedNumberCountdownShowcase } from "@/components/vui/text/AnimatedNumber";
-import { BentoGridShowcase } from "@/components/vui/BentoGrid";
-import CardShowcase from "@/components/vui/Card";
+import {
+  AnimatedNumberCountdownShowcase,
+  AnimatedNumberCountdownTheme,
+} from "@/components/vui/text/AnimatedNumber";
+import { BentoGridShowcase, BentoGridTheme } from "@/components/vui/BentoGrid";
+import CardShowcase, { CardTheme } from "@/components/vui/Card";
 import TunnelShowcase from "@/components/vui/backgrounds/Tunnel";
 import { WavyTilesShowcase } from "@/components/vui/backgrounds/WavyTiles";
-import ButtonShowcase from "@/components/vui/Button";
+import ButtonShowcase, { ButtonTheme } from "@/components/vui/Button";
 import ToolTipShowcase from "@/components/vui/ToolTip";
 import NavigationShowcase from "@/components/vui/Navigation";
 
 export type ComponentEntry = {
   name: string;
   component: React.ComponentType;
+  theme?: React.ComponentType;
   route: string;
   path?: string;
   isNew?: boolean;
@@ -59,24 +68,28 @@ export const componentMap: ComponentCategoryMap = {
     {
       name: "Decryption Text",
       component: TextDecryptionShowcase,
+      theme: TextDecryptionTheme,
       route: "/text-animation/decryption-text",
       path: "components/vui/text/TextDecryption.tsx",
     },
     {
       name: "Typing Text",
       component: TypingTextShowcase,
+      theme: TypingTextTheme,
       route: "/text-animation/typing-text",
       path: "components/vui/text/TypingText.tsx",
     },
     {
       name: "Counting Number",
       component: CountUpShowcase,
+      theme: CountUpTheme,
       route: "/text-animation/counting-number",
       path: "components/vui/text/CountUp.tsx",
     },
     {
       name: "Animated Number",
       component: AnimatedNumberCountdownShowcase,
+      theme: AnimatedNumberCountdownTheme,
       route: "/text-animation/animated-number",
       path: "components/vui/text/AnimatedNumber.tsx",
     },
@@ -85,24 +98,28 @@ export const componentMap: ComponentCategoryMap = {
     {
       name: "Accordion",
       component: AccordionShowcase,
+      theme: AccordionTheme,
       route: "/components/accordion",
       path: "components/vui/Accordion.tsx",
     },
     {
       name: "Bento Grid",
       component: BentoGridShowcase,
+      theme: BentoGridTheme,
       route: "/components/bento-grid",
       path: "components/vui/BentoGrid.tsx",
     },
     {
       name: "Buttons",
       component: ButtonShowcase,
+      theme: ButtonTheme,
       route: "/components/buttons",
       path: "components/vui/Button.tsx",
     },
     {
       name: "Card",
       component: CardShowcase,
+      theme: CardTheme,
       route: "/components/card",
       path: "components/vui/Card.tsx",
     },

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
-import { motion, Variants } from "motion/react";
+import { motion, Variants } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface CursorAnimationVariants extends Variants {
@@ -186,7 +186,6 @@ export function TypingTextShowcase() {
       <div className="max-w-6xl mx-auto space-y-12">
         {/* Hero Section */}
         <div className="text-center space-y-6">
-
           {/* Main Demo */}
           <div className="relative p-8 rounded-3xl bg-card/50 backdrop-blur-sm border border-border/50 shadow-2xl">
             <div className="text-center">
@@ -363,5 +362,27 @@ export function TypingTextShowcase() {
         </div>
       </div>
     </div>
+  );
+}
+
+export function TypingTextTheme() {
+  return (
+    <>
+      <TypingText
+        text={[
+          "Welcome to the future of UI! 🚀",
+          "Beautiful typing animations ✨",
+          "Smooth. Fast. Elegant. 💎",
+          "Built for modern web apps 🎯",
+        ]}
+        speed={60}
+        deleteSpeed={40}
+        waitTime={2000}
+        loop
+        showCursor
+        className="text-2xl md:text-3xl font-semibold text-foreground"
+        cursorChar="✨"
+      />
+    </>
   );
 }

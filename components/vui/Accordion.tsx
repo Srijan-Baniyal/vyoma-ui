@@ -316,3 +316,88 @@ export function AccordionShowcase() {
     </div>
   );
 }
+
+export function AccordionTheme() {
+  return (
+    <>
+      <Accordion
+        items={[
+          {
+            id: "demo-1",
+            header: "🚀 What makes this accordion special?",
+            content: (
+              <div className="space-y-4">
+                <p className="text-muted-foreground">
+                  Built with Framer Motion for smooth animations, full
+                  accessibility support, and beautiful design that adapts to
+                  your theme.
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  <span className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">
+                    Accessible
+                  </span>
+                  <span className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">
+                    Animated
+                  </span>
+                  <span className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">
+                    Responsive
+                  </span>
+                </div>
+              </div>
+            ),
+          },
+          {
+            id: "demo-2",
+            header: "✨ Smooth animations powered by Framer Motion",
+            content: (
+              <div className="space-y-3">
+                <p className="text-muted-foreground">
+                  Every interaction is carefully crafted with spring animations,
+                  staggered reveals, and thoughtful transitions.
+                </p>
+                <div className="bg-muted/50 rounded-lg p-4 border">
+                  <code className="text-sm text-foreground/80">
+                    transition: spring(300) + stagger(0.15s)
+                  </code>
+                </div>
+              </div>
+            ),
+          },
+          {
+            id: "demo-3",
+            header: "🎯 Fully accessible with ARIA support",
+            content: (
+              <div className="space-y-3">
+                <p className="text-muted-foreground">
+                  Built following WAI-ARIA guidelines with proper keyboard
+                  navigation, focus management, and screen reader support.
+                </p>
+                <ul className="space-y-2 ml-4">
+                  <li className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 bg-primary rounded-full" />
+                    <span className="text-sm text-muted-foreground">
+                      ARIA attributes and roles
+                    </span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 bg-primary rounded-full" />
+                    <span className="text-sm text-muted-foreground">
+                      Keyboard navigation support
+                    </span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 bg-primary rounded-full" />
+                    <span className="text-sm text-muted-foreground">
+                      Focus indicators
+                    </span>
+                  </li>
+                </ul>
+              </div>
+            ),
+          },
+        ]}
+        allowMultiple={true}
+      />
+    </>
+  );
+}

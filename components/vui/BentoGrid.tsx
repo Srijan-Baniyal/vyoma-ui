@@ -183,6 +183,29 @@ const gridItems = [
   },
 ];
 
+const gridItems2 = [
+  {
+    id: 1,
+    className:
+      "col-span-2 row-span-1 sm:col-span-2 sm:row-span-1 md:col-span-3 md:row-span-1 lg:col-span-3 lg:row-span-1",
+  },
+  {
+    id: 2,
+    className:
+      "col-span-2 row-span-1 sm:col-span-2 sm:row-span-1 md:col-span-3 md:row-span-1 lg:col-span-3 lg:row-span-1",
+  },
+  {
+    id: 3,
+    className:
+      "col-span-2 row-span-2 sm:col-span-2 sm:row-span-2 md:col-span-4 md:row-span-2 lg:col-span-4 lg:row-span-2",
+  },
+  {
+    id: 4,
+    className:
+      "col-span-2 row-span-1 sm:col-span-2 sm:row-span-2 md:col-span-2 md:row-span-2 lg:col-span-2 lg:row-span-2",
+  },
+];
+
 // Image Dialog Component
 function ImageDialog({
   image,
@@ -655,9 +678,234 @@ export function BentoGridShowcase() {
 }
 
 export function BentoGridTheme() {
+  const [refreshKey] = useState(0);
+  const [selectedImage, setSelectedImage] = useState<
+    (typeof staticImages)[0] | null
+  >(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+
+  const openImageDialog = (image: (typeof staticImages)[0]) => {
+    setSelectedImage(image);
+    setDialogOpen(true);
+  };
+
+  const closeImageDialog = () => {
+    setDialogOpen(false);
+    setTimeout(() => setSelectedImage(null), 300);
+  };
+
   return (
     <>
-      <BentoGrid />
+      <div className="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-7 lg:grid-cols-8 gap-2 sm:gap-3 lg:gap-4 auto-rows-[150px] sm:auto-rows-[180px] lg:auto-rows-[200px]">
+        <AnimatePresence mode="wait">
+          {gridItems2.map((item, index) => {
+            const image = staticImages[index];
+            if (!image) return null;
+            const isHovered = hoveredItem === image.id;
+            return (
+              <motion.div
+                key={`${image.id}-${refreshKey}`}
+                className={`${item.className} relative group overflow-hidden rounded-xl sm:rounded-2xl bg-gray-200 dark:bg-gray-700 cursor-pointer`}
+                initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.8, y: -20 }}
+                transition={{
+                  duration: 0.6,
+                  delay: index * 0.08,
+                  ease: [0.4, 0.0, 0.2, 1],
+                  type: "spring",
+                  damping: 20,
+                  stiffness: 300,
+                }}
+                whileHover={{
+                  scale: 1.02,
+                  zIndex: 10,
+                  rotateY: 1,
+                  transition: { duration: 0.4, ease: "easeOut" },
+                }}
+                whileTap={{
+                  scale: 0.98,
+                  transition: { duration: 0.1 },
+                }}
+                onHoverStart={() => setHoveredItem(image.id)}
+                onHoverEnd={() => setHoveredItem(null)}
+                onClick={() => openImageDialog(image)}
+                style={{
+                  transformStyle: "preserve-3d",
+                  transformOrigin: "center center",
+                }}
+              >
+                <Image
+                  src={image.url || "/placeholder.svg"}
+                  alt={image.alt}
+                  fill
+                  className="object-cover transition-all duration-700 group-hover:scale-110 group-hover:brightness-110 group-hover:contrast-110"
+                  sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
+                />
+
+                {/* Enhanced Overlay with gradient animation */}
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: isHovered ? 1 : 0 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                />
+
+                {/* Enhanced Content overlay with staggered animations */}
+                <motion.div
+                  className="absolute bottom-0 left-0 right-0 p-2 sm:p-3 lg:p-4 text-white"
+                  initial={{ y: "100%", opacity: 0 }}
+                  animate={{
+                    y: isHovered ? "0%" : "100%",
+                    opacity: isHovered ? 1 : 0,
+                  }}
+                  transition={{
+                    duration: 0.4,
+                    ease: [0.4, 0.0, 0.2, 1],
+                    delay: isHovered ? 0.1 : 0,
+                  }}
+                >
+                  <div className="space-y-2 sm:space-y-3">
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{
+                        opacity: isHovered ? 1 : 0,
+                        y: isHovered ? 0 : 10,
+                      }}
+                      transition={{ delay: isHovered ? 0.2 : 0, duration: 0.3 }}
+                    >
+                      <p className="font-bold text-xs sm:text-sm truncate mb-1 drop-shadow-lg">
+                        {image.alt}
+                      </p>
+                      <p className="text-xs opacity-90 truncate drop-shadow-md">
+                        by {image.photographer}
+                      </p>
+                    </motion.div>
+
+                    <motion.div
+                      className="flex items-center justify-between text-xs flex-wrap gap-1 sm:gap-2"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{
+                        opacity: isHovered ? 1 : 0,
+                        y: isHovered ? 0 : 10,
+                      }}
+                      transition={{ delay: isHovered ? 0.3 : 0, duration: 0.3 }}
+                    >
+                      <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
+                        <motion.span
+                          className="flex items-center bg-white/20 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full backdrop-blur-md border border-white/20 text-xs"
+                          whileHover={{
+                            scale: 1.05,
+                            backgroundColor: "rgba(255,255,255,0.3)",
+                          }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          <Heart className="w-2.5 h-2.5 sm:w-3 sm:h-3 mr-0.5 sm:mr-1 text-red-400" />
+                          <span className="hidden sm:inline">
+                            {image.likes}
+                          </span>
+                          <span className="sm:hidden">
+                            {Math.floor(image.likes / 1000)}k
+                          </span>
+                        </motion.span>
+                        <motion.span
+                          className="flex items-center bg-white/20 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full backdrop-blur-md border border-white/20 text-xs"
+                          whileHover={{
+                            scale: 1.05,
+                            backgroundColor: "rgba(255,255,255,0.3)",
+                          }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          <Download className="w-2.5 h-2.5 sm:w-3 sm:h-3 mr-0.5 sm:mr-1 text-blue-400" />
+                          <span className="hidden sm:inline">
+                            {image.downloads}
+                          </span>
+                          <span className="sm:hidden">
+                            {Math.floor(image.downloads / 1000)}k
+                          </span>
+                        </motion.span>
+                      </div>
+                      <motion.div
+                        className="text-xs bg-white/30 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full backdrop-blur-md border border-white/40 font-medium whitespace-nowrap flex-shrink-0"
+                        animate={{
+                          scale: isHovered ? [1, 1.02, 1] : 1,
+                          opacity: isHovered ? [0.9, 1, 0.95] : 0.9,
+                        }}
+                        transition={{
+                          duration: 1.5,
+                          repeat: isHovered ? Number.POSITIVE_INFINITY : 0,
+                          ease: "easeInOut",
+                        }}
+                      >
+                        <span className="hidden sm:inline">
+                          Click to expand
+                        </span>
+                        <span className="sm:hidden">Tap</span>
+                      </motion.div>
+                    </motion.div>
+                  </div>
+                </motion.div>
+
+                {/* Enhanced Hover border effect with animated gradient */}
+                <motion.div
+                  className="absolute inset-0 rounded-xl sm:rounded-2xl opacity-0 pointer-events-none"
+                  style={{
+                    background:
+                      "linear-gradient(45deg, rgba(255,255,255,0.4), rgba(255,255,255,0.1), rgba(255,255,255,0.4))",
+                    backgroundSize: "200% 200%",
+                  }}
+                  animate={{
+                    opacity: isHovered ? 1 : 0,
+                    backgroundPosition: isHovered
+                      ? ["0% 0%", "100% 100%"]
+                      : "0% 0%",
+                  }}
+                  transition={{
+                    opacity: { duration: 0.3 },
+                    backgroundPosition: {
+                      duration: 2,
+                      repeat: Number.POSITIVE_INFINITY,
+                      ease: "linear",
+                    },
+                  }}
+                />
+
+                {/* Shimmer effect on hover - enhanced */}
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none"
+                  initial={{ x: "-100%" }}
+                  animate={{
+                    x: isHovered ? "100%" : "-100%",
+                  }}
+                  transition={{
+                    duration: 1.2,
+                    ease: "easeInOut",
+                    repeat: isHovered ? Number.POSITIVE_INFINITY : 0,
+                    repeatDelay: 2,
+                  }}
+                />
+
+                {/* Corner accent */}
+                <motion.div
+                  className="absolute top-2 left-2 sm:top-3 sm:left-3 w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white/60 rounded-full backdrop-blur-sm"
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{
+                    scale: isHovered ? 1 : 0,
+                    opacity: isHovered ? 1 : 0,
+                  }}
+                  transition={{ duration: 0.3, delay: isHovered ? 0.4 : 0 }}
+                />
+              </motion.div>
+            );
+          })}
+        </AnimatePresence>
+      </div>
+      <ImageDialog
+        image={selectedImage}
+        isOpen={dialogOpen}
+        onClose={closeImageDialog}
+      />
     </>
   );
 }

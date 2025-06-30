@@ -366,12 +366,11 @@ export default function CardShowcase() {
 export function CardTheme() {
   return (
     <>
-        <div className="bg-gradient-to-br from-green-50/30 to-emerald-100/20 dark:from-green-950/20 dark:to-emerald-900/10 p-4 rounded-2xl border border-green-200/30 dark:border-green-800/20">
           <section
-            className="relative w-full h-[400px] overflow-hidden rounded-2xl shadow-xl"
+            className="w-full h-full rounded-2xl"
             aria-label="Tech Startup Card"
           >
-            <div className="absolute inset-0" aria-hidden="true">
+            <div className="absolute inset-0 w-full h-full" aria-hidden="true">
               <Image
                 src={GIRL}
                 alt="Technology background"
@@ -397,7 +396,6 @@ export function CardTheme() {
               />
             </div>
           </section>
-        </div>
     </>
   );
 }

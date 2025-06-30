@@ -14,7 +14,7 @@ interface ButtonShowcaseProps {
   className?: string;
 }
 
-const ButtonShowcase: React.FC<ButtonShowcaseProps> = ({ className }) => {
+export function ButtonShowcase({ className }: ButtonShowcaseProps) {
   return (
     <div className={`w-full max-w-7xl mx-auto p-8 space-y-12 ${className}`}>
       {/* Flip Buttons Section */}
@@ -89,7 +89,7 @@ const ButtonShowcase: React.FC<ButtonShowcaseProps> = ({ className }) => {
           </div>
 
           <div className="flex flex-col items-center space-y-4">
-            <AnimatedOpenInV0Button url="https://example.com" />
+            <AnimatedOpenInV0Button url="https://google.com" />
             <span className="text-xs text-muted-foreground text-center">
               Open in v0 with animation
             </span>
@@ -231,10 +231,7 @@ const ButtonShowcase: React.FC<ButtonShowcaseProps> = ({ className }) => {
       </section>
     </div>
   );
-};
-
-export default ButtonShowcase;
-export { ButtonShowcase };
+}
 
 export function ButtonTheme() {
   return (

@@ -23,7 +23,7 @@ import { BentoGridShowcase, BentoGridTheme } from "@/components/vui/BentoGrid";
 import CardShowcase, { CardTheme } from "@/components/vui/Card";
 import TunnelShowcase from "@/components/vui/backgrounds/Tunnel";
 import { WavyTilesShowcase } from "@/components/vui/backgrounds/WavyTiles";
-import ButtonShowcase, { ButtonTheme } from "@/components/vui/Button";
+import { ButtonShowcase, ButtonTheme } from "@/components/vui/Button";
 import ToolTipShowcase from "@/components/vui/ToolTip";
 import NavigationShowcase from "@/components/vui/Navigation";
 

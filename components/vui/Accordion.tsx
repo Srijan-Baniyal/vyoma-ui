@@ -396,7 +396,8 @@ export function AccordionTheme() {
             ),
           },
         ]}
-        allowMultiple={true}
+        allowMultiple={false}
+        defaultOpenIds={[]}
       />
     </>
   );

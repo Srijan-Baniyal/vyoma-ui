@@ -378,10 +378,11 @@ export function TypingTextTheme() {
         speed={60}
         deleteSpeed={40}
         waitTime={2000}
-        loop
-        showCursor
+        loop={true}
+        showCursor={true}
         className="text-2xl md:text-3xl font-semibold text-foreground"
         cursorChar="✨"
+        cursorClassName="text-primary font-bold"
       />
     </>
   );

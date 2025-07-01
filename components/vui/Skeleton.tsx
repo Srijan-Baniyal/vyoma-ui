@@ -30,7 +30,7 @@ export interface SkeletonProps {
 /**
  * A versatile skeleton loading component for creating placeholder UI
  */
-export function Skeleton({
+export default function Skeleton({
   width = "100%",
   height = "1rem",
   radius = "md",
@@ -83,11 +83,21 @@ export function ProfileCardSkeleton() {
         <motion.div
           initial={{ opacity: 0, scale: 0 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.1, duration: 0.5, type: "spring", stiffness: 200 }}
+          transition={{
+            delay: 0.1,
+            duration: 0.5,
+            type: "spring",
+            stiffness: 200,
+          }}
         >
-          <Skeleton width={80} height={80} radius="full" className="flex-shrink-0" />
+          <Skeleton
+            width={80}
+            height={80}
+            radius="full"
+            className="flex-shrink-0"
+          />
         </motion.div>
-        
+
         <div className="flex-1 space-y-3">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -134,7 +144,12 @@ export function ProfileCardSkeleton() {
             transition={{ delay: 0.6 + i * 0.1, duration: 0.3 }}
           >
             <Skeleton width="100%" height="1.5rem" radius="md" />
-            <Skeleton width="80%" height="0.875rem" radius="md" className="mx-auto" />
+            <Skeleton
+              width="80%"
+              height="0.875rem"
+              radius="md"
+              className="mx-auto"
+            />
           </motion.div>
         ))}
       </motion.div>
@@ -214,12 +229,14 @@ export function SkeletonShowcase() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2, duration: 0.6 }}
             >
-              <h2 className="text-2xl font-semibold mb-2">Profile Card Skeleton</h2>
+              <h2 className="text-2xl font-semibold mb-2">
+                Profile Card Skeleton
+              </h2>
               <p className="text-muted-foreground">
                 A comprehensive loading state for user profile cards
               </p>
             </motion.div>
-            
+
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -237,7 +254,9 @@ export function SkeletonShowcase() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2, duration: 0.6 }}
             >
-              <h2 className="text-2xl font-semibold mb-2">Basic Skeleton Elements</h2>
+              <h2 className="text-2xl font-semibold mb-2">
+                Basic Skeleton Elements
+              </h2>
               <p className="text-muted-foreground">
                 Flexible building blocks for custom loading states
               </p>
@@ -251,7 +270,9 @@ export function SkeletonShowcase() {
             >
               {/* Text lines */}
               <div className="space-y-4">
-                <h3 className="text-lg font-medium text-foreground">Text Content</h3>
+                <h3 className="text-lg font-medium text-foreground">
+                  Text Content
+                </h3>
                 <div className="space-y-3">
                   <Skeleton width="100%" height="1rem" />
                   <Skeleton width="85%" height="1rem" />
@@ -271,7 +292,9 @@ export function SkeletonShowcase() {
 
               {/* Button examples */}
               <div className="space-y-4">
-                <h3 className="text-lg font-medium text-foreground">Buttons & Cards</h3>
+                <h3 className="text-lg font-medium text-foreground">
+                  Buttons & Cards
+                </h3>
                 <div className="space-y-3">
                   <Skeleton width="120px" height="2.5rem" radius="lg" />
                   <Skeleton width="100%" height="4rem" radius="xl" />
@@ -313,4 +336,28 @@ export function SkeletonShowcase() {
   );
 }
 
-export default Skeleton;
+export function SkeletonTheme() {
+  return (
+    <div className="space-y-6">
+      <motion.div
+        className="text-center"
+        initial={{ opacity: 0, x: -32 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.2, duration: 0.6 }}
+      >
+        <h2 className="text-2xl font-semibold mb-2">Profile Card Skeleton</h2>
+        <p className="text-muted-foreground">
+          A comprehensive loading state for user profile cards
+        </p>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 0.4, duration: 0.6 }}
+      >
+        <ProfileCardSkeleton />
+      </motion.div>
+    </div>
+  );
+}

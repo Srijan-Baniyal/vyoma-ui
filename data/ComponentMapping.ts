@@ -12,8 +12,8 @@ import {
 } from "@/components/vui/text/TypingText";
 import { AccordionShowcase, AccordionTheme } from "@/components/vui/Accordion";
 import { WheelPickerDemo } from "@/components/vui/WheelPicker";
-import { SkeletonShowcase } from "@/components/vui/Skeleton";
-import { CheckboxRefinedShowcase } from "@/components/vui/CheckboxUpgraded";
+import { SkeletonShowcase, SkeletonTheme } from "@/components/vui/Skeleton";
+import { CheckboxRefinedShowcase, CheckboxRefinedTheme } from "@/components/vui/CheckboxUpgraded";
 import SheetShowcase from "@/components/vui/Sheet";
 import {
   AnimatedNumberCountdownShowcase,
@@ -24,7 +24,7 @@ import CardShowcase, { CardTheme } from "@/components/vui/Card";
 import TunnelShowcase from "@/components/vui/backgrounds/Tunnel";
 import { WavyTilesShowcase } from "@/components/vui/backgrounds/WavyTiles";
 import { ButtonShowcase, ButtonTheme } from "@/components/vui/Button";
-import ToolTipShowcase from "@/components/vui/ToolTip";
+import ToolTipShowcase, { ToolTipTheme } from "@/components/vui/ToolTip";
 import NavigationShowcase from "@/components/vui/Navigation";
 
 export type ComponentEntry = {
@@ -126,6 +126,7 @@ export const componentMap: ComponentCategoryMap = {
     {
       name: "Checkbox",
       component: CheckboxRefinedShowcase,
+      theme: CheckboxRefinedTheme,
       route: "/components/checkbox",
       path: "components/vui/CheckboxUpgraded.tsx",
     },
@@ -144,12 +145,14 @@ export const componentMap: ComponentCategoryMap = {
     {
       name: "Skeleton",
       component: SkeletonShowcase,
+      theme: SkeletonTheme,
       route: "/components/skeleton",
       path: "components/vui/Skeleton.tsx",
     },
     {
       name: "Tooltip",
       component: ToolTipShowcase,
+      theme: ToolTipTheme,
       route: "/components/tooltip",
       path: "components/vui/ToolTip.tsx",
     },

@@ -27,11 +27,7 @@ export function ButtonShowcase({ className }: ButtonShowcaseProps) {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 justify-items-center">
           <div className="flex flex-col items-center space-y-2">
-            <FlipButton
-              frontText="Hover me"
-              backText="From Top!"
-              from="top"
-            />
+            <FlipButton frontText="Hover me" backText="From Top!" from="top" />
             <span className="text-xs text-muted-foreground">From Top</span>
           </div>
           <div className="flex flex-col items-center space-y-2">
@@ -236,7 +232,30 @@ export function ButtonShowcase({ className }: ButtonShowcaseProps) {
 export function ButtonTheme() {
   return (
     <>
-      <ButtonShowcase />
+      <div className="flex flex-col items-center space-y-4">
+        <MagneticButton distance={0.6}>
+          <Button className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-8 py-3 rounded-lg font-medium transition-all duration-300">
+            Magnetic Button
+          </Button>
+        </MagneticButton>
+        <ShimmerButton
+          shimmerColor="#ffd93d"
+          background="linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)"
+          className="px-6 py-2"
+        >
+          Gold Shimmer
+        </ShimmerButton>
+        <AnimatedOpenInV0Button url="https://google.com" />
+        <FlipButton frontText="Hover me" backText="From Top!" from="top" />
+        <FlipButton
+              frontText="Hover me"
+              backText="From Bottom!"
+              from="bottom"
+            />
+            <FlipButton frontText="Hover me" backText="From Left!" from="left" />
+            <FlipButton frontText="Hover me" backText="From Right!" from="right" />
+            <SpotlightButton text="Spotlight Effect" />
+      </div>
     </>
   );
 }

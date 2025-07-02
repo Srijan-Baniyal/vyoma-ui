@@ -203,3 +203,11 @@ export default function TunnelShowcase() {
     </>
   );
 }
+
+export function TunnelTheme() {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background justify-center items-center flex">
+      <TunnelShowcase />
+    </div>
+  );
+}

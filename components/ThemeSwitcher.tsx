@@ -76,7 +76,7 @@ export default function ThemeSwitcher() {
         ...component,
         category,
         id: `${category}-${component.name}`,
-      }))
+      })).filter((component) => component.name !== "Navigation")
     );
 
   return (
@@ -157,11 +157,6 @@ export default function ThemeSwitcher() {
               </Card>
             );
           })}
-        </div>
-
-        {/* Footer Info */}
-        <div className="text-center mt-12 text-sm text-muted-foreground">
-          <p>Showing {allComponents.length} components</p>
         </div>
       </div>
     </div>

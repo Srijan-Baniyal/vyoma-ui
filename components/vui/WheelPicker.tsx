@@ -148,23 +148,24 @@ export function WheelPickerDemo() {
       // Number input
       if (/[0-9]/.test(key) && focusedPicker) {
         event.preventDefault();
-
-        const newBuffer = (inputBuffer + key).slice(-4); // Keep only last 4 digits for year
+        const maxLen = 2;
+        const newBuffer = (inputBuffer + key).slice(-maxLen);
         setInputBuffer(newBuffer);
-
         if (focusedPicker === "hours") {
           const numValue = parseInt(newBuffer);
           if (numValue >= 0 && numValue <= 23) {
             setHourValue(numValue.toString());
-            // Clear buffer after successful selection
-            setInputBuffer("");
+            if (newBuffer.length === maxLen || numValue > 2) {
+              setInputBuffer("");
+            }
           }
         } else if (focusedPicker === "minutes") {
           const numValue = parseInt(newBuffer);
           if (numValue >= 0 && numValue <= 59) {
             setMinuteValue(numValue.toString());
-            // Clear buffer after successful selection
-            setInputBuffer("");
+            if (newBuffer.length === maxLen || numValue > 5) {
+              setInputBuffer("");
+            }
           }
         } else if (focusedPicker === "day") {
           const numValue = parseInt(newBuffer);
@@ -244,19 +245,7 @@ export function WheelPickerDemo() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background p-8">
       <div className="max-w-7xl mx-auto space-y-16">
-        {/* Hero Section */}
         <div className="text-center space-y-6">
-          <div className="space-y-2">
-            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-              WheelPicker Component
-            </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Smooth, intuitive wheel pickers with comprehensive keyboard
-              navigation and infinite scrolling
-            </p>
-          </div>
-
-          {/* Main Demo */}
           <div className="relative p-8 rounded-3xl bg-card/30 backdrop-blur-sm border border-border/50 shadow-2xl">
             <div className="flex justify-center">
               <div
@@ -530,12 +519,6 @@ export function WheelPickerDemo() {
               </div>
               <div className="flex items-center gap-3">
                 <kbd className="px-3 py-2 text-sm font-mono bg-gradient-to-b from-zinc-700 to-zinc-800 text-zinc-100 rounded-lg shadow-sm border border-zinc-600 min-w-[40px] text-center">
-                  0-9
-                </kbd>
-                <span className="text-muted-foreground">Type numbers</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <kbd className="px-3 py-2 text-sm font-mono bg-gradient-to-b from-zinc-700 to-zinc-800 text-zinc-100 rounded-lg shadow-sm border border-zinc-600 min-w-[40px] text-center">
                   ↵
                 </kbd>
                 <span className="text-muted-foreground">Cycle pickers</span>
@@ -587,6 +570,222 @@ export function WheelPickerDemo() {
               <p className="text-sm text-muted-foreground">
                 Built with ARIA attributes and comprehensive keyboard support
               </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function WheelPickerTheme() {
+  const [focusedPicker, setFocusedPicker] = useState<"hours" | "minutes" | null>(null);
+  const [hourValue, setHourValue] = useState("0");
+  const [minuteValue, setMinuteValue] = useState("0");
+  const [inputBuffer, setInputBuffer] = useState("");
+  const componentRef = useRef<HTMLDivElement>(null);
+
+  const hourOptions_military = useMemo(() => createArray(24, 0), []);
+  const minuteOptions = useMemo(() => createArray(60), []);
+
+  const formattedTime = useMemo(
+    () => `${hourValue.padStart(2, "0")}:${minuteValue.padStart(2, "0")}`,
+    [hourValue, minuteValue]
+  );
+
+  // Keyboard navigation for hours and minutes only
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      const key = event.key.toLowerCase();
+
+      if (key === "h") {
+        setFocusedPicker("hours");
+        setInputBuffer("");
+        event.preventDefault();
+        return;
+      }
+      if (key === "m") {
+        setFocusedPicker("minutes");
+        setInputBuffer("");
+        event.preventDefault();
+        return;
+      }
+      if (key === "escape") {
+        setFocusedPicker(null);
+        setInputBuffer("");
+        event.preventDefault();
+        return;
+      }
+      if (key === "c") {
+        setHourValue("0");
+        setMinuteValue("0");
+        setFocusedPicker(null);
+        setInputBuffer("");
+        event.preventDefault();
+        return;
+      }
+      if (/[0-9]/.test(key) && focusedPicker) {
+        event.preventDefault();
+        const maxLen = 2;
+        const newBuffer = (inputBuffer + key).slice(-maxLen);
+        setInputBuffer(newBuffer);
+        if (focusedPicker === "hours") {
+          const numValue = parseInt(newBuffer);
+          if (numValue >= 0 && numValue <= 23) {
+            setHourValue(numValue.toString());
+            if (newBuffer.length === maxLen || numValue > 2) {
+              setInputBuffer("");
+            }
+          }
+        } else if (focusedPicker === "minutes") {
+          const numValue = parseInt(newBuffer);
+          if (numValue >= 0 && numValue <= 59) {
+            setMinuteValue(numValue.toString());
+            if (newBuffer.length === maxLen || numValue > 5) {
+              setInputBuffer("");
+            }
+          }
+        }
+      }
+      if (key === "enter") {
+        setFocusedPicker((prev) => (prev === "hours" ? "minutes" : "hours"));
+        setInputBuffer("");
+        event.preventDefault();
+      }
+    },
+    [focusedPicker, inputBuffer]
+  );
+
+  useEffect(() => {
+    const handleKeyDownEvent = (event: KeyboardEvent) => {
+      if (
+        componentRef.current &&
+        (componentRef.current.contains(document.activeElement) ||
+          document.activeElement === document.body)
+      ) {
+        handleKeyDown(event);
+      }
+    };
+    document.addEventListener("keydown", handleKeyDownEvent);
+    return () => document.removeEventListener("keydown", handleKeyDownEvent);
+  }, [handleKeyDown]);
+
+  useEffect(() => {
+    if (componentRef.current) {
+      componentRef.current.focus();
+    }
+  }, []);
+
+  return (
+    <div className="max-w-md mx-auto p-8 bg-gradient-to-br from-background via-muted/20 to-background rounded-3xl border border-border/50 shadow-2xl">
+      <div className="text-center space-y-6">
+        <div className="relative p-8 rounded-3xl bg-card/30 backdrop-blur-sm border border-border/50 shadow-2xl">
+          <div className="flex justify-center">
+            <div
+              ref={componentRef}
+              className="w-72 focus:outline-none group"
+              tabIndex={0}
+              role="application"
+              aria-label="Time picker with keyboard navigation"
+            >
+              {/* Current Time Display */}
+              <div className="mb-8 text-center">
+                <div className="text-4xl font-bold text-foreground mb-4 tracking-wider font-mono transition-all duration-300 transform hover:scale-105">
+                  {formattedTime}
+                </div>
+                <div className="flex gap-3 justify-center">
+                  <button
+                    onClick={() => setFocusedPicker("hours")}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
+                      focusedPicker === "hours"
+                        ? "bg-primary text-primary-foreground shadow-lg shadow-primary/30 scale-105"
+                        : "text-muted-foreground border border-border hover:border-primary/50 hover:bg-muted/50"
+                    }`}
+                  >
+                    Hours (H)
+                  </button>
+                  <button
+                    onClick={() => setFocusedPicker("minutes")}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
+                      focusedPicker === "minutes"
+                        ? "bg-primary text-primary-foreground shadow-lg shadow-primary/30 scale-105"
+                        : "text-muted-foreground border border-border hover:border-primary/50 hover:bg-muted/50"
+                    }`}
+                  >
+                    Minutes (M)
+                  </button>
+                </div>
+              </div>
+              {/* Wheel Picker */}
+              <div className="transform transition-all duration-500 hover:scale-[1.02]">
+                <WheelPickerWrapper>
+                  <WheelPicker
+                    options={hourOptions_military}
+                    infinite
+                    value={hourValue}
+                    onValueChange={setHourValue}
+                    classNames={{
+                      highlightWrapper:
+                        focusedPicker === "hours"
+                          ? "bg-gradient-to-br from-primary/20 to-primary/30 text-primary border-2 border-primary shadow-xl shadow-primary/25 transform scale-105 transition-all duration-300"
+                          : "border border-border text-foreground hover:border-primary/50 transition-all duration-200",
+                    }}
+                  />
+                  <WheelPicker
+                    options={minuteOptions}
+                    infinite
+                    value={minuteValue}
+                    onValueChange={setMinuteValue}
+                    classNames={{
+                      highlightWrapper:
+                        focusedPicker === "minutes"
+                          ? "bg-gradient-to-br from-primary/20 to-primary/30 text-primary border-2 border-primary shadow-xl shadow-primary/25 transform scale-105 transition-all duration-300"
+                          : "border border-border text-foreground hover:border-primary/50 transition-all duration-200",
+                    }}
+                  />
+                </WheelPickerWrapper>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* Keyboard Controls */}
+        <div className="mt-8">
+          <div className="flex flex-wrap justify-center gap-4">
+            <div className="flex items-center gap-2">
+              <kbd className="px-3 py-2 text-sm font-mono bg-gradient-to-b from-zinc-700 to-zinc-800 text-zinc-100 rounded-lg shadow-sm border border-zinc-600 min-w-[40px] text-center">
+                H
+              </kbd>
+              <span className="text-muted-foreground">Select hours</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <kbd className="px-3 py-2 text-sm font-mono bg-gradient-to-b from-zinc-700 to-zinc-800 text-zinc-100 rounded-lg shadow-sm border border-zinc-600 min-w-[40px] text-center">
+                M
+              </kbd>
+              <span className="text-muted-foreground">Select minutes</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <kbd className="px-3 py-2 text-sm font-mono bg-gradient-to-b from-zinc-700 to-zinc-800 text-zinc-100 rounded-lg shadow-sm border border-zinc-600 min-w-[40px] text-center">
+                0-9
+              </kbd>
+              <span className="text-muted-foreground">Type numbers</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <kbd className="px-3 py-2 text-sm font-mono bg-gradient-to-b from-zinc-700 to-zinc-800 text-zinc-100 rounded-lg shadow-sm border border-zinc-600 min-w-[40px] text-center">
+                ↵
+              </kbd>
+              <span className="text-muted-foreground">Cycle pickers</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <kbd className="px-3 py-2 text-sm font-mono bg-gradient-to-b from-zinc-700 to-zinc-800 text-zinc-100 rounded-lg shadow-sm border border-zinc-600 min-w-[40px] text-center">
+                Esc
+              </kbd>
+              <span className="text-muted-foreground">Clear selection</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <kbd className="px-3 py-2 text-sm font-mono bg-gradient-to-b from-zinc-700 to-zinc-800 text-zinc-100 rounded-lg shadow-sm border border-zinc-600 min-w-[40px] text-center">
+                C
+              </kbd>
+              <span className="text-muted-foreground">Clear all values</span>
             </div>
           </div>
         </div>

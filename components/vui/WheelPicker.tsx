@@ -538,41 +538,6 @@ export function WheelPickerDemo() {
             </div>
           </div>
         </div>
-
-        {/* Key Features */}
-        <div className="space-y-8">
-          <h2 className="text-3xl font-bold text-center">Key Features</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="text-center p-6 rounded-xl bg-card/30 border border-border/50 hover:shadow-lg transition-all duration-300">
-              <div className="text-3xl mb-3">⚡</div>
-              <h4 className="font-semibold mb-2">Infinite Scrolling</h4>
-              <p className="text-sm text-muted-foreground">
-                Smooth infinite scrolling with momentum and snap behavior
-              </p>
-            </div>
-            <div className="text-center p-6 rounded-xl bg-card/30 border border-border/50 hover:shadow-lg transition-all duration-300">
-              <div className="text-3xl mb-3">⌨️</div>
-              <h4 className="font-semibold mb-2">Full Keyboard Support</h4>
-              <p className="text-sm text-muted-foreground">
-                Complete keyboard navigation for all picker types with shortcuts
-              </p>
-            </div>
-            <div className="text-center p-6 rounded-xl bg-card/30 border border-border/50 hover:shadow-lg transition-all duration-300">
-              <div className="text-3xl mb-3">🎨</div>
-              <h4 className="font-semibold mb-2">Visual Feedback</h4>
-              <p className="text-sm text-muted-foreground">
-                Highlighted selection with smooth animations and color themes
-              </p>
-            </div>
-            <div className="text-center p-6 rounded-xl bg-card/30 border border-border/50 hover:shadow-lg transition-all duration-300">
-              <div className="text-3xl mb-3">♿</div>
-              <h4 className="font-semibold mb-2">Accessible</h4>
-              <p className="text-sm text-muted-foreground">
-                Built with ARIA attributes and comprehensive keyboard support
-              </p>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );

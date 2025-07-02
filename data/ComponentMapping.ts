@@ -66,6 +66,20 @@ export const componentMap: ComponentCategoryMap = {
   ],
   "Text Animation": [
     {
+      name: "Animated Number",
+      component: AnimatedNumberCountdownShowcase,
+      theme: AnimatedNumberCountdownTheme,
+      route: "/text-animation/animated-number",
+      path: "components/vui/text/AnimatedNumber.tsx",
+    },
+    {
+      name: "Counting Number",
+      component: CountUpShowcase,
+      theme: CountUpTheme,
+      route: "/text-animation/counting-number",
+      path: "components/vui/text/CountUp.tsx",
+    },
+    {
       name: "Decryption Text",
       component: TextDecryptionShowcase,
       theme: TextDecryptionTheme,
@@ -78,20 +92,6 @@ export const componentMap: ComponentCategoryMap = {
       theme: TypingTextTheme,
       route: "/text-animation/typing-text",
       path: "components/vui/text/TypingText.tsx",
-    },
-    {
-      name: "Counting Number",
-      component: CountUpShowcase,
-      theme: CountUpTheme,
-      route: "/text-animation/counting-number",
-      path: "components/vui/text/CountUp.tsx",
-    },
-    {
-      name: "Animated Number",
-      component: AnimatedNumberCountdownShowcase,
-      theme: AnimatedNumberCountdownTheme,
-      route: "/text-animation/animated-number",
-      path: "components/vui/text/AnimatedNumber.tsx",
     },
   ],
   Components: [

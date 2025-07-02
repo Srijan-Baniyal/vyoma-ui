@@ -23,7 +23,7 @@ export default function Navigation() {
       link: "/showcase",
     },
     {
-      name: "Themes",
+      name: "Themes (Beta)",
       link: "/themes",
     },
   ];

@@ -8,7 +8,6 @@ import {
   Rocket,
   Star,
   Code,
-  Zap,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -164,38 +163,6 @@ export default function Installation() {
 
                     <div className="space-y-4">
                       <PackageManagerTabs command="shadcn@latest init" />
-
-                      <Card className="p-6 bg-gradient-to-r from-blue-50/50 to-indigo-50/50 dark:from-blue-950/20 dark:to-indigo-950/20 border-blue-200/50 dark:border-blue-800/50">
-                        <div className="flex items-start gap-4">
-                          <Zap className="w-6 h-6 text-blue-600 mt-0.5" />
-                          <div className="space-y-4">
-                            <div>
-                              <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">
-                                ⚡ Quick Setup
-                              </h3>
-                              <p className="text-sm text-blue-800 dark:text-blue-200 mb-3">
-                                Skip the questions and use our recommended
-                                defaults:
-                              </p>
-                            </div>
-                            <PackageManagerTabs command="shadcn@latest init -d" />
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-                              <div className="flex items-center gap-2 p-2 rounded bg-background/50">
-                                <Star className="w-3 h-3 text-yellow-500" />
-                                <span>New York style</span>
-                              </div>
-                              <div className="flex items-center gap-2 p-2 rounded bg-background/50">
-                                <Star className="w-3 h-3 text-yellow-500" />
-                                <span>Zinc color palette</span>
-                              </div>
-                              <div className="flex items-center gap-2 p-2 rounded bg-background/50">
-                                <Star className="w-3 h-3 text-yellow-500" />
-                                <span>CSS variables enabled</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </Card>
                     </div>
                   </div>
                 </div>

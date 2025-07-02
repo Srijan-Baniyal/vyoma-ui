@@ -14,7 +14,7 @@ interface ButtonShowcaseProps {
   className?: string;
 }
 
-const ButtonShowcase: React.FC<ButtonShowcaseProps> = ({ className }) => {
+export function ButtonShowcase({ className }: ButtonShowcaseProps) {
   return (
     <div className={`w-full max-w-7xl mx-auto p-8 space-y-12 ${className}`}>
       {/* Flip Buttons Section */}
@@ -27,11 +27,7 @@ const ButtonShowcase: React.FC<ButtonShowcaseProps> = ({ className }) => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 justify-items-center">
           <div className="flex flex-col items-center space-y-2">
-            <FlipButton
-              frontText="Hover me"
-              backText="From Top!"
-              from="top"
-            />
+            <FlipButton frontText="Hover me" backText="From Top!" from="top" />
             <span className="text-xs text-muted-foreground">From Top</span>
           </div>
           <div className="flex flex-col items-center space-y-2">
@@ -89,7 +85,7 @@ const ButtonShowcase: React.FC<ButtonShowcaseProps> = ({ className }) => {
           </div>
 
           <div className="flex flex-col items-center space-y-4">
-            <AnimatedOpenInV0Button url="https://example.com" />
+            <AnimatedOpenInV0Button url="https://google.com" />
             <span className="text-xs text-muted-foreground text-center">
               Open in v0 with animation
             </span>
@@ -231,7 +227,35 @@ const ButtonShowcase: React.FC<ButtonShowcaseProps> = ({ className }) => {
       </section>
     </div>
   );
-};
+}
 
-export default ButtonShowcase;
-export { ButtonShowcase };
+export function ButtonTheme() {
+  return (
+    <>
+      <div className="flex flex-col items-center space-y-4">
+        <MagneticButton distance={0.6}>
+          <Button className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-8 py-3 rounded-lg font-medium transition-all duration-300">
+            Magnetic Button
+          </Button>
+        </MagneticButton>
+        <ShimmerButton
+          shimmerColor="#ffd93d"
+          background="linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)"
+          className="px-6 py-2"
+        >
+          Gold Shimmer
+        </ShimmerButton>
+        <AnimatedOpenInV0Button url="https://google.com" />
+        <FlipButton frontText="Hover me" backText="From Top!" from="top" />
+        <FlipButton
+              frontText="Hover me"
+              backText="From Bottom!"
+              from="bottom"
+            />
+            <FlipButton frontText="Hover me" backText="From Left!" from="left" />
+            <FlipButton frontText="Hover me" backText="From Right!" from="right" />
+            <SpotlightButton text="Spotlight Effect" />
+      </div>
+    </>
+  );
+}

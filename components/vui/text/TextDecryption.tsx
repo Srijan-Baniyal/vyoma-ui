@@ -119,7 +119,8 @@ function TextDecryption({
 
     // Helper function to check if a character is an emoji or special Unicode character
     const isEmojiOrSpecial = (char: string): boolean => {
-      const emojiRegex = /[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/u;
+      const emojiRegex =
+        /[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/u;
       return emojiRegex.test(char) || char.charCodeAt(0) > 127;
     };
 
@@ -794,5 +795,20 @@ export default function TextDecryptionShowcase() {
         </div>
       </section>
     </div>
+  );
+}
+
+export function TextDecryptionTheme() {
+  return (
+      <TextDecryption
+        text="I decrypt when you see me"
+        sequential={true}
+        revealDirection="start"
+        speed={120}
+        animateOn="view"
+        loop={true}
+        loopDelay={1000}
+        className="text-blue-600 dark:text-blue-400 text-xl"
+      />
   );
 }

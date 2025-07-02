@@ -575,3 +575,82 @@ export function CheckboxRefinedShowcase() {
     </div>
   );
 }
+
+export function CheckboxRefinedTheme() {
+  return (
+    <div className="space-y-12">
+      <div className="text-center space-y-4">
+        <h2 className="text-4xl font-light text-black dark:text-white">Color Expressions</h2>
+        <p className="text-slate-400 text-lg">
+          Semantic colors that speak your design language
+        </p>
+      </div>
+
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {[
+          {
+            scheme: "default",
+            label: "Default",
+            color: "from-blue-500 to-blue-600",
+            bg: "bg-blue-500/10",
+          },
+          {
+            scheme: "success",
+            label: "Success",
+            color: "from-emerald-500 to-emerald-600",
+            bg: "bg-emerald-500/10",
+          },
+          {
+            scheme: "warning",
+            label: "Warning",
+            color: "from-amber-500 to-amber-600",
+            bg: "bg-amber-500/10",
+          },
+          {
+            scheme: "error",
+            label: "Error",
+            color: "from-red-500 to-red-600",
+            bg: "bg-red-500/10",
+          },
+          {
+            scheme: "purple",
+            label: "Purple",
+            color: "from-purple-500 to-purple-600",
+            bg: "bg-purple-500/10",
+          },
+          {
+            scheme: "blue",
+            label: "Blue",
+            color: "from-sky-500 to-sky-600",
+            bg: "bg-sky-500/10",
+          },
+        ].map((item) => (
+          <div
+            key={item.scheme}
+            className={`group p-6 ${item.bg} backdrop-blur-xl rounded-2xl border border-white/10 hover:scale-105 transition-all duration-300`}
+          >
+            <div className="space-y-4">
+              <div
+                className={`h-3 bg-gradient-to-r ${item.color} rounded-full`}
+              />
+              <CheckboxRefined
+                label={`${item.label} State`}
+                variant="smooth"
+                colorScheme={
+                  item.scheme as
+                    | "default"
+                    | "success"
+                    | "warning"
+                    | "error"
+                    | "purple"
+                    | "blue"
+                }
+                defaultChecked
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}

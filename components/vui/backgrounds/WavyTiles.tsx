@@ -147,10 +147,10 @@ export default function Background() {
             </h1>
             <div className="h-1 w-full bg-gradient-to-r from-transparent via-white to-transparent mt-4 animate-pulse" />
           </div>
-          
+
           <p className="text-lg md:text-xl text-gray-300 max-w-2xl leading-relaxed font-light">
             We create clean, sophisticated designs that communicate clearly and
-            stand the test of time with 
+            stand the test of time with
             <span className="text-white font-medium"> interactive waves </span>
             that respond to your movement.
           </p>
@@ -202,7 +202,7 @@ export function WavyTilesShowcase() {
             });
           }
 
-          // Initialize Vanta effect with full window dimensions
+          // Initialize Vanta effect
           if (window.VANTA && window.THREE && vantaRef.current) {
             vantaEffect.current = window.VANTA.WAVES({
               el: vantaRef.current,
@@ -232,13 +232,101 @@ export function WavyTilesShowcase() {
 
     const timer = setTimeout(loadVanta, 100);
 
-    // Handle window resize
-    const handleResize = () => {
-      if (vantaEffect.current && vantaRef.current) {
-        // Trigger resize for Vanta effect
-        vantaEffect.current.destroy();
+    return () => {
+      clearTimeout(timer);
+      if (vantaEffect.current) {
+        try {
+          vantaEffect.current.destroy();
+        } catch (error) {
+          console.warn("Error destroying Vanta effect:", error);
+        }
         vantaEffect.current = null;
-        setTimeout(() => {
+      }
+    };
+  }, []);
+
+  return (
+    <div className="space-y-8">
+      <div className="space-y-6">
+        {/* Showcase Container */}
+        <div className="relative w-full h-96 rounded-lg overflow-hidden border">
+          {/* Fallback background */}
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-900 to-slate-800"></div>
+
+          {/* Vanta.js container */}
+          <div
+            ref={vantaRef}
+            className="absolute inset-0"
+            style={{
+              width: "100%",
+              height: "100%",
+            }}
+          ></div>
+
+          {/* Loading indicator */}
+          {!vantaLoaded && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          )}
+
+          {/* Overlay content */}
+          <div className="absolute inset-0 flex items-center justify-center z-10">
+            <div className="text-center text-white">
+              <h2 className="text-4xl font-bold mb-4">Interactive Waves</h2>
+              <p className="text-lg opacity-80">
+                Move your mouse to interact with the waves
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function WavyTilesTheme() {
+  const vantaRef = useRef<HTMLDivElement>(null);
+  const vantaEffect = useRef<{ destroy: () => void } | null>(null);
+  const [vantaLoaded, setVantaLoaded] = useState(false);
+
+  useEffect(() => {
+    const loadVanta = async () => {
+      if (
+        typeof window !== "undefined" &&
+        vantaRef.current &&
+        !vantaEffect.current
+      ) {
+        try {
+          // Load Three.js
+          if (!window.THREE) {
+            const script1 = document.createElement("script");
+            script1.src =
+              "https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js";
+            document.head.appendChild(script1);
+
+            await new Promise((resolve, reject) => {
+              script1.onload = resolve;
+              script1.onerror = reject;
+              setTimeout(reject, 5000);
+            });
+          }
+
+          // Load Vanta Waves
+          if (!window.VANTA) {
+            const script2 = document.createElement("script");
+            script2.src =
+              "https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.waves.min.js";
+            document.head.appendChild(script2);
+
+            await new Promise((resolve, reject) => {
+              script2.onload = resolve;
+              script2.onerror = reject;
+              setTimeout(reject, 5000);
+            });
+          }
+
+          // Initialize Vanta effect
           if (window.VANTA && window.THREE && vantaRef.current) {
             vantaEffect.current = window.VANTA.WAVES({
               el: vantaRef.current,
@@ -257,16 +345,19 @@ export function WavyTilesShowcase() {
               zoom: 0.9,
               forceAnimate: true,
             });
+            setVantaLoaded(true);
           }
-        }, 100);
+        } catch (error) {
+          console.warn("Vanta.js failed to load:", error);
+          setVantaLoaded(false);
+        }
       }
     };
 
-    window.addEventListener("resize", handleResize);
+    const timer = setTimeout(loadVanta, 100);
 
     return () => {
       clearTimeout(timer);
-      window.removeEventListener("resize", handleResize);
       if (vantaEffect.current) {
         try {
           vantaEffect.current.destroy();
@@ -279,44 +370,40 @@ export function WavyTilesShowcase() {
   }, []);
 
   return (
-    <div className="bg-black text-white min-h-screen overflow-hidden relative">
-      {/* Fallback background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 to-slate-800"></div>
+    <div className="space-y-6">
+      {/* Showcase Container */}
+        {/* Fallback background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 to-slate-800"></div>
 
-      {/* Vanta.js container - full screen */}
-      <div
-        ref={vantaRef}
-        className="fixed top-0 left-0 w-full h-full"
-        style={{
-          width: "100%",
-          height: "100%",
-        }}
-      ></div>
+        {/* Vanta.js container */}
+        <div
+          ref={vantaRef}
+          className="absolute inset-0"
+          style={{
+            width: "100%",
+            height: "100%",
+          }}
+        ></div>
 
-      {/* Loading indicator */}
-      {!vantaLoaded && (
-        <div className="absolute inset-0 flex items-center justify-center z-20">
-          <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-        </div>
-      )}
-
-      {/* Overlay content */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-4 text-center">
-        <div className="mb-8 space-y-6">
-          <div className="inline-block">
-            <h1 className="text-6xl md:text-8xl font-black tracking-tighter bg-gradient-to-r from-white via-gray-200 to-white bg-clip-text text-transparent animate-pulse">
-              WAVY TILES
-            </h1>
-            <div className="h-1 w-full bg-gradient-to-r from-transparent via-white to-transparent mt-4 animate-pulse" />
+        {/* Loading indicator */}
+        {!vantaLoaded && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin">
+              {" "}
+              hello
+            </div>
           </div>
-          
-          <p className="text-lg md:text-xl text-gray-300 max-w-2xl leading-relaxed font-light">
-            Experience mesmerizing interactive waves that respond to your movement with 
-            <span className="text-white font-medium"> Vanta.js </span> 
-            powered dynamic effects
-          </p>
+        )}
+
+        {/* Overlay content */}
+        <div className="absolute inset-0 flex items-center justify-center z-10">
+          <div className="text-center text-white">
+            <h2 className="text-4xl font-bold mb-4">Interactive Waves</h2>
+            <p className="text-lg opacity-80">
+              Move your mouse to interact with the waves
+            </p>
+          </div>
         </div>
       </div>
-    </div>
   );
 }

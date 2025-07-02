@@ -78,10 +78,11 @@ export default function CardShowcase() {
               Card Component
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Beautiful overlay cards with backdrop blur effects and dynamic content positioning
+              Beautiful overlay cards with backdrop blur effects and dynamic
+              content positioning
             </p>
           </div>
-          
+
           {/* Main Demo */}
           <div className="relative p-8 rounded-3xl bg-card/30 backdrop-blur-sm border border-border/50 shadow-2xl">
             <div className="flex justify-center">
@@ -113,7 +114,7 @@ export default function CardShowcase() {
         {/* Card Variations */}
         <div className="space-y-12">
           <h2 className="text-3xl font-bold text-center">Card Variations</h2>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Design Agency Card */}
             <div className="space-y-4">
@@ -125,7 +126,7 @@ export default function CardShowcase() {
                   Creative portfolio showcase
                 </p>
               </div>
-              
+
               <div className="bg-gradient-to-br from-blue-50/30 to-blue-100/20 dark:from-blue-950/20 dark:to-blue-900/10 p-4 rounded-2xl border border-blue-200/30 dark:border-blue-800/20">
                 <section
                   className="relative w-full h-[400px] overflow-hidden rounded-2xl shadow-xl"
@@ -150,8 +151,8 @@ export default function CardShowcase() {
                         <>
                           We craft digital experiences that{" "}
                           <span className="text-blue-400">captivate</span> and{" "}
-                          <span className="text-blue-400">convert</span>, blending
-                          creativity with strategy.
+                          <span className="text-blue-400">convert</span>,
+                          blending creativity with strategy.
                         </>
                       }
                     />
@@ -170,7 +171,7 @@ export default function CardShowcase() {
                   Modern technology focus
                 </p>
               </div>
-              
+
               <div className="bg-gradient-to-br from-green-50/30 to-emerald-100/20 dark:from-green-950/20 dark:to-emerald-900/10 p-4 rounded-2xl border border-green-200/30 dark:border-green-800/20">
                 <section
                   className="relative w-full h-[400px] overflow-hidden rounded-2xl shadow-xl"
@@ -194,8 +195,14 @@ export default function CardShowcase() {
                       description={
                         <>
                           Building tomorrow&apos;s solutions with{" "}
-                          <span className="text-green-400">cutting-edge tech</span>{" "}
-                          and <span className="text-green-400">innovative thinking</span>.
+                          <span className="text-green-400">
+                            cutting-edge tech
+                          </span>{" "}
+                          and{" "}
+                          <span className="text-green-400">
+                            innovative thinking
+                          </span>
+                          .
                         </>
                       }
                     />
@@ -214,7 +221,7 @@ export default function CardShowcase() {
                   Elegant and sophisticated
                 </p>
               </div>
-              
+
               <div className="bg-gradient-to-br from-purple-50/30 to-violet-100/20 dark:from-purple-950/20 dark:to-violet-900/10 p-4 rounded-2xl border border-purple-200/30 dark:border-purple-800/20">
                 <section
                   className="relative w-full h-[400px] overflow-hidden rounded-2xl shadow-xl"
@@ -238,8 +245,14 @@ export default function CardShowcase() {
                       description={
                         <>
                           Curating experiences that embody{" "}
-                          <span className="text-purple-400">sophistication</span>{" "}
-                          and <span className="text-purple-400">timeless style</span>.
+                          <span className="text-purple-400">
+                            sophistication
+                          </span>{" "}
+                          and{" "}
+                          <span className="text-purple-400">
+                            timeless style
+                          </span>
+                          .
                         </>
                       }
                     />
@@ -265,7 +278,7 @@ export default function CardShowcase() {
               <h3 className="text-xl font-semibold text-orange-700 dark:text-orange-300 text-center">
                 Compact Layout
               </h3>
-              
+
               <div className="bg-gradient-to-br from-orange-50/30 to-amber-100/20 dark:from-orange-950/20 dark:to-amber-900/10 p-6 rounded-2xl border border-orange-200/30 dark:border-orange-800/20">
                 <section
                   className="relative w-full h-[300px] overflow-hidden rounded-xl shadow-lg"
@@ -304,7 +317,7 @@ export default function CardShowcase() {
               <h3 className="text-xl font-semibold text-rose-700 dark:text-rose-300 text-center">
                 Wide Format
               </h3>
-              
+
               <div className="bg-gradient-to-br from-rose-50/30 to-pink-100/20 dark:from-rose-950/20 dark:to-pink-900/10 p-6 rounded-2xl border border-rose-200/30 dark:border-rose-800/20">
                 <section
                   className="relative w-full h-[300px] overflow-hidden rounded-xl shadow-lg"
@@ -328,8 +341,14 @@ export default function CardShowcase() {
                       description={
                         <>
                           Creating unforgettable experiences through{" "}
-                          <span className="text-rose-400">thoughtful design</span>{" "}
-                          and <span className="text-rose-400">attention to detail</span>.
+                          <span className="text-rose-400">
+                            thoughtful design
+                          </span>{" "}
+                          and{" "}
+                          <span className="text-rose-400">
+                            attention to detail
+                          </span>
+                          .
                         </>
                       }
                     />
@@ -341,5 +360,42 @@ export default function CardShowcase() {
         </div>
       </div>
     </div>
+  );
+}
+
+export function CardTheme() {
+  return (
+    <>
+          <section
+            className="w-full h-full rounded-2xl"
+            aria-label="Tech Startup Card"
+          >
+            <div className="absolute inset-0 w-full h-full" aria-hidden="true">
+              <Image
+                src={GIRL}
+                alt="Technology background"
+                fill
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-green-900/40 to-teal-900/20" />
+            </div>
+            <div className="absolute inset-4">
+              <VuiCard
+                imageSrc={GIRL}
+                imageAlt="Tech innovation background"
+                category="Technology / Innovation / AI"
+                title="Future Forward"
+                description={
+                  <>
+                    Building tomorrow&apos;s solutions with{" "}
+                    <span className="text-green-400">cutting-edge tech</span>{" "}
+                    and{" "}
+                    <span className="text-green-400">innovative thinking</span>.
+                  </>
+                }
+              />
+            </div>
+          </section>
+    </>
   );
 }

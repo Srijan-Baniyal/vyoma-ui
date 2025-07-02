@@ -126,9 +126,10 @@ export default function Introduction() {
             </h1>
 
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mb-8">
-              VUI (Vyoma UI) is a collection of beautifully crafted React components, 
-              born from creativity and built with love. Every component tells a story 
-              of thoughtful design, where aesthetics meet functionality in perfect harmony.
+              VUI (Vyoma UI) is a comprehensive React component library built
+              with modern web standards. This introduction will help you
+              understand the design philosophy and get you started building with
+              VUI.
             </p>
 
             <div className="flex flex-wrap gap-4 justify-center">
@@ -140,7 +141,7 @@ export default function Introduction() {
                 </Link>
               </Button>
               <Button variant="outline" size="lg" asChild>
-                <Link href="/components/accordion">Browse Components</Link>
+                <Link href="/components">Browse Components</Link>
               </Button>
             </div>
           </div>
@@ -170,36 +171,39 @@ export default function Introduction() {
 
             <div className="space-y-6">
               <p className="text-muted-foreground leading-relaxed text-lg">
-                VUI (Vyoma UI) is a labor of love - a collection of beautifully crafted components 
-                that dance on top of the solid{" "}
-                <strong className="text-foreground">shadcn/ui</strong> foundation. 
-                Each component is thoughtfully designed with artistic vision, attention to detail, 
-                and a deep appreciation for the craft of interface design. We didn&apos;t just build 
-                components; we sculpted digital experiences with passion and creativity.
+                VUI (Vyoma UI) is built upon the excellent foundation of{" "}
+                <strong className="text-foreground">shadcn/ui</strong>, taking
+                it to the next level with enhanced design patterns, improved
+                usability, and streamlined developer experience. While shadcn/ui
+                provides the building blocks, VUI adds the spatial wisdom and
+                design philosophy that makes creating beautiful interfaces
+                effortless.
               </p>
 
-              <Card className="p-6 bg-gradient-to-r from-pink-50/50 to-rose-50/50 dark:from-pink-950/20 dark:to-rose-950/20 border-pink-200/50 dark:border-pink-800/50">
+              <Card className="p-6 bg-gradient-to-r from-blue-50/50 to-indigo-50/50 dark:from-blue-950/20 dark:to-indigo-950/20 border-blue-200/50 dark:border-blue-800/50">
                 <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-pink-100 dark:bg-pink-900/30 flex items-center justify-center flex-shrink-0">
-                    <span className="text-pink-600 text-lg">💖</span>
+                  <div className="w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center flex-shrink-0">
+                    <Lightbulb className="w-5 h-5 text-blue-600" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-pink-900 dark:text-pink-100 mb-2">
-                      Crafted with Love & Creativity
+                    <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">
+                      Built on shadcn/ui Foundation
                     </h3>
-                    <p className="text-sm text-pink-800 dark:text-pink-200 leading-relaxed">
-                      VUI components are artistic expressions built on shadcn&apos;s reliable foundation. 
-                      Each element is carefully crafted with creative flair, bringing beauty and 
-                      soul to your applications while maintaining the technical excellence you expect.
+                    <p className="text-sm text-blue-800 dark:text-blue-200 leading-relaxed">
+                      VUI extends shadcn/ui with carefully crafted design
+                      improvements, enhanced component variants, and a cohesive
+                      design system that reduces decision fatigue and speeds up
+                      development.
                     </p>
                   </div>
                 </div>
               </Card>
 
               <p className="text-muted-foreground leading-relaxed">
-                Whether you&apos;re building a simple landing page or a complex web application, 
-                VUI brings the artistry and emotional connection that transforms functional 
-                interfaces into memorable experiences that users genuinely love to interact with.
+                Whether you&apos;re building a simple landing page or a complex
+                web application, VUI provides the enhanced foundation you need
+                to create polished user experiences with less hassle and more
+                confidence.
               </p>
             </div>
           </div>
@@ -263,91 +267,91 @@ export default function Introduction() {
           <div className="text-center">
             <h2 className="text-4xl font-bold mb-4">
               <span className="bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-                Why Choose VUI?
+                Why VUI over shadcn/ui?
               </span>
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              The difference between functional and beautiful - VUI brings artistry 
-              and soul to component design
+              While shadcn/ui is excellent, VUI takes it further with enhanced
+              design and reduced complexity
             </p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card className="relative overflow-hidden border-0 shadow-2xl bg-card/80 backdrop-blur-xl">
-              <div className="absolute inset-0 bg-gradient-to-r from-gray-500/5 via-transparent to-slate-500/5"></div>
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-gray-500/50 to-slate-500/50"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-red-500/5 via-transparent to-orange-500/5"></div>
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-500/50 to-orange-500/50"></div>
 
               <div className="relative p-8">
                 <div className="flex items-start gap-6 mb-6">
-                  <div className="flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-br from-gray-500/20 to-slate-500/10 border border-gray-500/20 shadow-lg">
-                    <span className="text-gray-600 font-bold">🔧</span>
+                  <div className="flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-br from-red-500/20 to-orange-500/10 border border-red-500/20 shadow-lg">
+                    <span className="text-red-600 font-bold">📦</span>
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold mb-2">Standard Components</h3>
+                    <h3 className="text-xl font-bold mb-2">shadcn/ui</h3>
                     <p className="text-sm text-muted-foreground">
-                      Functional but lacking soul
+                      Excellent foundation, but...
                     </p>
                   </div>
                 </div>
 
                 <ul className="space-y-3 text-sm text-muted-foreground">
                   <li className="flex items-start gap-3">
-                    <span className="text-gray-500 mt-1">○</span>
+                    <span className="text-red-500 mt-1">×</span>
                     <span>
-                      Built for function over form
+                      Requires extensive customization for cohesive design
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <span className="text-gray-500 mt-1">○</span>
-                    <span>Minimal aesthetic consideration</span>
+                    <span className="text-red-500 mt-1">×</span>
+                    <span>Decision fatigue on spacing and variants</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <span className="text-gray-500 mt-1">○</span>
-                    <span>Generic, one-size-fits-all approach</span>
+                    <span className="text-red-500 mt-1">×</span>
+                    <span>Limited advanced component compositions</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <span className="text-gray-500 mt-1">○</span>
-                    <span>Lacks emotional connection with users</span>
+                    <span className="text-red-500 mt-1">×</span>
+                    <span>Basic examples and documentation</span>
                   </li>
                 </ul>
               </div>
             </Card>
 
             <Card className="relative overflow-hidden border-0 shadow-2xl bg-card/80 backdrop-blur-xl">
-              <div className="absolute inset-0 bg-gradient-to-r from-pink-500/5 via-transparent to-purple-500/5"></div>
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-pink-500/50 to-purple-500/50"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-green-500/5 via-transparent to-emerald-500/5"></div>
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-500/50 to-emerald-500/50"></div>
 
               <div className="relative p-8">
                 <div className="flex items-start gap-6 mb-6">
-                  <div className="flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-br from-pink-500/20 to-purple-500/10 border border-pink-500/20 shadow-lg">
-                    <span className="text-pink-600 font-bold">✨</span>
+                  <div className="flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-br from-green-500/20 to-emerald-500/10 border border-green-500/20 shadow-lg">
+                    <span className="text-green-600 font-bold">✨</span>
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold mb-2">VUI Components</h3>
+                    <h3 className="text-xl font-bold mb-2">VUI (Vyoma UI)</h3>
                     <p className="text-sm text-muted-foreground">
-                      Crafted with creativity & love
+                      Enhanced and production-ready
                     </p>
                   </div>
                 </div>
 
                 <ul className="space-y-3 text-sm text-muted-foreground">
                   <li className="flex items-start gap-3">
-                    <span className="text-pink-600 mt-1">💖</span>
+                    <CheckCircle className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
                     <span>
-                      Designed with artistic vision and passion
+                      Pre-configured design system with spatial wisdom
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <span className="text-purple-600 mt-1">🎨</span>
-                    <span>Every detail crafted for beauty and delight</span>
+                    <CheckCircle className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <span>Opinionated choices reduce decision fatigue</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <span className="text-pink-600 mt-1">✨</span>
-                    <span>Thoughtful animations and micro-interactions</span>
+                    <CheckCircle className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <span>Advanced layouts and component compositions</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <span className="text-purple-600 mt-1">🌟</span>
-                    <span>Creates emotional connections with users</span>
+                    <CheckCircle className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <span>Comprehensive examples and best practices</span>
                   </li>
                 </ul>
               </div>
@@ -390,13 +394,13 @@ export default function Introduction() {
 
               <Card className="bg-gradient-to-br from-muted/50 to-muted/20 border-dashed border-2 p-8">
                 <h3 className="font-semibold mb-6 flex items-center gap-3 text-lg">
-                  <span className="text-2xl">🎨</span>
-                  Artistic Component Collections
+                  <Layers className="w-6 h-6 text-primary" />
+                  Component Categories
                 </h3>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center py-3 border-b border-border/50">
                     <span className="text-muted-foreground font-medium">
-                      Beautiful Layouts
+                      Layout
                     </span>
                     <span className="text-sm bg-primary/10 text-primary px-3 py-1 rounded-full">
                       Container, Grid, Flexbox
@@ -404,7 +408,7 @@ export default function Introduction() {
                   </div>
                   <div className="flex justify-between items-center py-3 border-b border-border/50">
                     <span className="text-muted-foreground font-medium">
-                      Elegant Navigation
+                      Navigation
                     </span>
                     <span className="text-sm bg-blue-500/10 text-blue-600 px-3 py-1 rounded-full">
                       Navbar, Sidebar, Breadcrumb
@@ -412,7 +416,7 @@ export default function Introduction() {
                   </div>
                   <div className="flex justify-between items-center py-3 border-b border-border/50">
                     <span className="text-muted-foreground font-medium">
-                      Delightful Forms
+                      Forms
                     </span>
                     <span className="text-sm bg-green-500/10 text-green-600 px-3 py-1 rounded-full">
                       Input, Select, Checkbox
@@ -420,7 +424,7 @@ export default function Introduction() {
                   </div>
                   <div className="flex justify-between items-center py-3 border-b border-border/50">
                     <span className="text-muted-foreground font-medium">
-                      Engaging Feedback
+                      Feedback
                     </span>
                     <span className="text-sm bg-orange-500/10 text-orange-600 px-3 py-1 rounded-full">
                       Alert, Toast, Modal
@@ -428,7 +432,7 @@ export default function Introduction() {
                   </div>
                   <div className="flex justify-between items-center py-3">
                     <span className="text-muted-foreground font-medium">
-                      Stunning Data Display
+                      Data Display
                     </span>
                     <span className="text-sm bg-purple-500/10 text-purple-600 px-3 py-1 rounded-full">
                       Table, Card, Badge

@@ -1,15 +1,13 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import NumberFlow from "@number-flow/react";
-import { motion } from "framer-motion";
-
-const MotionNumberFlow = motion.create(NumberFlow);
 
 interface CountdownProps {
   endDate: Date;
   startDate?: Date;
   className?: string;
+  compactPreview?: boolean;
 }
 
 interface TimeLeft {
@@ -23,6 +21,7 @@ export function AnimatedNumberCountdown({
   endDate,
   startDate,
   className,
+  compactPreview = false,
 }: CountdownProps) {
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({
     days: 0,
@@ -55,42 +54,148 @@ export function AnimatedNumberCountdown({
     return () => clearInterval(timer);
   }, [endDate, startDate]);
 
+  if (compactPreview) {
+    return (
+      <div className="flex items-center justify-center gap-1 h-full w-full p-1">
+        <div className="flex flex-col items-center">
+          <NumberFlow
+            value={timeLeft.days}
+            className="text-lg font-bold text-foreground leading-none"
+            format={{ minimumIntegerDigits: 2 }}
+          />    
+        </div>
+        <span className="text-sm font-bold text-muted-foreground mx-0.5">:</span>
+        <div className="flex flex-col items-center">
+          <NumberFlow
+            value={timeLeft.hours}
+            className="text-lg font-bold text-foreground leading-none"
+            format={{ minimumIntegerDigits: 2 }}
+          />
+        </div>
+        <span className="text-sm font-bold text-muted-foreground mx-0.5">:</span>
+        <div className="flex flex-col items-center">
+          <NumberFlow
+            value={timeLeft.minutes}
+            className="text-lg font-bold text-foreground leading-none"
+            format={{ minimumIntegerDigits: 2 }}
+          />
+        </div>
+        <span className="text-sm font-bold text-muted-foreground mx-0.5">:</span>
+        <div className="flex flex-col items-center">
+          <NumberFlow
+            value={timeLeft.seconds}
+            className="text-lg font-bold text-foreground leading-none"
+            format={{ minimumIntegerDigits: 2 }}
+          />
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className={`flex items-center justify-center gap-4 ${className}`}>
-      <div className="flex flex-col items-center">
-        <MotionNumberFlow
-          value={timeLeft.days}
-          className="text-5xl font-semibold tracking-tighter"
-          format={{ minimumIntegerDigits: 2 }}
-        />
-        <span className="text-sm text-gray-500">Days</span>
+    <div className={`w-full max-w-4xl mx-auto px-4 ${className}`}>
+      {/* Mobile Layout (< 640px) */}
+      <div className="sm:hidden">
+        <div className="grid grid-cols-2 gap-3">
+          <div className="flex flex-col items-center rounded-lg p-3 bg-card dark:bg-card border border-border">
+            <NumberFlow
+              value={timeLeft.days}
+              className="text-2xl font-semibold tracking-tighter text-foreground"
+              format={{ minimumIntegerDigits: 2 }}
+            />
+          </div>
+          <div className="flex flex-col items-center rounded-lg p-3 bg-card dark:bg-card border border-border">
+            <NumberFlow
+              value={timeLeft.hours}
+              className="text-2xl font-semibold tracking-tighter text-foreground"
+              format={{ minimumIntegerDigits: 2 }}
+            />
+          </div>
+          <div className="flex flex-col items-center rounded-lg p-3 bg-card dark:bg-card border border-border">
+            <NumberFlow
+              value={timeLeft.minutes}
+              className="text-2xl font-semibold tracking-tighter text-foreground"
+              format={{ minimumIntegerDigits: 2 }}
+            />
+          </div>
+          <div className="flex flex-col items-center rounded-lg p-3 bg-card dark:bg-card border border-border">
+            <NumberFlow
+              value={timeLeft.seconds}
+              className="text-2xl font-semibold tracking-tighter text-foreground"
+              format={{ minimumIntegerDigits: 2 }}
+            />
+          </div>
+        </div>
       </div>
-      <div className="text-2xl font-bold">:</div>
-      <div className="flex flex-col items-center">
-        <MotionNumberFlow
-          value={timeLeft.hours}
-          className="text-5xl font-semibold tracking-tighter"
-          format={{ minimumIntegerDigits: 2 }}
-        />
-        <span className="text-sm text-gray-500">Hours</span>
+
+      {/* Tablet Layout (640px - 1024px) */}
+      <div className="hidden sm:flex lg:hidden items-center justify-center gap-2">
+        <div className="flex flex-col items-center">
+          <NumberFlow
+            value={timeLeft.days}
+            className="text-3xl font-semibold tracking-tighter text-foreground"
+            format={{ minimumIntegerDigits: 2 }}
+          />
+        </div>
+        <div className="text-xl font-bold mx-1 text-muted-foreground">:</div>
+        <div className="flex flex-col items-center">
+          <NumberFlow
+            value={timeLeft.hours}
+            className="text-3xl font-semibold tracking-tighter text-foreground"
+            format={{ minimumIntegerDigits: 2 }}
+          />
+        </div>
+        <div className="text-xl font-bold mx-1 text-muted-foreground">:</div>
+        <div className="flex flex-col items-center">
+          <NumberFlow
+            value={timeLeft.minutes}
+            className="text-3xl font-semibold tracking-tighter text-foreground"
+            format={{ minimumIntegerDigits: 2 }}
+          />
+        </div>
+        <div className="text-xl font-bold mx-1 text-muted-foreground">:</div>
+        <div className="flex flex-col items-center">
+          <NumberFlow
+            value={timeLeft.seconds}
+            className="text-3xl font-semibold tracking-tighter text-foreground"
+            format={{ minimumIntegerDigits: 2 }}
+          />
+        </div>
       </div>
-      <div className="text-2xl font-bold">:</div>
-      <div className="flex flex-col items-center">
-        <MotionNumberFlow
-          value={timeLeft.minutes}
-          className="text-5xl font-semibold tracking-tighter"
-          format={{ minimumIntegerDigits: 2 }}
-        />
-        <span className="text-sm text-gray-500">Minutes</span>
-      </div>
-      <div className="text-2xl font-bold">:</div>
-      <div className="flex flex-col items-center">
-        <MotionNumberFlow
-          value={timeLeft.seconds}
-          className="text-5xl font-semibold tracking-tighter"
-          format={{ minimumIntegerDigits: 2 }}
-        />
-        <span className="text-sm text-gray-500">Seconds</span>
+
+      {/* Desktop Layout (>= 1024px) */}
+      <div className="hidden lg:flex items-center justify-center gap-4">
+        <div className="flex flex-col items-center">
+          <NumberFlow
+            value={timeLeft.days}
+            className="text-5xl font-semibold tracking-tighter text-foreground"
+            format={{ minimumIntegerDigits: 2 }}
+          />
+        </div>
+        <div className="text-2xl font-bold text-muted-foreground">:</div>
+        <div className="flex flex-col items-center">
+          <NumberFlow
+            value={timeLeft.hours}
+            className="text-5xl font-semibold tracking-tighter text-foreground"
+            format={{ minimumIntegerDigits: 2 }}
+          />
+        </div>
+        <div className="text-2xl font-bold text-muted-foreground">:</div>
+        <div className="flex flex-col items-center">
+          <NumberFlow
+            value={timeLeft.minutes}
+            className="text-5xl font-semibold tracking-tighter text-foreground"
+            format={{ minimumIntegerDigits: 2 }}
+          />
+        </div>
+        <div className="text-2xl font-bold text-muted-foreground">:</div>
+        <div className="flex flex-col items-center">
+          <NumberFlow
+            value={timeLeft.seconds}
+            className="text-5xl font-semibold tracking-tighter text-foreground" 
+            format={{ minimumIntegerDigits: 2 }}
+          />
+        </div>
       </div>
     </div>
   );
@@ -98,11 +203,24 @@ export function AnimatedNumberCountdown({
 
 export function AnimatedNumberCountdownShowcase() {
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className="flex flex-col p-4 bg-background">
       <AnimatedNumberCountdown
-        endDate={new Date("2025-06-28")}
+        endDate={new Date("2025-07-09")}
         className="my-4"
+        compactPreview={true}
       />
     </div>
+  );
+}
+
+export function AnimatedNumberCountdownTheme() {
+  return (
+    <>
+      <AnimatedNumberCountdown
+        endDate={new Date("2025-07-09")}
+        className="my-4"
+        compactPreview={true}
+      />
+    </>
   );
 }

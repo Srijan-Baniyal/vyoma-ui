@@ -7,7 +7,6 @@ import { Pill } from "@/components/ui/pill";
 import Link from "next/link";
 import {
   ArrowRight,
-  BookOpen,
   Heart,
   Target,
   Lightbulb,
@@ -19,9 +18,7 @@ import {
   Star,
   Zap,
   Clock,
-  CheckCircle,
   Globe,
-  Layers,
   Eye,
   Cpu,
   Palette,
@@ -29,6 +26,8 @@ import {
   TrendingUp,
   Award,
 } from "lucide-react";
+import Image from "next/image";
+import SB from "@/public/SB.jpeg";
 
 export default function StoryBehind() {
   const [isVisible, setIsVisible] = useState(false);
@@ -41,7 +40,7 @@ export default function StoryBehind() {
     {
       icon: <Lightbulb className="w-6 h-6" />,
       title: "The Spark",
-      period: "Early 2024",
+      period: "Mid 2024",
       description:
         "Frustrated with repetitive design decisions and inconsistent UI patterns, the idea of VUI was born during late-night coding sessions.",
       color: "from-yellow-500/20 to-orange-500/10",
@@ -52,7 +51,7 @@ export default function StoryBehind() {
     {
       icon: <Code className="w-6 h-6" />,
       title: "The Foundation",
-      period: "Mid 2024",
+      period: "Late 2024",
       description:
         "Building upon shadcn/ui's excellent foundation while addressing its design gaps and enhancing developer experience.",
       color: "from-blue-500/20 to-cyan-500/10",
@@ -63,7 +62,7 @@ export default function StoryBehind() {
     {
       icon: <Heart className="w-6 h-6" />,
       title: "The Passion",
-      period: "Late 2024",
+      period: "Early 2025",
       description:
         "Countless hours refining every pixel, testing every interaction, and crafting a design system that developers would love to use.",
       color: "from-pink-500/20 to-red-500/10",
@@ -84,33 +83,6 @@ export default function StoryBehind() {
     },
   ];
 
-  const challenges = [
-    {
-      problem: "Decision Fatigue",
-      solution: "Opinionated Design Choices",
-      icon: <Target className="w-5 h-5" />,
-      description: "Too many styling decisions slowing down development",
-    },
-    {
-      problem: "Inconsistent Spacing",
-      solution: "Spatial Wisdom System",
-      icon: <Layers className="w-5 h-5" />,
-      description: "Inconsistent margins and padding across components",
-    },
-    {
-      problem: "Complex Setup",
-      solution: "Simplified Integration",
-      icon: <Zap className="w-5 h-5" />,
-      description: "Time-consuming component library setup and configuration",
-    },
-    {
-      problem: "Limited Examples",
-      solution: "Comprehensive Documentation",
-      icon: <BookOpen className="w-5 h-5" />,
-      description: "Lack of real-world implementation examples",
-    },
-  ];
-
   const impacts = [
     {
       metric: "50%",
@@ -127,7 +99,7 @@ export default function StoryBehind() {
       color: "from-pink-500/20 to-rose-500/10",
     },
     {
-      metric: "100+",
+      metric: "10+",
       label: "Components & Variants",
       description: "Production-ready UI elements",
       icon: <Building className="w-6 h-6" />,
@@ -241,32 +213,7 @@ export default function StoryBehind() {
                 instead of building features.
               </p>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {challenges.map((challenge, index) => (
-                  <Card
-                    key={index}
-                    className="p-6 bg-gradient-to-r from-muted/50 to-muted/20 border-dashed border-2"
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 rounded-lg bg-red-100 dark:bg-red-900/30 flex items-center justify-center flex-shrink-0">
-                        {challenge.icon}
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-red-900 dark:text-red-100 mb-2">
-                          {challenge.problem}
-                        </h3>
-                        <p className="text-sm text-red-800 dark:text-red-200 mb-3">
-                          {challenge.description}
-                        </p>
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200 text-xs font-medium">
-                          <CheckCircle className="w-3 h-3" />
-                          {challenge.solution}
-                        </div>
-                      </div>
-                    </div>
-                  </Card>
-                ))}
-              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
 
               <Card className="p-6 bg-gradient-to-r from-yellow-50/50 to-amber-50/50 dark:from-yellow-950/20 dark:to-amber-950/20 border-yellow-200/50 dark:border-yellow-800/50">
                 <div className="flex items-start gap-4">
@@ -394,7 +341,7 @@ export default function StoryBehind() {
                     Developer First
                   </h3>
                   <p className="text-muted-foreground leading-relaxed">
-                    Built by developers, for developers. Every API decision,
+                    Built by developers, for developers. Every decision,
                     every prop name, and every pattern is designed to feel
                     intuitive and powerful.
                   </p>
@@ -590,12 +537,12 @@ export default function StoryBehind() {
                 I believe that great tools should feel invisible. They should
                 amplify your creativity, not constrain it. VUI is my attempt at
                 creating that perfect balance between opinionated design and
-                unlimited possibility.&
+                unlimited possibility.
               </blockquote>
 
               <div className="flex items-center gap-4 pt-4">
                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center">
-                  <span className="text-primary font-bold">SB</span>
+                  <Image src={SB} alt="Srijan Baniyal" width={48} height={48} className="rounded-full" />
                 </div>
                 <div>
                   <div className="font-semibold">Srijan Baniyal</div>

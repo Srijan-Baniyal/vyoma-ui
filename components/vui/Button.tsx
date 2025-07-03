@@ -188,43 +188,6 @@ export function ButtonShowcase({ className }: ButtonShowcaseProps) {
           </div>
         </div>
       </section>
-
-      {/* Usage Tips */}
-      <section className="bg-muted/30 rounded-lg p-6 space-y-4">
-        <h3 className="text-xl font-semibold">Usage Tips</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-muted-foreground">
-          <div>
-            <h4 className="font-medium text-foreground mb-2">FlipButton</h4>
-            <p>
-              Perfect for CTAs that need to convey two different messages. Use
-              sparingly for maximum impact.
-            </p>
-          </div>
-          <div>
-            <h4 className="font-medium text-foreground mb-2">MagneticButton</h4>
-            <p>
-              Great for hero sections and interactive elements. Wrap any button
-              component inside it.
-            </p>
-          </div>
-          <div>
-            <h4 className="font-medium text-foreground mb-2">ShimmerButton</h4>
-            <p>
-              Excellent for premium features or subscription upgrades. Highly
-              customizable colors.
-            </p>
-          </div>
-          <div>
-            <h4 className="font-medium text-foreground mb-2">
-              SpotlightButton
-            </h4>
-            <p>
-              Perfect for dark themes and professional interfaces. Subtle yet
-              engaging.
-            </p>
-          </div>
-        </div>
-      </section>
     </div>
   );
 }

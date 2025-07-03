@@ -141,7 +141,7 @@ export default function Introduction() {
                 </Link>
               </Button>
               <Button variant="outline" size="lg" asChild>
-                <Link href="/components">Browse Components</Link>
+                <Link href="/components/accordion">Browse Components</Link>
               </Button>
             </div>
           </div>

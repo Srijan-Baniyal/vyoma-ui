@@ -254,9 +254,9 @@ export function TypingTextShowcase() {
                 </p>
                 <div className="h-16 flex items-center">
                   <TypingText
-                    text="⚡ Super fast typing effect! Ready in milliseconds!"
+                    text={["⚡ Super fast typing effect! Ready in milliseconds!", "Ready in milliseconds!"]}
                     speed={25}
-                    loop={false}
+                    loop={true}
                     className="text-green-800 dark:text-green-200 font-semibold"
                     cursorChar="●"
                     cursorClassName="text-green-500 animate-pulse"
@@ -276,9 +276,9 @@ export function TypingTextShowcase() {
                 </p>
                 <div className="h-16 flex items-center">
                   <TypingText
-                    text="Elegance in every keystroke... ✨"
+                    text={["Elegance in every keystroke... ✨", "Elegance is the key to success"]}
                     speed={120}
-                    loop={false}
+                    loop={true}
                     initialDelay={500}
                     className="text-purple-800 dark:text-purple-200 font-medium italic"
                     cursorChar="│"
@@ -327,10 +327,10 @@ export function TypingTextShowcase() {
                 </p>
                 <div className="h-16 flex items-center">
                   <TypingText
-                    text="Pure text, no distractions"
+                    text={["Pure text, no distractions", "Only the best for you"]}
                     speed={90}
                     showCursor={false}
-                    loop={false}
+                    loop={true}
                     className="text-orange-800 dark:text-orange-200 font-medium"
                   />
                 </div>
@@ -348,9 +348,9 @@ export function TypingTextShowcase() {
                 </p>
                 <div className="h-16 flex items-center">
                   <TypingText
-                    text="Creativity knows no bounds! 🎨"
+                    text={["Creativity knows no bounds! 🎨", "Innovation never stops... 🚀"]}
                     speed={75}
-                    loop={false}
+                    loop={true}
                     cursorChar="✨"
                     cursorClassName="text-rose-500 text-lg"
                     className="text-rose-800 dark:text-rose-200 font-semibold"

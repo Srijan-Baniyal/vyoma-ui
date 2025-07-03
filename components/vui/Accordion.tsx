@@ -306,7 +306,7 @@ export function AccordionShowcase() {
                     ),
                   },
                 ]}
-                defaultOpenIds={["demo-1"]}
+                defaultOpenIds={[]}
                 allowMultiple={true}
               />
             </div>
@@ -396,7 +396,6 @@ export function AccordionTheme() {
             ),
           },
         ]}
-        allowMultiple={false}
         defaultOpenIds={[]}
       />
     </>

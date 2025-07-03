@@ -6,10 +6,8 @@ import {
   Terminal,
   Settings,
   Rocket,
-  Star,
   Code,
 } from "lucide-react";
-import Link from "next/link";
 
 export default function Installation() {
   return (
@@ -289,7 +287,7 @@ export default function Installation() {
                           and patterns.
                         </p>
                         <div className="text-sm text-blue-600 font-medium">
-                          50+ Components Available →
+                          10+ Components Available →
                         </div>
                       </Card>
 
@@ -315,36 +313,6 @@ export default function Installation() {
                 </div>
               </Card>
             </div>
-          </div>
-
-          {/* Footer CTA */}
-          <div className="text-center py-12">
-            <Card className="inline-block p-8 bg-card/50 backdrop-blur-xl border-0 shadow-2xl">
-              <div className="space-y-4">
-                <h3 className="text-2xl font-bold">Need Help?</h3>
-                <p className="text-muted-foreground">
-                  Join our community and get support from other developers.
-                </p>
-                <div className="flex flex-wrap justify-center gap-4">
-                  <Link
-                    href="/docs"
-                    className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors font-medium"
-                  >
-                    <Terminal className="w-4 h-4" />
-                    Documentation
-                  </Link>
-                  <a
-                    href="https://github.com/Srijan-Baniyal/VyomaUI"
-                    className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-border hover:bg-muted transition-colors font-medium"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Star className="w-4 h-4" />
-                    Star on GitHub
-                  </a>
-                </div>
-              </div>
-            </Card>
           </div>
         </div>
       </div>

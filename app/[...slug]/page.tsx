@@ -27,7 +27,7 @@ function findComponentByCategoryAndName(category: string, name: string) {
   return components.find((c) => normalize(c.name) === normalizedName) || null;
 }
 
-export default async function Page({ params }: { params: { slug: string[] } }) {
+export default async function Page({ params }: { params: Promise<{ slug: string[] }> }) {
   const awaitedParams = await params;
   // Expecting /category/componentName
   if (!awaitedParams.slug || awaitedParams.slug.length !== 2) {

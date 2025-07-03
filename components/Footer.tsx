@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Icons } from "@/components/ui/Icons";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/buttonShadcn";
 import { Github, Linkedin, Twitter, Heart } from "lucide-react";
 
 export default function Footer() {

@@ -8,7 +8,7 @@ import { ShinyButton } from "./buttons/ShinyButtons";
 import { SpotlightButton } from "./buttons/SpotLight";
 import VideoButton from "./buttons/VideoButton";
 import { AnimatedOpenInV0Button } from "./buttons/OpenInv0";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/buttonShadcn";
 
 interface ButtonShowcaseProps {
   className?: string;

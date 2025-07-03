@@ -29,7 +29,7 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/buttonShadcn";
 import {
   Sheet,
   SheetContent,

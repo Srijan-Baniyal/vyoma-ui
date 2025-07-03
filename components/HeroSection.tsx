@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/buttonShadcn";
 import Link from "next/link";
 import { ArrowRight, Sparkles, Layers, Zap } from "lucide-react";
 import { useEffect, useState } from "react";

@@ -242,7 +242,9 @@ export default function ComponentShowCaseTable({
 
                   <div className="relative group">
                     <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-700 ease-out"></div>
-                    <div className={`relative rounded-xl border-2 border-dashed border-muted-foreground/20 bg-gradient-to-br from-background to-muted/30 backdrop-blur-sm transition-all duration-300 group-hover:border-muted-foreground/40 group-hover:shadow-lg`}>
+                    <div
+                      className={`relative rounded-xl border-2 border-dashed border-muted-foreground/20 bg-gradient-to-br from-background to-muted/30 backdrop-blur-sm transition-all duration-300 group-hover:border-muted-foreground/40 group-hover:shadow-lg`}
+                    >
                       <div
                         key={refreshKeys[index] || 0}
                         className="w-full transition-all duration-500 animate-in zoom-in-50 fade-in-0"
@@ -272,6 +274,12 @@ export default function ComponentShowCaseTable({
                         className="text-xs animate-in zoom-in-50 duration-300 delay-100"
                       >
                         TypeScript
+                      </Badge>
+                      <Badge
+                        variant="outline"
+                        className="text-xs animate-in zoom-in-50 duration-300 delay-200"
+                      >
+                        {comp.codeString.split("\n").length} lines
                       </Badge>
                     </div>
                     <Button

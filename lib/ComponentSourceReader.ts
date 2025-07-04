@@ -4,24 +4,60 @@ import { join } from "path";
 // Import the pre-generated source map for production
 let componentSourceMap: Record<string, string> = {};
 let componentPropsMap: Record<string, Record<string, unknown>> = {};
+let sourceMapLoaded = false;
 
 // Try to import the pre-generated source map (only available in production builds)
 async function loadSourceMap() {
   try {
-    const sourceMapModule = await import('./componentSourceCode');
+    const sourceMapModule = await import("./componentSourceCode");
     componentSourceMap = sourceMapModule.componentSourceMap || {};
     componentPropsMap = sourceMapModule.componentPropsMap || {};
+    sourceMapLoaded = true;
+    console.log(
+      "Production mode: Loaded pre-generated source map with",
+      Object.keys(componentSourceMap).length,
+      "components"
+    );
   } catch {
     // Source map not available (development mode), will use filesystem reading
-    console.log('Development mode: Using filesystem reading for component sources');
+    console.log(
+      "Development mode: Using filesystem reading for component sources"
+    );
+    sourceMapLoaded = true;
   }
 }
 
 // Initialize the source map
 loadSourceMap();
 
-// Check if we're in production or if source map is available
-const isProduction = process.env.NODE_ENV === 'production' || Object.keys(componentSourceMap).length > 0;
+// Check if we're in production based on environment
+const isProduction = process.env.NODE_ENV === "production";
+
+// Function to get component path from ComponentMapping
+async function getComponentPathFromMapping(
+  componentName: string
+): Promise<string | null> {
+  try {
+    const mappingPath = join(process.cwd(), "data/ComponentMapping.ts");
+    const mappingContent = await readFile(mappingPath, "utf-8");
+
+    // Look for the component entry with a path property
+    const componentRegex = new RegExp(
+      `name:\\s*["']${componentName}["'][^}]*path:\\s*["']([^"']+)["']`,
+      "g"
+    );
+    const match = componentRegex.exec(mappingContent);
+
+    if (match) {
+      return match[1]; // Return the path
+    }
+
+    return null;
+  } catch (error) {
+    console.error("Error reading ComponentMapping for path:", error);
+    return null;
+  }
+}
 
 // Dynamic component discovery by reading the ComponentMapping file
 async function getComponentMappingImports(): Promise<Record<string, string>> {
@@ -34,7 +70,8 @@ async function getComponentMappingImports(): Promise<Record<string, string>> {
 
     // Handle both default imports and destructured imports
     const defaultImportRegex = /import\s+(\w+)\s+from\s+["'](@\/[^"']+)["']/g;
-    const destructuredImportRegex = /import\s+\{\s*([^}]+)\s*\}\s+from\s+["'](@\/[^"']+)["']/g;
+    const destructuredImportRegex =
+      /import\s+\{\s*([^}]+)\s*\}\s+from\s+["'](@\/[^"']+)["']/g;
 
     // Process default imports
     let match;
@@ -50,10 +87,10 @@ async function getComponentMappingImports(): Promise<Record<string, string>> {
       const [, componentNames, importPath] = match;
       // Convert @/ path to actual file path
       const actualPath = importPath.replace("@/", "") + ".tsx";
-      
+
       // Handle multiple destructured imports
-      const names = componentNames.split(",").map(name => name.trim());
-      names.forEach(name => {
+      const names = componentNames.split(",").map((name) => name.trim());
+      names.forEach((name) => {
         imports[name] = actualPath;
       });
     }
@@ -74,7 +111,14 @@ async function findComponentFile(
     return null;
   }
 
-  const searchDirs = ["components", "components/vui", "components/ui", "components/vui/text", "components/vui/buttons"];
+  const searchDirs = [
+    "components",
+    "components/vui",
+    "components/ui",
+    "components/vui/text",
+    "components/vui/buttons",
+    "components/vui/backgrounds",
+  ];
   const possibleNames = [
     `${componentName}.tsx`,
     `${componentName}.ts`,
@@ -133,16 +177,45 @@ export async function getComponentSourceCode(
   componentName: string
 ): Promise<string> {
   try {
+    // Wait for source map to load if in production
+    if (isProduction && !sourceMapLoaded) {
+      await loadSourceMap();
+    }
+
     // In production, use pre-generated source map
     if (isProduction && componentSourceMap[componentName]) {
       return componentSourceMap[componentName];
     }
 
     // Development mode: read from filesystem
+    console.log(`Development mode: Reading source for ${componentName}`);
+
+    // First, try to get the exact path from ComponentMapping
+    let filePath = await getComponentPathFromMapping(componentName);
+
+    if (filePath) {
+      console.log(`Found direct path for ${componentName}: ${filePath}`);
+      try {
+        const fullPath = join(process.cwd(), filePath);
+        const sourceCode = await readFile(fullPath, "utf-8");
+
+        console.log(
+          `Successfully read source for ${componentName} from ${filePath}: ${
+            sourceCode.split("\n").length
+          } lines`
+        );
+
+        return sourceCode;
+      } catch (error) {
+        console.error(`Error reading from direct path ${filePath}:`, error);
+      }
+    }
+
+    // Fallback: try the old method
     const componentClassName = await getComponentClassName(componentName);
     const imports = await getComponentMappingImports();
 
-    let filePath: string | null = imports[componentClassName] || null;
+    filePath = imports[componentClassName] || null;
 
     // If not found in imports, try to find the file dynamically
     if (!filePath) {
@@ -156,6 +229,7 @@ export async function getComponentSourceCode(
     }
 
     if (!filePath) {
+      console.error(`No file path found for component: ${componentName}`);
       return `// Source code not available for ${componentName}
 // Component file could not be located automatically
 
@@ -176,6 +250,12 @@ export default function ${componentName.replace(/\s+/g, "")}() {
     // Read the source file
     const fullPath = join(process.cwd(), filePath);
     const sourceCode = await readFile(fullPath, "utf-8");
+
+    console.log(
+      `Successfully read source for ${componentName} from ${filePath}: ${
+        sourceCode.split("\n").length
+      } lines`
+    );
 
     return sourceCode;
   } catch (error) {
@@ -249,38 +329,43 @@ export async function getDefaultProps(
 
     // Development mode: try to extract props dynamically
     const sourceCode = await getComponentSourceCode(componentName);
-    
+
     // Simple extraction of default props from source code
     const defaultProps: Record<string, unknown> = {};
-    
+
     // Look for default parameter values in function definitions
-    const functionMatch = sourceCode.match(/function\s+\w+\s*\([^)]*\{([^}]+)\}[^)]*\)/);
+    const functionMatch = sourceCode.match(
+      /function\s+\w+\s*\([^)]*\{([^}]+)\}[^)]*\)/
+    );
     if (functionMatch) {
       const params = functionMatch[1];
       const propMatches = params.matchAll(/(\w+)\s*=\s*([^,}]+)/g);
-      
+
       for (const match of propMatches) {
         const [, propName, defaultValue] = match;
         try {
           // Try to parse the default value
           if (defaultValue.includes('"') || defaultValue.includes("'")) {
-            defaultProps[propName] = defaultValue.replace(/['"]/g, '');
-          } else if (defaultValue === 'true' || defaultValue === 'false') {
-            defaultProps[propName] = defaultValue === 'true';
+            defaultProps[propName] = defaultValue.replace(/['"]/g, "");
+          } else if (defaultValue === "true" || defaultValue === "false") {
+            defaultProps[propName] = defaultValue === "true";
           } else if (!isNaN(Number(defaultValue))) {
             defaultProps[propName] = Number(defaultValue);
           } else {
             defaultProps[propName] = defaultValue.trim();
           }
-                 } catch {
-           defaultProps[propName] = defaultValue.trim();
-         }
+        } catch {
+          defaultProps[propName] = defaultValue.trim();
+        }
       }
     }
-    
+
     return defaultProps;
   } catch (error) {
-    console.error(`Error extracting default props for ${componentName}:`, error);
+    console.error(
+      `Error extracting default props for ${componentName}:`,
+      error
+    );
     return {};
   }
 }

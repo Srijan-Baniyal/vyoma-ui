@@ -56,13 +56,74 @@ function extractDefaultProps(sourceCode, componentName) {
   }
 }
 
+// Function to parse component entries from the mapping structure
+function parseComponentEntries(mapContent) {
+  const entries = [];
+  
+  // More robust approach: find the balance of brackets for each category
+  // Handle both quoted and unquoted property names
+  const categoryStartPattern = /(?:"([^"]+)"|([a-zA-Z\s]+)):\s*\[/g;
+  let match;
+  
+  while ((match = categoryStartPattern.exec(mapContent)) !== null) {
+    // Handle both quoted and unquoted category names
+    const categoryName = match[1] || match[2];
+    const startIndex = match.index + match[0].length;
+    
+    // Skip "Get Started" as it contains documentation, not UI components
+    if (categoryName === "Get Started") {
+      continue;
+    }
+    
+    // Find the matching closing bracket
+    let bracketCount = 1;
+    let currentIndex = startIndex;
+    let categoryContent = '';
+    
+    while (bracketCount > 0 && currentIndex < mapContent.length) {
+      const char = mapContent[currentIndex];
+      if (char === '[') bracketCount++;
+      else if (char === ']') bracketCount--;
+      
+      if (bracketCount > 0) {
+        categoryContent += char;
+      }
+      currentIndex++;
+    }
+    
+    // Now parse individual component entries within this category
+    const entryPattern = /\{\s*([\s\S]*?)\s*\}/g;
+    let entryMatch;
+    
+    while ((entryMatch = entryPattern.exec(categoryContent)) !== null) {
+      const entryContent = entryMatch[1];
+      
+      // Extract name and path from this specific entry
+      const nameMatch = entryContent.match(/name:\s*["']([^"']+)["']/);
+      const pathMatch = entryContent.match(/path:\s*["']([^"']+)["']/);
+      
+      if (nameMatch) {
+        const componentName = nameMatch[1];
+        const componentPath = pathMatch ? pathMatch[1] : null;
+        
+        entries.push({
+          name: componentName,
+          path: componentPath,
+          category: categoryName
+        });
+      }
+    }
+  }
+  
+  return entries;
+}
+
 async function generateSourceMap() {
   try {
     // Read the ComponentMapping file to get all components
     const mappingPath = path.join(process.cwd(), 'data/ComponentMapping.ts');
     const mappingContent = await fs.readFile(mappingPath, 'utf-8');
     
-    // Extract component entries with their paths
     const sourceMap = {};
     const propMap = {};
     
@@ -71,55 +132,28 @@ async function generateSourceMap() {
     if (componentMapMatch) {
       const mapContent = componentMapMatch[1];
       
-      // Extract path properties
-      const pathMatches = mapContent.matchAll(/path:\s*["']([^"']+)["']/g);
-      const nameMatches = mapContent.matchAll(/name:\s*["']([^"']+)["']/g);
+
       
-      const paths = Array.from(pathMatches).map(match => match[1]);
-      const names = Array.from(nameMatches).map(match => match[1]);
+      // Parse component entries maintaining name-path relationships
+      const entries = parseComponentEntries(mapContent);
       
-      // Read source code for each component
-      for (let i = 0; i < Math.min(paths.length, names.length); i++) {
-        const componentPath = paths[i];
-        const componentName = names[i];
-        
-        if (componentPath && componentPath.endsWith('.tsx')) {
-          console.log(`Reading source for: ${componentName} at ${componentPath}`);
-          const sourceCode = await readComponentSource(componentPath);
-          
-          if (sourceCode) {
-            sourceMap[componentName] = sourceCode;
-            
-            // Extract default props
-            const className = componentName.replace(/\s+/g, '');
-            const defaultProps = extractDefaultProps(sourceCode, className);
-            propMap[componentName] = defaultProps;
-          }
-        }
-      }
-    }
-    
-    // Also read source for components in the import statements
-    const importMatches = mappingContent.matchAll(/import[^from]+from\s+["']@\/([^"']+)["']/g);
-    for (const match of importMatches) {
-      const importPath = match[1] + '.tsx';
-      if (importPath.includes('components/')) {
-        // Extract component name from import
-        const importStatement = match[0];
-        const componentNameMatch = importStatement.match(/import\s+\{\s*([^,}]+)/);
-        if (componentNameMatch) {
-          const componentName = componentNameMatch[1].trim().replace('Showcase', '').replace('Theme', '');
-          if (!sourceMap[componentName]) {
-            console.log(`Reading source for imported component: ${componentName} at ${importPath}`);
-            const sourceCode = await readComponentSource(importPath);
-            if (sourceCode) {
-              sourceMap[componentName] = sourceCode;
-              const defaultProps = extractDefaultProps(sourceCode, componentName);
-              propMap[componentName] = defaultProps;
-            }
-          }
-        }
-      }
+      console.log(`Found ${entries.length} component entries`);
+      
+             // Process each component entry
+       for (const entry of entries) {
+         if (entry.path && entry.path.endsWith('.tsx')) {
+           const sourceCode = await readComponentSource(entry.path);
+           
+           if (sourceCode) {
+             sourceMap[entry.name] = sourceCode;
+             
+             // Extract default props
+             const className = entry.name.replace(/\s+/g, '');
+             const defaultProps = extractDefaultProps(sourceCode, className);
+             propMap[entry.name] = defaultProps;
+           }
+         }
+       }
     }
     
     // Generate the output file
@@ -134,6 +168,13 @@ export const componentPropsMap: Record<string, Record<string, unknown>> = ${JSON
     await fs.writeFile(path.join(process.cwd(), 'lib/componentSourceCode.ts'), outputContent);
     console.log(`✅ Generated source map with ${Object.keys(sourceMap).length} components`);
     console.log(`📝 Component names: ${Object.keys(sourceMap).join(', ')}`);
+    
+    // Verify the mapping
+    console.log('\n🔍 Verification:');
+    for (const [name, code] of Object.entries(sourceMap)) {
+      const firstLine = code.split('\n')[0];
+      console.log(`  ${name}: ${firstLine.substring(0, 50)}...`);
+    }
     
   } catch (error) {
     console.error('❌ Error generating source map:', error);

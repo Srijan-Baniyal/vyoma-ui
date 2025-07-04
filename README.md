@@ -3,6 +3,7 @@
   
   **A modern UI design system crafted with spatial wisdom and thoughtful design**
   
+  [![Version](https://img.shields.io/badge/Version-0.9.0-brightgreen?style=flat-square)](https://github.com/yourusername/vui/releases)
   [![Next.js](https://img.shields.io/badge/Next.js-15.3.4-black?style=flat-square&logo=next.js)](https://nextjs.org/)
   [![React](https://img.shields.io/badge/React-19.1.0-blue?style=flat-square&logo=react)](https://reactjs.org/)
   [![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)

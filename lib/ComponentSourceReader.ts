@@ -1,33 +1,29 @@
 import { readFile, readdir } from "fs/promises";
 import { join } from "path";
+import { extractComponentPropsFromSource, extractDefaultValuesFromSource, type ComponentPropsInfo } from "./TsASTAbstractionForDoc";
 
-// Import the pre-generated source map for production
+// Import the pre-generated source map - ALWAYS prioritized
 let componentSourceMap: Record<string, string> = {};
-let componentPropsMap: Record<string, Record<string, unknown>> = {};
 let sourceMapLoaded = false;
 
-// Try to import the pre-generated source map (only available in production builds)
+// Load the pre-generated source map - this is now the PRIMARY source
 async function loadSourceMap() {
   try {
     const sourceMapModule = await import("./componentSourceCode");
     componentSourceMap = sourceMapModule.componentSourceMap || {};
-    componentPropsMap = sourceMapModule.componentPropsMap || {};
     sourceMapLoaded = true;
     console.log(
-      "Production mode: Loaded pre-generated source map with",
+      "✅ Loaded pre-generated source map with",
       Object.keys(componentSourceMap).length,
-      "components"
+      "components from componentSourceCode.ts"
     );
-  } catch {
-    // Source map not available (development mode), will use filesystem reading
-    console.log(
-      "Development mode: Using filesystem reading for component sources"
-    );
+  } catch (error) {
+    console.error("❌ Failed to load componentSourceCode.ts:", error);
     sourceMapLoaded = true;
   }
 }
 
-// Initialize the source map
+// Initialize the source map immediately
 loadSourceMap();
 
 // Check if we're in production based on environment
@@ -192,120 +188,108 @@ export async function getComponentSourceCode(
   componentName: string
 ): Promise<string> {
   try {
-    // Wait for source map to load if in production
-    if (isProduction && !sourceMapLoaded) {
+    // Always wait for source map to load first (PRIMARY SOURCE)
+    if (!sourceMapLoaded) {
       await loadSourceMap();
     }
 
-    // In production, ONLY use pre-generated source map
-    if (isProduction) {
-      if (componentSourceMap[componentName]) {
-        return componentSourceMap[componentName];
-      } else {
-        // Component not found in pre-generated source map
-        console.warn(`Component "${componentName}" not found in production source map`);
-        return `// Source code not available for ${componentName}
-// This component was not included in the production build
+    // 🎯 PRIMARY SOURCE: Always check componentSourceCode.ts FIRST
+    if (componentSourceMap[componentName]) {
+      console.log(`✅ Found ${componentName} in componentSourceCode.ts`);
+      return componentSourceMap[componentName];
+    }
+
+    // 🔄 FALLBACK: Only use filesystem in development if not in componentSourceCode.ts
+    if (!isProduction) {
+      console.log(`⚠️ ${componentName} not found in componentSourceCode.ts, trying filesystem fallback...`);
+      
+      // Try to get the exact path from ComponentMapping
+      let filePath = await getComponentPathFromMapping(componentName);
+
+      if (filePath) {
+        console.log(`📁 Found direct path for ${componentName}: ${filePath}`);
+        try {
+          const fullPath = join(process.cwd(), filePath);
+          const sourceCode = await readFile(fullPath, "utf-8");
+          console.log(`📖 Successfully read ${sourceCode.split("\n").length} lines from ${filePath}`);
+          return sourceCode;
+        } catch (error) {
+          console.error(`❌ Error reading from direct path ${filePath}:`, error);
+        }
+      }
+
+      // Try component class name approach
+      const componentClassName = await getComponentClassName(componentName);
+      const imports = await getComponentMappingImports();
+      filePath = imports[componentClassName] || null;
+
+      // Try to find the file dynamically
+      if (!filePath) {
+        filePath = await findComponentFile(componentClassName);
+      }
+
+      // Try with clean display name
+      if (!filePath) {
+        const cleanName = componentName.replace(/\s+/g, "");
+        filePath = await findComponentFile(cleanName);
+      }
+
+      if (filePath) {
+        try {
+          const fullPath = join(process.cwd(), filePath);
+          const sourceCode = await readFile(fullPath, "utf-8");
+          console.log(`🔍 Found via search: ${filePath} (${sourceCode.split("\n").length} lines)`);
+          return sourceCode;
+        } catch (error) {
+          console.error(`❌ Error reading found file ${filePath}:`, error);
+        }
+      }
+    }
+
+    // 🚫 Component not found anywhere
+    const environment = isProduction ? "production" : "development";
+    console.error(`❌ Component "${componentName}" not found in componentSourceCode.ts${!isProduction ? ' or filesystem' : ''} (${environment} mode)`);
+    
+    return `// ❌ Component source not found for "${componentName}"
+// Environment: ${environment}
+// Expected: Component should be in componentSourceCode.ts
+// 
+// To fix this:
+// 1. Add the component to componentSourceCode.ts
+// 2. Or regenerate the source map
+// 3. Or check the component name spelling
 
 import React from 'react';
 
 export default function ${componentName.replace(/\s+/g, "")}() {
   return (
-    <div className="p-8 text-center">
-      <h2 className="text-2xl font-bold mb-4">${componentName}</h2>
-      <p className="text-muted-foreground">
-        This component is coming soon. Stay tuned for updates!
+    <div className="p-8 text-center border-2 border-dashed border-orange-300 bg-orange-50 dark:bg-orange-950 rounded-lg">
+      <h2 className="text-2xl font-bold mb-4 text-orange-600">${componentName}</h2>
+      <p className="text-orange-500 mb-4">
+        Component source not available in componentSourceCode.ts
+      </p>
+      <p className="text-sm text-orange-400">
+        Environment: ${environment} | Please check the source map
       </p>
     </div>
   );
 }`;
-      }
-    }
-
-    // Development mode: read from filesystem
-    console.log(`Development mode: Reading source for ${componentName}`);
-
-    // First, try to get the exact path from ComponentMapping
-    let filePath = await getComponentPathFromMapping(componentName);
-
-    if (filePath) {
-      console.log(`Found direct path for ${componentName}: ${filePath}`);
-      try {
-        const fullPath = join(process.cwd(), filePath);
-        const sourceCode = await readFile(fullPath, "utf-8");
-
-        console.log(
-          `Successfully read source for ${componentName} from ${filePath}: ${
-            sourceCode.split("\n").length
-          } lines`
-        );
-
-        return sourceCode;
-      } catch (error) {
-        console.error(`Error reading from direct path ${filePath}:`, error);
-      }
-    }
-
-    // Fallback: try the old method
-    const componentClassName = await getComponentClassName(componentName);
-    const imports = await getComponentMappingImports();
-
-    filePath = imports[componentClassName] || null;
-
-    // If not found in imports, try to find the file dynamically
-    if (!filePath) {
-      filePath = await findComponentFile(componentClassName);
-    }
-
-    // If still not found, try with display name
-    if (!filePath) {
-      const cleanName = componentName.replace(/\s+/g, "");
-      filePath = await findComponentFile(cleanName);
-    }
-
-    if (!filePath) {
-      console.error(`No file path found for component: ${componentName}`);
-      return `// Source code not available for ${componentName}
-// Component file could not be located automatically
-
-import React from 'react';
-
-export default function ${componentName.replace(/\s+/g, "")}() {
-  return (
-    <div className="p-8 text-center">
-      <h2 className="text-2xl font-bold mb-4">${componentName}</h2>
-      <p className="text-muted-foreground">
-        This component is coming soon. Stay tuned for updates!
-      </p>
-    </div>
-  );
-}`;
-    }
-
-    // Read the source file
-    const fullPath = join(process.cwd(), filePath);
-    const sourceCode = await readFile(fullPath, "utf-8");
-
-    console.log(
-      `Successfully read source for ${componentName} from ${filePath}: ${
-        sourceCode.split("\n").length
-      } lines`
-    );
-
-    return sourceCode;
   } catch (error) {
-    console.error(`Error reading source for ${componentName}:`, error);
-    return `// Error reading source code for ${componentName}
-// ${error instanceof Error ? error.message : "Unknown error"}
+    console.error(`💥 Critical error loading source for ${componentName}:`, error);
+    return `// 💥 Critical error loading source code for "${componentName}"
+// Error: ${error instanceof Error ? error.message : "Unknown error"}
 
 import React from 'react';
 
 export default function ${componentName.replace(/\s+/g, "")}() {
   return (
-    <div className="p-8 text-center border-2 border-dashed border-red-300 rounded-lg">
+    <div className="p-8 text-center border-2 border-dashed border-red-300 bg-red-50 dark:bg-red-950 rounded-lg">
       <h2 className="text-2xl font-bold mb-4 text-red-600">${componentName}</h2>
-      <p className="text-red-500">
-        Failed to load source code. Please check the file path and permissions.
+      <p className="text-red-500 mb-4">
+        Critical error loading source code
+      </p>
+      <p className="text-xs text-red-400 font-mono">
+        Error: ${error instanceof Error ? error.message : "Unknown error"}
       </p>
     </div>
   );
@@ -384,54 +368,89 @@ export default function Example() {
 }`;
 }
 
+/**
+ * Extract comprehensive component props information using TypeScript AST
+ * Sources: componentSourceCode.ts (primary) -> filesystem (development fallback)
+ */
+export async function getComponentPropsInfo(
+  componentName: string
+): Promise<ComponentPropsInfo | null> {
+  try {
+    console.log(`🔍 Extracting props info for component: ${componentName}`);
+    
+    // Get source code (which now prioritizes componentSourceCode.ts)
+    const sourceCode = await getComponentSourceCode(componentName);
+    if (!sourceCode || sourceCode.includes("// ❌ Component source not found") || sourceCode.includes("// 💥 Critical error")) {
+      console.warn(`❌ No valid source code available for ${componentName}`);
+      return null;
+    }
+
+    // 🧠 Intelligent component name variations for AST parsing
+    const componentNameVariations = [
+      componentName,
+      componentName.replace(/\s+/g, ""), // Remove spaces: "Animated Number" -> "AnimatedNumber"
+      componentName.replace(/\s+/g, "") + "Countdown", // Add Countdown: "AnimatedNumber" -> "AnimatedNumberCountdown"
+      componentName.replace(/\s+/g, "") + "Component", // Add Component suffix
+      undefined, // Let AST parser auto-detect best component
+    ];
+
+    console.log(`🎯 Trying ${componentNameVariations.length} name variations for AST parsing...`);
+
+    // Try each variation until we find props
+    for (const nameVariation of componentNameVariations) {
+      const propsInfo = extractComponentPropsFromSource(
+        sourceCode,
+        nameVariation,
+        {
+          includePrivateProps: false,
+          extractExamples: true,
+          resolveUnions: true,
+          maxDepth: 3,
+        }
+      );
+
+      if (propsInfo && propsInfo.props.length > 0) {
+        console.log(
+          `✅ Successfully extracted ${propsInfo.props.length} props for ${componentName} using variation: ${nameVariation || 'auto-detect'}`
+        );
+        return propsInfo;
+      }
+    }
+
+    console.warn(`⚠️ No props found for ${componentName} with any name variation (may have no props interface)`);
+    return null;
+  } catch (error) {
+    console.error(`💥 Error extracting props info for ${componentName}:`, error);
+    return null;
+  }
+}
+
 export async function getDefaultProps(
   componentName: string
 ): Promise<Record<string, unknown>> {
   try {
-    // In production, use pre-generated props map
-    if (isProduction && componentPropsMap[componentName]) {
-      return componentPropsMap[componentName];
-    }
-
-    // Development mode: try to extract props dynamically
+    console.log(`🔍 Extracting default props for component: ${componentName}`);
+    
+    // Get source code (which now prioritizes componentSourceCode.ts)
     const sourceCode = await getComponentSourceCode(componentName);
-
-    // Simple extraction of default props from source code
-    const defaultProps: Record<string, unknown> = {};
-
-    // Look for default parameter values in function definitions
-    const functionMatch = sourceCode.match(
-      /function\s+\w+\s*\([^)]*\{([^}]+)\}[^)]*\)/
-    );
-    if (functionMatch) {
-      const params = functionMatch[1];
-      const propMatches = params.matchAll(/(\w+)\s*=\s*([^,}]+)/g);
-
-      for (const match of propMatches) {
-        const [, propName, defaultValue] = match;
-        try {
-          // Try to parse the default value
-          if (defaultValue.includes('"') || defaultValue.includes("'")) {
-            defaultProps[propName] = defaultValue.replace(/['"]/g, "");
-          } else if (defaultValue === "true" || defaultValue === "false") {
-            defaultProps[propName] = defaultValue === "true";
-          } else if (!isNaN(Number(defaultValue))) {
-            defaultProps[propName] = Number(defaultValue);
-          } else {
-            defaultProps[propName] = defaultValue.trim();
-          }
-        } catch {
-          defaultProps[propName] = defaultValue.trim();
-        }
-      }
+    if (!sourceCode || sourceCode.includes("// ❌ Component source not found") || sourceCode.includes("// 💥 Critical error")) {
+      console.warn(`❌ No valid source code available for ${componentName} - cannot extract default props`);
+      return {};
     }
 
-    return defaultProps;
+    // 🧠 100% TypeScript AST-based extraction
+    console.log(`🔬 Using TypeScript AST parser to extract default props for ${componentName}`);
+    const astDefaultValues = extractDefaultValuesFromSource(sourceCode);
+    
+    if (Object.keys(astDefaultValues).length > 0) {
+      console.log(`✅ AST parser found ${Object.keys(astDefaultValues).length} default values for ${componentName}:`, Object.keys(astDefaultValues));
+      return astDefaultValues;
+    }
+
+    console.log(`ℹ️ No default values found for ${componentName} (normal if component has no defaults)`);
+    return {};
   } catch (error) {
-    console.error(
-      `Error extracting default props for ${componentName}:`,
-      error
-    );
+    console.error(`💥 Error extracting default props for ${componentName}:`, error);
     return {};
   }
 }

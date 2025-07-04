@@ -59,6 +59,7 @@ import {
 } from "@/components/ui/tooltip";
 import V from "@/public/VyomaUI.svg";
 import Footer from "@/components/Footer";
+import parser from "html-react-parser";
 
 interface SidebarComponentProps {
   children: React.ReactNode;
@@ -317,11 +318,6 @@ export default function SidebarComponent({ children }: SidebarComponentProps) {
                     transition={{ duration: 0.3 }}
                   />
                   <span className="truncate font-medium">{comp.name}</span>
-                  {comp.isNew && (
-                    <Badge className="ml-auto text-[0.65rem] px-1.5 py-0.5 h-5 bg-gradient-to-r from-blue-500 to-purple-600 text-white border-0 shadow-sm">
-                      NEW
-                    </Badge>
-                  )}
                   {isActive && (
                     <motion.div
                       className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent rounded-lg"
@@ -344,7 +340,7 @@ export default function SidebarComponent({ children }: SidebarComponentProps) {
                 </p>
                 {comp.description && (
                   <p className="text-xs text-muted-foreground leading-relaxed">
-                    {comp.description}
+                    {parser(comp.description)}
                   </p>
                 )}
               </div>

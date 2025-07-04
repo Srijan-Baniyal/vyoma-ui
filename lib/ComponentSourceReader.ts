@@ -1,6 +1,28 @@
 import { readFile, readdir } from "fs/promises";
 import { join } from "path";
 
+// Import the pre-generated source map for production
+let componentSourceMap: Record<string, string> = {};
+let componentPropsMap: Record<string, Record<string, unknown>> = {};
+
+// Try to import the pre-generated source map (only available in production builds)
+async function loadSourceMap() {
+  try {
+    const sourceMapModule = await import('./componentSourceCode');
+    componentSourceMap = sourceMapModule.componentSourceMap || {};
+    componentPropsMap = sourceMapModule.componentPropsMap || {};
+  } catch {
+    // Source map not available (development mode), will use filesystem reading
+    console.log('Development mode: Using filesystem reading for component sources');
+  }
+}
+
+// Initialize the source map
+loadSourceMap();
+
+// Check if we're in production or if source map is available
+const isProduction = process.env.NODE_ENV === 'production' || Object.keys(componentSourceMap).length > 0;
+
 // Dynamic component discovery by reading the ComponentMapping file
 async function getComponentMappingImports(): Promise<Record<string, string>> {
   try {
@@ -47,6 +69,11 @@ async function getComponentMappingImports(): Promise<Record<string, string>> {
 async function findComponentFile(
   componentName: string
 ): Promise<string | null> {
+  // In production, don't search filesystem
+  if (isProduction) {
+    return null;
+  }
+
   const searchDirs = ["components", "components/vui", "components/ui", "components/vui/text", "components/vui/buttons"];
   const possibleNames = [
     `${componentName}.tsx`,
@@ -106,7 +133,12 @@ export async function getComponentSourceCode(
   componentName: string
 ): Promise<string> {
   try {
-    // First, try to get the component class name and find it in imports
+    // In production, use pre-generated source map
+    if (isProduction && componentSourceMap[componentName]) {
+      return componentSourceMap[componentName];
+    }
+
+    // Development mode: read from filesystem
     const componentClassName = await getComponentClassName(componentName);
     const imports = await getComponentMappingImports();
 
@@ -199,64 +231,56 @@ export async function getComponentUsageExample(
 
 export default function Example() {
   return (
-    <div>
+    <div className="p-8">
       <${componentClassName}${propsString ? ` ${propsString}` : ""} />
     </div>
   );
 }`;
 }
 
-// Dynamic props detection based on component analysis
 export async function getDefaultProps(
   componentName: string
 ): Promise<Record<string, unknown>> {
   try {
+    // In production, use pre-generated props map
+    if (isProduction && componentPropsMap[componentName]) {
+      return componentPropsMap[componentName];
+    }
+
+    // Development mode: try to extract props dynamically
     const sourceCode = await getComponentSourceCode(componentName);
-
-    // Basic props extraction from TypeScript interfaces and default values
-    const propsDefaults: Record<string, unknown> = {};
-
-    // Look for common prop patterns in the source code
-    if (componentName.toLowerCase().includes("decryption")) {
-      propsDefaults.text = "Hover to decrypt this text!";
-      propsDefaults.speed = 50;
-      propsDefaults.sequential = true;
-      propsDefaults.animateOn = "hover";
-    }
-
-    if (componentName.toLowerCase().includes("typing")) {
-      propsDefaults.placeholder = "Start typing...";
-      propsDefaults.delay = 100;
-    }
-
-    if (componentName.toLowerCase().includes("counting")) {
-      propsDefaults.start = 0;
-      propsDefaults.end = 100;
-      propsDefaults.duration = 2000;
-    }
-
-    // Extract default values from the source code
-    const defaultValueRegex = /(\w+):\s*([^,\n}]+)\s*=/g;
-    let match;
-    while ((match = defaultValueRegex.exec(sourceCode)) !== null) {
-      const [propName, defaultValue] = match;
-      try {
-        // Try to parse the default value
-        if (defaultValue.includes('"') || defaultValue.includes("'")) {
-          propsDefaults[propName] = defaultValue.replace(/['"]/g, "");
-        } else if (defaultValue === "true" || defaultValue === "false") {
-          propsDefaults[propName] = defaultValue === "true";
-        } else if (!isNaN(Number(defaultValue))) {
-          propsDefaults[propName] = Number(defaultValue);
-        }
-      } catch {
-        // Skip if can't parse
+    
+    // Simple extraction of default props from source code
+    const defaultProps: Record<string, unknown> = {};
+    
+    // Look for default parameter values in function definitions
+    const functionMatch = sourceCode.match(/function\s+\w+\s*\([^)]*\{([^}]+)\}[^)]*\)/);
+    if (functionMatch) {
+      const params = functionMatch[1];
+      const propMatches = params.matchAll(/(\w+)\s*=\s*([^,}]+)/g);
+      
+      for (const match of propMatches) {
+        const [, propName, defaultValue] = match;
+        try {
+          // Try to parse the default value
+          if (defaultValue.includes('"') || defaultValue.includes("'")) {
+            defaultProps[propName] = defaultValue.replace(/['"]/g, '');
+          } else if (defaultValue === 'true' || defaultValue === 'false') {
+            defaultProps[propName] = defaultValue === 'true';
+          } else if (!isNaN(Number(defaultValue))) {
+            defaultProps[propName] = Number(defaultValue);
+          } else {
+            defaultProps[propName] = defaultValue.trim();
+          }
+                 } catch {
+           defaultProps[propName] = defaultValue.trim();
+         }
       }
     }
-
-    return propsDefaults;
+    
+    return defaultProps;
   } catch (error) {
-    console.error(`Error extracting props for ${componentName}:`, error);
+    console.error(`Error extracting default props for ${componentName}:`, error);
     return {};
   }
 }

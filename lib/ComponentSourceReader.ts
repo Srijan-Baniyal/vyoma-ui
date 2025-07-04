@@ -37,6 +37,11 @@ const isProduction = process.env.NODE_ENV === "production";
 async function getComponentPathFromMapping(
   componentName: string
 ): Promise<string | null> {
+  // In production, don't try to read files
+  if (isProduction) {
+    return null;
+  }
+
   try {
     const mappingPath = join(process.cwd(), "data/ComponentMapping.ts");
     const mappingContent = await readFile(mappingPath, "utf-8");
@@ -61,6 +66,11 @@ async function getComponentPathFromMapping(
 
 // Dynamic component discovery by reading the ComponentMapping file
 async function getComponentMappingImports(): Promise<Record<string, string>> {
+  // In production, don't try to read files
+  if (isProduction) {
+    return {};
+  }
+
   try {
     const mappingFilePath = join(process.cwd(), "data/ComponentMapping.ts");
     const mappingContent = await readFile(mappingFilePath, "utf-8");
@@ -150,6 +160,11 @@ async function findComponentFile(
 
 // Get the component class name from the component mapping
 async function getComponentClassName(displayName: string): Promise<string> {
+  // In production, don't try to read files - just use fallback
+  if (isProduction) {
+    return displayName.replace(/\s+/g, "");
+  }
+
   try {
     const mappingFilePath = join(process.cwd(), "data/ComponentMapping.ts");
     const mappingContent = await readFile(mappingFilePath, "utf-8");
@@ -182,9 +197,29 @@ export async function getComponentSourceCode(
       await loadSourceMap();
     }
 
-    // In production, use pre-generated source map
-    if (isProduction && componentSourceMap[componentName]) {
-      return componentSourceMap[componentName];
+    // In production, ONLY use pre-generated source map
+    if (isProduction) {
+      if (componentSourceMap[componentName]) {
+        return componentSourceMap[componentName];
+      } else {
+        // Component not found in pre-generated source map
+        console.warn(`Component "${componentName}" not found in production source map`);
+        return `// Source code not available for ${componentName}
+// This component was not included in the production build
+
+import React from 'react';
+
+export default function ${componentName.replace(/\s+/g, "")}() {
+  return (
+    <div className="p-8 text-center">
+      <h2 className="text-2xl font-bold mb-4">${componentName}</h2>
+      <p className="text-muted-foreground">
+        This component is coming soon. Stay tuned for updates!
+      </p>
+    </div>
+  );
+}`;
+      }
     }
 
     // Development mode: read from filesystem
@@ -282,6 +317,37 @@ export async function getComponentUsageExample(
   componentName: string,
   defaultProps?: Record<string, unknown>
 ): Promise<string> {
+  // In production, provide a simple usage example without reading files
+  if (isProduction) {
+    const componentClassName = componentName.replace(/\s+/g, "");
+    const propsString =
+      defaultProps && Object.keys(defaultProps).length > 0
+        ? Object.entries(defaultProps)
+            .map(([key, value]) => {
+              if (typeof value === "string") {
+                return `${key}="${value}"`;
+              } else if (typeof value === "boolean") {
+                return value ? key : `${key}={false}`;
+              } else if (typeof value === "number") {
+                return `${key}={${value}}`;
+              } else {
+                return `${key}={${JSON.stringify(value)}}`;
+              }
+            })
+            .join(" ")
+        : "";
+
+    return `import ${componentClassName} from '@/components/vui/${componentClassName}';
+
+export default function Example() {
+  return (
+    <div className="p-8">
+      <${componentClassName}${propsString ? ` ${propsString}` : ""} />
+    </div>
+  );
+}`;
+  }
+
   const componentClassName = await getComponentClassName(componentName);
   const imports = await getComponentMappingImports();
   const importPath =

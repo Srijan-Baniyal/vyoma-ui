@@ -23,7 +23,7 @@ export default function Navigation() {
       link: "/showcase",
     },
     {
-      name: "Themes (Beta)",
+      name: "Theme(Beta)",
       link: "/themes",
     },
   ];
@@ -65,13 +65,14 @@ export default function Navigation() {
         <MobileNavMenu
           isOpen={isMobileMenuOpen}
           onClose={() => setIsMobileMenuOpen(false)}
+          className="backdrop-blur-xl"
         >
           {navItems.map((item, idx) => (
             <a
               key={`mobile-link-${idx}`}
               href={item.link}
               onClick={() => setIsMobileMenuOpen(false)}
-              className="relative text-neutral-600 dark:text-neutral-300 hover:text-foreground transition-colors"
+              className="relative text-neutral-600 dark:text-neutral-300 backdrop-blur-xl hover:text-foreground transition-colors"
               target={item.link.startsWith("http") ? "_blank" : undefined}
               rel={
                 item.link.startsWith("http") ? "noopener noreferrer" : undefined

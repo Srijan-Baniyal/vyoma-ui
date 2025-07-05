@@ -1,4 +1,5 @@
 "use client";
+
 import { cn } from "@/lib/utils";
 import { IconMenu2, IconX } from "@tabler/icons-react";
 import {
@@ -7,9 +8,9 @@ import {
   useScroll,
   useMotionValueEvent,
 } from "motion/react";
-import Image from "next/image";
 import React, { useRef, useState } from "react";
-import V from "@/public/VyomaUI.svg";
+import Image from "next/image";
+import VyomaUI from "@/public/VyomaUI.svg";
 
 interface NavbarProps {
   children: React.ReactNode;
@@ -88,7 +89,7 @@ export const NavBody = ({ children, className, visible }: NavBodyProps) => {
       animate={{
         backdropFilter: visible ? "blur(20px)" : "none",
         boxShadow: visible
-          ? "0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(255, 255, 255, 0.1)"
+          ? "0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04)"
           : "none",
         width: visible ? "45%" : "100%",
         y: visible ? 12 : 0,
@@ -102,11 +103,14 @@ export const NavBody = ({ children, className, visible }: NavBodyProps) => {
       }}
       style={{
         minWidth: "800px",
+        backgroundColor: visible
+          ? "rgba(255, 255, 255, 0.1)"
+          : "rgba(255, 255, 255, 0)",
       }}
       className={cn(
         "relative z-[60] mx-auto hidden w-full max-w-7xl items-center px-6 py-3 lg:grid lg:grid-cols-3",
-        visible 
-          ? "border border-white/10 dark:border-white/5 rounded-2xl" 
+        visible
+          ? "border border-white/20 dark:border-white/10 rounded-2xl bg-white/10 dark:bg-black/10 shadow-[0_8px_32px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
           : "border-0",
         className
       )}
@@ -139,7 +143,7 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
         <motion.a
           onMouseEnter={() => setHovered(idx)}
           onClick={onItemClick}
-          className="relative px-4 py-2.5 text-neutral-800 transition-colors duration-200 hover:text-neutral-900 dark:text-neutral-200 dark:hover:text-white"
+          className="relative px-4 py-2.5 text-neutral-700 transition-colors duration-200 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white"
           key={`link-${idx}`}
           href={item.link}
           target={item.link.startsWith("http") ? "_blank" : undefined}
@@ -150,7 +154,7 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
           {hovered === idx && (
             <motion.div
               layoutId="hovered"
-              className="absolute inset-0 h-full w-full rounded-xl bg-black/5 dark:bg-white/10"
+              className="absolute inset-0 h-full w-full rounded-xl bg-white/20 dark:bg-white/10 backdrop-blur-sm"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
@@ -185,10 +189,15 @@ export const MobileNav = ({ children, className, visible }: MobileNavProps) => {
         damping: 40,
         mass: 0.8,
       }}
+      style={{
+        backgroundColor: visible
+          ? "rgba(255, 255, 255, 0.1)"
+          : "rgba(255, 255, 255, 0)",
+      }}
       className={cn(
         "relative z-50 mx-auto flex w-full max-w-[calc(100vw-1rem)] flex-col items-center justify-between py-3 lg:hidden",
-        visible 
-          ? "border border-white/10 dark:border-white/5" 
+        visible
+          ? "border border-white/20 dark:border-white/10 bg-white/10 dark:bg-black/10 shadow-[0_8px_32px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
           : "border-0",
         className
       )}
@@ -220,18 +229,31 @@ export const MobileNavMenu = ({
   isOpen,
 }: MobileNavMenuProps) => {
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       {isOpen && (
         <motion.div
           initial={{ opacity: 0, y: -20, scale: 0.95 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
+          animate={{
+            opacity: 1,
+            y: 0,
+            scale: 0.98,
+            backdropFilter: "blur(20px)",
+            boxShadow:
+              "0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04)",
+          }}
           exit={{ opacity: 0, y: -20, scale: 0.95 }}
           transition={{
-            duration: 0.2,
-            ease: [0.4, 0.0, 0.2, 1],
+            type: "spring",
+            stiffness: 300,
+            damping: 40,
+            mass: 0.8,
+          }}
+          style={{
+            backgroundColor: "rgba(255, 255, 255, 0.1)",
           }}
           className={cn(
-            "absolute inset-x-0 top-16 z-50 flex w-full flex-col items-start justify-start gap-4 px-6 py-6",
+            "fixed left-4 right-4 top-20 z-[9999] flex flex-col items-start justify-start gap-4 py-6 px-4",
+            "border border-white/20 dark:border-white/10 rounded-2xl bg-white/10 dark:bg-black/10 shadow-[0_8px_32px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.3)]",
             className
           )}
         >
@@ -252,7 +274,7 @@ export const MobileNavToggle = ({
   return (
     <motion.button
       onClick={onClick}
-      className="flex h-10 w-10 items-center justify-center rounded-xl transition-colors hover:bg-black/5 dark:hover:bg-white/10"
+      className="flex h-10 w-10 items-center justify-center rounded-xl transition-colors hover:bg-white/10 dark:hover:bg-white/5 backdrop-blur-sm border border-white/20 dark:border-white/10"
       whileTap={{ scale: 0.9 }}
       transition={{ duration: 0.1 }}
     >
@@ -265,7 +287,7 @@ export const MobileNavToggle = ({
             exit={{ rotate: 90, opacity: 0 }}
             transition={{ duration: 0.15 }}
           >
-            <IconX className="h-5 w-5 text-neutral-800 dark:text-neutral-200" />
+            <IconX className="h-5 w-5 text-neutral-700 dark:text-neutral-300" />
           </motion.div>
         ) : (
           <motion.div
@@ -275,7 +297,7 @@ export const MobileNavToggle = ({
             exit={{ rotate: -90, opacity: 0 }}
             transition={{ duration: 0.15 }}
           >
-            <IconMenu2 className="h-5 w-5 text-neutral-800 dark:text-neutral-200" />
+            <IconMenu2 className="h-5 w-5 text-neutral-700 dark:text-neutral-300" />
           </motion.div>
         )}
       </AnimatePresence>
@@ -297,15 +319,18 @@ export const NavbarLogo = () => {
         whileHover={{ rotate: 5 }}
         transition={{ duration: 0.2 }}
       >
-        <Image
-          src={V}
-          alt="Vyoma UI"
-          width={32}
-          height={32}
-          className="h-8 w-8"
-        />
+        <div className="h-10 w-10 rounded-lg flex items-center justify-center shadow-lg">
+          <Image
+            src={VyomaUI}
+            alt="Vyoma UI"
+            width={40}
+            height={40}
+            priority
+            quality={100}
+          />
+        </div>
       </motion.div>
-      <span className="text-lg font-semibold text-neutral-900 dark:text-white">
+      <span className="text-lg font-semibold text-neutral-800 dark:text-white">
         Vyoma UI
       </span>
     </motion.a>
@@ -324,22 +349,24 @@ export const NavbarButton = ({
   as?: React.ElementType;
   children: React.ReactNode;
   className?: string;
-  variant?: "primary" | "secondary" | "dark" | "gradient";
+  variant?: "primary" | "secondary" | "dark" | "gradient" | "glass";
 } & (
   | React.ComponentPropsWithoutRef<"a">
   | React.ComponentPropsWithoutRef<"button">
 )) => {
   const baseStyles =
-    "px-4 py-2 rounded-xl text-sm font-semibold relative cursor-pointer transition-all duration-200 inline-flex items-center justify-center";
+    "px-4 py-2 rounded-xl text-sm font-semibold relative cursor-pointer transition-all duration-200 inline-flex items-center justify-center backdrop-blur-sm";
 
   const variantStyles = {
     primary:
-      "bg-white text-neutral-900 shadow-[0_4px_16px_rgba(0,0,0,0.08)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.12)] hover:-translate-y-0.5 border border-neutral-200/50 dark:bg-neutral-800 dark:text-white dark:border-neutral-700/50",
+      "bg-white/90 text-neutral-900 shadow-[0_4px_16px_rgba(0,0,0,0.08)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.12)] hover:-translate-y-0.5 border border-white/20 dark:bg-white/10 dark:text-white dark:border-white/10",
     secondary:
-      "bg-transparent text-neutral-700 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800 border border-neutral-200 dark:border-neutral-700",
-    dark: "bg-neutral-900 text-white shadow-[0_4px_16px_rgba(0,0,0,0.12)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.16)] hover:-translate-y-0.5 border border-neutral-800",
+      "bg-white/10 text-neutral-700 hover:bg-white/20 dark:text-neutral-300 dark:hover:bg-white/10 border border-white/20 dark:border-white/10",
+    dark: "bg-black/80 text-white shadow-[0_4px_16px_rgba(0,0,0,0.12)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.16)] hover:-translate-y-0.5 border border-black/20 dark:border-white/10",
     gradient:
-      "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-[0_4px_16px_rgba(59,130,246,0.3)] hover:shadow-[0_8px_24px_rgba(59,130,246,0.4)] hover:-translate-y-0.5",
+      "bg-gradient-to-r from-blue-500/90 to-blue-600/90 text-white shadow-[0_4px_16px_rgba(59,130,246,0.3)] hover:shadow-[0_8px_24px_rgba(59,130,246,0.4)] hover:-translate-y-0.5 border border-blue-400/20",
+    glass:
+      "bg-white/10 text-neutral-700 dark:text-neutral-300 border border-white/20 dark:border-white/10 hover:bg-white/20 dark:hover:bg-white/10",
   };
 
   return (

@@ -5,7 +5,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const pillVariants = cva(
-  "inline-flex items-center gap-3 px-6 py-3 rounded-full border backdrop-blur-sm font-medium transition-all",
+  "inline-flex items-center gap-2 md:gap-3 px-3 py-2 md:px-6 md:py-3 rounded-full border backdrop-blur-sm font-medium transition-all",
   {
     variants: {
       variant: {
@@ -18,9 +18,9 @@ const pillVariants = cva(
         outline: "border-border bg-background/50 text-foreground",
       },
       size: {
-        default: "px-6 py-3 text-sm",
-        sm: "px-4 py-2 text-xs",
-        lg: "px-8 py-4 text-base",
+        default: "px-3 py-2 md:px-6 md:py-3 text-xs md:text-sm",
+        sm: "px-2 py-1 md:px-4 md:py-2 text-xs",
+        lg: "px-4 py-3 md:px-8 md:py-4 text-sm md:text-base",
       },
     },
     defaultVariants: {
@@ -34,11 +34,11 @@ const statusVariants = cva("rounded-full", {
   variants: {
     status: {
       none: "hidden",
-      active: "w-2 h-2 bg-green-500 animate-pulse",
-      inactive: "w-2 h-2 bg-gray-400",
-      warning: "w-2 h-2 bg-yellow-500 animate-pulse",
-      error: "w-2 h-2 bg-red-500 animate-pulse",
-      info: "w-2 h-2 bg-blue-500 animate-pulse",
+      active: "w-1.5 h-1.5 md:w-2 md:h-2 bg-green-500 animate-pulse",
+      inactive: "w-1.5 h-1.5 md:w-2 md:h-2 bg-gray-400",
+      warning: "w-1.5 h-1.5 md:w-2 md:h-2 bg-yellow-500 animate-pulse",
+      error: "w-1.5 h-1.5 md:w-2 md:h-2 bg-red-500 animate-pulse",
+      info: "w-1.5 h-1.5 md:w-2 md:h-2 bg-blue-500 animate-pulse",
     },
   },
   defaultVariants: {
@@ -67,12 +67,12 @@ const Pill = React.forwardRef<HTMLDivElement, PillProps>(
         {...props}
       >
         {icon && (
-          <span className="w-5 h-5 flex items-center justify-center">
+          <span className="w-3 h-3 md:w-4 md:h-4 lg:w-5 lg:h-5 flex items-center justify-center flex-shrink-0">
             {icon}
           </span>
         )}
-        <span>{children}</span>
-        <div className={cn(statusVariants({ status }))} />
+        <span className="truncate">{children}</span>
+        <div className={cn(statusVariants({ status }), "flex-shrink-0")} />
       </Comp>
     )
   }

@@ -69,7 +69,7 @@ export const Navbar = ({ children, className }: NavbarProps) => {
   return (
     <motion.div
       ref={ref}
-      className={cn("sticky inset-x-0 top-0 z-50 w-full", className)}
+      className={cn("sticky inset-x-0 top-5 z-50 w-full", className)}
     >
       {React.Children.map(children, (child) =>
         React.isValidElement(child)
@@ -90,8 +90,9 @@ export const NavBody = ({ children, className, visible }: NavBodyProps) => {
         backdropFilter: visible ? "blur(20px)" : "none",
         boxShadow: visible
           ? "0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04)"
-          : "none",
+          : "blur(0px)",
         width: visible ? "45%" : "100%",
+        height: visible ? "100%" : "100%",
         y: visible ? 12 : 0,
         scale: visible ? 0.98 : 1,
       }}
@@ -177,11 +178,12 @@ export const MobileNav = ({ children, className, visible }: MobileNavProps) => {
           ? "0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04)"
           : "none",
         width: visible ? "95%" : "100%",
+        height: visible ? "100%" : "100%",
         paddingRight: visible ? "16px" : "12px",
         paddingLeft: visible ? "16px" : "12px",
         borderRadius: visible ? "16px" : "0px",
         y: visible ? 16 : 0,
-        scale: visible ? 0.98 : 1,
+        scale: visible ? 0.98 : 0.98,
       }}
       transition={{
         type: "spring",
@@ -229,31 +231,29 @@ export const MobileNavMenu = ({
   isOpen,
 }: MobileNavMenuProps) => {
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence mode="sync">
       {isOpen && (
         <motion.div
-          initial={{ opacity: 0, y: -20, scale: 0.95 }}
           animate={{
-            opacity: 1,
-            y: 0,
-            scale: 0.98,
             backdropFilter: "blur(20px)",
             boxShadow:
-              "0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04)",
+              "0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.02)",
+            width: "95%",
+            height: "100%",
+            paddingRight: "16px",
+            paddingLeft: "12px",
+            borderRadius: "16px",
+            scale: 0.98,
           }}
-          exit={{ opacity: 0, y: -20, scale: 0.95 }}
           transition={{
             type: "spring",
             stiffness: 300,
             damping: 40,
             mass: 0.8,
           }}
-          style={{
-            backgroundColor: "rgba(255, 255, 255, 0.1)",
-          }}
           className={cn(
-            "fixed left-4 right-4 top-20 z-[9999] flex flex-col items-start justify-start gap-4 py-6 px-4",
-            "border border-white/20 dark:border-white/10 rounded-2xl bg-white/10 dark:bg-black/10 shadow-[0_8px_32px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.3)]",
+            "relative z-50 mx-auto flex w-full max-w-[calc(100vw-1rem)] flex-col items-center justify-between py-3 lg:hidden",
+            "border border-white/20 dark:border-white/10 bg-white/10 dark:bg-black/10 shadow-[0_8px_32px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.3)]",
             className
           )}
         >

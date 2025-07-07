@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 import {
   ChevronRight,
   Home,
-  Menu,
   X,
   ExternalLink,
   Search,
@@ -95,7 +94,6 @@ const createAnimationVariants = (shouldReduceMotion: boolean) => ({
 export default function SidebarComponent({ children }: SidebarComponentProps) {
   const pathname = usePathname();
   const shouldReduceMotion = useReducedMotion();
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -160,21 +158,12 @@ export default function SidebarComponent({ children }: SidebarComponentProps) {
     return filtered;
   }, [debouncedSearchQuery]);
 
-  // Close mobile sidebar when route changes
-  useEffect(() => {
-    setIsMobileOpen(false);
-  }, [pathname]);
-
   // Initialize dark mode state
   useEffect(() => {
     setIsDarkMode(document.documentElement.classList.contains("dark"));
   }, []);
 
   // Optimized handlers with useCallback
-  const handleMobileToggle = useCallback(() => {
-    setIsMobileOpen((prev) => !prev);
-  }, []);
-
   const handleSearchChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setSearchQuery(e.target.value);
@@ -188,14 +177,12 @@ export default function SidebarComponent({ children }: SidebarComponentProps) {
     document.documentElement.classList.toggle("dark", newDarkMode);
   }, [isDarkMode]);
 
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent) => {
-      if (e.key === "Escape" && isMobileOpen) {
-        setIsMobileOpen(false);
-      }
-    },
-    [isMobileOpen]
-  );
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === "Escape") {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  }, []);
 
   const toggleCategory = useCallback((category: string) => {
     setOpenCategories((prev) => {
@@ -356,18 +343,6 @@ export default function SidebarComponent({ children }: SidebarComponentProps) {
   return (
     <div onKeyDown={handleKeyDown}>
       <SidebarProvider>
-        {/* Enhanced mobile sidebar overlay */}
-        <AnimatePresence>
-          {isMobileOpen && (
-            <motion.div
-              {...animations.overlay}
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-30 md:hidden"
-              onClick={() => setIsMobileOpen(false)}
-              aria-hidden="true"
-            />
-          )}
-        </AnimatePresence>
-
         <Sidebar className="border-r bg-background/98 backdrop-blur-md supports-[backdrop-filter]:bg-background/95 z-40 shadow-sm">
           <SidebarHeader className="border-b border-border/50 p-0">
             <div className="flex items-center justify-between p-4">
@@ -377,7 +352,7 @@ export default function SidebarComponent({ children }: SidebarComponentProps) {
               >
                 <div className="flex aspect-square size-12 items-center justify-center rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20 group-hover:border-primary/30 transition-all duration-200">
                   <Image
-                    src={V || "/placeholder.svg"}
+                    src={V}
                     alt="Vyoma UI Logo"
                     width={32}
                     height={32}
@@ -393,15 +368,6 @@ export default function SidebarComponent({ children }: SidebarComponentProps) {
                   </span>
                 </div>
               </Link>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="md:hidden h-8 w-8 hover:bg-accent/70 transition-colors duration-200"
-                onClick={() => setIsMobileOpen(false)}
-                aria-label="Close sidebar"
-              >
-                <X className="size-4" />
-              </Button>
             </div>
             <div className="px-4 pb-4">
               <div className="relative group">
@@ -525,15 +491,7 @@ export default function SidebarComponent({ children }: SidebarComponentProps) {
 
         <SidebarInset className="flex flex-col min-h-screen">
           <header className="sticky top-0 z-50 flex h-16 shrink-0 items-center gap-2 border-b border-border/50 bg-background/98 backdrop-blur-md supports-[backdrop-filter]:bg-background/95 px-4 shadow-sm">
-            <Button
-              variant="outline"
-              size="icon"
-              className="md:hidden mr-2 h-9 w-9 border-border/50 hover:bg-accent/70 transition-all duration-200"
-              onClick={handleMobileToggle}
-              aria-label="Open sidebar"
-            >
-              <Menu className="size-4" />
-            </Button>
+            <SidebarTrigger className="md:hidden mr-2 h-9 w-9" />
             <SidebarTrigger className="-ml-1 hidden md:flex hover:bg-accent/70 transition-colors duration-200" />
             <Separator
               orientation="vertical"
@@ -541,6 +499,7 @@ export default function SidebarComponent({ children }: SidebarComponentProps) {
             />
             <BreadcrumbNavigation />
             <div className="ml-auto flex items-center gap-2">
+              {/* More things will come here */}
               <Button
                 variant="ghost"
                 size="icon"

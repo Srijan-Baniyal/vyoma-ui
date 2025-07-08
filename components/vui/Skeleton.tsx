@@ -3,6 +3,7 @@
 import React from "react";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export interface SkeletonProps {
   /**
@@ -203,36 +204,21 @@ export function ProfileCardSkeleton() {
 }
 
 export function SkeletonShowcase() {
+  const isMobile = useIsMobile();
+  
   return (
-    <div className="flex items-center justify-center min-h-screen p-8">
-      <div className="w-full max-w-6xl space-y-12">
-        <motion.div
-          className="text-center space-y-4"
-          initial={{ opacity: 0, y: -32 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-        >
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-foreground to-foreground/60 bg-clip-text text-transparent">
-            Skeleton Loading Components
-          </h1>
-          <p className="text-xl text-muted-foreground">
-            Beautiful loading states for better user experience
-          </p>
-        </motion.div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+    <div className="flex items-center justify-center min-h-screen p-4 md:p-8">
+      <div className="w-full max-w-6xl space-y-8 md:space-y-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-start">
           {/* Profile Card Skeleton Demo */}
-          <div className="space-y-6">
+          <div className="space-y-4 md:space-y-6">
             <motion.div
               className="text-center"
               initial={{ opacity: 0, x: -32 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2, duration: 0.6 }}
             >
-              <h2 className="text-2xl font-semibold mb-2">
-                Profile Card Skeleton
-              </h2>
-              <p className="text-muted-foreground">
+              <p className="text-muted-foreground text-sm md:text-base">
                 A comprehensive loading state for user profile cards
               </p>
             </motion.div>
@@ -247,57 +233,54 @@ export function SkeletonShowcase() {
           </div>
 
           {/* Basic Skeleton Examples */}
-          <div className="space-y-6">
+          <div className="space-y-4 md:space-y-6">
             <motion.div
               className="text-center"
               initial={{ opacity: 0, x: 32 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2, duration: 0.6 }}
             >
-              <h2 className="text-2xl font-semibold mb-2">
-                Basic Skeleton Elements
-              </h2>
-              <p className="text-muted-foreground">
+              <p className="text-muted-foreground text-sm md:text-base">
                 Flexible building blocks for custom loading states
               </p>
             </motion.div>
 
             <motion.div
-              className="bg-card border border-border/50 rounded-2xl p-6 space-y-6"
+              className="bg-card border border-border/50 rounded-2xl p-4 md:p-6 space-y-4 md:space-y-6"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.6, duration: 0.6 }}
             >
               {/* Text lines */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-medium text-foreground">
+              <div className="space-y-3 md:space-y-4">
+                <h3 className={`${isMobile ? 'text-base' : 'text-lg'} font-medium text-foreground`}>
                   Text Content
                 </h3>
-                <div className="space-y-3">
-                  <Skeleton width="100%" height="1rem" />
-                  <Skeleton width="85%" height="1rem" />
-                  <Skeleton width="70%" height="1rem" />
+                <div className="space-y-2 md:space-y-3">
+                  <Skeleton width="100%" height={isMobile ? "0.75rem" : "1rem"} />
+                  <Skeleton width="85%" height={isMobile ? "0.75rem" : "1rem"} />
+                  <Skeleton width="70%" height={isMobile ? "0.75rem" : "1rem"} />
                 </div>
               </div>
 
               {/* Avatar examples */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-medium text-foreground">Avatars</h3>
-                <div className="flex items-center space-x-4">
-                  <Skeleton width={40} height={40} radius="full" />
-                  <Skeleton width={50} height={50} radius="full" />
-                  <Skeleton width={60} height={60} radius="full" />
+              <div className="space-y-3 md:space-y-4">
+                <h3 className={`${isMobile ? 'text-base' : 'text-lg'} font-medium text-foreground`}>Avatars</h3>
+                <div className="flex items-center space-x-3 md:space-x-4">
+                  <Skeleton width={isMobile ? 32 : 40} height={isMobile ? 32 : 40} radius="full" />
+                  <Skeleton width={isMobile ? 40 : 50} height={isMobile ? 40 : 50} radius="full" />
+                  <Skeleton width={isMobile ? 48 : 60} height={isMobile ? 48 : 60} radius="full" />
                 </div>
               </div>
 
               {/* Button examples */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-medium text-foreground">
+              <div className="space-y-3 md:space-y-4">
+                <h3 className={`${isMobile ? 'text-base' : 'text-lg'} font-medium text-foreground`}>
                   Buttons & Cards
                 </h3>
-                <div className="space-y-3">
-                  <Skeleton width="120px" height="2.5rem" radius="lg" />
-                  <Skeleton width="100%" height="4rem" radius="xl" />
+                <div className="space-y-2 md:space-y-3">
+                  <Skeleton width={isMobile ? "100px" : "120px"} height={isMobile ? "2rem" : "2.5rem"} radius="lg" />
+                  <Skeleton width="100%" height={isMobile ? "3rem" : "4rem"} radius="xl" />
                 </div>
               </div>
             </motion.div>
@@ -306,25 +289,25 @@ export function SkeletonShowcase() {
 
         {/* Usage Example */}
         <motion.div
-          className="bg-card border border-border/50 rounded-2xl p-6"
+          className="bg-card border border-border/50 rounded-2xl p-4 md:p-6"
           initial={{ opacity: 0, y: 32 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8, duration: 0.6 }}
         >
-          <h3 className="text-xl font-semibold mb-4">Usage Examples</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-3">
-              <h4 className="font-medium text-foreground">Basic Skeleton</h4>
-              <div className="bg-muted/50 rounded-lg p-4">
-                <code className="text-sm text-foreground/80">
+          <h3 className={`${isMobile ? 'text-lg' : 'text-xl'} font-semibold mb-3 md:mb-4`}>Usage Examples</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+            <div className="space-y-2 md:space-y-3">
+              <h4 className={`font-medium text-foreground ${isMobile ? 'text-sm' : 'text-base'}`}>Basic Skeleton</h4>
+              <div className="bg-muted/50 rounded-lg p-3 md:p-4">
+                <code className={`${isMobile ? 'text-xs' : 'text-sm'} text-foreground/80`}>
                   {`<Skeleton width="100%" height="1rem" />`}
                 </code>
               </div>
             </div>
-            <div className="space-y-3">
-              <h4 className="font-medium text-foreground">Profile Card</h4>
-              <div className="bg-muted/50 rounded-lg p-4">
-                <code className="text-sm text-foreground/80">
+            <div className="space-y-2 md:space-y-3">
+              <h4 className={`font-medium text-foreground ${isMobile ? 'text-sm' : 'text-base'}`}>Profile Card</h4>
+              <div className="bg-muted/50 rounded-lg p-3 md:p-4">
+                <code className={`${isMobile ? 'text-xs' : 'text-sm'} text-foreground/80`}>
                   {`<ProfileCardSkeleton />`}
                 </code>
               </div>
@@ -338,15 +321,14 @@ export function SkeletonShowcase() {
 
 export function SkeletonTheme() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       <motion.div
         className="text-center"
         initial={{ opacity: 0, x: -32 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.2, duration: 0.6 }}
       >
-        <h2 className="text-2xl font-semibold mb-2">Profile Card Skeleton</h2>
-        <p className="text-muted-foreground">
+        <p className="text-muted-foreground text-sm md:text-base">
           A comprehensive loading state for user profile cards
         </p>
       </motion.div>

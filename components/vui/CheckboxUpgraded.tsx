@@ -4,6 +4,7 @@ import * as React from "react";
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 // Streamlined animated check icon with clean animation styles
 const AnimatedCheckIcon = ({
@@ -289,59 +290,60 @@ export { CheckboxRefined };
 
 export function CheckboxRefinedShowcase() {
   const [controlled, setControlled] = React.useState(false);
+  const isMobile = useIsMobile();
+  
   return (
     <div className="min-h-5 text-white overflow-hidden">
-      <div className="relative z-10 max-w-7xl mx-auto px-8 py-16 space-y-32">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-16 space-y-16 md:space-y-32">
         {/* Interactive Animation Demo */}
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
-          <div className="space-y-8">
+        <div className="grid lg:grid-cols-2 gap-8 md:gap-16 items-center">
+          <div className="space-y-6 md:space-y-8">
             <div className="space-y-4">
-              <h2 className="text-3xl font-light text-white">
-                Animation Variants
-              </h2>
-              <p className="text-slate-400">
+              <p className="text-slate-400 text-sm md:text-base">
                 Choose your preferred interaction style
               </p>
             </div>
-            <div className="grid gap-8">
-              <div className="group p-8 bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 hover:bg-white/10 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-blue-500/10">
-                <div className="flex items-center justify-between mb-4">
+            <div className="grid gap-4 md:gap-8">
+              <div className="group p-4 md:p-8 bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 hover:bg-white/10 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-blue-500/10">
+                <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-3">
                   <div>
-                    <h3 className="text-lg font-medium text-white">
+                    <h3 className={`${isMobile ? 'text-base' : 'text-lg'} font-medium text-white`}>
                       Default Animation
                     </h3>
-                    <p className="text-sm text-slate-400">
+                    <p className="text-xs md:text-sm text-slate-400">
                       Clean and professional
                     </p>
                   </div>
-                  <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center group-hover:bg-blue-500/30 transition-colors">
-                    <div className="w-6 h-6 bg-blue-400 rounded opacity-70" />
+                  <div className={`${isMobile ? 'w-8 h-8' : 'w-12 h-12'} bg-blue-500/20 rounded-xl flex items-center justify-center group-hover:bg-blue-500/30 transition-colors`}>
+                    <div className={`${isMobile ? 'w-4 h-4' : 'w-6 h-6'} bg-blue-400 rounded opacity-70`} />
                   </div>
                 </div>
                 <CheckboxRefined
                   label="Enable default animations"
                   variant="default"
                   colorScheme="blue"
+                  size={isMobile ? "sm" : "md"}
                   description="Crisp and immediate visual feedback"
                 />
               </div>
 
-              <div className="group p-8 bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 hover:bg-white/10 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-purple-500/10">
-                <div className="flex items-center justify-between mb-4">
+              <div className="group p-4 md:p-8 bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 hover:bg-white/10 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-purple-500/10">
+                <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-3">
                   <div>
-                    <h3 className="text-lg font-medium text-white">
+                    <h3 className={`${isMobile ? 'text-base' : 'text-lg'} font-medium text-white`}>
                       Smooth Animation
                     </h3>
-                    <p className="text-sm text-slate-400">Fluid and elegant</p>
+                    <p className="text-xs md:text-sm text-slate-400">Fluid and elegant</p>
                   </div>
-                  <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center group-hover:bg-purple-500/30 transition-colors">
-                    <div className="w-6 h-6 bg-purple-400 rounded opacity-70" />
+                  <div className={`${isMobile ? 'w-8 h-8' : 'w-12 h-12'} bg-purple-500/20 rounded-xl flex items-center justify-center group-hover:bg-purple-500/30 transition-colors`}>
+                    <div className={`${isMobile ? 'w-4 h-4' : 'w-6 h-6'} bg-purple-400 rounded opacity-70`} />
                   </div>
                 </div>
                 <CheckboxRefined
                   label="Enable smooth animations"
                   variant="smooth"
                   colorScheme="purple"
+                  size={isMobile ? "sm" : "md"}
                   description="Graceful transitions with organic motion"
                 />
               </div>
@@ -350,12 +352,12 @@ export function CheckboxRefinedShowcase() {
 
           <div className="relative">
             <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-3xl blur-xl" />
-            <div className="relative bg-black/20 backdrop-blur-xl rounded-3xl p-12 border border-white/10">
-              <div className="text-center space-y-8">
-                <h3 className="text-2xl font-light text-white">Live Preview</h3>
-                <div className="grid grid-cols-3 gap-8">
+            <div className="relative bg-black/20 backdrop-blur-xl rounded-3xl p-6 md:p-12 border border-white/10">
+              <div className="text-center space-y-6 md:space-y-8">
+                <h3 className={`${isMobile ? 'text-lg' : 'text-2xl'} font-light text-white`}>Live Preview</h3>
+                <div className="grid grid-cols-3 gap-4 md:gap-8">
                   <div className="text-center space-y-4">
-                    <div className="text-sm text-slate-400">Small</div>
+                    <div className="text-xs md:text-sm text-slate-400">Small</div>
                     <CheckboxRefined
                       label="SM"
                       size="sm"
@@ -364,7 +366,7 @@ export function CheckboxRefinedShowcase() {
                     />
                   </div>
                   <div className="text-center space-y-4">
-                    <div className="text-sm text-slate-400">Medium</div>
+                    <div className="text-xs md:text-sm text-slate-400">Medium</div>
                     <CheckboxRefined
                       label="MD"
                       size="md"
@@ -373,10 +375,10 @@ export function CheckboxRefinedShowcase() {
                     />
                   </div>
                   <div className="text-center space-y-4">
-                    <div className="text-sm text-slate-400">Large</div>
+                    <div className="text-xs md:text-sm text-slate-400">Large</div>
                     <CheckboxRefined
                       label="LG"
-                      size="lg"
+                      size={isMobile ? "md" : "lg"}
                       variant="smooth"
                       colorScheme="purple"
                     />
@@ -388,17 +390,14 @@ export function CheckboxRefinedShowcase() {
         </div>
 
         {/* Color Palette Showcase */}
-        <div className="space-y-12">
+        <div className="space-y-8 md:space-y-12">
           <div className="text-center space-y-4">
-            <h2 className="text-4xl font-light text-white">
-              Color Expressions
-            </h2>
-            <p className="text-slate-400 text-lg">
+            <p className="text-slate-400 text-sm md:text-lg">
               Semantic colors that speak your design language
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
             {[
               {
                 scheme: "default",
@@ -439,15 +438,16 @@ export function CheckboxRefinedShowcase() {
             ].map((item) => (
               <div
                 key={item.scheme}
-                className={`group p-6 ${item.bg} backdrop-blur-xl rounded-2xl border border-white/10 hover:scale-105 transition-all duration-300`}
+                className={`group p-3 md:p-6 ${item.bg} backdrop-blur-xl rounded-2xl border border-white/10 hover:scale-105 transition-all duration-300`}
               >
-                <div className="space-y-4">
+                <div className="space-y-3 md:space-y-4">
                   <div
-                    className={`h-3 bg-gradient-to-r ${item.color} rounded-full`}
+                    className={`h-2 md:h-3 bg-gradient-to-r ${item.color} rounded-full`}
                   />
                   <CheckboxRefined
                     label={`${item.label} State`}
                     variant="smooth"
+                    size={isMobile ? "sm" : "md"}
                     colorScheme={
                       item.scheme as
                         | "default"
@@ -466,22 +466,19 @@ export function CheckboxRefinedShowcase() {
         </div>
 
         {/* Interactive Features */}
-        <div className="grid lg:grid-cols-2 gap-16">
-          <div className="space-y-8">
+        <div className="grid lg:grid-cols-2 gap-8 md:gap-16">
+          <div className="space-y-6 md:space-y-8">
             <div>
-              <h2 className="text-3xl font-light text-white mb-4">
-                Interactive Features
-              </h2>
-              <p className="text-slate-400">
+              <p className="text-slate-400 text-sm md:text-base">
                 Advanced interaction patterns for modern interfaces
               </p>
             </div>
 
-            <div className="space-y-6">
-              <div className="p-6 bg-white/5 backdrop-blur-xl rounded-xl border border-white/10">
+            <div className="space-y-4 md:space-y-6">
+              <div className="p-4 md:p-6 bg-white/5 backdrop-blur-xl rounded-xl border border-white/10">
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-white font-medium">Ripple Effects</span>
-                  <div className="px-3 py-1 bg-blue-500/20 text-blue-300 text-xs rounded-full">
+                  <span className={`text-white font-medium ${isMobile ? 'text-sm' : 'text-base'}`}>Ripple Effects</span>
+                  <div className={`px-2 md:px-3 py-1 bg-blue-500/20 text-blue-300 ${isMobile ? 'text-xs' : 'text-xs'} rounded-full`}>
                     Enhanced
                   </div>
                 </div>
@@ -489,16 +486,17 @@ export function CheckboxRefinedShowcase() {
                   label="Enable ripple animations"
                   variant="smooth"
                   colorScheme="blue"
+                  size={isMobile ? "sm" : "md"}
                   showRipple={true}
                 />
               </div>
 
-              <div className="p-6 bg-white/5 backdrop-blur-xl rounded-xl border border-white/10">
+              <div className="p-4 md:p-6 bg-white/5 backdrop-blur-xl rounded-xl border border-white/10">
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-white font-medium">
+                  <span className={`text-white font-medium ${isMobile ? 'text-sm' : 'text-base'}`}>
                     Clean Interaction
                   </span>
-                  <div className="px-3 py-1 bg-slate-500/20 text-slate-300 text-xs rounded-full">
+                  <div className={`px-2 md:px-3 py-1 bg-slate-500/20 text-slate-300 ${isMobile ? 'text-xs' : 'text-xs'} rounded-full`}>
                     Minimal
                   </div>
                 </div>
@@ -506,29 +504,28 @@ export function CheckboxRefinedShowcase() {
                   label="Disable ripple effects"
                   variant="smooth"
                   colorScheme="purple"
+                  size={isMobile ? "sm" : "md"}
                   showRipple={false}
                 />
               </div>
             </div>
           </div>
 
-          <div className="space-y-8">
+          <div className="space-y-6 md:space-y-8">
             <div>
-              <h2 className="text-3xl font-light text-white mb-4">
-                Controlled State
-              </h2>
-              <p className="text-slate-400">
+              <p className="text-slate-400 text-sm md:text-base">
                 Programmatic control with external state management
               </p>
             </div>
 
-            <div className="p-8 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl rounded-2xl border border-white/10">
-              <div className="text-center space-y-6">
-                <div className="p-6 bg-black/20 rounded-xl">
+            <div className="p-4 md:p-8 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl rounded-2xl border border-white/10">
+              <div className="text-center space-y-4 md:space-y-6">
+                <div className="p-4 md:p-6 bg-black/20 rounded-xl">
                   <CheckboxRefined
                     label="Externally controlled checkbox"
                     variant="smooth"
                     colorScheme="success"
+                    size={isMobile ? "sm" : "md"}
                     checked={controlled}
                     onCheckedChange={(checked) =>
                       setControlled(checked === true)
@@ -537,29 +534,29 @@ export function CheckboxRefinedShowcase() {
                   />
                 </div>
 
-                <div className="flex justify-center gap-4">
+                <div className="flex flex-col md:flex-row justify-center gap-3 md:gap-4">
                   <button
                     onClick={() => setControlled(true)}
-                    className="px-6 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl hover:from-emerald-600 hover:to-emerald-700 transition-all duration-200 font-medium shadow-lg hover:shadow-emerald-500/25 hover:scale-105"
+                    className={`${isMobile ? 'px-4 py-2 text-sm' : 'px-6 py-3'} bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl hover:from-emerald-600 hover:to-emerald-700 transition-all duration-200 font-medium shadow-lg hover:shadow-emerald-500/25 hover:scale-105`}
                   >
                     Activate
                   </button>
                   <button
                     onClick={() => setControlled(false)}
-                    className="px-6 py-3 bg-gradient-to-r from-slate-600 to-slate-700 text-white rounded-xl hover:from-slate-700 hover:to-slate-800 transition-all duration-200 font-medium shadow-lg hover:shadow-slate-500/25 hover:scale-105"
+                    className={`${isMobile ? 'px-4 py-2 text-sm' : 'px-6 py-3'} bg-gradient-to-r from-slate-600 to-slate-700 text-white rounded-xl hover:from-slate-700 hover:to-slate-800 transition-all duration-200 font-medium shadow-lg hover:shadow-slate-500/25 hover:scale-105`}
                   >
                     Deactivate
                   </button>
                 </div>
 
                 <div className="text-center">
-                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-black/30 rounded-full">
+                  <div className="inline-flex items-center gap-2 px-3 md:px-4 py-2 bg-black/30 rounded-full">
                     <div
                       className={`w-2 h-2 rounded-full ${
                         controlled ? "bg-emerald-400" : "bg-slate-400"
                       } transition-colors`}
                     />
-                    <span className="text-sm text-slate-300">
+                    <span className={`${isMobile ? 'text-xs' : 'text-sm'} text-slate-300`}>
                       State:{" "}
                       <span className="font-mono text-white">
                         {String(controlled)}
@@ -577,16 +574,17 @@ export function CheckboxRefinedShowcase() {
 }
 
 export function CheckboxRefinedTheme() {
+  const isMobile = useIsMobile();
+  
   return (
-    <div className="space-y-12">
+    <div className="space-y-8 md:space-y-12">
       <div className="text-center space-y-4">
-        <h2 className="text-4xl font-light text-black dark:text-white">Color Expressions</h2>
-        <p className="text-slate-400 text-lg">
+        <p className="text-slate-400 text-sm md:text-lg">
           Semantic colors that speak your design language
         </p>
       </div>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
         {[
           {
             scheme: "default",
@@ -627,15 +625,16 @@ export function CheckboxRefinedTheme() {
         ].map((item) => (
           <div
             key={item.scheme}
-            className={`group p-6 ${item.bg} backdrop-blur-xl rounded-2xl border border-white/10 hover:scale-105 transition-all duration-300`}
+            className={`group p-3 md:p-6 ${item.bg} backdrop-blur-xl rounded-2xl border border-white/10 hover:scale-105 transition-all duration-300`}
           >
-            <div className="space-y-4">
+            <div className="space-y-3 md:space-y-4">
               <div
-                className={`h-3 bg-gradient-to-r ${item.color} rounded-full`}
+                className={`h-2 md:h-3 bg-gradient-to-r ${item.color} rounded-full`}
               />
               <CheckboxRefined
                 label={`${item.label} State`}
                 variant="smooth"
+                size={isMobile ? "sm" : "md"}
                 colorScheme={
                   item.scheme as
                     | "default"

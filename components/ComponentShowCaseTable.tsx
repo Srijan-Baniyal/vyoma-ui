@@ -30,6 +30,7 @@ import { Separator } from "@/components/ui/separator";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import parser from "html-react-parser";
 import type { ComponentPropsInfo } from "@/lib/TsASTAbstractionForDoc";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface ComponentShowcaseProps {
   componentName: string;
@@ -55,6 +56,7 @@ export default function ComponentShowCaseTable({
   const [expandedDescriptions, setExpandedDescriptions] = useState<
     Record<number, boolean>
   >({});
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     setIsClient(true);
@@ -160,7 +162,7 @@ export default function ComponentShowCaseTable({
   }
 
   return (
-    <div className="space-y-6 sm:space-y-8">
+    <div className={`${isMobile ? "space-y-4" : "space-y-6 sm:space-y-8"}`}>
       {components.map((comp, index) => {
         const { content: descriptionContent, isTruncated } =
           truncateDescription(
@@ -189,7 +191,11 @@ export default function ComponentShowCaseTable({
               animationFillMode: "both",
             }}
           >
-            <CardHeader className="border-b bg-gradient-to-r from-slate-50/80 via-white to-blue-50/50 dark:from-slate-800/80 dark:via-slate-900 dark:to-blue-950/50 transition-all duration-300 p-4 sm:p-6">
+            <CardHeader
+              className={`border-b bg-gradient-to-r from-slate-50/80 via-white to-blue-50/50 dark:from-slate-800/80 dark:via-slate-900 dark:to-blue-950/50 transition-all duration-300 ${
+                isMobile ? "p-3" : "p-4 sm:p-6"
+              }`}
+            >
               <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                 <div className="space-y-3 flex-1 min-w-0">
                   <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
@@ -244,17 +250,21 @@ export default function ComponentShowCaseTable({
                   </Button>
                   <Button
                     variant="outline"
-                    size="sm"
+                    size={isMobile ? "sm" : "sm"}
                     onClick={() => handleRefresh(index)}
                     className="shrink-0 transition-all duration-200 hover:scale-105 hover:shadow-md bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/50 dark:to-purple-950/50 border-blue-200 dark:border-blue-800 hover:from-blue-100 hover:to-purple-100 dark:hover:from-blue-900/50 dark:hover:to-purple-900/50 rounded-xl"
                     disabled={isRefreshing}
                   >
                     <RefreshCw
-                      className={`h-4 w-4 mr-2 transition-transform duration-500 text-blue-600 dark:text-blue-400 ${
+                      className={`${isMobile ? "h-3 w-3" : "h-4 w-4"} ${
+                        isMobile ? "mr-1" : "mr-2"
+                      } transition-transform duration-500 text-blue-600 dark:text-blue-400 ${
                         isRefreshing ? "animate-spin" : ""
                       }`}
                     />
-                    <span className="hidden sm:inline">Refresh</span>
+                    <span className={isMobile ? "text-xs" : "text-sm"}>
+                      Refresh
+                    </span>
                   </Button>
                 </div>
               </div>
@@ -263,10 +273,10 @@ export default function ComponentShowCaseTable({
             <CardContent className="p-0">
               <Tabs defaultValue="preview" className="w-full">
                 <div className="border-b bg-gradient-to-r from-slate-50/50 to-blue-50/30 dark:from-slate-800/50 dark:to-blue-950/30">
-                  <TabsList className="h-12 sm:h-14 w-full justify-start rounded-none bg-transparent p-0 overflow-x-auto">
+                  <TabsList className={`${isMobile ? "h-10" : "h-12 sm:h-14"} w-full justify-start rounded-none bg-transparent p-0 overflow-x-auto`}>
                     <TabsTrigger
                       value="preview"
-                      className="data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900 data-[state=active]:shadow-sm border-b-2 border-transparent data-[state=active]:border-blue-500 rounded-none h-12 sm:h-14 px-4 sm:px-8 text-xs sm:text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 relative overflow-hidden group whitespace-nowrap"
+                      className={`data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900 data-[state=active]:shadow-sm border-b-2 border-transparent data-[state=active]:border-blue-500 rounded-none ${isMobile ? "h-10 px-3" : "h-12 sm:h-14 px-4 sm:px-8"} ${isMobile ? "text-xs" : "text-xs sm:text-sm"} font-medium transition-all duration-300 hover:-translate-y-0.5 relative overflow-hidden group whitespace-nowrap`}
                     >
                       <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 translate-y-full group-data-[state=active]:translate-y-0 transition-transform duration-300"></div>
                       <Eye className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2 relative z-10" />
@@ -274,7 +284,7 @@ export default function ComponentShowCaseTable({
                     </TabsTrigger>
                     <TabsTrigger
                       value="code"
-                      className="data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900 data-[state=active]:shadow-sm border-b-2 border-transparent data-[state=active]:border-blue-500 rounded-none h-12 sm:h-14 px-4 sm:px-8 text-xs sm:text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 relative overflow-hidden group whitespace-nowrap"
+                      className={`data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900 data-[state=active]:shadow-sm border-b-2 border-transparent data-[state=active]:border-blue-500 rounded-none ${isMobile ? "h-10 px-3" : "h-12 sm:h-14 px-4 sm:px-8"} ${isMobile ? "text-xs" : "text-xs sm:text-sm"} font-medium transition-all duration-300 hover:-translate-y-0.5 relative overflow-hidden group whitespace-nowrap`}
                     >
                       <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 translate-y-full group-data-[state=active]:translate-y-0 transition-transform duration-300"></div>
                       <Terminal className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2 relative z-10" />
@@ -282,7 +292,7 @@ export default function ComponentShowCaseTable({
                     </TabsTrigger>
                     <TabsTrigger
                       value="props"
-                      className="data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900 data-[state=active]:shadow-sm border-b-2 border-transparent data-[state=active]:border-blue-500 rounded-none h-12 sm:h-14 px-4 sm:px-8 text-xs sm:text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 relative overflow-hidden group whitespace-nowrap"
+                      className={`data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900 data-[state=active]:shadow-sm border-b-2 border-transparent data-[state=active]:border-blue-500 rounded-none ${isMobile ? "h-10 px-3" : "h-12 sm:h-14 px-4 sm:px-8"} ${isMobile ? "text-xs" : "text-xs sm:text-sm"} font-medium transition-all duration-300 hover:-translate-y-0.5 relative overflow-hidden group whitespace-nowrap`}
                     >
                       <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 translate-y-full group-data-[state=active]:translate-y-0 transition-transform duration-300"></div>
                       <Info className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2 relative z-10" />
@@ -295,8 +305,8 @@ export default function ComponentShowCaseTable({
                   value="preview"
                   className="m-0 border-0 animate-in fade-in-50 slide-in-from-bottom-4 duration-400"
                 >
-                  <div className="p-4 sm:p-8">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 gap-3">
+                  <div className={`${isMobile ? "p-3" : "p-4 sm:p-8"}`}>
+                                          <div className={`flex flex-col sm:flex-row sm:items-center justify-between ${isMobile ? "mb-3 gap-2" : "mb-4 sm:mb-6 gap-3"}`}>
                       <div className="flex items-center gap-3">
                         <h4 className="text-sm font-semibold text-foreground">
                           Live Component Preview
@@ -315,7 +325,7 @@ export default function ComponentShowCaseTable({
                       <div className="relative rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-700 bg-gradient-to-br from-white via-slate-50/50 to-blue-50/30 dark:from-slate-900 dark:via-slate-800/50 dark:to-blue-950/30 backdrop-blur-sm transition-all duration-300 group-hover:border-blue-300 dark:group-hover:border-blue-600 group-hover:shadow-xl overflow-hidden">
                         <div
                           key={refreshKeys[index] || 0}
-                          className="w-full transition-all duration-500 animate-in zoom-in-50 fade-in-0 p-4 sm:p-8"
+                          className={`w-full transition-all duration-500 animate-in zoom-in-50 fade-in-0 ${isMobile ? "p-3" : "p-4 sm:p-8"}`}
                         >
                           {isClient && (
                             <div className="w-full overflow-auto">
@@ -385,26 +395,31 @@ export default function ComponentShowCaseTable({
                     <div className="relative overflow-hidden animate-in fade-in-50 duration-500 delay-200">
                       {isClient && (
                         <>
-                          <div className="overflow-auto max-h-96 sm:max-h-[600px]">
+                          <div
+                            className={`overflow-auto ${
+                              isMobile
+                                ? "max-h-64"
+                                : "max-h-96 sm:max-h-[600px]"
+                            }`}
+                          >
                             <SyntaxHighlighter
                               language="typescript"
                               customStyle={{
                                 margin: 0,
                                 borderRadius: 0,
-                                fontSize:
-                                  window.innerWidth < 640 ? "11px" : "12px",
-                                lineHeight: "1.5",
-                                padding:
-                                  window.innerWidth < 640 ? "16px" : "24px",
+                                fontSize: isMobile ? "10px" : "12px",
+                                lineHeight: isMobile ? "1.4" : "1.5",
+                                padding: isMobile ? "12px" : "24px",
                                 backgroundColor: "transparent",
                                 color: "var(--foreground)",
                               }}
-                              showLineNumbers={true}
+                              showLineNumbers={!isMobile}
                               lineNumberStyle={{
-                                minWidth: "3em",
-                                paddingRight: "1em",
+                                minWidth: isMobile ? "2em" : "3em",
+                                paddingRight: isMobile ? "0.5em" : "1em",
                                 color: "var(--muted-foreground)",
                                 userSelect: "none",
+                                fontSize: isMobile ? "9px" : "11px",
                               }}
                               codeTagProps={{
                                 className:
@@ -574,7 +589,13 @@ ${comp.propsInfo?.props
                                     </span>
                                   </div>
                                 </div>
-                                <div className="p-4 font-mono text-xs sm:text-sm overflow-x-auto">
+                                <div
+                                  className={`${
+                                    isMobile ? "p-2" : "p-4"
+                                  } font-mono ${
+                                    isMobile ? "text-xs" : "text-xs sm:text-sm"
+                                  } overflow-x-auto`}
+                                >
                                   <div className="text-blue-600 dark:text-blue-400">
                                     interface{" "}
                                     <span className="text-green-600 dark:text-green-400 font-semibold">

@@ -2,6 +2,7 @@
 
 import Image, { StaticImageData } from "next/image";
 import GIRL from "@/public/BG.jpg";
+import { useIsMobile } from "@/hooks/use-mobile";
 import {
   Card,
   CardContent,
@@ -32,6 +33,8 @@ function VuiCard({
     </>
   ),
 }: VuiCardProps) {
+  const isMobile = useIsMobile();
+  
   return (
     <Card className="overflow-hidden border-1 border-gray-500 bg-white/5 backdrop-blur-md w-full h-full">
       <Image
@@ -42,9 +45,9 @@ function VuiCard({
         priority
         aria-hidden="true"
       />
-      <div className="absolute inset-1 p-2 flex flex-col justify-between h-full">
-        <CardHeader>
-          <CardDescription className="text-white/80 text-sm font-medium tracking-wide">
+      <div className={`absolute inset-1 ${isMobile ? 'p-1' : 'p-2'} flex flex-col justify-between h-full`}>
+        <CardHeader className={isMobile ? 'p-2' : ''}>
+          <CardDescription className={`text-white/80 ${isMobile ? 'text-xs' : 'text-sm'} font-medium tracking-wide`}>
             {category}
           </CardDescription>
         </CardHeader>
@@ -53,11 +56,11 @@ function VuiCard({
             className="absolute inset-0 bg-white/20 backdrop-blur-xl rounded-xl z-0 blur-2xl shadow-2xl shadow-black/30"
             aria-hidden="true"
           />
-          <CardContent className="relative z-10 p-4">
-            <CardTitle className="text-white text-xl font-bold leading-tight text-shadow-md">
+          <CardContent className={`relative z-10 ${isMobile ? 'p-2' : 'p-4'}`}>
+            <CardTitle className={`text-white ${isMobile ? 'text-base' : 'text-xl'} font-bold leading-tight text-shadow-md`}>
               {title}
             </CardTitle>
-            <p className="text-white/90 text-sm leading-relaxed text-shadow-sm mt-2">
+            <p className={`text-white/90 ${isMobile ? 'text-xs' : 'text-sm'} leading-relaxed text-shadow-sm mt-2`}>
               {description}
             </p>
           </CardContent>
@@ -68,26 +71,28 @@ function VuiCard({
 }
 
 export default function CardShowcase() {
+  const isMobile = useIsMobile();
+  
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background p-8">
-      <div className="max-w-7xl mx-auto space-y-16">
+    <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background p-4 md:p-8">
+      <div className="max-w-7xl mx-auto space-y-8 md:space-y-16">
         {/* Hero Section */}
-        <div className="text-center space-y-6">
+        <div className="text-center space-y-4 md:space-y-6">
           <div className="space-y-2">
-            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+            <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
               Card Component
             </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-base md:text-xl text-muted-foreground max-w-2xl mx-auto px-4">
               Beautiful overlay cards with backdrop blur effects and dynamic
               content positioning
             </p>
           </div>
 
           {/* Main Demo */}
-          <div className="relative p-8 rounded-3xl bg-card/30 backdrop-blur-sm border border-border/50 shadow-2xl">
+          <div className="relative p-4 md:p-8 rounded-3xl bg-card/30 backdrop-blur-sm border border-border/50 shadow-2xl">
             <div className="flex justify-center">
               <section
-                className="relative w-full max-w-xl mx-auto h-[500px] overflow-hidden rounded-3xl shadow-2xl"
+                className={`relative w-full ${isMobile ? 'max-w-sm h-[300px]' : 'max-w-xl h-[400px] md:h-[500px]'} mx-auto overflow-hidden rounded-3xl shadow-2xl`}
                 aria-label="Featured Card: Ideas Made Visuals"
               >
                 <div className="absolute inset-0" aria-hidden="true">
@@ -100,7 +105,7 @@ export default function CardShowcase() {
                   />
                   <div className="absolute inset-0 bg-black/20" />
                 </div>
-                <div className="absolute inset-6 sm:inset-12">
+                <div className={`absolute ${isMobile ? 'inset-3' : 'inset-6 sm:inset-12'}`}>
                   <VuiCard
                     imageSrc={GIRL}
                     imageAlt="Card background visual, blurred for effect."
@@ -112,14 +117,14 @@ export default function CardShowcase() {
         </div>
 
         {/* Card Variations */}
-        <div className="space-y-12">
-          <h2 className="text-3xl font-bold text-center">Card Variations</h2>
+        <div className="space-y-8 md:space-y-12">
+          <h2 className="text-2xl md:text-3xl font-bold text-center">Card Variations</h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
             {/* Design Agency Card */}
             <div className="space-y-4">
               <div className="text-center space-y-2">
-                <h3 className="text-xl font-semibold text-blue-700 dark:text-blue-300">
+                <h3 className="text-lg md:text-xl font-semibold text-blue-700 dark:text-blue-300">
                   Design Agency
                 </h3>
                 <p className="text-sm text-muted-foreground">
@@ -129,7 +134,7 @@ export default function CardShowcase() {
 
               <div className="bg-gradient-to-br from-blue-50/30 to-blue-100/20 dark:from-blue-950/20 dark:to-blue-900/10 p-4 rounded-2xl border border-blue-200/30 dark:border-blue-800/20">
                 <section
-                  className="relative w-full h-[400px] overflow-hidden rounded-2xl shadow-xl"
+                  className={`relative w-full ${isMobile ? 'h-[250px]' : 'h-[300px] md:h-[400px]'} overflow-hidden rounded-2xl shadow-xl`}
                   aria-label="Design Agency Card"
                 >
                   <div className="absolute inset-0" aria-hidden="true">
@@ -141,7 +146,7 @@ export default function CardShowcase() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-blue-900/40 to-purple-900/20" />
                   </div>
-                  <div className="absolute inset-4">
+                  <div className={`absolute ${isMobile ? 'inset-2' : 'inset-4'}`}>
                     <VuiCard
                       imageSrc={GIRL}
                       imageAlt="Design portfolio background"
@@ -164,7 +169,7 @@ export default function CardShowcase() {
             {/* Tech Startup Card */}
             <div className="space-y-4">
               <div className="text-center space-y-2">
-                <h3 className="text-xl font-semibold text-green-700 dark:text-green-300">
+                <h3 className="text-lg md:text-xl font-semibold text-green-700 dark:text-green-300">
                   Tech Startup
                 </h3>
                 <p className="text-sm text-muted-foreground">
@@ -174,7 +179,7 @@ export default function CardShowcase() {
 
               <div className="bg-gradient-to-br from-green-50/30 to-emerald-100/20 dark:from-green-950/20 dark:to-emerald-900/10 p-4 rounded-2xl border border-green-200/30 dark:border-green-800/20">
                 <section
-                  className="relative w-full h-[400px] overflow-hidden rounded-2xl shadow-xl"
+                  className={`relative w-full ${isMobile ? 'h-[250px]' : 'h-[300px] md:h-[400px]'} overflow-hidden rounded-2xl shadow-xl`}
                   aria-label="Tech Startup Card"
                 >
                   <div className="absolute inset-0" aria-hidden="true">
@@ -186,7 +191,7 @@ export default function CardShowcase() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-green-900/40 to-teal-900/20" />
                   </div>
-                  <div className="absolute inset-4">
+                  <div className={`absolute ${isMobile ? 'inset-2' : 'inset-4'}`}>
                     <VuiCard
                       imageSrc={GIRL}
                       imageAlt="Tech innovation background"
@@ -214,7 +219,7 @@ export default function CardShowcase() {
             {/* Lifestyle Brand Card */}
             <div className="space-y-4">
               <div className="text-center space-y-2">
-                <h3 className="text-xl font-semibold text-purple-700 dark:text-purple-300">
+                <h3 className="text-lg md:text-xl font-semibold text-purple-700 dark:text-purple-300">
                   Lifestyle Brand
                 </h3>
                 <p className="text-sm text-muted-foreground">
@@ -224,7 +229,7 @@ export default function CardShowcase() {
 
               <div className="bg-gradient-to-br from-purple-50/30 to-violet-100/20 dark:from-purple-950/20 dark:to-violet-900/10 p-4 rounded-2xl border border-purple-200/30 dark:border-purple-800/20">
                 <section
-                  className="relative w-full h-[400px] overflow-hidden rounded-2xl shadow-xl"
+                  className={`relative w-full ${isMobile ? 'h-[250px]' : 'h-[300px] md:h-[400px]'} overflow-hidden rounded-2xl shadow-xl`}
                   aria-label="Lifestyle Brand Card"
                 >
                   <div className="absolute inset-0" aria-hidden="true">
@@ -236,7 +241,7 @@ export default function CardShowcase() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-purple-900/40 to-pink-900/20" />
                   </div>
-                  <div className="absolute inset-4">
+                  <div className={`absolute ${isMobile ? 'inset-2' : 'inset-4'}`}>
                     <VuiCard
                       imageSrc={GIRL}
                       imageAlt="Lifestyle elegance background"
@@ -266,22 +271,22 @@ export default function CardShowcase() {
         {/* Different Layouts */}
         <div className="space-y-8">
           <div className="text-center space-y-2">
-            <h2 className="text-3xl font-bold">Layout Examples</h2>
+            <h2 className="text-2xl md:text-3xl font-bold">Layout Examples</h2>
             <p className="text-muted-foreground">
               Various card arrangements and compositions
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8">
             {/* Compact Layout */}
             <div className="space-y-4">
-              <h3 className="text-xl font-semibold text-orange-700 dark:text-orange-300 text-center">
+              <h3 className="text-lg md:text-xl font-semibold text-orange-700 dark:text-orange-300 text-center">
                 Compact Layout
               </h3>
 
-              <div className="bg-gradient-to-br from-orange-50/30 to-amber-100/20 dark:from-orange-950/20 dark:to-amber-900/10 p-6 rounded-2xl border border-orange-200/30 dark:border-orange-800/20">
+              <div className="bg-gradient-to-br from-orange-50/30 to-amber-100/20 dark:from-orange-950/20 dark:to-amber-900/10 p-4 md:p-6 rounded-2xl border border-orange-200/30 dark:border-orange-800/20">
                 <section
-                  className="relative w-full h-[300px] overflow-hidden rounded-xl shadow-lg"
+                  className={`relative w-full ${isMobile ? 'h-[200px]' : 'h-[250px] md:h-[300px]'} overflow-hidden rounded-xl shadow-lg`}
                   aria-label="Compact Card Layout"
                 >
                   <div className="absolute inset-0" aria-hidden="true">
@@ -293,7 +298,7 @@ export default function CardShowcase() {
                     />
                     <div className="absolute inset-0 bg-black/30" />
                   </div>
-                  <div className="absolute inset-3">
+                  <div className={`absolute ${isMobile ? 'inset-2' : 'inset-3'}`}>
                     <VuiCard
                       imageSrc={GIRL}
                       imageAlt="Compact card visual"
@@ -314,13 +319,13 @@ export default function CardShowcase() {
 
             {/* Wide Layout */}
             <div className="space-y-4">
-              <h3 className="text-xl font-semibold text-rose-700 dark:text-rose-300 text-center">
+              <h3 className="text-lg md:text-xl font-semibold text-rose-700 dark:text-rose-300 text-center">
                 Wide Format
               </h3>
 
-              <div className="bg-gradient-to-br from-rose-50/30 to-pink-100/20 dark:from-rose-950/20 dark:to-pink-900/10 p-6 rounded-2xl border border-rose-200/30 dark:border-rose-800/20">
+              <div className="bg-gradient-to-br from-rose-50/30 to-pink-100/20 dark:from-rose-950/20 dark:to-pink-900/10 p-4 md:p-6 rounded-2xl border border-rose-200/30 dark:border-rose-800/20">
                 <section
-                  className="relative w-full h-[300px] overflow-hidden rounded-xl shadow-lg"
+                  className={`relative w-full ${isMobile ? 'h-[200px]' : 'h-[250px] md:h-[300px]'} overflow-hidden rounded-xl shadow-lg`}
                   aria-label="Wide Format Card"
                 >
                   <div className="absolute inset-0" aria-hidden="true">
@@ -332,7 +337,7 @@ export default function CardShowcase() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-r from-rose-900/40 to-transparent" />
                   </div>
-                  <div className="absolute inset-4">
+                  <div className={`absolute ${isMobile ? 'inset-2' : 'inset-4'}`}>
                     <VuiCard
                       imageSrc={GIRL}
                       imageAlt="Wide format card visual"
@@ -364,6 +369,8 @@ export default function CardShowcase() {
 }
 
 export function CardTheme() {
+  const isMobile = useIsMobile();
+  
   return (
     <>
           <section
@@ -379,7 +386,7 @@ export function CardTheme() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-green-900/40 to-teal-900/20" />
             </div>
-            <div className="absolute inset-4">
+            <div className={`absolute ${isMobile ? 'inset-2' : 'inset-4'}`}>
               <VuiCard
                 imageSrc={GIRL}
                 imageAlt="Tech innovation background"

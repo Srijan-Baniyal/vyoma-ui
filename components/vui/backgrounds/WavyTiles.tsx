@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 declare global {
   interface Window {
@@ -33,6 +34,7 @@ export default function Background() {
   const vantaRef = useRef<HTMLDivElement>(null);
   const vantaEffect = useRef<{ destroy: () => void } | null>(null);
   const [vantaLoaded, setVantaLoaded] = useState(false);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const loadVanta = async () => {
@@ -70,7 +72,7 @@ export default function Background() {
             });
           }
 
-          // Initialize Vanta effect with theme-proof settings
+          // Initialize Vanta effect with consistent mobile-optimized settings
           if (window.VANTA && window.THREE && vantaRef.current) {
             vantaEffect.current = window.VANTA.WAVES({
               el: vantaRef.current,
@@ -79,14 +81,14 @@ export default function Background() {
               gyroControls: false,
               minHeight: 200.0,
               minWidth: 200.0,
-              scale: 1.0,
-              scaleMobile: 1.0,
-              color: 0x000000, // Pure black - theme proof
-              backgroundColor: 0x000000, // Force black background
-              shininess: 40.0,
-              waveHeight: 25.0,
-              waveSpeed: 1.2,
-              zoom: 0.8,
+              scale: isMobile ? 0.8 : 1.0,
+              scaleMobile: 0.8,
+              color: 0x1a1a2e, // Consistent color scheme
+              backgroundColor: 0x0f0f23, // Consistent background
+              shininess: isMobile ? 25.0 : 30.0,
+              waveHeight: isMobile ? 15.0 : 20.0,
+              waveSpeed: isMobile ? 0.8 : 1.0,
+              zoom: isMobile ? 1.0 : 0.9,
               forceAnimate: true,
             });
             setVantaLoaded(true);
@@ -112,47 +114,66 @@ export default function Background() {
         vantaEffect.current = null;
       }
     };
-  }, []);
+  }, [isMobile]);
 
   return (
     <section className="relative h-screen flex items-center overflow-hidden">
-      {/* Fallback background - theme proof */}
-      <div className="absolute inset-0 bg-black z-0"></div>
+      {/* Fallback background - consistent with showcase */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 to-slate-800 z-0"></div>
 
-      {/* Vanta.js container with theme-proof styling */}
+      {/* Vanta.js container */}
       <div
         ref={vantaRef}
         className="absolute inset-0 z-10"
         style={{
           width: "100%",
           height: "100%",
-          backgroundColor: "#000000", // Force black background
-          background: "#000000", // Additional fallback
         }}
       ></div>
 
       {/* Loading indicator */}
       {!vantaLoaded && (
         <div className="absolute inset-0 z-20 flex items-center justify-center">
-          <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+          <div
+            className={`${
+              isMobile ? "w-6 h-6" : "w-8 h-8"
+            } border-2 border-white border-t-transparent rounded-full animate-spin`}
+          ></div>
         </div>
       )}
 
-      {/* Content */}
+      {/* Content - consistent responsive styling */}
       <div className="relative z-30 flex flex-col items-center justify-center min-h-screen p-4 text-center">
-        <div className="mb-8 space-y-6">
+        <div
+          className={`${
+            isMobile ? "mb-4 space-y-2" : "mb-8 space-y-3 md:space-y-6"
+          }`}
+        >
           <div className="inline-block">
-            <h1 className="text-6xl md:text-8xl font-black tracking-tighter bg-gradient-to-r from-white via-gray-200 to-white bg-clip-text text-transparent animate-pulse">
-              MINIMALIST
+            <h1
+              className={`${
+                isMobile ? "text-3xl" : "text-6xl md:text-8xl"
+              } font-black tracking-tighter bg-gradient-to-r from-white via-gray-200 to-white bg-clip-text text-transparent animate-pulse`}
+            >
+              INTERACTIVE WAVES
             </h1>
-            <div className="h-1 w-full bg-gradient-to-r from-transparent via-white to-transparent mt-4 animate-pulse" />
+            <div
+              className={`h-1 w-full bg-gradient-to-r from-transparent via-white to-transparent ${
+                isMobile ? "mt-2" : "mt-4"
+              } animate-pulse`}
+            />
           </div>
 
-          <p className="text-lg md:text-xl text-gray-300 max-w-2xl leading-relaxed font-light">
-            We create clean, sophisticated designs that communicate clearly and
-            stand the test of time with
-            <span className="text-white font-medium"> interactive waves </span>
-            that respond to your movement.
+          <p
+            className={`${
+              isMobile
+                ? "text-sm px-4 leading-relaxed"
+                : "text-lg md:text-xl px-0 leading-relaxed"
+            } text-gray-300 max-w-2xl font-light`}
+          >
+            Experience mesmerizing fluid dynamics with
+            <span className="text-white font-medium"> Vanta.js </span>
+            powered interactive waves that respond to your {isMobile ? "touch" : "movement"}
           </p>
         </div>
       </div>
@@ -165,6 +186,7 @@ export function WavyTilesShowcase() {
   const vantaRef = useRef<HTMLDivElement>(null);
   const vantaEffect = useRef<{ destroy: () => void } | null>(null);
   const [vantaLoaded, setVantaLoaded] = useState(false);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const loadVanta = async () => {
@@ -211,20 +233,20 @@ export function WavyTilesShowcase() {
               gyroControls: false,
               minHeight: 200.0,
               minWidth: 200.0,
-              scale: 1.0,
-              scaleMobile: 1.0,
+              scale: isMobile ? 0.8 : 1.0,
+              scaleMobile: 0.8,
               color: 0x1a1a2e,
               backgroundColor: 0x0f0f23,
-              shininess: 30.0,
-              waveHeight: 20.0,
-              waveSpeed: 1.0,
-              zoom: 0.9,
+              shininess: isMobile ? 25.0 : 30.0,
+              waveHeight: isMobile ? 15.0 : 20.0,
+              waveSpeed: isMobile ? 0.8 : 1.0,
+              zoom: isMobile ? 1.0 : 0.9,
               forceAnimate: true,
             });
             setVantaLoaded(true);
           }
         } catch (error) {
-          console.warn("Vanta.js failed to load:", error);
+          console.warn(`Vanta.js failed to load: ${error}`);
           setVantaLoaded(false);
         }
       }
@@ -243,11 +265,11 @@ export function WavyTilesShowcase() {
         vantaEffect.current = null;
       }
     };
-  }, []);
+  }, [isMobile]);
 
   return (
-    <div className="space-y-8">
-      <div className="space-y-6">
+    <div className="space-y-6 md:space-y-8">
+      <div className="space-y-4 md:space-y-6">
         {/* Showcase Container */}
         <div className="relative w-full h-96 rounded-lg overflow-hidden border">
           {/* Fallback background */}
@@ -266,16 +288,28 @@ export function WavyTilesShowcase() {
           {/* Loading indicator */}
           {!vantaLoaded && (
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+              <div
+                className={`${
+                  isMobile ? "w-6 h-6" : "w-8 h-8"
+                } border-2 border-white border-t-transparent rounded-full animate-spin`}
+              ></div>
             </div>
           )}
 
           {/* Overlay content */}
           <div className="absolute inset-0 flex items-center justify-center z-10">
             <div className="text-center text-white">
-              <h2 className="text-4xl font-bold mb-4">Interactive Waves</h2>
-              <p className="text-lg opacity-80">
-                Move your mouse to interact with the waves
+              <h2
+                className={`${
+                  isMobile ? "text-2xl" : "text-4xl"
+                } font-bold mb-2 md:mb-4`}
+              >
+                Interactive Waves
+              </h2>
+              <p className={`${isMobile ? "text-sm" : "text-lg"} opacity-80`}>
+                {isMobile
+                  ? "Touch to interact"
+                  : "Move your mouse to interact with the waves"}
               </p>
             </div>
           </div>
@@ -289,6 +323,7 @@ export function WavyTilesTheme() {
   const vantaRef = useRef<HTMLDivElement>(null);
   const vantaEffect = useRef<{ destroy: () => void } | null>(null);
   const [vantaLoaded, setVantaLoaded] = useState(false);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const loadVanta = async () => {
@@ -335,14 +370,14 @@ export function WavyTilesTheme() {
               gyroControls: false,
               minHeight: 200.0,
               minWidth: 200.0,
-              scale: 1.0,
-              scaleMobile: 1.0,
+              scale: isMobile ? 0.8 : 1.0,
+              scaleMobile: 0.8,
               color: 0x1a1a2e,
               backgroundColor: 0x0f0f23,
-              shininess: 30.0,
-              waveHeight: 20.0,
-              waveSpeed: 1.0,
-              zoom: 0.9,
+              shininess: isMobile ? 25.0 : 30.0,
+              waveHeight: isMobile ? 15.0 : 20.0,
+              waveSpeed: isMobile ? 0.8 : 1.0,
+              zoom: isMobile ? 1.0 : 0.9,
               forceAnimate: true,
             });
             setVantaLoaded(true);
@@ -367,43 +402,48 @@ export function WavyTilesTheme() {
         vantaEffect.current = null;
       }
     };
-  }, []);
+  }, [isMobile]);
 
   return (
-    <div className="space-y-6">
-      {/* Showcase Container */}
-        {/* Fallback background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 to-slate-800"></div>
+    <div className="relative w-full h-96 bg-black overflow-hidden rounded-lg">
+      {/* Vanta.js container */}
+      <div
+        ref={vantaRef}
+        className="absolute inset-0"
+        style={{
+          width: "100%",
+          height: "100%",
+        }}
+      ></div>
 
-        {/* Vanta.js container */}
-        <div
-          ref={vantaRef}
-          className="absolute inset-0"
-          style={{
-            width: "100%",
-            height: "100%",
-          }}
-        ></div>
+      {/* Loading indicator */}
+      {!vantaLoaded && (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div
+            className={`${
+              isMobile ? "w-6 h-6" : "w-8 h-8"
+            } border-2 border-white border-t-transparent rounded-full animate-spin`}
+          ></div>
+        </div>
+      )}
 
-        {/* Loading indicator */}
-        {!vantaLoaded && (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin">
-              {" "}
-              hello
-            </div>
-          </div>
-        )}
-
-        {/* Overlay content */}
-        <div className="absolute inset-0 flex items-center justify-center z-10">
-          <div className="text-center text-white">
-            <h2 className="text-4xl font-bold mb-4">Interactive Waves</h2>
-            <p className="text-lg opacity-80">
-              Move your mouse to interact with the waves
-            </p>
-          </div>
+      {/* Overlay content */}
+      <div className="absolute inset-0 flex items-center justify-center z-10">
+        <div className="text-center text-white">
+          <h2
+            className={`${
+              isMobile ? "text-2xl" : "text-4xl"
+            } font-bold mb-2 md:mb-4`}
+          >
+            Interactive Waves
+          </h2>
+          <p className={`${isMobile ? "text-sm" : "text-lg"} opacity-80`}>
+            {isMobile
+              ? "Touch to interact"
+              : "Move your mouse to interact with the waves"}
+          </p>
         </div>
       </div>
+    </div>
   );
 }

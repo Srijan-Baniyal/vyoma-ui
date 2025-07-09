@@ -6,6 +6,7 @@ import { ArrowRight, Sparkles, Layers, Zap } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Pill } from "@/components/ui/pill";
 import { CountUp } from "@/components/vui/text/CountUp";
+import { getDynamicStats } from "@/lib/ComponentCounter";
 
 export default function HeroSection() {
   const [gridCells, setGridCells] = useState<boolean[]>([]);
@@ -204,7 +205,7 @@ export default function HeroSection() {
             <div>
               <div className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-1 bg-gradient-to-r from-primary to-secondary bg-clip-text">
                 <CountUp
-                  to={10}
+                  to={getDynamicStats().totalComponents}
                   suffix="+"
                   duration={2.5}
                   delay={0.5}

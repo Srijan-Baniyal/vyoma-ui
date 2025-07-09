@@ -8,6 +8,7 @@ import {
   Rocket,
   Code,
 } from "lucide-react";
+import { getDynamicStats } from "@/lib/ComponentCounter";
 
 export default function Installation() {
   return (
@@ -287,7 +288,8 @@ export default function Installation() {
                           and patterns.
                         </p>
                         <div className="text-sm text-blue-600 font-medium">
-                          10+ Components Available →
+                          {getDynamicStats().totalComponents} Components
+                          Available →
                         </div>
                       </Card>
 

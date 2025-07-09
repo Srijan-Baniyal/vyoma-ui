@@ -1,37 +1,47 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/buttonShadcn"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { ExternalLink, Mail } from "lucide-react"
-import Image from "next/image"
-import Link from "next/link"
+import { Button } from "@/components/ui/buttonShadcn";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { ExternalLink, Mail } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
 type Project = {
-  id: number
-  name: string
-  description: string
-  image: string
-  url: string
-  category: string
-  technologies: string[]
-}
+  id: number;
+  name: string;
+  description: string;
+  image: string;
+  url: string;
+  category: string;
+  technologies: string[];
+};
 
-const showcaseProjects: Project[] = []
+const showcaseProjects: Project[] = [];
 
 const EmptyState = () => (
   <div className="flex flex-col items-center justify-center py-24">
-    <span className="text-6xl mb-4 animate-bounce" role="img" aria-label="Rocket">🚀</span>
-    <h3 className="text-2xl font-semibold mb-2">Cooking something delicious...</h3>
-    <p className="text-muted-foreground text-lg mb-4">Stay tuned! We are preparing some amazing showcases for you.</p>
-    <Button asChild size="lg" className="mt-2 animate-pulse">
-      <a href="mailto:hello@vyomaui.com" aria-label="Email to get featured">
-        <Mail className="mr-2 h-4 w-4" />
-        Get Featured
-      </a>
-    </Button>
+    <span
+      className="text-6xl mb-4 animate-bounce"
+      role="img"
+      aria-label="Rocket"
+    >
+      🚀
+    </span>
+    <h3 className="text-2xl font-semibold mb-2">
+      Cooking something Beautiful...
+    </h3>
+    <p className="text-muted-foreground text-lg mb-4">
+      Stay tuned! We are preparing some amazing showcases for you.
+    </p>
   </div>
-)
+);
 
 export default function Showcase() {
   return (
@@ -42,8 +52,9 @@ export default function Showcase() {
           Projects in Production
         </h2>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-          Discover how businesses are leveraging our solutions to drive growth and innovation. See real implementations
-          making a difference across various industries.
+          Discover how businesses are leveraging our solutions to drive growth
+          and innovation. See real implementations making a difference across
+          various industries.
         </p>
       </div>
 
@@ -69,7 +80,10 @@ export default function Showcase() {
                     className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute top-3 right-3">
-                    <Badge variant="secondary" className="bg-white/90 text-black shadow">
+                    <Badge
+                      variant="secondary"
+                      className="bg-white/90 text-black shadow"
+                    >
                       {project.category}
                     </Badge>
                   </div>
@@ -86,7 +100,11 @@ export default function Showcase() {
                 {/* Technologies */}
                 <div className="flex flex-wrap gap-1 mb-4">
                   {project.technologies.map((tech: string) => (
-                    <Badge key={tech} variant="outline" className="text-xs border-primary/30">
+                    <Badge
+                      key={tech}
+                      variant="outline"
+                      className="text-xs border-primary/30"
+                    >
                       {tech}
                     </Badge>
                   ))}
@@ -116,12 +134,20 @@ export default function Showcase() {
             Want Your Project Featured Here?
           </h3>
           <p className="text-lg text-muted-foreground mb-8">
-            Join our showcase and let the world see how you&apos;re using our solutions to transform your business. Get in
-            touch to discuss featuring your implementation.
+            Join our showcase and let the world see how you&apos;re using our
+            solutions to transform your business. Get in touch to discuss
+            featuring your implementation.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild size="lg" className="inline-flex items-center animate-glow">
-              <a href="mailto:hello@vyomaui.com" aria-label="Email to get featured">
+            <Button
+              asChild
+              size="lg"
+              className="inline-flex items-center animate-glow"
+            >
+              <a
+                href="mailto:john.rambo.9901@gmail.com"
+                aria-label="Email to get featured"
+              >
                 <Mail className="mr-2 h-4 w-4" />
                 Email Me
               </a>
@@ -130,5 +156,5 @@ export default function Showcase() {
         </div>
       </div>
     </div>
-  )
+  );
 }

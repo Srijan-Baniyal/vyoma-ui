@@ -11,9 +11,15 @@ import {
   TypingTextTheme,
 } from "@/components/vui/text/TypingText";
 import { AccordionShowcase, AccordionTheme } from "@/components/vui/Accordion";
-import { WheelPickerDemo, WheelPickerTheme } from "@/components/vui/WheelPicker";
+import {
+  WheelPickerDemo,
+  WheelPickerTheme,
+} from "@/components/vui/WheelPicker";
 import { SkeletonShowcase, SkeletonTheme } from "@/components/vui/Skeleton";
-import { CheckboxRefinedShowcase, CheckboxRefinedTheme } from "@/components/vui/CheckboxUpgraded";
+import {
+  CheckboxRefinedShowcase,
+  CheckboxRefinedTheme,
+} from "@/components/vui/CheckboxUpgraded";
 import SheetShowcase from "@/components/vui/Sheet";
 import {
   AnimatedNumberCountdownShowcase,
@@ -22,7 +28,10 @@ import {
 import { BentoGridShowcase, BentoGridTheme } from "@/components/vui/BentoGrid";
 import CardShowcase, { CardTheme } from "@/components/vui/Card";
 import TunnelShowcase from "@/components/vui/backgrounds/Tunnel";
-import { WavyTilesShowcase, WavyTilesTheme } from "@/components/vui/backgrounds/WavyTiles";
+import {
+  WavyTilesShowcase,
+  WavyTilesTheme,
+} from "@/components/vui/backgrounds/WavyTiles";
 import { ButtonShowcase, ButtonTheme } from "@/components/vui/Button";
 import ToolTipShowcase, { ToolTipTheme } from "@/components/vui/ToolTip";
 import NavigationShowcase from "@/components/vui/Navigation";
@@ -46,59 +55,48 @@ export const componentMap: ComponentCategoryMap = {
       name: "Introduction",
       component: Introduction,
       route: "/get-started/introduction",
-      description: "🚀 <b>Welcome to VUI</b> - A modern React UI library designed for developers who value <b>beautiful design</b> and <b>seamless functionality</b>. Get started with our comprehensive guide.",
+      description:
+        "🚀 <b>Welcome to VUI</b> - A modern React UI library designed for developers who value <b>beautiful design</b> and <b>seamless functionality</b>. Get started with our comprehensive guide.",
     },
     {
       name: "Installation",
       component: Installation,
       route: "/get-started/installation",
-      description: "⚡ <b>Quick Setup Guide</b> - Install VUI in your project with <code>npm</code>, <code>yarn</code>, or <code>pnpm</code>. Includes <b>TypeScript support</b> and <b>tree-shaking</b> for optimal bundle size.",
+      description:
+        "⚡ <b>Quick Setup Guide</b> - Install VUI in your project with <code>npm</code>, <code>yarn</code>, or <code>pnpm</code>. Includes <b>TypeScript support</b> and <b>tree-shaking</b> for optimal bundle size.",
     },
     {
       name: "Story Behind",
       component: StoryBehind,
       route: "/get-started/story-behind",
-      description: "💡 <b>The Journey</b> - Discover the inspiration and vision behind VUI. Learn about our commitment to <b>developer experience</b> and <b>design excellence</b>.",
+      description:
+        "💡 <b>The Journey</b> - Discover the inspiration and vision behind VUI. Learn about our commitment to <b>developer experience</b> and <b>design excellence</b>.",
     },
     {
       name: "Changelog",
       component: Changelog,
       route: "/get-started/changelog",
-      description: "📝 <b>Release Notes</b> - Stay updated with the latest features, improvements, and bug fixes. Track our progress with <b>semantic versioning</b> and detailed change logs.",
+      description:
+        "📝 <b>Release Notes</b> - Stay updated with the latest features, improvements, and bug fixes. Track our progress with <b>semantic versioning</b> and detailed change logs.",
     },
   ],
-  "Text Animation": [
+  Backgrounds: [
     {
-      name: "Animated Number",
-      component: AnimatedNumberCountdownShowcase,
-      theme: AnimatedNumberCountdownTheme,
-      route: "/text-animation/animated-number",
-      path: "components/vui/text/AnimatedNumber.tsx",
-      description: "🔢 <b>Dynamic Number Animations</b> - Create stunning countdown timers and number transitions with <span style='color: #3b82f6;'>smooth easing</span> and customizable <span style='color: #8b5cf6;'>duration</span>. <i>Perfect for dashboards and analytics.</i>",
+      name: "Tunnel",
+      component: TunnelShowcase,
+      route: "/backgrounds/tunnel",
+      path: "components/vui/backgrounds/Tunnel.tsx",
+      description:
+        "🌌 <b>3D Tunnel Animation</b> - Mesmerizing <span style='color: #8b5cf6;'>depth-based</span> background effect with <span style='color: #3b82f6;'>particle systems</span> and <span style='color: #10b981;'>smooth transitions</span>. <i>Creates an immersive visual experience for hero sections.</i>",
     },
     {
-      name: "Counting Number",
-      component: CountUpShowcase,
-      theme: CountUpTheme,
-      route: "/text-animation/counting-number",
-      path: "components/vui/text/CountUp.tsx",
-      description: "📈 <b>Count-Up Animations</b> - Animate numbers from zero to target values with <span style='color: #10b981;'>configurable speed</span> and <span style='color: #f59e0b;'>decimal precision</span>. <i>Ideal for displaying statistics and metrics.</i>",
-    },
-    {
-      name: "Decryption Text",
-      component: TextDecryptionShowcase,
-      theme: TextDecryptionTheme,
-      route: "/text-animation/decryption-text",
-      path: "components/vui/text/TextDecryption.tsx",
-      description: "🔐 <b>Matrix-Style Text Reveal</b> - Create captivating text animations that simulate <span style='color: #ef4444;'>decryption effects</span>. Features <span style='color: #8b5cf6;'>character scrambling</span> and smooth reveal transitions.",
-    },
-    {
-      name: "Typing Text",
-      component: TypingTextShowcase,
-      theme: TypingTextTheme,
-      route: "/text-animation/typing-text",
-      path: "components/vui/text/TypingText.tsx",
-      description: "⌨️ <b>Typewriter Effect</b> - Simulate realistic typing animations with <span style='color: #3b82f6;'>customizable speed</span>, <span style='color: #10b981;'>cursor blinking</span>, and <span style='color: #f59e0b;'>backspace effects</span>. <i>Great for hero sections and presentations.</i>",
+      name: "Wavy Tiles",
+      component: WavyTilesShowcase,
+      theme: WavyTilesTheme,
+      route: "/backgrounds/wavy-tiles",
+      path: "components/vui/backgrounds/WavyTiles.tsx",
+      description:
+        "🌊 <b>Animated Wave Pattern</b> - Dynamic tiled background with <span style='color: #3b82f6;'>fluid wave animations</span> and <span style='color: #f59e0b;'>customizable colors</span>. Features <span style='color: #10b981;'>performance optimization</span> and <b>responsive scaling</b>.",
     },
   ],
   Components: [
@@ -108,7 +106,8 @@ export const componentMap: ComponentCategoryMap = {
       theme: AccordionTheme,
       route: "/components/accordion",
       path: "components/vui/Accordion.tsx",
-      description: "📁 <b>Collapsible Content Panels</b> - Organize content with smooth <span style='color: #8b5cf6;'>expand/collapse animations</span>. Supports <span style='color: #10b981;'>multiple open items</span>, keyboard navigation, and <b>accessibility features</b>.",
+      description:
+        "📁 <b>Collapsible Content Panels</b> - Organize content with smooth <span style='color: #8b5cf6;'>expand/collapse animations</span>. Supports <span style='color: #10b981;'>multiple open items</span>, keyboard navigation, and <b>accessibility features</b>.",
     },
     {
       name: "Bento Grid",
@@ -116,7 +115,8 @@ export const componentMap: ComponentCategoryMap = {
       theme: BentoGridTheme,
       route: "/components/bento-grid",
       path: "components/vui/BentoGrid.tsx",
-      description: "🎨 <b>Modern Grid Layout</b> - Create beautiful <span style='color: #f59e0b;'>masonry-style</span> layouts inspired by Apple's design language. Features <span style='color: #3b82f6;'>responsive breakpoints</span> and <span style='color: #8b5cf6;'>smooth hover effects</span>.",
+      description:
+        "🎨 <b>Modern Grid Layout</b> - Create beautiful <span style='color: #f59e0b;'>masonry-style</span> layouts inspired by Apple's design language. Features <span style='color: #3b82f6;'>responsive breakpoints</span> and <span style='color: #8b5cf6;'>smooth hover effects</span>.",
     },
     {
       name: "Buttons",
@@ -124,7 +124,8 @@ export const componentMap: ComponentCategoryMap = {
       theme: ButtonTheme,
       route: "/components/buttons",
       path: "components/vui/Button.tsx",
-      description: "🎭 <b>Interactive Button Collection</b> - A comprehensive set of buttons including <span style='color: #ef4444;'>Shimmer</span>, <span style='color: #8b5cf6;'>Magnetic</span>, <span style='color: #f59e0b;'>Spotlight</span>, and <span style='color: #10b981;'>Video</span> variants with <b>micro-interactions</b> and <b>haptic feedback</b>.",
+      description:
+        "🎭 <b>Interactive Button Collection</b> - A comprehensive set of buttons including <span style='color: #ef4444;'>Shimmer</span>, <span style='color: #8b5cf6;'>Magnetic</span>, <span style='color: #f59e0b;'>Spotlight</span>, and <span style='color: #10b981;'>Video</span> variants with <b>micro-interactions</b> and <b>haptic feedback</b>.",
     },
     {
       name: "Card",
@@ -132,7 +133,8 @@ export const componentMap: ComponentCategoryMap = {
       theme: CardTheme,
       route: "/components/card",
       path: "components/vui/Card.tsx",
-      description: "🃏 <b>Elegant Content Cards</b> - Display content in beautiful cards with <span style='color: #3b82f6;'>glassmorphism effects</span>, <span style='color: #8b5cf6;'>hover animations</span>, and <span style='color: #10b981;'>responsive layouts</span>. <i>Perfect for portfolios and dashboards.</i>",
+      description:
+        "🃏 <b>Elegant Content Cards</b> - Display content in beautiful cards with <span style='color: #3b82f6;'>glassmorphism effects</span>, <span style='color: #8b5cf6;'>hover animations</span>, and <span style='color: #10b981;'>responsive layouts</span>. <i>Perfect for portfolios and dashboards.</i>",
     },
     {
       name: "Checkbox",
@@ -140,21 +142,24 @@ export const componentMap: ComponentCategoryMap = {
       theme: CheckboxRefinedTheme,
       route: "/components/checkbox",
       path: "components/vui/CheckboxUpgraded.tsx",
-      description: "✅ <b>Enhanced Checkbox Controls</b> - Beautifully animated checkboxes with <span style='color: #10b981;'>smooth transitions</span>, <span style='color: #f59e0b;'>indeterminate states</span>, and <span style='color: #8b5cf6;'>custom styling options</span>. Fully accessible and keyboard-friendly.",
+      description:
+        "✅ <b>Enhanced Checkbox Controls</b> - Beautifully animated checkboxes with <span style='color: #10b981;'>smooth transitions</span>, <span style='color: #f59e0b;'>indeterminate states</span>, and <span style='color: #8b5cf6;'>custom styling options</span>. Fully accessible and keyboard-friendly.",
     },
     {
       name: "Navigation",
       component: NavigationShowcase,
       route: "/components/navigation",
       path: "components/vui/Navigation.tsx",
-      description: "🧭 <b>Responsive Navigation System</b> - Modern navigation components with <span style='color: #3b82f6;'>smooth transitions</span>, <span style='color: #10b981;'>mobile-first design</span>, and <span style='color: #8b5cf6;'>active state indicators</span>. <i>Includes breadcrumbs and menu variants.</i>",
+      description:
+        "🧭 <b>Responsive Navigation System</b> - Modern navigation components with <span style='color: #3b82f6;'>smooth transitions</span>, <span style='color: #10b981;'>mobile-first design</span>, and <span style='color: #8b5cf6;'>active state indicators</span>. <i>Includes breadcrumbs and menu variants.</i>",
     },
     {
       name: "Sheet",
       component: SheetShowcase,
       route: "/components/sheet",
       path: "components/vui/Sheet.tsx",
-      description: "📄 <b>Sliding Panel Component</b> - Create smooth slide-out panels from any direction with <span style='color: #3b82f6;'>backdrop blur</span>, <span style='color: #ef4444;'>drag-to-close</span>, and <span style='color: #10b981;'>responsive breakpoints</span>. <i>Perfect for mobile interfaces.</i>",
+      description:
+        "📄 <b>Sliding Panel Component</b> - Create smooth slide-out panels from any direction with <span style='color: #3b82f6;'>backdrop blur</span>, <span style='color: #ef4444;'>drag-to-close</span>, and <span style='color: #10b981;'>responsive breakpoints</span>. <i>Perfect for mobile interfaces.</i>",
     },
     {
       name: "Skeleton",
@@ -162,7 +167,8 @@ export const componentMap: ComponentCategoryMap = {
       theme: SkeletonTheme,
       route: "/components/skeleton",
       path: "components/vui/Skeleton.tsx",
-      description: "💀 <b>Loading State Placeholders</b> - Improve perceived performance with <span style='color: #8b5cf6;'>shimmer animations</span> and <span style='color: #f59e0b;'>customizable shapes</span>. Supports <span style='color: #10b981;'>dark/light themes</span> and <b>complex layouts</b>.",
+      description:
+        "💀 <b>Loading State Placeholders</b> - Improve perceived performance with <span style='color: #8b5cf6;'>shimmer animations</span> and <span style='color: #f59e0b;'>customizable shapes</span>. Supports <span style='color: #10b981;'>dark/light themes</span> and <b>complex layouts</b>.",
     },
     {
       name: "Tooltip",
@@ -170,7 +176,8 @@ export const componentMap: ComponentCategoryMap = {
       theme: ToolTipTheme,
       route: "/components/tooltip",
       path: "components/vui/ToolTip.tsx",
-      description: "💬 <b>Smart Tooltip System</b> - Context-aware tooltips with <span style='color: #3b82f6;'>auto-positioning</span>, <span style='color: #10b981;'>arrow indicators</span>, and <span style='color: #f59e0b;'>delay controls</span>. Includes <b>rich content support</b> and <b>accessibility features</b>.",
+      description:
+        "💬 <b>Smart Tooltip System</b> - Context-aware tooltips with <span style='color: #3b82f6;'>auto-positioning</span>, <span style='color: #10b981;'>arrow indicators</span>, and <span style='color: #f59e0b;'>delay controls</span>. Includes <b>rich content support</b> and <b>accessibility features</b>.",
     },
     {
       name: "Wheel Picker",
@@ -178,24 +185,46 @@ export const componentMap: ComponentCategoryMap = {
       theme: WheelPickerTheme,
       route: "/components/wheel-picker",
       path: "components/vui/WheelPicker.tsx",
-      description: "🎡 <b>iOS-Style Picker Wheel</b> - Native-feeling selection component with <span style='color: #8b5cf6;'>momentum scrolling</span>, <span style='color: #ef4444;'>haptic feedback</span>, and <span style='color: #10b981;'>infinite scroll support</span>. <i>Great for date/time and option selection.</i>",
+      description:
+        "🎡 <b>iOS-Style Picker Wheel</b> - Native-feeling selection component with <span style='color: #8b5cf6;'>momentum scrolling</span>, <span style='color: #ef4444;'>haptic feedback</span>, and <span style='color: #10b981;'>infinite scroll support</span>. <i>Great for date/time and option selection.</i>",
     },
   ],
-  Backgrounds: [
+  "Text Animation": [
     {
-      name: "Tunnel",
-      component: TunnelShowcase,
-      route: "/backgrounds/tunnel",
-      path: "components/vui/backgrounds/Tunnel.tsx",
-      description: "🌌 <b>3D Tunnel Animation</b> - Mesmerizing <span style='color: #8b5cf6;'>depth-based</span> background effect with <span style='color: #3b82f6;'>particle systems</span> and <span style='color: #10b981;'>smooth transitions</span>. <i>Creates an immersive visual experience for hero sections.</i>",
+      name: "Animated Number",
+      component: AnimatedNumberCountdownShowcase,
+      theme: AnimatedNumberCountdownTheme,
+      route: "/text-animation/animated-number",
+      path: "components/vui/text/AnimatedNumber.tsx",
+      description:
+        "🔢 <b>Dynamic Number Animations</b> - Create stunning countdown timers and number transitions with <span style='color: #3b82f6;'>smooth easing</span> and customizable <span style='color: #8b5cf6;'>duration</span>. <i>Perfect for dashboards and analytics.</i>",
     },
     {
-      name: "Wavy Tiles",
-      component: WavyTilesShowcase,
-      theme: WavyTilesTheme,
-      route: "/backgrounds/wavy-tiles",
-      path: "components/vui/backgrounds/WavyTiles.tsx",
-      description: "🌊 <b>Animated Wave Pattern</b> - Dynamic tiled background with <span style='color: #3b82f6;'>fluid wave animations</span> and <span style='color: #f59e0b;'>customizable colors</span>. Features <span style='color: #10b981;'>performance optimization</span> and <b>responsive scaling</b>.",
+      name: "Counting Number",
+      component: CountUpShowcase,
+      theme: CountUpTheme,
+      route: "/text-animation/counting-number",
+      path: "components/vui/text/CountUp.tsx",
+      description:
+        "📈 <b>Count-Up Animations</b> - Animate numbers from zero to target values with <span style='color: #10b981;'>configurable speed</span> and <span style='color: #f59e0b;'>decimal precision</span>. <i>Ideal for displaying statistics and metrics.</i>",
+    },
+    {
+      name: "Decryption Text",
+      component: TextDecryptionShowcase,
+      theme: TextDecryptionTheme,
+      route: "/text-animation/decryption-text",
+      path: "components/vui/text/TextDecryption.tsx",
+      description:
+        "🔐 <b>Matrix-Style Text Reveal</b> - Create captivating text animations that simulate <span style='color: #ef4444;'>decryption effects</span>. Features <span style='color: #8b5cf6;'>character scrambling</span> and smooth reveal transitions.",
+    },
+    {
+      name: "Typing Text",
+      component: TypingTextShowcase,
+      theme: TypingTextTheme,
+      route: "/text-animation/typing-text",
+      path: "components/vui/text/TypingText.tsx",
+      description:
+        "⌨️ <b>Typewriter Effect</b> - Simulate realistic typing animations with <span style='color: #3b82f6;'>customizable speed</span>, <span style='color: #10b981;'>cursor blinking</span>, and <span style='color: #f59e0b;'>backspace effects</span>. <i>Great for hero sections and presentations.</i>",
     },
   ],
 };

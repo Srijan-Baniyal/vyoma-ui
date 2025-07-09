@@ -153,7 +153,7 @@ export async function generateMetadata({
   const description =
     componentEntry.description ||
     `Discover the ${humanComponent} component in the ${humanCategory} section of VUI. Modern, customizable, and interactive React UI for your next project.`;
-  const canonicalUrl = `https://yourdomain.com${componentEntry.route}`;
+  const canonicalUrl = `https://vyomaui.design/${componentEntry.route}`;
   const keywords = [
     humanComponent,
     humanCategory,

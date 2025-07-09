@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Vyoma UI ",
+  title: "Vyoma UI | Truly Beyond UI. Designed with Spatial Wisdom Inside.",
   description: "Truly Beyond UI. Designed with Spatial Wisdom Inside.",
   keywords: [
     "Vyoma UI",
@@ -28,19 +28,19 @@ export const metadata: Metadata = {
     "Spatial Design",
     "VUI",
   ],
-  metadataBase: new URL("https://yourdomain.com"), // TODO: Replace with your real domain
+  metadataBase: new URL("https://vyomaui.design"), 
   alternates: {
-    canonical: "https://yourdomain.com/", // TODO: Replace with your real domain
+    canonical: "https://vyomaui.design", 
   },
   openGraph: {
     title: "Vyoma UI",
     description: "Truly Beyond UI. Designed with Spatial Wisdom Inside.",
-    url: "https://yourdomain.com/", // TODO: Replace with your real domain
+    url: "https://vyomaui.design/", 
     siteName: "Vyoma UI",
     type: "website",
     images: [
       {
-        url: "/VyomaUI.svg", // You may want to generate a PNG for better OG support
+        url: "../public/favicons/favicon.svg", 
         width: 1200,
         height: 630,
         alt: "Vyoma UI Logo",
@@ -52,20 +52,18 @@ export const metadata: Metadata = {
     title: "Vyoma UI",
     description: "Truly Beyond UI. Designed with Spatial Wisdom Inside.",
     images: [
-      "/VyomaUI.svg", // You may want to generate a PNG for better Twitter support
+      "../public/favicons/favicon.svg", 
     ],
-    creator: "@yourtwitter", // TODO: Replace with your Twitter handle
+    creator: "@srijanbaniyal",
   },
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",
     apple: [
-      // You may want to add a 180x180 PNG for best Apple support
-      // { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
-      { url: "/VyomaUI.svg", type: "image/svg+xml" },
+      { url: "../public/favicons/favicon.svg", type: "image/svg+xml" },
+      {url:"../public/favicons/apple-touch-icon.png", sizes: "180x180", type: "image/png"}
     ],
   },
-  // manifest: "/manifest.json", // Uncomment if you add a manifest file
   appleWebApp: {
     title: "Vyoma UI",
     statusBarStyle: "default",

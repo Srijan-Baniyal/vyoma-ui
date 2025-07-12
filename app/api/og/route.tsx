@@ -13,9 +13,11 @@ export async function GET() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
+          backgroundColor:"black",
           fontSize: 32,
           fontWeight: 600,
         }}
+        className="bg-black"
       >
           <svg
             xmlns="http://www.w3.org/2000/svg"

@@ -28,19 +28,19 @@ export const metadata: Metadata = {
     "Spatial Design",
     "VUI",
   ],
-  metadataBase: new URL("https://vyomaui.design"), 
+  metadataBase: new URL("https://vyomaui.design"),
   alternates: {
-    canonical: "https://vyomaui.design", 
+    canonical: "https://vyomaui.design",
   },
   openGraph: {
     title: "Vyoma UI",
     description: "Truly Beyond UI. Designed with Spatial Wisdom Inside.",
-    url: "https://vyomaui.design/", 
+    url: "https://vyomaui.design/",
     siteName: "Vyoma UI",
     type: "website",
     images: [
       {
-        url: "../public/favicons/favicon.svg", 
+        url: "https://vyomaui.design/api/og",
         width: 1200,
         height: 630,
         alt: "Vyoma UI Logo",
@@ -52,16 +52,35 @@ export const metadata: Metadata = {
     title: "Vyoma UI",
     description: "Truly Beyond UI. Designed with Spatial Wisdom Inside.",
     images: [
-      "../public/favicons/favicon.svg", 
+      {
+        url: "https://vyomaui.design/api/og",
+        width: 1200,
+        height: 630,
+        alt: "Vyoma UI Logo",
+      },
     ],
     creator: "@srijanbaniyal",
   },
   icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
+    icon: [
+      { url: "./favicon.ico", sizes: "any" },
+      {
+        url: "../public/favicons/favicon-16x16.png",
+        sizes: "16x16",
+        type: "image/png",
+      },
+      {
+        url: "../public/favicons/favicon-32x32.png",
+        sizes: "32x32",
+        type: "image/png",
+      },
+    ],
     apple: [
-      { url: "../public/favicons/favicon.svg", type: "image/svg+xml" },
-      {url:"../public/favicons/apple-touch-icon.png", sizes: "180x180", type: "image/png"}
+      {
+        url: "../public/favicons/apple-touch-icon.png",
+        sizes: "180x180",
+        type: "image/png",
+      },
     ],
   },
   appleWebApp: {
@@ -89,9 +108,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider>
-          <PackageManagerProvider>
-            {children}
-          </PackageManagerProvider>
+          <PackageManagerProvider>{children}</PackageManagerProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -8,6 +8,8 @@ import {
 } from "@/lib/ComponentSourceReader";
 import type { Metadata } from "next";
 import parser from "html-react-parser";
+
+
 function normalize(str: string) {
   return str.replace(/[-_\s]/g, "").toLowerCase();
 }
@@ -21,7 +23,9 @@ function truncateDescription(
     if (words.length <= wordLimit) return description;
     return words.slice(0, wordLimit).join(" ") + "...";
   }
-  const extractText = (element: React.JSX.Element | React.JSX.Element[]): string => {
+  const extractText = (
+    element: React.JSX.Element | React.JSX.Element[]
+  ): string => {
     if (Array.isArray(element)) {
       return element.map(extractText).join(" ");
     }
@@ -31,7 +35,7 @@ function truncateDescription(
       }
       if (Array.isArray(element.props.children)) {
         return element.props.children
-          .map((child: unknown) => typeof child === "string" ? child : "")
+          .map((child: unknown) => (typeof child === "string" ? child : ""))
           .join(" ");
       }
     }
@@ -150,9 +154,9 @@ export async function generateMetadata({
   const humanCategory = humanize(category);
   const humanComponent = humanize(componentEntry.name);
   const title = `${humanComponent} | ${humanCategory} | VUI React UI Library`;
-  const description =
-    componentEntry.description ||
-    `Discover the ${humanComponent} component in the ${humanCategory} section of VUI. Modern, customizable, and interactive React UI for your next project.`;
+  const description = `${componentEntry.description
+    .replace(/<[^>]*>/g, "")
+    .trim()}`;
   const canonicalUrl = `https://vyomaui.design/${componentEntry.route}`;
   const keywords = [
     humanComponent,
@@ -178,13 +182,25 @@ export async function generateMetadata({
       url: canonicalUrl,
       type: "website",
       siteName: "VUI React UI Library",
-      // images: [ogImage],
+      images: [
+        {
+          url: "https://vyomaui.design/api/og",
+          width: 1200,
+          height: 630,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      // images: [ogImage],
+      images: [
+        {
+          url: "https://vyomaui.design/api/og",
+          width: 1200,
+          height: 630,
+        },
+      ],
     },
     category: humanCategory,
   };

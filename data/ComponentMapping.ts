@@ -35,6 +35,7 @@ import {
 import { ButtonShowcase, ButtonTheme } from "@/components/vui/Button";
 import ToolTipShowcase, { ToolTipTheme } from "@/components/vui/ToolTip";
 import NavigationShowcase from "@/components/vui/Navigation";
+import MagicalChatInput from "@/components/vui/ai/MagicalChatInput";
 
 export type ComponentEntry = {
   name: string;
@@ -78,6 +79,15 @@ export const componentMap: ComponentCategoryMap = {
       route: "/get-started/changelog",
       description:
         "📝 <b>Release Notes</b> - Stay updated with the latest features, improvements, and bug fixes. Track our progress with <b>semantic versioning</b> and detailed change logs.",
+    },
+  ],
+  "AI Components":[
+    {
+      name: "Magical Chat Input",
+      component: MagicalChatInput,
+      route: "/ai-components/magical-chat-input",
+      description:
+        "🔮 <b>Magical Chat Input</b> - A magical chat input component with <span style='color: #8b5cf6;'>smooth animations</span>, <span style='color: #3b82f6;'>cursor effects</span>, and <span style='color: #10b981;'>micro-interactions</span>. <i>Perfect for chat applications and AI assistants.</i>",
     },
   ],
   Backgrounds: [

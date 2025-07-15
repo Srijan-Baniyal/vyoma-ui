@@ -196,7 +196,7 @@ export const componentMap: ComponentCategoryMap = {
       route: "/components/wheel-picker",
       path: "components/vui/WheelPicker.tsx",
       description:
-        "🎡 <b>iOS-Style Picker Wheel</b> - Native-feeling selection component with <span style='color: #8b5cf6;'>momentum scrolling</span>, <span style='color: #ef4444;'>haptic feedback</span>, and <span style='color: #10b981;'>infinite scroll support</span>. <i>Great for date/time and option selection.</i>",
+        "🎡 <b>iOS-Style Picker Wheel</b> - Native-feeling selection component with <span style='color: #8b5cf6;'>momentum scrolling</span>, <span style='color: #ef4444;'>haptic feedback</span>, and <span style='color: #10b981;'>infinite scroll support</span>. <i>Great for date/time and option selection.</i> <br /><br /> Credits to <a href='https://www.chanhdai.com' target='_blank'>@ncdai</a> for creating this beautiful iOS Wheel Picker. ",
     },
   ],
   "Text Animation": [

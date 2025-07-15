@@ -130,6 +130,7 @@ export async function generateMetadata({
     return str
       .replace(/[-_]/g, " ")
       .replace(/\b\w/g, (c) => c.toUpperCase())
+      .replace(/\bAi\b/g, "AI")
       .replace(/\s+/g, " ")
       .trim();
   }

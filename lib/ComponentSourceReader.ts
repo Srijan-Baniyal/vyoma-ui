@@ -124,6 +124,7 @@ async function findComponentFile(
     "components/vui/text",
     "components/vui/buttons",
     "components/vui/backgrounds",
+    "components/vui/ai"
   ];
   const possibleNames = [
     `${componentName}.tsx`,

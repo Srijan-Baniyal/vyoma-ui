@@ -64,7 +64,7 @@ export default function Footer() {
                 asChild
               >
                 <Link
-                  href="https://github.com/Srijan-Baniyal/VyomaUI"
+                  href="https://github.com/Srijan-Baniyal/vyoma-ui"
                   target="_blank"
                   className="gap-2 justify-center sm:justify-start"
                 >

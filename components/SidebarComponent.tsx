@@ -475,7 +475,7 @@ export default function SidebarComponent({ children }: SidebarComponentProps) {
 
             <div className="border-t border-border/50 p-4 bg-background/50">
               <Link
-                href="https://github.com/Srijan-Baniyal/VyomaUI"
+                href="https://github.com/Srijan-Baniyal/vyoma-ui"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group flex items-center justify-between w-full text-sm text-muted-foreground hover:text-foreground transition-all duration-200 rounded-lg p-3 hover:bg-accent/60 border border-transparent hover:border-border/50"

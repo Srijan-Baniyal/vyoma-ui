@@ -494,7 +494,7 @@ export default function StoryBehind() {
               </Button>
               <Button variant="outline" size="lg" asChild>
                 <a
-                  href="https://github.com/Srijan-Baniyal/VyomaUI"
+                  href="https://github.com/Srijan-Baniyal/vyoma-ui"
                   target="_blank"
                   rel="noopener noreferrer"
                 >

@@ -149,15 +149,51 @@ export async function generateMetadata({
     category,
     componentName
   );
+  
   if (!componentEntry) {
-    return { title: "Not Found" };
+    // For non-existent components, return generic metadata
+    const slug = `${category}/${componentName}`;
+    return {
+      title: "Component Not Found | VUI React UI Library",
+      description: "This component doesn't exist yet. I am planning to build that.",
+      openGraph: {
+        title: "Component Not Found",
+        description: "This component doesn't exist yet. I am planning to build that.",
+        url: `https://vyomaui.design/${slug}`,
+        type: "website",
+        siteName: "VUI React UI Library",
+        images: [
+          {
+            url: `https://vyomaui.design/api/og?title=component-not-found&description=this-component-doesnt-exist-yet-i-am-planning-to-build-that&path=${encodeURIComponent(`/${slug}`)}`,
+            width: 1200,
+            height: 630,
+          },
+        ],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: "Component Not Found",
+        description: "This component doesn't exist yet. I am planning to build that.",
+        images: [
+          {
+            url: `https://vyomaui.design/api/og?title=component-not-found&description=this-component-doesnt-exist-yet-i-am-planning-to-build-that&path=${encodeURIComponent(`/${slug}`)}`,
+            width: 1200,
+            height: 630,
+          },
+        ],
+      },
+    };
   }
+
+  // For existing components
   const humanCategory = humanize(category);
   const humanComponent = humanize(componentEntry.name);
   const title = `${humanComponent} | ${humanCategory} | VUI React UI Library`;
-  const description = `${componentEntry.description
-    .replace(/<[^>]*>/g, "")
-    .trim()}`;
+  
+  // Keep original description with emojis for OG, but clean version for meta description
+  const cleanDescription = componentEntry.description.replace(/<[^>]*>/g, "").trim();
+  const richDescription = componentEntry.description; // Keep original with emojis and HTML
+  
   const canonicalUrl = `https://vyomaui.design/${componentEntry.route}`;
   const keywords = [
     humanComponent,
@@ -170,22 +206,23 @@ export async function generateMetadata({
     "Customizable",
     "Interactive",
   ];
+  
   return {
     title,
-    description,
+    description: cleanDescription, // Clean version for meta description
     keywords,
     alternates: {
       canonical: canonicalUrl,
     },
     openGraph: {
-      title,
-      description,
+      title: humanComponent, // Use human-readable component name
+      description: cleanDescription, // Clean description for OG
       url: canonicalUrl,
       type: "website",
       siteName: "VUI React UI Library",
       images: [
         {
-          url: "https://vyomaui.design/api/og",
+          url: `https://vyomaui.design/api/og?title=${encodeURIComponent(humanComponent)}&description=${encodeURIComponent(richDescription)}&path=${encodeURIComponent(componentEntry.route)}`,
           width: 1200,
           height: 630,
         },
@@ -193,11 +230,11 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title,
-      description,
+      title: humanComponent, // Use human-readable component name
+      description: cleanDescription, // Clean description for Twitter
       images: [
         {
-          url: "https://vyomaui.design/api/og",
+          url: `https://vyomaui.design/api/og?title=${encodeURIComponent(humanComponent)}&description=${encodeURIComponent(richDescription)}&path=${encodeURIComponent(componentEntry.route)}`,
           width: 1200,
           height: 630,
         },

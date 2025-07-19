@@ -36,13 +36,14 @@ import { ButtonShowcase, ButtonTheme } from "@/components/vui/Button";
 import ToolTipShowcase, { ToolTipTheme } from "@/components/vui/ToolTip";
 import NavigationShowcase from "@/components/vui/Navigation";
 import MagicalChatInput from "@/components/vui/ai/MagicalChatInput";
+import { WavingTextShowcase,WavingTextTheme } from "@/components/vui/text/WavingText";
 
 export type ComponentEntry = {
   name: string;
   component: React.ComponentType;
   theme?: React.ComponentType;
   route: string;
-  path?: string;
+  path: string | undefined;
   description: string;
 };
 
@@ -56,6 +57,7 @@ export const componentMap: ComponentCategoryMap = {
       name: "Introduction",
       component: Introduction,
       route: "/get-started/introduction",
+      path: undefined,
       description:
         "🚀 <b>Welcome to VUI</b> - A modern React UI library designed for developers who value <b>beautiful design</b> and <b>seamless functionality</b>. Get started with our comprehensive guide.",
     },
@@ -63,6 +65,7 @@ export const componentMap: ComponentCategoryMap = {
       name: "Installation",
       component: Installation,
       route: "/get-started/installation",
+      path: undefined,
       description:
         "⚡ <b>Quick Setup Guide</b> - Install VUI in your project with <code>npm</code>, <code>yarn</code>, or <code>pnpm</code>. Includes <b>TypeScript support</b> and <b>tree-shaking</b> for optimal bundle size.",
     },
@@ -70,6 +73,7 @@ export const componentMap: ComponentCategoryMap = {
       name: "Story Behind",
       component: StoryBehind,
       route: "/get-started/story-behind",
+      path: undefined,
       description:
         "💡 <b>The Journey</b> - Discover the inspiration and vision behind VUI. Learn about our commitment to <b>developer experience</b> and <b>design excellence</b>.",
     },
@@ -77,16 +81,17 @@ export const componentMap: ComponentCategoryMap = {
       name: "Changelog",
       component: Changelog,
       route: "/get-started/changelog",
+      path: undefined,
       description:
         "📝 <b>Release Notes</b> - Stay updated with the latest features, improvements, and bug fixes. Track our progress with <b>semantic versioning</b> and detailed change logs.",
     },
   ],
-  "AI Components":[
+  "AI Components": [
     {
       name: "Magical Chat Input",
       component: MagicalChatInput,
       route: "/ai-components/magical-chat-input",
-      path:"components/vui/ai/MagicalChatInput.tsx",
+      path: "components/vui/ai/MagicalChatInput.tsx",
       description:
         "🔮 <b>Magical Chat Input</b> - A magical chat input component with <span style='color: #8b5cf6;'>smooth animations</span>, <span style='color: #3b82f6;'>cursor effects</span>, and <span style='color: #10b981;'>micro-interactions</span>. <i>Perfect for chat applications and AI assistants.</i>",
     },
@@ -237,5 +242,14 @@ export const componentMap: ComponentCategoryMap = {
       description:
         "⌨️ <b>Typewriter Effect</b> - Simulate realistic typing animations with <span style='color: #3b82f6;'>customizable speed</span>, <span style='color: #10b981;'>cursor blinking</span>, and <span style='color: #f59e0b;'>backspace effects</span>. <i>Great for hero sections and presentations.</i>",
     },
+    {
+      name:"Waving Text",
+      component: WavingTextShowcase ,
+      theme: WavingTextTheme,
+      route: "/text-animation/waving-text",
+      path: "components/vui/text/WavingText.tsx",
+      description:
+        "🌊 <b>Waving Text Effect</b> - Create mesmerizing text animations with <span style='color: #3b82f6;'>smooth wave effects</span>. Features <span style='color: #10b981;'>configurable speed</span> and <span style='color: #f59e0b;'>customizable colors</span>.",
+    }
   ],
 };

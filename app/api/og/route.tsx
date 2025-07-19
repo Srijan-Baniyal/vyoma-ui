@@ -1,6 +1,5 @@
 import { ImageResponse } from "next/og";
 import { componentMap } from "@/data/ComponentMapping";
-import LogoCode from "@/lib/LogoCode";
 
 export const runtime = "edge";
 
@@ -42,6 +41,7 @@ function cleanDescription(htmlString: string): string {
 }
 
 export async function GET(request: Request) {
+  const { default: LogoCode } = await import("@/lib/LogoCode");
   const { searchParams } = new URL(request.url);
   const title = searchParams.get("title") || "Vyoma UI";
   const rawDescription =

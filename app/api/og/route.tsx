@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 import { componentMap } from "@/data/ComponentMapping";
 
-export const runtime = "edge";
+export const runtime = "nodejs";
 
 function normalize(str: string) {
   return str.replace(/[-_\s]/g, "").toLowerCase();

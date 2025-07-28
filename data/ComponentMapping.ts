@@ -36,7 +36,11 @@ import { ButtonShowcase, ButtonTheme } from "@/components/vui/Button";
 import ToolTipShowcase, { ToolTipTheme } from "@/components/vui/ToolTip";
 import NavigationShowcase from "@/components/vui/Navigation";
 import MagicalChatInput from "@/components/vui/ai/MagicalChatInput";
-import { WavingTextShowcase,WavingTextTheme } from "@/components/vui/text/WavingText";
+import {
+  WavingTextShowcase,
+  WavingTextTheme,
+} from "@/components/vui/text/WavingText";
+import BeautifulFooterShowcase from "@/components/vui/BeautyFooter";
 
 export type ComponentEntry = {
   name: string;
@@ -162,6 +166,14 @@ export const componentMap: ComponentCategoryMap = {
         "✅ <b>Enhanced Checkbox Controls</b> - Beautifully animated checkboxes with <span style='color: #10b981;'>smooth transitions</span>, <span style='color: #f59e0b;'>indeterminate states</span>, and <span style='color: #8b5cf6;'>custom styling options</span>. Fully accessible and keyboard-friendly.",
     },
     {
+      name: "Footer",
+      component: BeautifulFooterShowcase,
+      route: "/components/footer",
+      path: "components/vui/BeautyFooter.tsx",
+      description:
+        "👣 <b>Beautiful Footer</b> - Create stunning footer sections with <span style='color: #8b5cf6;'>multi-layered gradients</span>, <span style='color: #3b82f6;'>glassmorphism effects</span>, and <span style='color: #f59e0b;'>artistic light overlays</span>. Features <span style='color: #10b981;'>responsive design</span> and <b>smooth hover animations</b>. <i>Perfect for portfolios, agencies, and creative websites.</i>",
+    },
+    {
       name: "Navigation",
       component: NavigationShowcase,
       route: "/components/navigation",
@@ -243,13 +255,13 @@ export const componentMap: ComponentCategoryMap = {
         "⌨️ <b>Typewriter Effect</b> - Simulate realistic typing animations with <span style='color: #3b82f6;'>customizable speed</span>, <span style='color: #10b981;'>cursor blinking</span>, and <span style='color: #f59e0b;'>backspace effects</span>. <i>Great for hero sections and presentations.</i>",
     },
     {
-      name:"Waving Text",
-      component: WavingTextShowcase ,
+      name: "Waving Text",
+      component: WavingTextShowcase,
       theme: WavingTextTheme,
       route: "/text-animation/waving-text",
       path: "components/vui/text/WavingText.tsx",
       description:
         "🌊 <b>Waving Text Effect</b> - Create mesmerizing text animations with <span style='color: #3b82f6;'>smooth wave effects</span>. Features <span style='color: #10b981;'>configurable speed</span> and <span style='color: #f59e0b;'>customizable colors</span>.",
-    }
+    },
   ],
 };

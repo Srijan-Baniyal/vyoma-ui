@@ -3,6 +3,7 @@ import { componentMap } from "@/data/ComponentMapping";
 import { version as vuiVersion } from "@/lib/version";
 
 export const runtime = "nodejs";
+export const dynamic = "force-static";
 
 function normalize(str: string) {
   return str.replace(/[-_\s]/g, "").toLowerCase();

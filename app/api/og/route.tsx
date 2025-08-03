@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { componentMap } from "@/data/ComponentMapping";
+import { version as vuiVersion } from "@/lib/version";
 
 export const runtime = "nodejs";
 
@@ -381,7 +382,7 @@ export async function GET(request: Request) {
             fontWeight: "500",
           }}
         >
-          v1.0
+          {`v${vuiVersion}`}
         </div>
       </div>
     ),

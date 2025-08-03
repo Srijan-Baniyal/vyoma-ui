@@ -1,0 +1,30 @@
+name: Build and Deploy
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "yarn"
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Build Next.js application
+        run: yarn build
+      - name: Export static site
+        run: npx next export
+      - name: Archive build output
+        run: |
+          tar -czf vui-${{ github.ref_name }}.tar.gz out
+      - name: Upload release asset
+        uses: softprops/action-gh-release@v1
+        with:
+          files: vui-${{ github.ref_name }}.tar.gz

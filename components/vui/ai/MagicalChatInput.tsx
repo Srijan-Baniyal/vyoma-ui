@@ -1,12 +1,29 @@
+
 "use client";
 
-import { Loader2Icon, SendIcon, SquareIcon, XIcon } from "lucide-react";
+import {
+  Loader2Icon,
+  SendIcon,
+  SquareIcon,
+  XIcon,
+  GlobeIcon,
+  MicIcon,
+  PlusIcon,
+  FlaskConicalIcon,
+} from "lucide-react";
 import type {
   ComponentProps,
   HTMLAttributes,
   KeyboardEventHandler,
 } from "react";
-import { Children, useCallback, useEffect, useRef, useState } from "react";
+import {
+  Children,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Button } from "@/components/ui/buttonShadcn";
 import {
   Select,
@@ -18,69 +35,74 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { type FormEventHandler } from "react";
-import { GlobeIcon, MicIcon, PlusIcon, FlaskConicalIcon } from "lucide-react";
 
 type UseAutoResizeTextareaProps = {
   minHeight: number;
   maxHeight?: number;
 };
+
 const useAutoResizeTextarea = ({
   minHeight,
   maxHeight,
 }: UseAutoResizeTextareaProps) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
   const adjustHeight = useCallback(
     (reset?: boolean) => {
-      const textarea = textareaRef.current;
-      if (!textarea) {
-        return;
-      }
-      if (reset) {
-        textarea.style.height = `${minHeight}px`;
-        return;
-      }
-      // Temporarily shrink to get the right scrollHeight
-      textarea.style.height = `${minHeight}px`;
-      // Calculate new height
-      const newHeight = Math.max(
+      const el = textareaRef.current;
+      if (!el) return;
+
+      // Reset for accurate measurement
+      el.style.height = reset ? `${minHeight}px` : `${minHeight}px`;
+
+      const next = Math.max(
         minHeight,
-        Math.min(textarea.scrollHeight, maxHeight ?? Number.POSITIVE_INFINITY)
+        Math.min(el.scrollHeight, maxHeight ?? Number.POSITIVE_INFINITY)
       );
-      textarea.style.height = `${newHeight}px`;
+      el.style.height = `${next}px`;
     },
     [minHeight, maxHeight]
   );
+
+  // Initial height
   useEffect(() => {
-    // Set initial height
-    const textarea = textareaRef.current;
-    if (textarea) {
-      textarea.style.height = `${minHeight}px`;
+    const el = textareaRef.current;
+    if (el) {
+      el.style.height = `${minHeight}px`;
     }
   }, [minHeight]);
-  // Adjust height on window resize
+
+  // On resize/orientation change
   useEffect(() => {
-    const handleResize = () => adjustHeight();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    const resize = () => adjustHeight();
+    window.addEventListener("resize", resize);
+    window.addEventListener("orientationchange", resize);
+    return () => {
+      window.removeEventListener("resize", resize);
+      window.removeEventListener("orientationchange", resize);
+    };
   }, [adjustHeight]);
+
   return { textareaRef, adjustHeight };
 };
+
+const glassPanel =
+  "bg-background/70 dark:bg-background/60 backdrop-blur-xl backdrop-saturate-150 border border-border/50 shadow-[0_8px_30px_rgb(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.25)]";
+const glassHover =
+  "hover:bg-background/75 dark:hover:bg-background/65 hover:backdrop-blur-2xl";
+const motionSafe =
+  "motion-safe:transition-all motion-safe:duration-300 motion-reduce:transition-none";
+const subtleFocus =
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-0";
 
 export type AIInputProps = HTMLAttributes<HTMLFormElement>;
 export const AIInput = ({ className, ...props }: AIInputProps) => (
   <form
     className={cn(
-      "w-full divide-y overflow-hidden rounded-2xl border border-border/50",
-      "bg-background/80 backdrop-blur-xl backdrop-saturate-150",
-      "shadow-2xl shadow-black/5 dark:shadow-black/20",
-      "transition-all duration-500 ease-out",
-      "hover:shadow-3xl hover:shadow-primary/10 hover:border-primary/30",
-      "hover:bg-background/90 hover:backdrop-blur-2xl",
-      "focus-within:shadow-3xl focus-within:shadow-primary/20 focus-within:border-primary/40",
-      "focus-within:bg-background/95 focus-within:backdrop-blur-2xl",
-      "focus-within:scale-[1.02] focus-within:translate-y-[-2px]",
-      "group",
-      // Hide all possible scrollbars
+      "w-full overflow-hidden rounded-2xl",
+      glassPanel,
+      motionSafe,
+      "hover:shadow-[0_12px_40px_rgba(0,0,0,0.10)] dark:hover:shadow-[0_12px_40px_rgba(0,0,0,0.35)]",
       "scrollbar-none overflow-x-hidden overflow-y-hidden",
       "[&::-webkit-scrollbar]:hidden [&::-webkit-scrollbar]:w-0",
       "[-ms-overflow-style:none] [scrollbar-width:none]",
@@ -92,59 +114,65 @@ export const AIInput = ({ className, ...props }: AIInputProps) => (
   />
 );
 
+
 export type AIInputTextareaProps = ComponentProps<typeof Textarea> & {
   minHeight?: number;
   maxHeight?: number;
 };
+
 export const AIInputTextarea = ({
   onChange,
   className,
   placeholder = "What would you like to cook?",
   minHeight = 88,
-  maxHeight = 164,
+  maxHeight = 180,
   ...props
 }: AIInputTextareaProps) => {
   const { textareaRef, adjustHeight } = useAutoResizeTextarea({
     minHeight,
     maxHeight,
   });
+
   const handleKeyDown: KeyboardEventHandler<HTMLTextAreaElement> = (e) => {
-    if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+    // Respect IME composition to avoid premature submit on mobile
+    // @ts-expect-error - composition API exists on event target at runtime
+    if (e.isComposing) return;
+
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      const form = e.currentTarget.form;
-      if (form) {
-        form.requestSubmit();
-      }
+      e.currentTarget.form?.requestSubmit();
     }
   };
+
   return (
     <Textarea
       className={cn(
-        "w-full resize-none rounded-none border-none p-4 shadow-none outline-none ring-0",
+        "w-full resize-none rounded-none border-none p-3 sm:p-4 shadow-none",
+        "text-base leading-relaxed sm:text-[1rem] font-medium",
         "bg-transparent dark:bg-transparent",
-        "focus-visible:ring-0 focus-visible:outline-none",
-        "transition-all duration-300 ease-out",
-        "placeholder:text-muted-foreground/50 placeholder:transition-all placeholder:duration-300",
-        "focus:placeholder:text-muted-foreground/30 focus:placeholder:translate-x-1",
-        "text-base leading-relaxed font-medium",
-        // Complete scrollbar removal
+        "placeholder:text-muted-foreground/60",
+        "focus-visible:ring-0",
+        motionSafe,
+        // Remove scrollbars
         "scrollbar-none overflow-hidden overflow-x-hidden overflow-y-hidden",
         "[&::-webkit-scrollbar]:hidden [&::-webkit-scrollbar]:w-0 [&::-webkit-scrollbar]:h-0",
         "[-ms-overflow-style:none] [scrollbar-width:none]",
-        "[&::-webkit-scrollbar-track]:hidden [&::-webkit-scrollbar-thumb]:hidden",
-        // Additional scrollbar hiding for all states
-        "[&:focus::-webkit-scrollbar]:hidden [&:hover::-webkit-scrollbar]:hidden",
-        "[&:active::-webkit-scrollbar]:hidden [&:disabled::-webkit-scrollbar]:hidden",
+        // Better mobile tap
+        "touch-manipulation",
         className
       )}
+      inputMode="text"
+      autoCorrect="on"
+      spellCheck
+      aria-label="Message"
       name="message"
+      placeholder={placeholder}
+      ref={textareaRef}
       onChange={(e) => {
         adjustHeight();
         onChange?.(e);
       }}
       onKeyDown={handleKeyDown}
-      placeholder={placeholder}
-      ref={textareaRef}
       {...props}
     />
   );
@@ -157,37 +185,76 @@ export const AIInputToolbar = ({
 }: AIInputToolbarProps) => (
   <div
     className={cn(
-      "flex items-center justify-between p-2 px-3",
-      "transition-all duration-300 ease-out",
-      "bg-gradient-to-r from-background/50 via-background/80 to-background/50",
-      "group-focus-within:bg-gradient-to-r group-focus-within:from-muted/20 group-focus-within:via-muted/40 group-focus-within:to-muted/20",
-      "backdrop-blur-sm",
-      // Hide scrollbars here too
-      "scrollbar-none overflow-hidden",
-      "[&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]",
+      "flex items-center justify-between px-2.5 py-2 sm:px-3 sm:py-2",
+      "bg-gradient-to-r from-background/40 via-background/60 to-background/40",
+      "backdrop-blur-md",
+      motionSafe,
       className
     )}
     {...props}
   />
 );
-
 export type AIInputToolsProps = HTMLAttributes<HTMLDivElement>;
 export const AIInputTools = ({ className, ...props }: AIInputToolsProps) => (
   <div
     className={cn(
-      "flex items-center gap-1.5",
-      "[&_button:first-child]:rounded-bl-2xl",
-      "scrollbar-none overflow-hidden overflow-x-auto",
-      "[&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]",
+      "flex items-center gap-1.5 sm:gap-2",
+      "overflow-x-auto overflow-y-hidden no-scrollbar",
+      "max-w-[calc(100vw-6rem)] sm:max-w-none",
+      "pl-1 -ml-1 pr-2",
       className
     )}
     {...props}
   />
 );
 
-export type AIInputButtonProps = ComponentProps<typeof Button> & {
-  colorScheme?: "purple" | "orange" | "blue" | "green" | "red";
+type ColorScheme = "purple" | "orange" | "blue" | "green" | "red";
+
+const colorMap: Record<
+  ColorScheme,
+  { hover: string; active: string; text: string }
+> = {
+  purple: {
+    hover:
+      "hover:bg-purple-50/60 dark:hover:bg-purple-950/40 hover:border-purple-300/40",
+    active:
+      "bg-gradient-to-r from-purple-100/70 via-purple-200/50 to-purple-100/70 dark:from-purple-950/50 dark:via-purple-900/70 dark:to-purple-950/50 border-purple-300/60 dark:border-purple-700/60",
+    text: "text-purple-700 dark:text-purple-300",
+  },
+  orange: {
+    hover:
+      "hover:bg-orange-50/60 dark:hover:bg-orange-950/40 hover:border-orange-300/40",
+    active:
+      "bg-gradient-to-r from-orange-100/70 via-orange-200/50 to-orange-100/70 dark:from-orange-950/50 dark:via-orange-900/70 dark:to-orange-950/50 border-orange-300/60 dark:border-orange-700/60",
+    text: "text-orange-700 dark:text-orange-300",
+  },
+  blue: {
+    hover:
+      "hover:bg-blue-50/60 dark:hover:bg-blue-950/40 hover:border-blue-300/40",
+    active:
+      "bg-gradient-to-r from-blue-100/70 via-blue-200/50 to-blue-100/70 dark:from-blue-950/50 dark:via-blue-900/70 dark:to-blue-950/50 border-blue-300/60 dark:border-blue-700/60",
+    text: "text-blue-700 dark:text-blue-300",
+  },
+  green: {
+    hover:
+      "hover:bg-green-50/60 dark:hover:bg-green-950/40 hover:border-green-300/40",
+    active:
+      "bg-gradient-to-r from-green-100/70 via-green-200/50 to-green-100/70 dark:from-green-950/50 dark:via-green-900/70 dark:to-green-950/50 border-green-300/60 dark:border-green-700/60",
+    text: "text-green-700 dark:text-green-300",
+  },
+  red: {
+    hover:
+      "hover:bg-red-50/60 dark:hover:bg-red-950/40 hover:border-red-300/40",
+    active:
+      "bg-gradient-to-r from-red-100/70 via-red-200/50 to-red-100/70 dark:from-red-950/50 dark:via-red-900/70 dark:to-red-950/50 border-red-300/60 dark:border-red-700/60",
+    text: "text-red-700 dark:text-red-300",
+  },
 };
+
+export type AIInputButtonProps = ComponentProps<typeof Button> & {
+  colorScheme?: ColorScheme;
+};
+
 export const AIInputButton = ({
   variant = "ghost",
   className,
@@ -196,36 +263,19 @@ export const AIInputButton = ({
   ...props
 }: AIInputButtonProps) => {
   const newSize =
-    size ?? Children.count(props.children) > 1 ? "default" : "icon";
-
-  // Color scheme mappings for hover states
-  const colorClasses = {
-    purple:
-      "hover:bg-purple-50 hover:text-purple-600 dark:hover:bg-purple-950/50 dark:hover:text-purple-400 hover:shadow-purple-500/20 hover:border-purple-300/40",
-    orange:
-      "hover:bg-orange-50 hover:text-orange-600 dark:hover:bg-orange-950/50 dark:hover:text-orange-400 hover:shadow-orange-500/20 hover:border-orange-300/40",
-    blue: "hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-blue-950/50 dark:hover:text-blue-400 hover:shadow-blue-500/20 hover:border-blue-300/40",
-    green:
-      "hover:bg-green-50 hover:text-green-600 dark:hover:bg-green-950/50 dark:hover:text-green-400 hover:shadow-green-500/20 hover:border-green-300/40",
-    red: "hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/50 dark:hover:text-red-400 hover:shadow-red-500/20 hover:border-red-300/40",
-  };
+    size ?? (Children.count(props.children) > 1 ? "default" : "icon");
 
   return (
     <Button
       className={cn(
-        "shrink-0 gap-2 rounded-xl border border-transparent",
-        "transition-all duration-300 ease-out",
-        "hover:scale-105 hover:rotate-1 active:scale-95 active:rotate-0",
-        "hover:shadow-lg group-focus-within:hover:shadow-xl",
-        variant === "ghost" && "text-muted-foreground hover:text-foreground",
-        newSize === "default" && "px-4 py-2",
-        newSize === "icon" && "h-10 w-10",
-        "group/button backdrop-blur-sm",
-        "relative overflow-hidden",
-        // Add subtle gradient overlay
-        "before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent",
-        "before:translate-x-[-100%] hover:before:translate-x-[100%] before:transition-transform before:duration-700",
-        colorClasses[colorScheme],
+        "shrink-0 rounded-xl border border-transparent",
+        "text-muted-foreground",
+        motionSafe,
+        "active:scale-95",
+        "backdrop-blur-sm",
+        colorMap[colorScheme].hover,
+        newSize === "default" ? "px-3 py-2" : "h-10 w-10 sm:h-10 sm:w-10",
+        subtleFocus,
         className
       )}
       size={newSize}
@@ -238,8 +288,9 @@ export const AIInputButton = ({
 
 export type AIInputToggleButtonProps = ComponentProps<typeof Button> & {
   isActive?: boolean;
-  colorScheme?: "purple" | "orange" | "blue" | "green" | "red";
+  colorScheme?: ColorScheme;
 };
+
 export const AIInputToggleButton = ({
   variant = "ghost",
   className,
@@ -249,60 +300,28 @@ export const AIInputToggleButton = ({
   ...props
 }: AIInputToggleButtonProps) => {
   const newSize =
-    size ?? Children.count(props.children) > 1 ? "default" : "icon";
-
-  // Color scheme mappings
-  const colorClasses = {
-    purple: {
-      active:
-        "bg-gradient-to-r from-purple-100/80 via-purple-200/60 to-purple-100/80 dark:from-purple-950/60 dark:via-purple-900/80 dark:to-purple-950/60 text-purple-700 dark:text-purple-300 border-purple-300/60 dark:border-purple-700/60 shadow-lg shadow-purple-500/25",
-      hover:
-        "hover:bg-purple-50 hover:text-purple-600 dark:hover:bg-purple-950/50 dark:hover:text-purple-400 hover:shadow-purple-500/20 hover:border-purple-300/40",
-    },
-    orange: {
-      active:
-        "bg-gradient-to-r from-orange-100/80 via-orange-200/60 to-orange-100/80 dark:from-orange-950/60 dark:via-orange-900/80 dark:to-orange-950/60 text-orange-700 dark:text-orange-300 border-orange-300/60 dark:border-orange-700/60 shadow-lg shadow-orange-500/25",
-      hover:
-        "hover:bg-orange-50 hover:text-orange-600 dark:hover:bg-orange-950/50 dark:hover:text-orange-400 hover:shadow-orange-500/20 hover:border-orange-300/40",
-    },
-    blue: {
-      active:
-        "bg-gradient-to-r from-blue-100/80 via-blue-200/60 to-blue-100/80 dark:from-blue-950/60 dark:via-blue-900/80 dark:to-blue-950/60 text-blue-700 dark:text-blue-300 border-blue-300/60 dark:border-blue-700/60 shadow-lg shadow-blue-500/25",
-      hover:
-        "hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-blue-950/50 dark:hover:text-blue-400 hover:shadow-blue-500/20 hover:border-blue-300/40",
-    },
-    green: {
-      active:
-        "bg-gradient-to-r from-green-100/80 via-green-200/60 to-green-100/80 dark:from-green-950/60 dark:via-green-900/80 dark:to-green-950/60 text-green-700 dark:text-green-300 border-green-300/60 dark:border-green-700/60 shadow-lg shadow-green-500/25",
-      hover:
-        "hover:bg-green-50 hover:text-green-600 dark:hover:bg-green-950/50 dark:hover:text-green-400 hover:shadow-green-500/20 hover:border-green-300/40",
-    },
-    red: {
-      active:
-        "bg-gradient-to-r from-red-100/80 via-red-200/60 to-red-100/80 dark:from-red-950/60 dark:via-red-900/80 dark:to-red-950/60 text-red-700 dark:text-red-300 border-red-300/60 dark:border-red-700/60 shadow-lg shadow-red-500/25",
-      hover:
-        "hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/50 dark:hover:text-red-400 hover:shadow-red-500/20 hover:border-red-300/40",
-    },
-  };
+    size ?? (Children.count(props.children) > 1 ? "default" : "icon");
 
   return (
     <Button
+      aria-pressed={isActive}
       className={cn(
-        "shrink-0 gap-2 rounded-xl border transition-all duration-300 ease-out",
-        "hover:scale-105 hover:rotate-1 active:scale-95 active:rotate-0",
-        "hover:shadow-lg group-focus-within:hover:shadow-xl",
-        "group/button backdrop-blur-sm relative overflow-hidden",
-        newSize === "default" && "px-4 py-2",
-        newSize === "icon" && "h-10 w-10",
-        // Add shimmer effect
-        "before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent",
-        "before:translate-x-[-100%] hover:before:translate-x-[100%] before:transition-transform before:duration-700",
+        "shrink-0 rounded-xl border",
+        "backdrop-blur-sm",
+        motionSafe,
+        "active:scale-95",
+        newSize === "default" ? "px-3 py-2" : "h-10 w-10 sm:h-10 sm:w-10",
         isActive
-          ? colorClasses[colorScheme].active
+          ? cn(
+              colorMap[colorScheme].active,
+              colorMap[colorScheme].text,
+              "shadow-md"
+            )
           : cn(
-              "text-muted-foreground hover:text-foreground border-transparent",
-              colorClasses[colorScheme].hover
+              "border-transparent text-muted-foreground",
+              colorMap[colorScheme].hover
             ),
+        subtleFocus,
         className
       )}
       size={newSize}
@@ -316,6 +335,7 @@ export const AIInputToggleButton = ({
 export type AIInputSubmitProps = ComponentProps<typeof Button> & {
   status?: "submitted" | "streaming" | "ready" | "error";
 };
+
 export const AIInputSubmit = ({
   className,
   variant = "default",
@@ -325,37 +345,30 @@ export const AIInputSubmit = ({
   ...props
 }: AIInputSubmitProps) => {
   let Icon = (
-    <SendIcon className="transition-all duration-300 group-hover/submit:translate-x-1 group-hover/submit:scale-110" />
+    <SendIcon className="motion-safe:transition-transform motion-safe:duration-300 group-hover/submit:translate-x-0.5" />
   );
-  if (status === "submitted") {
-    Icon = <Loader2Icon className="animate-spin" />;
-  } else if (status === "streaming") {
+  if (status === "submitted") Icon = <Loader2Icon className="animate-spin" />;
+  else if (status === "streaming")
     Icon = <SquareIcon className="animate-pulse" />;
-  } else if (status === "error") {
-    Icon = <XIcon className="animate-bounce" />;
-  }
+  else if (status === "error") Icon = <XIcon className="animate-bounce" />;
 
   const isDisabled = status === "submitted" || status === "streaming";
 
   return (
     <Button
+      aria-label="Send message"
       className={cn(
-        "gap-2 rounded-xl rounded-br-2xl border border-transparent",
-        "transition-all duration-300 ease-out",
-        "hover:scale-105 active:scale-95",
-        "hover:shadow-xl hover:shadow-current/30",
-        "group/submit backdrop-blur-sm relative overflow-hidden",
-        "disabled:hover:scale-100 disabled:opacity-70",
-        size === "icon" && "h-11 w-11",
-        // Add gradient background
-        "bg-gradient-to-r from-primary via-primary to-primary/90",
-        "hover:from-primary/90 hover:via-primary/95 hover:to-primary",
-        // Add shimmer effect
-        "before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/30 before:to-transparent",
-        "before:translate-x-[-100%] hover:before:translate-x-[100%] before:transition-transform before:duration-700",
-        status === "ready" && "animate-pulse",
+        "rounded-xl rounded-br-2xl border border-transparent",
+        "bg-gradient-to-r from-primary via-primary/90 to-primary",
+        "text-primary-foreground",
+        "shadow-md hover:shadow-lg",
+        "group/submit",
+        motionSafe,
+        "active:scale-95",
+        size === "icon" ? "h-11 w-11 sm:h-11 sm:w-11" : "",
+        subtleFocus,
         status === "error" &&
-          "bg-gradient-to-r from-destructive via-destructive to-destructive/90 hover:from-destructive/90 hover:via-destructive/95 hover:to-destructive",
+          "bg-gradient-to-r from-destructive via-destructive to-destructive",
         className
       )}
       disabled={isDisabled}
@@ -383,17 +396,15 @@ export const AIInputModelSelectTrigger = ({
 }: AIInputModelSelectTriggerProps) => (
   <SelectTrigger
     className={cn(
-      "border border-transparent bg-transparent font-semibold text-muted-foreground shadow-none",
-      "transition-all duration-300 ease-out rounded-xl",
-      "hover:bg-gradient-to-r hover:from-accent/50 hover:to-accent/80 hover:text-foreground hover:scale-105 hover:rotate-1",
-      "focus:bg-gradient-to-r focus:from-accent/50 focus:to-accent/80 focus:text-foreground focus:scale-105",
-      "data-[state=open]:bg-gradient-to-r data-[state=open]:from-accent/50 data-[state=open]:to-accent/80 data-[state=open]:text-foreground data-[state=open]:scale-105",
-      '[&[aria-expanded="true"]]:bg-gradient-to-r [&[aria-expanded="true"]]:from-accent/50 [&[aria-expanded="true"]]:to-accent/80 [&[aria-expanded="true"]]:text-foreground [&[aria-expanded="true"]]:scale-105',
-      "active:scale-95 hover:shadow-lg hover:border-current/20",
-      "backdrop-blur-sm relative overflow-hidden",
-      // Add shimmer
-      "before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent",
-      "before:translate-x-[-100%] hover:before:translate-x-[100%] before:transition-transform before:duration-700",
+      "border border-transparent bg-transparent font-semibold text-muted-foreground",
+      "rounded-xl",
+      motionSafe,
+      glassHover,
+      "hover:scale-[1.015]",
+      "active:scale-95",
+      "backdrop-blur-sm",
+      subtleFocus,
+      "min-w-[120px] sm:min-w-[140px] px-2.5 py-2",
       className
     )}
     {...props}
@@ -409,16 +420,12 @@ export const AIInputModelSelectContent = ({
 }: AIInputModelSelectContentProps) => (
   <SelectContent
     className={cn(
-      "animate-in fade-in-0 zoom-in-95 slide-in-from-top-2",
-      "duration-300 ease-out rounded-xl border border-border/50",
-      "bg-background/90 backdrop-blur-xl backdrop-saturate-150",
-      "shadow-2xl shadow-black/10 dark:shadow-black/30",
-      // Complete scrollbar removal
-      "scrollbar-none overflow-hidden overflow-y-auto",
-      "[&::-webkit-scrollbar]:hidden [&::-webkit-scrollbar]:w-0 [&::-webkit-scrollbar]:h-0",
-      "[-ms-overflow-style:none] [scrollbar-width:none]",
-      "[&::-webkit-scrollbar-track]:hidden [&::-webkit-scrollbar-thumb]:hidden",
-      "max-h-[250px]",
+      "rounded-xl",
+      glassPanel,
+      "max-h-[260px] sm:max-h-[300px]",
+      "overflow-hidden overflow-y-auto",
+      "no-scrollbar",
+      motionSafe,
       className
     )}
     {...props}
@@ -432,11 +439,10 @@ export const AIInputModelSelectItem = ({
 }: AIInputModelSelectItemProps) => (
   <SelectItem
     className={cn(
-      "transition-all duration-200 ease-out rounded-lg mx-1 my-0.5",
-      "hover:bg-gradient-to-r hover:from-accent/60 hover:to-accent/80 focus:bg-gradient-to-r focus:from-accent/60 focus:to-accent/80",
-      "hover:scale-[1.02] focus:scale-[1.02] hover:translate-x-1 focus:translate-x-1",
-      "active:scale-[0.98] cursor-pointer",
-      "backdrop-blur-sm",
+      "rounded-lg mx-1 my-0.5",
+      "hover:bg-accent/70 focus:bg-accent/70",
+      motionSafe,
+      "cursor-pointer",
       className
     )}
     {...props}
@@ -450,6 +456,7 @@ export const AIInputModelSelectValue = ({
 }: AIInputModelSelectValueProps) => (
   <SelectValue className={cn("font-semibold", className)} {...props} />
 );
+
 
 const models = [
   { id: "gpt-4", name: "GPT-4" },
@@ -473,35 +480,68 @@ export default function MagicalChatInput() {
   const [isDeepResearchEnabled, setIsDeepResearchEnabled] = useState(false);
   const [isWebSearchEnabled, setIsWebSearchEnabled] = useState(false);
 
-  const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
-    event.preventDefault();
-    if (!text) {
-      return;
-    }
+  const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault();
+    if (!text.trim()) return;
 
-    // Show alert with user input
     alert(`You entered: ${text}`);
-
     setStatus("submitted");
-    setTimeout(() => {
-      setStatus("streaming");
-    }, 200);
-    setTimeout(() => {
-      setStatus("ready");
-    }, 2000);
+    setTimeout(() => setStatus("streaming"), 200);
+    setTimeout(() => setStatus("ready"), 1800);
   };
 
-  return (
-    <div className="relative group min-h-[50vh] flex items-center justify-center">
-      {/* Enhanced animated background with multiple layers */}
-      <div className="absolute -inset-1 bg-gradient-to-r from-primary/30 via-purple-500/30 to-primary/30 rounded-2xl opacity-0 group-hover:opacity-100 transition-all duration-700 blur-lg animate-pulse" />
-      <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/20 via-purple-500/20 to-primary/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm" />
+  const showFooterPill = text.length > 0;
+  const pillContent = useMemo(() => {
+    if (isWebSearchEnabled || isDeepResearchEnabled) {
+      return (
+        <div className="flex items-center justify-center gap-4 sm:gap-6 text-xs sm:text-sm">
+          <div className="flex items-center gap-2 text-muted-foreground">
+            <div className="w-2 h-2 bg-current rounded-full animate-pulse" />
+            <span className="font-medium">Press Enter to send</span>
+          </div>
+          {isWebSearchEnabled && (
+            <div className="flex items-center gap-2 text-purple-600 dark:text-purple-400">
+              <GlobeIcon
+                size={16}
+                className="animate-spin"
+                style={{ animationDuration: "3s" }}
+                aria-hidden
+              />
+              <span className="font-semibold">Web search active</span>
+            </div>
+          )}
+          {isDeepResearchEnabled && (
+            <div className="flex items-center gap-2 text-orange-600 dark:text-orange-400">
+              <FlaskConicalIcon
+                size={16}
+                className="animate-bounce"
+                aria-hidden
+              />
+              <span className="font-semibold">Research mode</span>
+            </div>
+          )}
+        </div>
+      );
+    }
+    return (
+      <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
+        <div className="w-1.5 h-1.5 bg-current rounded-full animate-pulse" />
+        <span className="font-medium">Press Enter to send</span>
+      </div>
+    );
+  }, [isWebSearchEnabled, isDeepResearchEnabled]);
 
-      {/* Floating particles effect */}
-      <div className="absolute inset-0 overflow-hidden rounded-2xl pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-primary/30 rounded-full animate-ping animation-delay-300" />
-        <div className="absolute top-3/4 right-1/4 w-1 h-1 bg-purple-500/40 rounded-full animate-ping animation-delay-700" />
-        <div className="absolute top-1/2 right-1/3 w-1.5 h-1.5 bg-pink-500/30 rounded-full animate-ping animation-delay-1000" />
+  return (
+    <div className="relative group flex items-center justify-center py-6 sm:py-10">
+      {/* Soft ambient gradient glow (mobile-friendly) */}
+      <div
+        aria-hidden
+        className={cn(
+          "absolute inset-0 pointer-events-none",
+          "opacity-60 sm:opacity-80"
+        )}
+      >
+        <div className="absolute inset-0 m-auto max-w-5xl h-[40%] sm:h-[50%] blur-2xl sm:blur-3xl rounded-[48px] bg-gradient-to-r from-primary/15 via-purple-500/15 to-primary/15" />
       </div>
 
       <AIInput
@@ -509,78 +549,70 @@ export default function MagicalChatInput() {
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         className={cn(
-          "relative z-10 max-w-4xl w-full",
-          "transform transition-all duration-700 ease-out",
-          isFocused && "scale-102 translate-y-[-2px]"
+          "relative z-10 w-full",
+          "max-w-[min(100%,48rem)]", // 768px max
+          motionSafe,
+          isFocused && "ring-1 ring-primary/30"
         )}
       >
         <AIInputTextarea
           onChange={(e) => setText(e.target.value)}
           value={text}
           className={cn(
-            "transition-all duration-500 ease-out",
-            isFocused && "transform translate-y-[-1px]",
+            motionSafe,
+            isFocused && "placeholder:text-muted-foreground/40",
             text.length > 0 && "font-semibold"
           )}
           placeholder="Ask me anything... ✨"
         />
+
         <AIInputToolbar
           className={cn(
-            "transition-all duration-500 ease-out",
-            text.length > 0 &&
-              "bg-gradient-to-r from-muted/10 via-muted/20 to-muted/10 backdrop-blur-lg"
+            "items-stretch gap-2",
+            "bg-gradient-to-r from-background/50 via-background/65 to-background/50",
+            text.length > 0 && "backdrop-blur-xl"
           )}
         >
-          <AIInputTools className="space-x-3">
-            <AIInputButton colorScheme="blue">
-              <PlusIcon
-                size={18}
-                className="transition-transform duration-300 group-hover/button:rotate-180"
-              />
+          <AIInputTools>
+            <AIInputButton colorScheme="blue" aria-label="Add attachment">
+              <PlusIcon size={18} />
             </AIInputButton>
-            <AIInputButton colorScheme="green">
-              <MicIcon
-                size={18}
-                className="transition-transform duration-300 group-hover/button:scale-125"
-              />
+
+            <AIInputButton colorScheme="green" aria-label="Record voice">
+              <MicIcon size={18} />
             </AIInputButton>
+
             <AIInputToggleButton
               isActive={isWebSearchEnabled}
-              onClick={() => setIsWebSearchEnabled(!isWebSearchEnabled)}
+              onClick={() => setIsWebSearchEnabled((v) => !v)}
               colorScheme="purple"
+              aria-label="Toggle web search"
             >
-              <GlobeIcon
-                size={18}
-                className="transition-transform duration-300 group-hover/button:rotate-12"
-              />
-              <span className="transition-all duration-300 group-hover/button:tracking-wider font-semibold">
-                Web Search
-              </span>
+              <GlobeIcon size={18} />
+              <span className="hidden sm:inline font-semibold">Web Search</span>
             </AIInputToggleButton>
+
             <AIInputToggleButton
               isActive={isDeepResearchEnabled}
-              onClick={() => setIsDeepResearchEnabled(!isDeepResearchEnabled)}
+              onClick={() => setIsDeepResearchEnabled((v) => !v)}
               colorScheme="orange"
+              aria-label="Toggle research mode"
             >
-              <FlaskConicalIcon
-                size={18}
-                className="transition-transform duration-300 group-hover/button:rotate-12"
-              />
-              <span className="transition-all duration-300 group-hover/button:tracking-wider font-semibold">
-                Research
-              </span>
+              <FlaskConicalIcon size={18} />
+              <span className="hidden sm:inline font-semibold">Research</span>
             </AIInputToggleButton>
+
             <AIInputModelSelect onValueChange={setModel} value={model}>
-              <AIInputModelSelectTrigger className="min-w-[140px]">
+              <AIInputModelSelectTrigger className="min-w-[116px] sm:min-w-[140px]">
                 <AIInputModelSelectValue />
               </AIInputModelSelectTrigger>
               <AIInputModelSelectContent>
-                {models.map((model) => (
-                  <AIInputModelSelectItem key={model.id} value={model.id}>
+                {models.map((m) => (
+                  <AIInputModelSelectItem key={m.id} value={m.id}>
                     <div className="flex items-center justify-between w-full">
-                      <span className="font-medium">{model.name}</span>
-                      {model.id === "gpt-4" && (
-                        <span className="text-xs bg-gradient-to-r from-primary/20 to-primary/30 text-primary px-2 py-1 rounded-full ml-3 font-semibold backdrop-blur-sm">
+                      <span className="font-medium">{m.name}</span>
+                      {m.id === "gpt-4" && (
+                        <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full ml-3 font-semibold">
                           Popular
                         </span>
                       )}
@@ -590,64 +622,45 @@ export default function MagicalChatInput() {
               </AIInputModelSelectContent>
             </AIInputModelSelect>
           </AIInputTools>
+
           <AIInputSubmit
             status={status}
             className={cn(
               "relative overflow-hidden z-10",
-              text.length > 0 && "shadow-2xl shadow-primary/40 scale-105",
+              text.length > 0 && "shadow-lg",
               status === "ready" && text.length > 0 && "animate-none"
             )}
           />
         </AIInputToolbar>
       </AIInput>
 
-      {/* Enhanced feature indicators with glassmorphism */}
-      {(isDeepResearchEnabled || isWebSearchEnabled) && text.length > 0 && (
-        <div className="absolute -bottom-12 left-4 right-4 flex justify-center">
-          <div className="bg-background/80 backdrop-blur-xl rounded-full px-6 py-3 shadow-xl border border-border/50 animate-in fade-in-0 slide-in-from-bottom-4 duration-500">
-            <div className="flex items-center justify-center space-x-6 text-sm">
-              <div className="flex items-center space-x-2 text-muted-foreground">
-                <div className="w-2 h-2 bg-current rounded-full animate-pulse" />
-                <span className="font-medium">Press ⌘+Enter to send</span>
-              </div>
-              {isWebSearchEnabled && (
-                <div className="flex items-center space-x-2 text-purple-600 dark:text-purple-400">
-                  <GlobeIcon
-                    size={16}
-                    className="animate-spin"
-                    style={{ animationDuration: "3s" }}
-                  />
-                  <span className="font-semibold">Web search active</span>
-                </div>
-              )}
-              {isDeepResearchEnabled && (
-                <div className="flex items-center space-x-2 text-orange-600 dark:text-orange-400">
-                  <FlaskConicalIcon size={16} className="animate-bounce" />
-                  <span className="font-semibold">Research mode</span>
-                </div>
-              )}
-            </div>
+      {/* Footer hint pill */}
+      {showFooterPill && (
+        <div className="absolute -bottom-12 sm:-bottom-14 left-0 right-0 flex justify-center px-3">
+          <div
+            className={cn(
+              "px-4 py-2 sm:px-6 sm:py-3 rounded-full",
+              glassPanel,
+              "text-[0.8rem]",
+              "animate-in fade-in-0 slide-in-from-bottom-2 duration-300"
+            )}
+          >
+            {pillContent}
           </div>
         </div>
       )}
 
-      {/* Enhanced typing indicator */}
-      {!(isDeepResearchEnabled || isWebSearchEnabled) && text.length > 0 && (
-        <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2">
-          <div className="bg-background/80 backdrop-blur-xl rounded-full px-4 py-2 shadow-lg border border-border/50 animate-in fade-in-0 slide-in-from-bottom-2 duration-300">
-            <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-              <div className="w-1.5 h-1.5 bg-current rounded-full animate-pulse" />
-              <span className="font-medium">Press ⌘+Enter to send</span>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Enhanced success effects */}
+      {/* Subtle success pulse */}
       {status === "submitted" && (
         <>
-          <div className="absolute inset-0 rounded-2xl border-2 border-primary/60 animate-ping" />
-          <div className="absolute inset-0 rounded-2xl bg-primary/5 animate-pulse" />
+          <div
+            aria-hidden
+            className="absolute inset-0 rounded-3xl border-2 border-primary/40 animate-ping"
+          />
+          <div
+            aria-hidden
+            className="absolute inset-0 rounded-3xl bg-primary/5 animate-pulse"
+          />
         </>
       )}
     </div>

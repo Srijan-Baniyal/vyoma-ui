@@ -56,35 +56,37 @@ export function AnimatedNumberCountdown({
 
   if (compactPreview) {
     return (
-      <div className="flex items-center justify-center gap-1 h-full w-full p-1">
+      <div className="min-h-14 flex items-center justify-center gap-1 h-full w-full p-1">
         <div className="flex flex-col items-center">
           <NumberFlow
             value={timeLeft.days}
-            className="text-lg font-bold text-foreground leading-none"
+            className="text-4xl font-bold text-foreground leading-none"
             format={{ minimumIntegerDigits: 2 }}
-          />    
+          />
         </div>
-        <span className="text-sm font-bold text-muted-foreground mx-0.5">:</span>
+        <span className="text-4xl font-bold text-muted-foreground mx-0.5">
+          :
+        </span>
         <div className="flex flex-col items-center">
           <NumberFlow
             value={timeLeft.hours}
-            className="text-lg font-bold text-foreground leading-none"
+            className="text-4xl font-bold text-foreground leading-none"
             format={{ minimumIntegerDigits: 2 }}
           />
         </div>
-        <span className="text-sm font-bold text-muted-foreground mx-0.5">:</span>
+        <span className="text-3xl font-bold text-muted-foreground">:</span>
         <div className="flex flex-col items-center">
           <NumberFlow
             value={timeLeft.minutes}
-            className="text-lg font-bold text-foreground leading-none"
+            className="text-4xl font-bold text-foreground leading-none"
             format={{ minimumIntegerDigits: 2 }}
           />
         </div>
-        <span className="text-sm font-bold text-muted-foreground mx-0.5">:</span>
+        <span className="text-3xl font-bold text-muted-foreground">:</span>
         <div className="flex flex-col items-center">
           <NumberFlow
             value={timeLeft.seconds}
-            className="text-lg font-bold text-foreground leading-none"
+            className="text-4xl font-bold text-foreground leading-none"
             format={{ minimumIntegerDigits: 2 }}
           />
         </div>
@@ -192,7 +194,7 @@ export function AnimatedNumberCountdown({
         <div className="flex flex-col items-center">
           <NumberFlow
             value={timeLeft.seconds}
-            className="text-5xl font-semibold tracking-tighter text-foreground" 
+            className="text-5xl font-semibold tracking-tighter text-foreground"
             format={{ minimumIntegerDigits: 2 }}
           />
         </div>

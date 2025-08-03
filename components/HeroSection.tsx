@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { Pill } from "@/components/ui/pill";
 import { CountUp } from "@/components/vui/text/CountUp";
 import { getDynamicStats } from "@/lib/ComponentCounter";
+import { version as vuiVersion } from "@/lib/version";
 
 export default function HeroSection() {
   const [gridCells, setGridCells] = useState<boolean[]>([]);
@@ -119,7 +120,7 @@ export default function HeroSection() {
               status="active"
               className="mb-6 md:mb-8 bg-background/50 backdrop-blur-sm text-xs md:text-sm text-muted-foreground"
             >
-              Introducing Vyoma UI v1.0
+              {`Introducing Vyoma UI v${vuiVersion}`}
             </Pill>
 
             <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-black tracking-tight leading-[0.9] px-2">

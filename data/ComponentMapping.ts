@@ -35,6 +35,7 @@ import {
 import { ButtonShowcase, ButtonTheme } from "@/components/vui/Button";
 import ToolTipShowcase, { ToolTipTheme } from "@/components/vui/ToolTip";
 import NavigationShowcase from "@/components/vui/Navigation";
+import { PillShowcase, PillTheme } from "@/components/vui/pillcomponent";
 import MagicalChatInput from "@/components/vui/ai/MagicalChatInput";
 import {
   WavingTextShowcase,
@@ -180,6 +181,15 @@ export const componentMap: ComponentCategoryMap = {
       path: "components/vui/Navigation.tsx",
       description:
         "🧭 <b>Responsive Navigation System</b> - Modern navigation components with <span style='color: #3b82f6;'>smooth transitions</span>, <span style='color: #10b981;'>mobile-first design</span>, and <span style='color: #8b5cf6;'>active state indicators</span>. <i>Includes breadcrumbs and menu variants.</i>",
+    },
+    {
+      name: "Pill",
+      component: PillShowcase,
+      theme: PillTheme,
+      route: "/components/pill",
+      path: "components/vui/pillcomponent.tsx",
+      description:
+        "💊 <b>Pill / Tag Component</b> - Versatile labels and status indicators with <span style='color: #3b82f6;'>variants</span>, <span style='color: #8b5cf6;'>sizes</span>, and <span style='color: #10b981;'>icons</span>. Ideal for tagging, chips, and dynamic metadata.",
     },
     {
       name: "Sheet",

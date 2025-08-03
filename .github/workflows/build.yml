@@ -24,8 +24,6 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Build Next.js application
         run: yarn build
-      - name: Export static site
-        run: npx next export
       - name: Archive build output
         run: |
           tar -czf vui-${{ github.ref_name }}.tar.gz out

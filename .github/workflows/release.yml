@@ -102,19 +102,11 @@ jobs:
           # Generate a simple changelog from git commits since last tag
           LAST_TAG=$(git describe --tags --abbrev=0 HEAD~1 2>/dev/null || echo "")
           if [ -n "$LAST_TAG" ]; then
-            echo "## Changes since $LAST_TAG" > CHANGELOG.md
-            git log $LAST_TAG..HEAD --pretty=format:"- %s (%h)" --no-merges >> CHANGELOG.md
+            COMMIT_COUNT=$(git rev-list --count $LAST_TAG..HEAD)
+            echo "changelog=Changes since $LAST_TAG ($COMMIT_COUNT commits)" >> $GITHUB_OUTPUT
           else
-            echo "## Initial Release" > CHANGELOG.md
-            echo "- First release of VUI component library" >> CHANGELOG.md
+            echo "changelog=Initial release of VUI component library" >> $GITHUB_OUTPUT
           fi
-          
-          # Use a more reliable method for multi-line output
-          {
-            echo 'changelog<<CHANGELOG_EOF'
-            cat CHANGELOG.md
-            echo 'CHANGELOG_EOF'
-          } >> $GITHUB_OUTPUT
           
       - name: Create Release
         uses: softprops/action-gh-release@v2

@@ -42,10 +42,13 @@ function cleanDescription(htmlString: string): string {
     .trim();
 }
 
-export async function GET() {
+export async function GET(request: Request) {
   const { default: LogoCode } = await import("@/lib/LogoCode");
-  const title = "Vyoma UI";
-  const rawDescription = "Beautiful, accessible, and customizable UI components for React";
+  const { searchParams } = new URL(request.url);
+  const title = searchParams.get("title") || "Vyoma UI";
+  const rawDescription =
+    searchParams.get("description") ||
+    "Beautiful, accessible, and customizable UI components for React";
   const description = cleanDescription(rawDescription);
   const path = "/";
 

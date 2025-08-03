@@ -109,9 +109,12 @@ jobs:
             echo "- First release of VUI component library" >> CHANGELOG.md
           fi
           
-          echo "changelog<<EOF" >> $GITHUB_OUTPUT
-          cat CHANGELOG.md >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          # Use a more reliable method for multi-line output
+          {
+            echo 'changelog<<CHANGELOG_EOF'
+            cat CHANGELOG.md
+            echo 'CHANGELOG_EOF'
+          } >> $GITHUB_OUTPUT
           
       - name: Create Release
         uses: softprops/action-gh-release@v2

@@ -77,8 +77,21 @@ jobs:
           
           # Also create a source code archive with build output
           mkdir -p vui-built
-          cp -r . vui-built/
-          rm -rf vui-built/node_modules vui-built/.git vui-built/vui-release vui-built/vui-built
+          
+          # Copy all project files except those we want to exclude
+          rsync -av --progress . vui-built/ \
+            --exclude=node_modules \
+            --exclude=.git \
+            --exclude=vui-release \
+            --exclude=vui-built \
+            --exclude=.env.local \
+            --exclude=.env \
+            --exclude=*.log \
+            --exclude=.DS_Store \
+            --exclude=.vscode \
+            --exclude=.idea \
+            --exclude=coverage
+            
           cd vui-built
           zip -r ../vui-built-${{ steps.get_version.outputs.version }}.zip .
           cd ..

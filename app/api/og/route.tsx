@@ -42,15 +42,12 @@ function cleanDescription(htmlString: string): string {
     .trim();
 }
 
-export async function GET(request: Request) {
+export async function GET() {
   const { default: LogoCode } = await import("@/lib/LogoCode");
-  const { searchParams } = new URL(request.url);
-  const title = searchParams.get("title") || "Vyoma UI";
-  const rawDescription =
-    searchParams.get("description") ||
-    "Beautiful, accessible, and customizable UI components for React";
+  const title = "Vyoma UI";
+  const rawDescription = "Beautiful, accessible, and customizable UI components for React";
   const description = cleanDescription(rawDescription);
-  const path = searchParams.get("path") || "/";
+  const path = "/";
 
   // Check if this is a component page that doesn't exist
   const isValidComp = isValidComponent(path);

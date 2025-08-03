@@ -111,7 +111,27 @@ export default async function Page({
   );
 }
 
-export const dynamicParams = true;
+export const dynamicParams = false;
+
+export async function generateStaticParams() {
+  const params = [];
+  
+  // Generate params for all components in componentMap
+  for (const [, components] of Object.entries(componentMap)) {
+    for (const component of components) {
+      if (component.route) {
+        const routeParts = component.route.split('/').filter(Boolean);
+        if (routeParts.length === 2) {
+          params.push({
+            slug: routeParts
+          });
+        }
+      }
+    }
+  }
+  
+  return params;
+}
 
 export async function generateMetadata({
   params,

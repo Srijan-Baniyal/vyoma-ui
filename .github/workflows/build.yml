@@ -32,8 +32,8 @@ jobs:
         
       - name: Test build output
         run: |
-          if [ ! -d "out" ]; then
-            echo "Build failed - out directory not found"
+          if [ ! -d ".next" ]; then
+            echo "Build failed - .next directory not found"
             exit 1
           fi
           echo "Build successful!"

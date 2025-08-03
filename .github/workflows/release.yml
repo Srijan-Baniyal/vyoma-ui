@@ -1,0 +1,146 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., v1.1.0)'
+        required: true
+        default: 'v1.1.0'
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "yarn"
+          
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+        
+      - name: Build project
+        run: yarn build
+        
+      - name: Get version from tag or input
+        id: get_version
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+            echo "tag_name=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          else
+            echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+            echo "tag_name=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          fi
+          
+      - name: Create project archive
+        run: |
+          # Create a clean copy of the project without unnecessary files
+          mkdir -p vui-release
+          
+          # Copy all project files except those we want to exclude
+          rsync -av --progress . vui-release/ \
+            --exclude=node_modules \
+            --exclude=.git \
+            --exclude=.next \
+            --exclude=out \
+            --exclude=.github \
+            --exclude=yarn.lock \
+            --exclude=.env.local \
+            --exclude=.env \
+            --exclude=*.log \
+            --exclude=.DS_Store \
+            --exclude=.vscode \
+            --exclude=.idea \
+            --exclude=coverage \
+            --exclude=dist \
+            --exclude=build \
+            --exclude=vui-release
+            
+          # Create the zip archive
+          cd vui-release
+          zip -r ../vui-${{ steps.get_version.outputs.version }}.zip .
+          cd ..
+          
+          # Also create a source code archive with build output
+          mkdir -p vui-built
+          cp -r . vui-built/
+          rm -rf vui-built/node_modules vui-built/.git vui-built/vui-release vui-built/vui-built
+          cd vui-built
+          zip -r ../vui-built-${{ steps.get_version.outputs.version }}.zip .
+          cd ..
+          
+      - name: Generate changelog
+        id: changelog
+        run: |
+          # Generate a simple changelog from git commits since last tag
+          LAST_TAG=$(git describe --tags --abbrev=0 HEAD~1 2>/dev/null || echo "")
+          if [ -n "$LAST_TAG" ]; then
+            echo "## Changes since $LAST_TAG" > CHANGELOG.md
+            git log $LAST_TAG..HEAD --pretty=format:"- %s (%h)" --no-merges >> CHANGELOG.md
+          else
+            echo "## Initial Release" > CHANGELOG.md
+            echo "- First release of VUI component library" >> CHANGELOG.md
+          fi
+          
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          cat CHANGELOG.md >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.get_version.outputs.tag_name }}
+          name: VUI ${{ steps.get_version.outputs.version }}
+          body: |
+            # VUI Component Library ${{ steps.get_version.outputs.version }}
+            
+            A beautiful collection of React components built with Next.js, TypeScript, and Tailwind CSS.
+            
+            ## Downloads
+            - **Source Code**: Download the source code to customize and build yourself
+            - **Built Version**: Download the pre-built version ready to deploy
+            
+            ${{ steps.changelog.outputs.changelog }}
+            
+            ## Installation
+            ```bash
+            # Clone the repository
+            git clone https://github.com/${{ github.repository }}.git
+            cd vui
+            
+            # Install dependencies
+            yarn install
+            
+            # Run development server
+            yarn dev
+            ```
+            
+            ## What's Included
+            - 🎨 Beautiful UI components
+            - 🎭 Animation components
+            - 🔧 Utility components
+            - 📱 Responsive design
+            - 🌙 Dark mode support
+            - ⚡ Next.js 15 ready
+            - 🎯 TypeScript support
+            
+          files: |
+            vui-${{ steps.get_version.outputs.version }}.zip
+            vui-built-${{ steps.get_version.outputs.version }}.zip
+          draft: false
+          prerelease: false
+          generate_release_notes: true

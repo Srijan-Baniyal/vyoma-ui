@@ -1,13 +1,12 @@
-name: Build and Deploy
+name: Build and Test
 
 on:
   push:
     branches:
       - main
-    tags:
-      - 'v*.*.*'
-  release:
-    types: [created]
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
@@ -15,19 +14,26 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "24"
           cache: "yarn"
+          
       - name: Install dependencies
         run: yarn install --frozen-lockfile
+        
+      - name: Run linting
+        run: yarn lint
+        
       - name: Build Next.js application
         run: yarn build
-      - name: Archive build output
+        
+      - name: Test build output
         run: |
-          tar -czf vui-${{ github.ref_name }}.tar.gz out
-      - name: Upload release asset
-        uses: softprops/action-gh-release@v1
-        with:
-          files: vui-${{ github.ref_name }}.tar.gz
+          if [ ! -d "out" ]; then
+            echo "Build failed - out directory not found"
+            exit 1
+          fi
+          echo "Build successful!"

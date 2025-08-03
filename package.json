@@ -10,7 +10,12 @@
     "prebuild": "node scripts/GenerateSourceMap.js",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "release": "./scripts/release.sh",
+    "release:patch": "./scripts/release.sh $(node -p \"require('./package.json').version.replace(/\\d+$/, m => +m + 1)\")",
+    "release:minor": "./scripts/release.sh $(node -p \"const v = require('./package.json').version.split('.'); v[1] = +v[1] + 1; v[2] = 0; v.join('.')\")",
+    "release:major": "./scripts/release.sh $(node -p \"const v = require('./package.json').version.split('.'); v[0] = +v[0] + 1; v[1] = 0; v[2] = 0; v.join('.')\")\"",
+    "version": "echo $(node -p \"require('./package.json').version\")"
   },
   "dependencies": {
     "@ncdai/react-wheel-picker": "^1.0.14",

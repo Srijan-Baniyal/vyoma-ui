@@ -5,7 +5,7 @@
   
   **Beautiful, accessible React components with smooth animations**
   
-  [![Version](https://img.shields.io/badge/Version-1.1.0-brightgreen?style=flat-square)](https://github.com/srijanbaniyal/vyoma-ui/releases)
+  [![Version](https://img.shields.io/badge/Version-1.2.4-brightgreen?style=flat-square)](https://github.com/srijanbaniyal/vyoma-ui/releases)
   [![MIT License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
   [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue?style=flat-square)](https://www.typescriptlang.org/)
 

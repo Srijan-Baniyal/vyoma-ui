@@ -2,7 +2,7 @@
 
 # VUI Release Script
 # Usage: ./scripts/release.sh [version]
-# Example: ./scripts/release.sh 1.1.0
+# Example: ./scripts/release.sh 1.3.1
 
 set -e
 
@@ -34,7 +34,12 @@ print_error() {
 if [ -z "$1" ]; then
     print_error "Version is required!"
     echo "Usage: $0 <version>"
-    echo "Example: $0 1.1.0"
+    echo "Example: $0 1.3.1"
+    echo ""
+    echo "Available shortcuts:"
+    echo "  yarn release:patch  - Increment patch version (1.3.0 → 1.3.1)"
+    echo "  yarn release:minor  - Increment minor version (1.3.0 → 1.4.0)"
+    echo "  yarn release:major  - Increment major version (1.3.0 → 2.0.0)"
     exit 1
 fi
 

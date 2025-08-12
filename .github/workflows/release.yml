@@ -7,9 +7,23 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version to release (e.g., v1.1.0)'
+        description: 'Version to release (e.g., v1.3.1)'
         required: true
-        default: 'v1.1.0'
+        default: 'v1.3.1'
+      release_type:
+        description: 'Type of release'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+      prerelease:
+        description: 'Mark as pre-release'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   create-release:

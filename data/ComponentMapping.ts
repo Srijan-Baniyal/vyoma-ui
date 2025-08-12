@@ -32,6 +32,7 @@ import {
   WavyTilesShowcase,
   WavyTilesTheme,
 } from "@/components/vui/backgrounds/WavyTiles";
+import HexagonalShowcase from "@/components/vui/backgrounds/Hexagonal";
 import { ButtonShowcase, ButtonTheme } from "@/components/vui/Button";
 import ToolTipShowcase, { ToolTipTheme } from "@/components/vui/ToolTip";
 import NavigationShowcase from "@/components/vui/Navigation";
@@ -42,6 +43,8 @@ import {
   WavingTextTheme,
 } from "@/components/vui/text/WavingText";
 import BeautifulFooterShowcase from "@/components/vui/BeautyFooter";
+import MagicalCaret from "@/components/vui/MagicalCaret";
+import FlipTextShowcase, { FlipTextTheme } from "@/components/vui/text/FlipText";
 
 export type ComponentEntry = {
   name: string;
@@ -102,6 +105,14 @@ export const componentMap: ComponentCategoryMap = {
     },
   ],
   Backgrounds: [
+    {
+      name: "Hexagonal",
+      component: HexagonalShowcase,
+      route: "/backgrounds/hexagonal",
+      path: "components/vui/backgrounds/Hexagonal.tsx",
+      description:
+        "🌐 <b>Hexagonal Background</b> - A beautiful hexagonal background with <span style='color: #8b5cf6;'>smooth transitions</span> and <span style='color: #3b82f6;'>customizable colors</span>. <i>Perfect for portfolios and creative websites.</i>",
+    },
     {
       name: "Tunnel",
       component: TunnelShowcase,
@@ -173,6 +184,14 @@ export const componentMap: ComponentCategoryMap = {
       path: "components/vui/BeautyFooter.tsx",
       description:
         "👣 <b>Beautiful Footer</b> - Create stunning footer sections with <span style='color: #8b5cf6;'>multi-layered gradients</span>, <span style='color: #3b82f6;'>glassmorphism effects</span>, and <span style='color: #f59e0b;'>artistic light overlays</span>. Features <span style='color: #10b981;'>responsive design</span> and <b>smooth hover animations</b>. <i>Perfect for portfolios, agencies, and creative websites.</i>",
+    },
+    {
+      name: "Magical Caret",
+      component: MagicalCaret,
+      route: "/components/magical-caret",
+      path: "components/vui/MagicalCaret.tsx",
+      description:
+        "🔮 <b>Magical Caret</b> - A magical caret component with <span style='color: #8b5cf6;'>smooth animations</span>, <span style='color: #3b82f6;'>cursor effects</span>, and <span style='color: #10b981;'>micro-interactions</span>. <i>Perfect for chat applications and AI assistants.</i>",
     },
     {
       name: "Navigation",
@@ -254,6 +273,14 @@ export const componentMap: ComponentCategoryMap = {
       path: "components/vui/text/TextDecryption.tsx",
       description:
         "🔐 <b>Matrix-Style Text Reveal</b> - Create captivating text animations that simulate <span style='color: #ef4444;'>decryption effects</span>. Features <span style='color: #8b5cf6;'>character scrambling</span> and smooth reveal transitions.",
+    },
+    {
+      name:"Flipping Text",
+      component:FlipTextShowcase,
+      theme:FlipTextTheme,
+      route:"/text-animation/flipping-text",
+      path:"components/vui/text/FlipText.tsx",
+      description:"🔄 <b>Flipping Text Effect</b> - Create mesmerizing text animations with <span style='color: #3b82f6;'>smooth flip effects</span>. Features <span style='color: #10b981;'>configurable speed</span> and <span style='color: #f59e0b;'>customizable colors</span>.",
     },
     {
       name: "Typing Text",

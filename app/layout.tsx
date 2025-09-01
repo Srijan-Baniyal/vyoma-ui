@@ -4,6 +4,7 @@ import "./globals.css";
 import ThemeProvider from "@/providers/ThemeProvider";
 import { PackageManagerProvider } from "@/contexts/PackageManagerContext";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -112,6 +113,7 @@ export default function RootLayout({
           <PackageManagerProvider>
             {children}
             <Analytics />
+            <SpeedInsights />
           </PackageManagerProvider>
         </ThemeProvider>
       </body>

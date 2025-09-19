@@ -45,6 +45,7 @@ import {
 import BeautifulFooterShowcase from "@/components/vui/BeautyFooter";
 import MagicalCaret from "@/components/vui/MagicalCaret";
 import FlipTextShowcase, { FlipTextTheme } from "@/components/vui/text/FlipText";
+import DrawingLinesShowcase from "@/components/vui/backgrounds/DrawingLines";
 
 export type ComponentEntry = {
   name: string;
@@ -122,9 +123,15 @@ export const componentMap: ComponentCategoryMap = {
         "🌌 <b>3D Tunnel Animation</b> - Mesmerizing <span style='color: #8b5cf6;'>depth-based</span> background effect with <span style='color: #3b82f6;'>particle systems</span> and <span style='color: #10b981;'>smooth transitions</span>. <i>Creates an immersive visual experience for hero sections.</i>",
     },
     {
+      name:"Drawing Lines",
+      component:DrawingLinesShowcase,
+      route:"/backgrounds/drawing-lines",
+      path:"components/vui/backgrounds/DrawingLines.tsx",
+      description:"🎨 <b>Drawing Lines</b> - A beautiful drawing lines background with <span style='color: #8b5cf6;'>smooth transitions</span> and <span style='color: #3b82f6;'>customizable colors</span>. <i>Perfect for portfolios and creative websites.</i>",
+    },
+    {
       name: "Wavy Tiles",
       component: WavyTilesShowcase,
-      theme: WavyTilesTheme,
       route: "/backgrounds/wavy-tiles",
       path: "components/vui/backgrounds/WavyTiles.tsx",
       description:

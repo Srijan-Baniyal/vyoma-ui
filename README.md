@@ -5,11 +5,21 @@
   
   **Beautiful, accessible React components with smooth animations**
 
-  [![Version](https://img.shields.io/badge/Version-1.3.2-brightgreen?style=flat-square)](https://github.com/srijanbaniyal/vyoma-ui/releases)
-  [![MIT License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
-  [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue?style=flat-square)](https://www.typescriptlang.org/)
+[![Version](https://img.shields.io/badge/Version-1.3.2-brightgreen?style=flat-square)](https://github.com/srijanbaniyal/vyoma-ui/releases)
+[![MIT License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue?style=flat-square)](https://www.typescriptlang.org/)
 
-  [🚀 Get Started](#-quick-start) • [📖 Components](#-components) • [🤝 Contributing](#-contributing)
+
+<a href="https://www.star-history.com/#Srijan-Baniyal/vyoma-ui&Date">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=Srijan-Baniyal/vyoma-ui&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=Srijan-Baniyal/vyoma-ui&type=Date" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=Srijan-Baniyal/vyoma-ui&type=Date" />
+ </picture>
+</a>
+
+[🚀 Get Started](#-quick-start) • [📖 Components](#-components) • [🤝 Contributing](#-contributing)
+
 </div>
 
 ## ✨ Why Vyoma UI?
@@ -48,14 +58,10 @@ pnpm add vui
 
 ```jsx
 // Copy any component and use it
-import { ShimmerButton } from 'vui/buttons/ShimmerButton'
+import { ShimmerButton } from "vui/buttons/ShimmerButton";
 
 export default function App() {
-  return (
-    <ShimmerButton>
-      ✨ Click me!
-    </ShimmerButton>
-  )
+  return <ShimmerButton>✨ Click me!</ShimmerButton>;
 }
 ```
 
@@ -67,7 +73,7 @@ Vyoma UI offers a rich collection of components across multiple categories, with
 
 **FlipButton** • **MagneticButton** • **ShimmerButton** • **SpotLight** • **VideoButton** • **ShinyButtons**
 
-### ✏️ Text Animations  
+### ✏️ Text Animations
 
 **AnimatedNumber** • **CountUp** • **TextDecryption** • **TypingText** • **WavingText** • **FlipText**
 
@@ -98,18 +104,20 @@ Vyoma UI offers a rich collection of components across multiple categories, with
 We'd love your help making Vyoma UI even better!
 
 - 🐛 **Report bugs** or suggest features
-- 🎨 **Add new components** following our guidelines  
+- 🎨 **Add new components** following our guidelines
 - 📝 **Improve documentation** or fix typos
 - ⭐ **Star the repo** to show your support
 
 ### Development Setup
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/Srijan-Baniyal/vyoma-ui.git
    ```
 
 2. Install dependencies:
+
    ```bash
    cd vyoma-ui && yarn install
    ```

@@ -27,34 +27,34 @@ Vyoma UI (VUI) is a modern React component library built on top of [shadcn/ui](h
 
 ## 🚀 Quick Start
 
-### 1. Create a new Next.js project
+Getting started with Vyoma UI is simple. You can either clone the repository to explore all components or install it directly in your project.
+
+### Running the Demo Locally
 
 ```bash
-npx create-next-app@latest my-vyoma-app --typescript --tailwind --eslint
-cd my-vyoma-app
+# Clone and run locally
+git clone https://github.com/Srijan-Baniyal/vui.git
+cd vui && pnpm install && pnpm dev
 ```
 
-### 2. Install Shadcn UI
+Visit `http://localhost:3000` to see all components in action.
+
+### Installing in Your Project
 
 ```bash
-npx shadcn@latest init
+# Using pnpm
+pnpm add vui
 ```
-
-### 3. Configure your components
-
-Follow the initialization wizard to configure your `components.json` file with the perfect settings for your project.
-
-### 4. Start using Vyoma UI components
 
 ```jsx
 // Copy any component and use it
-import { MagicalButton } from "@/components/vui/buttons/MagicalButton"
+import { ShimmerButton } from 'vui/buttons/ShimmerButton'
 
 export default function App() {
   return (
-    <MagicalButton variant="shimmer">
+    <ShimmerButton>
       ✨ Click me!
-    </MagicalButton>
+    </ShimmerButton>
   )
 }
 ```

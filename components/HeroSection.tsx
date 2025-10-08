@@ -84,7 +84,7 @@ export default function HeroSection() {
   }, [isMobile]);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-background via-background to-secondary/20">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-background via-background to-secondary/20 pt-20 md:pt-24">
       {/* Mobile-Optimized Animated Grid Background */}
       <div className="absolute inset-0 overflow-hidden opacity-20 md:opacity-30">
         <div

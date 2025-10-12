@@ -1,23 +1,8 @@
 "use client";
 
-import { motion, Transition } from "framer-motion";
+import { motion, Transition, Easing as FramerEasing } from "framer-motion";
 import { useEffect, useRef, useState, useMemo } from "react";
 import { cn } from "@/lib/utils";
-
-type Easing =
-  | "linear"
-  | "easeIn"
-  | "easeOut"
-  | "easeInOut"
-  | "circIn"
-  | "circOut"
-  | "circInOut"
-  | "backIn"
-  | "backOut"
-  | "backInOut"
-  | "anticipate"
-  | number[]
-  | ((t: number) => number);
 
 type BlurTextProps = {
   text?: string;
@@ -29,7 +14,7 @@ type BlurTextProps = {
   rootMargin?: string;
   animationFrom?: Record<string, string | number>;
   animationTo?: Array<Record<string, string | number>>;
-  easing?: Easing;
+  easing?: FramerEasing | FramerEasing[];
   onAnimationComplete?: () => void;
   stepDuration?: number;
   autoPlay?: boolean;
@@ -132,7 +117,7 @@ const BlurText: React.FC<BlurTextProps> = ({
             duration: totalDuration,
             times,
             delay: (index * delay) / 1000,
-            ease: easing as any,
+            ease: easing,
           };
 
           return (

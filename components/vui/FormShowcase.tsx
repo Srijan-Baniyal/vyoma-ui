@@ -89,7 +89,7 @@ export default function FormShowcase() {
               <div className="flex justify-center pt-4">
                 <Button
                   variant="default"
-                  className="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-xl font-semibold transition-transform duration-300 hover:scale-105"
+                  className="bg-dark hover:bg-dark/90 text-white px-6 py-3 rounded-xl font-semibold transition-transform duration-300 hover:scale-105"
                 >
                   Send Message 🚀
                 </Button>

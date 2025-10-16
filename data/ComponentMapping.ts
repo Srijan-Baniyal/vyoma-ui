@@ -48,9 +48,13 @@ import MagicalCaret from "@/components/vui/MagicalCaret";
 import FlipTextShowcase, {
   FlipTextTheme,
 } from "@/components/vui/text/FlipText";
-import { BlurTextShowcase, BlurTextTheme } from "@/components/vui/text/BlurText";
+import {
+  BlurTextShowcase,
+  BlurTextTheme,
+} from "@/components/vui/text/BlurText";
 import DrawingLinesShowcase from "@/components/vui/backgrounds/DrawingLines";
 import MagneticDock from "@/components/vui/MagneticDock";
+import SwitchToggle from "@/components/vui/SwitchToggle";
 
 export type ComponentEntry = {
   name: string;
@@ -273,6 +277,14 @@ export const componentMap: ComponentCategoryMap = {
       path: "components/vui/FormShowcase.tsx",
       description:
         "📝 <b>Interactive Form Component</b> - A beautifully designed form with <span style='color: #3b82f6;'>validation</span>, <span style='color: #8b5cf6;'>animations</span>, and <span style='color: #10b981;'>accessibility support</span>. Perfect for authentication, contact, or feedback sections.",
+    },
+    {
+      name: "Switch-toggle",
+      component: SwitchToggle,
+      route: "/components/SwitchToggle",
+      path: "components/vui/SwitchToggle.tsx",
+      description:
+        "📝 <b>Interactive SwitchToggle Component</b> - A beautifully designed SwitchToggle with <span style='color: #3b82f6;'>validation</span>, <span style='color: #8b5cf6;'>animations</span>, and <span style='color: #10b981;'>accessibility support</span>.  Ideal for user preferences, settings, or feature toggles.",
     },
   ],
   "Text Animation": [

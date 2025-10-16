@@ -2,6 +2,7 @@ import Installation from "@/components/Installation";
 import Introduction from "@/components/Introduction";
 import StoryBehind from "@/components/StoryBehind";
 import Changelog from "@/components/ChangeLog";
+import FormShowcase from "@/components/vui/FormShowcase";
 import TextDecryptionShowcase, {
   TextDecryptionTheme,
 } from "@/components/vui/text/TextDecryption";
@@ -44,9 +45,11 @@ import {
 } from "@/components/vui/text/WavingText";
 import BeautifulFooterShowcase from "@/components/vui/BeautyFooter";
 import MagicalCaret from "@/components/vui/MagicalCaret";
-import FlipTextShowcase, { FlipTextTheme } from "@/components/vui/text/FlipText";
+import FlipTextShowcase, {
+  FlipTextTheme,
+} from "@/components/vui/text/FlipText";
 import DrawingLinesShowcase from "@/components/vui/backgrounds/DrawingLines";
-import { BlurTextShowcase, BlurTextTheme } from "@/components/vui/text/BlurText";
+import MagneticDock from "@/components/vui/MagneticDock";
 
 export type ComponentEntry = {
   name: string;
@@ -124,11 +127,12 @@ export const componentMap: ComponentCategoryMap = {
         "🌌 <b>3D Tunnel Animation</b> - Mesmerizing <span style='color: #8b5cf6;'>depth-based</span> background effect with <span style='color: #3b82f6;'>particle systems</span> and <span style='color: #10b981;'>smooth transitions</span>. <i>Creates an immersive visual experience for hero sections.</i>",
     },
     {
-      name:"Drawing Lines",
-      component:DrawingLinesShowcase,
-      route:"/backgrounds/drawing-lines",
-      path:"components/vui/backgrounds/DrawingLines.tsx",
-      description:"🎨 <b>Drawing Lines</b> - A beautiful drawing lines background with <span style='color: #8b5cf6;'>smooth transitions</span> and <span style='color: #3b82f6;'>customizable colors</span>. <i>Perfect for portfolios and creative websites.</i>",
+      name: "Drawing Lines",
+      component: DrawingLinesShowcase,
+      route: "/backgrounds/drawing-lines",
+      path: "components/vui/backgrounds/DrawingLines.tsx",
+      description:
+        "🎨 <b>Drawing Lines</b> - A beautiful drawing lines background with <span style='color: #8b5cf6;'>smooth transitions</span> and <span style='color: #3b82f6;'>customizable colors</span>. <i>Perfect for portfolios and creative websites.</i>",
     },
     {
       name: "Wavy Tiles",
@@ -245,6 +249,14 @@ export const componentMap: ComponentCategoryMap = {
         "💬 <b>Smart Tooltip System</b> - Context-aware tooltips with <span style='color: #3b82f6;'>auto-positioning</span>, <span style='color: #10b981;'>arrow indicators</span>, and <span style='color: #f59e0b;'>delay controls</span>. Includes <b>rich content support</b> and <b>accessibility features</b>.",
     },
     {
+      name: "Magnetic Dock",
+      component: MagneticDock,
+      route: "/components/magnetic-dock",
+      path: "components/vui/MagneticDock.tsx",
+      description:
+        "🧲 <b>Magnetic Dock</b> - An interactive dock component with <span style='color: #8b5cf6;'>magnetic attraction</span>, <span style='color: #3b82f6;'>smooth scaling</span>, and <span style='color: #10b981;'>responsive design</span>. <i>Perfect for application launchers and toolbars.</i>",
+    },
+    {
       name: "Wheel Picker",
       component: WheelPickerDemo,
       theme: WheelPickerTheme,
@@ -252,6 +264,14 @@ export const componentMap: ComponentCategoryMap = {
       path: "components/vui/WheelPicker.tsx",
       description:
         "🎡 <b>iOS-Style Picker Wheel</b> - Native-feeling selection component with <span style='color: #8b5cf6;'>momentum scrolling</span>, <span style='color: #ef4444;'>haptic feedback</span>, and <span style='color: #10b981;'>infinite scroll support</span>. <i>Great for date/time and option selection.</i> <br /><br /> Credits to <a href='https://www.chanhdai.com' target='_blank'>@ncdai</a> for creating this beautiful iOS Wheel Picker. ",
+    },
+    {
+      name: "Form",
+      component: FormShowcase,
+      route: "/components/form",
+      path: "components/vui/FormShowcase.tsx",
+      description:
+        "📝 <b>Interactive Form Component</b> - A beautifully designed form with <span style='color: #3b82f6;'>validation</span>, <span style='color: #8b5cf6;'>animations</span>, and <span style='color: #10b981;'>accessibility support</span>. Perfect for authentication, contact, or feedback sections.",
     },
   ],
   "Text Animation": [
@@ -292,12 +312,13 @@ export const componentMap: ComponentCategoryMap = {
         "🔐 <b>Matrix-Style Text Reveal</b> - Create captivating text animations that simulate <span style='color: #ef4444;'>decryption effects</span>. Features <span style='color: #8b5cf6;'>character scrambling</span> and smooth reveal transitions.",
     },
     {
-      name:"Flipping Text",
-      component:FlipTextShowcase,
-      theme:FlipTextTheme,
-      route:"/text-animation/flipping-text",
-      path:"components/vui/text/FlipText.tsx",
-      description:"🔄 <b>Flipping Text Effect</b> - Create mesmerizing text animations with <span style='color: #3b82f6;'>smooth flip effects</span>. Features <span style='color: #10b981;'>configurable speed</span> and <span style='color: #f59e0b;'>customizable colors</span>.",
+      name: "Flipping Text",
+      component: FlipTextShowcase,
+      theme: FlipTextTheme,
+      route: "/text-animation/flipping-text",
+      path: "components/vui/text/FlipText.tsx",
+      description:
+        "🔄 <b>Flipping Text Effect</b> - Create mesmerizing text animations with <span style='color: #3b82f6;'>smooth flip effects</span>. Features <span style='color: #10b981;'>configurable speed</span> and <span style='color: #f59e0b;'>customizable colors</span>.",
     },
     {
       name: "Typing Text",

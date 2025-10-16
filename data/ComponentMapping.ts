@@ -46,6 +46,7 @@ import BeautifulFooterShowcase from "@/components/vui/BeautyFooter";
 import MagicalCaret from "@/components/vui/MagicalCaret";
 import FlipTextShowcase, { FlipTextTheme } from "@/components/vui/text/FlipText";
 import DrawingLinesShowcase from "@/components/vui/backgrounds/DrawingLines";
+import MagneticDock from "@/components/vui/MagneticDock";
 
 export type ComponentEntry = {
   name: string;
@@ -242,6 +243,14 @@ export const componentMap: ComponentCategoryMap = {
       path: "components/vui/ToolTip.tsx",
       description:
         "💬 <b>Smart Tooltip System</b> - Context-aware tooltips with <span style='color: #3b82f6;'>auto-positioning</span>, <span style='color: #10b981;'>arrow indicators</span>, and <span style='color: #f59e0b;'>delay controls</span>. Includes <b>rich content support</b> and <b>accessibility features</b>.",
+    },
+    {
+      name: "Magnetic Dock",
+      component: MagneticDock,
+      route: "/components/magnetic-dock",
+      path: "components/vui/MagneticDock.tsx",
+      description:
+        "🧲 <b>Magnetic Dock</b> - An interactive dock component with <span style='color: #8b5cf6;'>magnetic attraction</span>, <span style='color: #3b82f6;'>smooth scaling</span>, and <span style='color: #10b981;'>responsive design</span>. <i>Perfect for application launchers and toolbars.</i>",
     },
     {
       name: "Wheel Picker",

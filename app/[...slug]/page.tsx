@@ -11,7 +11,7 @@ import parser from "html-react-parser";
 
 
 function normalize(str: string) {
-  return str.replace(/[-_\s]/g, "").toLowerCase();
+  return str.replace(/[-_\s&]/g, "").toLowerCase();
 }
 
 function truncateDescription(
@@ -144,7 +144,7 @@ export async function generateMetadata({
   }
   const [category, componentName] = awaitedParams.slug;
   function normalize(str: string) {
-    return str.replace(/[-_\s]/g, "").toLowerCase();
+    return str.replace(/[-_\s&]/g, "").toLowerCase();
   }
   function humanize(str: string) {
     return str

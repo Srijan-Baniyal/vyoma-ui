@@ -48,6 +48,7 @@ import MagicalCaret from "@/components/vui/MagicalCaret";
 import FlipTextShowcase, {
   FlipTextTheme,
 } from "@/components/vui/text/FlipText";
+import { BlurTextShowcase, BlurTextTheme } from "@/components/vui/text/BlurText";
 import DrawingLinesShowcase from "@/components/vui/backgrounds/DrawingLines";
 import MagneticDock from "@/components/vui/MagneticDock";
 

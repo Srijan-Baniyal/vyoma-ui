@@ -48,6 +48,7 @@ import MagicalCaret from "@/components/vui/MagicalCaret";
 import FlipTextShowcase, {
   FlipTextTheme,
 } from "@/components/vui/text/FlipText";
+import { BlurTextShowcase, BlurTextTheme } from "@/components/vui/text/BlurText";
 import DrawingLinesShowcase from "@/components/vui/backgrounds/DrawingLines";
 import MagneticDock from "@/components/vui/MagneticDock";
 
@@ -283,6 +284,15 @@ export const componentMap: ComponentCategoryMap = {
       path: "components/vui/text/AnimatedNumber.tsx",
       description:
         "🔢 <b>Dynamic Number Animations</b> - Create stunning countdown timers and number transitions with <span style='color: #3b82f6;'>smooth easing</span> and customizable <span style='color: #8b5cf6;'>duration</span>. <i>Perfect for dashboards and analytics.</i>",
+    },
+    {
+      name: "Blur Text",
+      component: BlurTextShowcase,
+      theme: BlurTextTheme,
+      route: "/text-animation/blur-text",
+      path: "components/vui/text/BlurText.tsx",
+      description:
+        "✨ <b>Blur-In Text Animation</b> - Create captivating text reveals with <span style='color: #8b5cf6;'>smooth blur transitions</span> and <span style='color: #3b82f6;'>directional animations</span>. Features <span style='color: #10b981;'>word-by-word</span> or <span style='color: #f59e0b;'>letter-by-letter</span> modes. <i>Perfect for hero sections and attention-grabbing headlines.</i>",
     },
     {
       name: "Counting Number",

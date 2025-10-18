@@ -51,6 +51,7 @@ import FlipTextShowcase, {
 import { BlurTextShowcase, BlurTextTheme } from "@/components/vui/text/BlurText";
 import DrawingLinesShowcase from "@/components/vui/backgrounds/DrawingLines";
 import MagneticDock from "@/components/vui/MagneticDock";
+import BeforeAfterSliderShowcase from "@/components/vui/BeforeAfterSlider";
 
 export type ComponentEntry = {
   name: string;
@@ -163,6 +164,13 @@ export const componentMap: ComponentCategoryMap = {
       description:
         "🎨 <b>Modern Grid Layout</b> - Create beautiful <span style='color: #f59e0b;'>masonry-style</span> layouts inspired by Apple's design language. Features <span style='color: #3b82f6;'>responsive breakpoints</span> and <span style='color: #8b5cf6;'>smooth hover effects</span>.",
     },
+    {
+    name: "Before & After Slider",
+      component: BeforeAfterSliderShowcase,
+    route: "/components/before-after-slider",
+    path: "components/vui/BeforeAfterSlider.tsx",
+    description: "🔄 <b>Image Comparison Slider</b> - A beautiful slider component with <span style='color: #8b5cf6;'>smooth drag interactions</span>, <span style='color: #3b82f6;'>responsive design</span>, and <span style='color: #10b981;'>customizable labels</span>. Perfect for before/after image comparisons.",
+  },
     {
       name: "Buttons",
       component: ButtonShowcase,

@@ -34,6 +34,7 @@ import {
   WavyTilesTheme,
 } from "@/components/vui/backgrounds/WavyTiles";
 import HexagonalShowcase from "@/components/vui/backgrounds/Hexagonal";
+import CircuitBackground from "@/components/vui/backgrounds/CircuitBackground";
 import { ButtonShowcase, ButtonTheme } from "@/components/vui/Button";
 import ToolTipShowcase, { ToolTipTheme } from "@/components/vui/ToolTip";
 import NavigationShowcase from "@/components/vui/Navigation";
@@ -119,6 +120,14 @@ export const componentMap: ComponentCategoryMap = {
       path: "components/vui/backgrounds/Hexagonal.tsx",
       description:
         "🌐 <b>Hexagonal Background</b> - A beautiful hexagonal background with <span style='color: #8b5cf6;'>smooth transitions</span> and <span style='color: #3b82f6;'>customizable colors</span>. <i>Perfect for portfolios and creative websites.</i>",
+    },
+    {
+      name: "Circuit Flow",
+      component: CircuitBackground,
+      route: "/backgrounds/circuit-flow",
+      path: "components/vui/backgrounds/CircuitBackground.tsx",
+      description:
+        "🔌 <b>Animated Circuit Background</b> - A neon circuit board effect with <span style='color: #8b5cf6;'>glowing paths</span>, <span style='color: #3b82f6;'>pulsing nodes</span>, and <span style='color: #10b981;'>themeable colors</span>. <i>Great for tech, AI, and developer-focused pages.</i>",
     },
     {
       name: "Tunnel",

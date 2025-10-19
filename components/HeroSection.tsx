@@ -3,114 +3,81 @@
 import { Button } from "@/components/ui/buttonShadcn";
 import Link from "next/link";
 import { ArrowRight, Sparkles, Layers, Zap } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Pill } from "@/components/ui/pill";
 import { CountUp } from "@/components/vui/text/CountUp";
 import { getDynamicStats } from "@/lib/ComponentCounter";
 import { version as vuiVersion } from "@/lib/version";
 
 export default function HeroSection() {
-  const [gridCells, setGridCells] = useState<boolean[]>([]);
-  const [isMobile, setIsMobile] = useState(false);
+  const leavesRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Check if mobile device
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
+    const container = leavesRef.current;
+    if (!container) return;
+
+    const totalLeaves = 60;
+    const leaves: {
+      el: HTMLDivElement;
+      x: number;
+      y: number;
+      speedY: number;
+      rotation: number;
+      rotationSpeed: number;
+      width: number;
+      height: number;
+    }[] = [];
+
+    for (let i = 0; i < totalLeaves; i++) {
+      const div = document.createElement("div");
+
+      const width = 6 + Math.random() * 8; // width of leaf
+      const height = width * (0.3 + Math.random() * 0.4); // height smaller than width for leaf shape
+
+      div.style.position = "absolute";
+      div.style.width = `${width}px`;
+      div.style.height = `${height}px`;
+      div.style.backgroundColor = "black";
+      div.style.borderRadius = "50% / 50%"; // elliptical shape
+      div.style.opacity = "0.7";
+      div.style.pointerEvents = "none";
+
+      container.appendChild(div);
+
+      leaves.push({
+        el: div,
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        speedY: 0.5 + Math.random() * 1,
+        rotation: Math.random() * 360,
+        rotationSpeed: (Math.random() - 0.5) * 2, // small rotation
+        width,
+        height,
+      });
+    }
+
+    const animate = () => {
+      leaves.forEach((leaf) => {
+        leaf.y += leaf.speedY;
+        leaf.rotation += leaf.rotationSpeed;
+
+        if (leaf.y > 100) leaf.y = -5; // reset to top
+
+        leaf.el.style.transform = `translate(${leaf.x}vw, ${leaf.y}vh) rotate(${leaf.rotation}deg)`;
+      });
+
+      requestAnimationFrame(animate);
     };
 
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-
-    return () => window.removeEventListener("resize", checkMobile);
+    animate();
   }, []);
-
-  useEffect(() => {
-    // Mobile-optimized grid: 12x10 = 120 cells, Desktop: 20x15 = 300 cells
-    const totalCells = isMobile ? 120 : 300;
-    const cells = new Array(totalCells).fill(false);
-    setGridCells(cells);
-
-    // Progressive grid animation with mobile optimization
-    const animateGrid = () => {
-      let filledCells = 0;
-      // Mobile: lighter animation (50-55%), Desktop: (65-67%)
-      const baseFillPercentage = isMobile ? 0.5 : 0.65;
-      const variationRange = isMobile ? 0.05 : 0.02;
-      const targetFillPercentage =
-        baseFillPercentage + Math.random() * variationRange;
-      const targetCells = Math.floor(totalCells * targetFillPercentage);
-
-      // Mobile: slower interval for better performance
-      const baseInterval = isMobile ? 120 : 64;
-      const randomVariation = isMobile ? 60 : 32;
-      const intervalTiming = baseInterval + Math.random() * randomVariation;
-
-      const fillInterval = setInterval(() => {
-        setGridCells((prev) => {
-          const newCells = [...prev];
-
-          // Mobile: fewer cells per iteration for smoother animation
-          const cellsToFill = isMobile ? 1 : 2 + Math.floor(Math.random() * 3);
-
-          for (let i = 0; i < cellsToFill; i++) {
-            let randomIndex;
-            let attempts = 0;
-
-            do {
-              randomIndex = Math.floor(Math.random() * totalCells);
-              attempts++;
-            } while (newCells[randomIndex] && attempts < 30);
-
-            if (!newCells[randomIndex]) {
-              newCells[randomIndex] = true;
-              filledCells++;
-            }
-          }
-
-          if (filledCells >= targetCells) {
-            clearInterval(fillInterval);
-          }
-
-          return newCells;
-        });
-      }, intervalTiming);
-    };
-
-    // Mobile: quicker start, Desktop: varied delay
-    const startDelay = isMobile ? 200 : 50 + Math.random() * 1000;
-    const timer = setTimeout(animateGrid, startDelay);
-    return () => clearTimeout(timer);
-  }, [isMobile]);
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-background via-background to-secondary/20 pt-20 md:pt-24">
-      {/* Mobile-Optimized Animated Grid Background */}
-      <div className="absolute inset-0 overflow-hidden opacity-20 md:opacity-30">
-        <div
-          className={`grid gap-1 w-full h-full p-2 md:p-4 ${
-            isMobile ? "grid-cols-12" : "grid-cols-20"
-          }`}
-        >
-          {gridCells.map((filled, index) => (
-            <div
-              key={index}
-              className={`aspect-square rounded-sm transition-all ease-out ${
-                isMobile ? "duration-700" : "duration-1000"
-              } ${
-                filled
-                  ? "bg-gradient-to-br from-primary/40 to-secondary/40 shadow-lg scale-100"
-                  : "bg-transparent scale-75"
-              }`}
-              style={{
-                animationDelay: `${index * (isMobile ? 15 : 20)}ms`,
-                transitionDelay: `${index * (isMobile ? 8 : 10)}ms`,
-              }}
-            />
-          ))}
-        </div>
-      </div>
+      {/* Falling Black Leaves Background */}
+      <div ref={leavesRef} className="absolute inset-0 z-0" />
 
+      {/* --- content remains unchanged --- */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-5xl mx-auto text-center">
           {/* Main Headline */}

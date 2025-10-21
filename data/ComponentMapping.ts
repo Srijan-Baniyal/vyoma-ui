@@ -36,6 +36,7 @@ import {
 } from "@/components/vui/backgrounds/WavyTiles";
 import HexagonalShowcase from "@/components/vui/backgrounds/Hexagonal";
 import { ButtonShowcase, ButtonTheme } from "@/components/vui/Button";
+import ShinyParticleGalaxyShowcase from "@/components/vui/backgrounds/ShinyParticleGalaxy";
 import ToolTipShowcase, { ToolTipTheme } from "@/components/vui/ToolTip";
 import NavigationShowcase from "@/components/vui/Navigation";
 import { PillShowcase, PillTheme } from "@/components/vui/pillcomponent";
@@ -55,6 +56,9 @@ import MagneticDock from "@/components/vui/MagneticDock";
 import BeforeAfterSliderShowcase from "@/components/vui/BeforeAfterSlider";
 import CircuitFlow from "@/components/vui/backgrounds/CircuitFlow";
 import AIChatShowcase from "@/components/vui/ai/AIChatShowcase";
+
+// ✅ Import your new “Shining Star” component here
+import ShiningStarShowcase from "@/components/vui/backgrounds/ShinyParticleGalaxy";
 
 export type ComponentEntry = {
   name: string;
@@ -111,7 +115,7 @@ export const componentMap: ComponentCategoryMap = {
       route: "/ai-components/magical-chat-input",
       path: "components/vui/ai/MagicalChatInput.tsx",
       description:
-        "🔮 <b>Magical Chat Input</b> - A magical chat input component with <span style='color: #8b5cf6;'>smooth animations</span>, <span style='color: #3b82f6;'>cursor effects</span>, and <span style='color: #10b981;'>micro-interactions</span>. <i>Perfect for chat applications and AI assistants.</i>",
+        "🔮 <b>Magical Chat Input</b> - A magical chat input component with smooth animations, cursor effects, and micro-interactions. Perfect for chat applications and AI assistants.",
     },
     {
       name: "AI Chat",
@@ -119,7 +123,7 @@ export const componentMap: ComponentCategoryMap = {
       route: "/ai-components/ai-chat",
       path: "components/vui/ai/AIChat.tsx",
       description:
-        "🤖 <b>Complete AI Chat Interface</b> - Ready-to-use chat component with <span style='color: #10b981;'>OpenAI integration</span>, <span style='color: #3b82f6;'>real-time messaging</span>, and <span style='color: #8b5cf6;'>beautiful animations</span>. <i>Just add your API key and start chatting!</i>",
+        "🤖 <b>Complete AI Chat Interface</b> - Ready-to-use chat component with OpenAI integration, real-time messaging, and beautiful animations. Just add your API key and start chatting!",
     },
   ],
   Backgrounds: [
@@ -129,7 +133,7 @@ export const componentMap: ComponentCategoryMap = {
       route: "/backgrounds/circuit-flow",
       path: "components/vui/backgrounds/CircuitFlow.tsx",
       description:
-        "🔌 <b>Animated Circuit Background</b> - A neon circuit board effect with <span style='color: #8b5cf6;'>glowing paths</span>, <span style='color: #3b82f6;'>pulsing nodes</span>, and <span style='color: #10b981;'>themeable colors</span>. <i>Great for tech, AI, and developer-focused pages.</i>",
+        "🔌 <b>Animated Circuit Background</b> - A neon circuit board effect with glowing paths, pulsing nodes, and themeable colors. Great for tech, AI, and developer-focused pages.",
     },
     {
       name: "Hexagonal",
@@ -137,7 +141,7 @@ export const componentMap: ComponentCategoryMap = {
       route: "/backgrounds/hexagonal",
       path: "components/vui/backgrounds/Hexagonal.tsx",
       description:
-        "🌐 <b>Hexagonal Background</b> - A beautiful hexagonal background with <span style='color: #8b5cf6;'>smooth transitions</span> and <span style='color: #3b82f6;'>customizable colors</span>. <i>Perfect for portfolios and creative websites.</i>",
+        "🌐 <b>Hexagonal Background</b> - A beautiful hexagonal background with smooth transitions and customizable colors. Perfect for portfolios and creative websites.",
     },
     {
       name: "Tunnel",
@@ -145,7 +149,7 @@ export const componentMap: ComponentCategoryMap = {
       route: "/backgrounds/tunnel",
       path: "components/vui/backgrounds/Tunnel.tsx",
       description:
-        "🌌 <b>3D Tunnel Animation</b> - Mesmerizing <span style='color: #8b5cf6;'>depth-based</span> background effect with <span style='color: #3b82f6;'>particle systems</span> and <span style='color: #10b981;'>smooth transitions</span>. <i>Creates an immersive visual experience for hero sections.</i>",
+        "🌌 <b>3D Tunnel Animation</b> - Mesmerizing depth-based background effect with particle systems and smooth transitions. Creates an immersive visual experience for hero sections.",
     },
     {
       name: "Space",
@@ -153,7 +157,7 @@ export const componentMap: ComponentCategoryMap = {
       route: "/backgrounds/space",
       path: "components/vui/backgrounds/Space.tsx",
       description:
-        "🧑‍🚀 <b>Interactive 3D Space Scene</b> - Embark on a cosmic journey with a <span style='color: #3b82f6;'>fully interactive</span> 3D environment. Features a <span style='color: #8b5cf6;'>drifting astronaut</span>, a rotating planet, and dynamic lighting. <i>Perfect for creating an immersive, out-of-this-world hero section.</i>",
+        "🧑‍🚀 <b>Interactive 3D Space Scene</b> - Embark on a cosmic journey with a fully interactive environment featuring a drifting astronaut and dynamic lighting.",
     },
     {
       name: "Drawing Lines",
@@ -161,7 +165,7 @@ export const componentMap: ComponentCategoryMap = {
       route: "/backgrounds/drawing-lines",
       path: "components/vui/backgrounds/DrawingLines.tsx",
       description:
-        "🎨 <b>Drawing Lines</b> - A beautiful drawing lines background with <span style='color: #8b5cf6;'>smooth transitions</span> and <span style='color: #3b82f6;'>customizable colors</span>. <i>Perfect for portfolios and creative websites.</i>",
+        "🎨 <b>Drawing Lines</b> - A beautiful animated background with smooth transitions and customizable colors. Perfect for creative websites.",
     },
     {
       name: "Wavy Tiles",
@@ -169,8 +173,18 @@ export const componentMap: ComponentCategoryMap = {
       route: "/backgrounds/wavy-tiles",
       path: "components/vui/backgrounds/WavyTiles.tsx",
       description:
-        "🌊 <b>Animated Wave Pattern</b> - Dynamic tiled background with <span style='color: #3b82f6;'>fluid wave animations</span> and <span style='color: #f59e0b;'>customizable colors</span>. Features <span style='color: #10b981;'>performance optimization</span> and <b>responsive scaling</b>.",
+        "🌊 <b>Animated Wave Pattern</b> - Dynamic tiled background with fluid wave animations and customizable colors.",
     },
+    {
+      name: "Shiny Particle Galaxy",
+      component: ShinyParticleGalaxyShowcase,
+      route: "/backgrounds/shiny-particle-galaxy",
+      path: "components/vui/backgrounds/ShinyParticleGalaxy.tsx",
+      description:
+        "✨ <b>Shiny Particle Galaxy</b> - Stunning galaxy animation with twinkling stars, motion depth, and smooth particle effects. Great for hero sections.",
+    },
+    // ✅ Your new background entry
+
   ],
   Components: [
     {
@@ -180,7 +194,7 @@ export const componentMap: ComponentCategoryMap = {
       route: "/components/accordion",
       path: "components/vui/Accordion.tsx",
       description:
-        "📁 <b>Collapsible Content Panels</b> - Organize content with smooth <span style='color: #8b5cf6;'>expand/collapse animations</span>. Supports <span style='color: #10b981;'>multiple open items</span>, keyboard navigation, and <b>accessibility features</b>.",
+        "📁 <b>Collapsible Content Panels</b> - Organize content with smooth expand/collapse animations and accessibility features.",
     },
     {
       name: "Bento Grid",
@@ -189,15 +203,16 @@ export const componentMap: ComponentCategoryMap = {
       route: "/components/bento-grid",
       path: "components/vui/BentoGrid.tsx",
       description:
-        "🎨 <b>Modern Grid Layout</b> - Create beautiful <span style='color: #f59e0b;'>masonry-style</span> layouts inspired by Apple's design language. Features <span style='color: #3b82f6;'>responsive breakpoints</span> and <span style='color: #8b5cf6;'>smooth hover effects</span>.",
+        "🎨 <b>Modern Grid Layout</b> - Create beautiful masonry-style layouts inspired by Apple’s design language.",
     },
     {
-    name: "Before & After Slider",
+      name: "Before & After Slider",
       component: BeforeAfterSliderShowcase,
-    route: "/components/before-after-slider",
-    path: "components/vui/BeforeAfterSlider.tsx",
-    description: "🔄 <b>Image Comparison Slider</b> - A beautiful slider component with <span style='color: #8b5cf6;'>smooth drag interactions</span>, <span style='color: #3b82f6;'>responsive design</span>, and <span style='color: #10b981;'>customizable labels</span>. Perfect for before/after image comparisons.",
-  },
+      route: "/components/before-after-slider",
+      path: "components/vui/BeforeAfterSlider.tsx",
+      description:
+        "🔄 <b>Image Comparison Slider</b> - Smooth drag interactions and responsive design for before/after images.",
+    },
     {
       name: "Buttons",
       component: ButtonShowcase,
@@ -205,7 +220,7 @@ export const componentMap: ComponentCategoryMap = {
       route: "/components/buttons",
       path: "components/vui/Button.tsx",
       description:
-        "🎭 <b>Interactive Button Collection</b> - A comprehensive set of buttons including <span style='color: #ef4444;'>Shimmer</span>, <span style='color: #8b5cf6;'>Magnetic</span>, <span style='color: #f59e0b;'>Spotlight</span>, and <span style='color: #10b981;'>Video</span> variants with <b>micro-interactions</b> and <b>haptic feedback</b>.",
+        "🎭 <b>Interactive Button Collection</b> - Includes shimmer, magnetic, and spotlight variants.",
     },
     {
       name: "Card",
@@ -214,7 +229,7 @@ export const componentMap: ComponentCategoryMap = {
       route: "/components/card",
       path: "components/vui/Card.tsx",
       description:
-        "🃏 <b>Elegant Content Cards</b> - Display content in beautiful cards with <span style='color: #3b82f6;'>glassmorphism effects</span>, <span style='color: #8b5cf6;'>hover animations</span>, and <span style='color: #10b981;'>responsive layouts</span>. <i>Perfect for portfolios and dashboards.</i>",
+        "🃏 <b>Elegant Content Cards</b> - Display content with glassmorphism and hover animations.",
     },
     {
       name: "Checkbox",
@@ -223,7 +238,7 @@ export const componentMap: ComponentCategoryMap = {
       route: "/components/checkbox",
       path: "components/vui/CheckboxUpgraded.tsx",
       description:
-        "✅ <b>Enhanced Checkbox Controls</b> - Beautifully animated checkboxes with <span style='color: #10b981;'>smooth transitions</span>, <span style='color: #f59e0b;'>indeterminate states</span>, and <span style='color: #8b5cf6;'>custom styling options</span>. Fully accessible and keyboard-friendly.",
+        "✅ <b>Enhanced Checkbox Controls</b> - Animated, accessible, and beautifully styled checkboxes.",
     },
     {
       name: "Footer",
@@ -231,7 +246,7 @@ export const componentMap: ComponentCategoryMap = {
       route: "/components/footer",
       path: "components/vui/BeautyFooter.tsx",
       description:
-        "👣 <b>Beautiful Footer</b> - Create stunning footer sections with <span style='color: #8b5cf6;'>multi-layered gradients</span>, <span style='color: #3b82f6;'>glassmorphism effects</span>, and <span style='color: #f59e0b;'>artistic light overlays</span>. Features <span style='color: #10b981;'>responsive design</span> and <b>smooth hover animations</b>. <i>Perfect for portfolios, agencies, and creative websites.</i>",
+        "👣 <b>Beautiful Footer</b> - Stunning footer with gradients, glassmorphism, and hover effects.",
     },
     {
       name: "Magical Caret",
@@ -239,7 +254,7 @@ export const componentMap: ComponentCategoryMap = {
       route: "/components/magical-caret",
       path: "components/vui/MagicalCaret.tsx",
       description:
-        "🔮 <b>Magical Caret</b> - A magical caret component with <span style='color: #8b5cf6;'>smooth animations</span>, <span style='color: #3b82f6;'>cursor effects</span>, and <span style='color: #10b981;'>micro-interactions</span>. <i>Perfect for chat applications and AI assistants.</i>",
+        "🔮 <b>Magical Caret</b> - Smooth cursor animation and text interaction effects.",
     },
     {
       name: "Navigation",
@@ -247,7 +262,7 @@ export const componentMap: ComponentCategoryMap = {
       route: "/components/navigation",
       path: "components/vui/Navigation.tsx",
       description:
-        "🧭 <b>Responsive Navigation System</b> - Modern navigation components with <span style='color: #3b82f6;'>smooth transitions</span>, <span style='color: #10b981;'>mobile-first design</span>, and <span style='color: #8b5cf6;'>active state indicators</span>. <i>Includes breadcrumbs and menu variants.</i>",
+        "🧭 <b>Responsive Navigation</b> - Smooth transitions and mobile-first design.",
     },
     {
       name: "Pill",
@@ -256,7 +271,7 @@ export const componentMap: ComponentCategoryMap = {
       route: "/components/pill",
       path: "components/vui/pillcomponent.tsx",
       description:
-        "💊 <b>Pill / Tag Component</b> - Versatile labels and status indicators with <span style='color: #3b82f6;'>variants</span>, <span style='color: #8b5cf6;'>sizes</span>, and <span style='color: #10b981;'>icons</span>. Ideal for tagging, chips, and dynamic metadata.",
+        "💊 <b>Pill / Tag Component</b> - Versatile tags and status indicators with variants and icons.",
     },
     {
       name: "Sheet",
@@ -264,7 +279,7 @@ export const componentMap: ComponentCategoryMap = {
       route: "/components/sheet",
       path: "components/vui/Sheet.tsx",
       description:
-        "📄 <b>Sliding Panel Component</b> - Create smooth slide-out panels from any direction with <span style='color: #3b82f6;'>backdrop blur</span>, <span style='color: #ef4444;'>drag-to-close</span>, and <span style='color: #10b981;'>responsive breakpoints</span>. <i>Perfect for mobile interfaces.</i>",
+        "📄 <b>Sliding Panel Component</b> - Create smooth slide-out panels from any direction.",
     },
     {
       name: "Skeleton",
@@ -273,7 +288,7 @@ export const componentMap: ComponentCategoryMap = {
       route: "/components/skeleton",
       path: "components/vui/Skeleton.tsx",
       description:
-        "💀 <b>Loading State Placeholders</b> - Improve perceived performance with <span style='color: #8b5cf6;'>shimmer animations</span> and <span style='color: #f59e0b;'>customizable shapes</span>. Supports <span style='color: #10b981;'>dark/light themes</span> and <b>complex layouts</b>.",
+        "💀 <b>Loading State Placeholders</b> - Shimmer animations and customizable shapes.",
     },
     {
       name: "Tooltip",
@@ -282,7 +297,7 @@ export const componentMap: ComponentCategoryMap = {
       route: "/components/tooltip",
       path: "components/vui/ToolTip.tsx",
       description:
-        "💬 <b>Smart Tooltip System</b> - Context-aware tooltips with <span style='color: #3b82f6;'>auto-positioning</span>, <span style='color: #10b981;'>arrow indicators</span>, and <span style='color: #f59e0b;'>delay controls</span>. Includes <b>rich content support</b> and <b>accessibility features</b>.",
+        "💬 <b>Smart Tooltip</b> - Auto-positioning, arrow indicators, and rich content support.",
     },
     {
       name: "Magnetic Dock",
@@ -290,7 +305,7 @@ export const componentMap: ComponentCategoryMap = {
       route: "/components/magnetic-dock",
       path: "components/vui/MagneticDock.tsx",
       description:
-        "🧲 <b>Magnetic Dock</b> - An interactive dock component with <span style='color: #8b5cf6;'>magnetic attraction</span>, <span style='color: #3b82f6;'>smooth scaling</span>, and <span style='color: #10b981;'>responsive design</span>. <i>Perfect for application launchers and toolbars.</i>",
+        "🧲 <b>Magnetic Dock</b> - Interactive dock with smooth scaling and attraction effects.",
     },
     {
       name: "Wheel Picker",
@@ -299,7 +314,7 @@ export const componentMap: ComponentCategoryMap = {
       route: "/components/wheel-picker",
       path: "components/vui/WheelPicker.tsx",
       description:
-        "🎡 <b>iOS-Style Picker Wheel</b> - Native-feeling selection component with <span style='color: #8b5cf6;'>momentum scrolling</span>, <span style='color: #ef4444;'>haptic feedback</span>, and <span style='color: #10b981;'>infinite scroll support</span>. <i>Great for date/time and option selection.</i> <br /><br /> Credits to <a href='https://www.chanhdai.com' target='_blank'>@ncdai</a> for creating this beautiful iOS Wheel Picker. ",
+        "🎡 <b>iOS-Style Picker Wheel</b> - Momentum scrolling and infinite selection.",
     },
     {
       name: "Form",
@@ -307,7 +322,7 @@ export const componentMap: ComponentCategoryMap = {
       route: "/components/form",
       path: "components/vui/FormShowcase.tsx",
       description:
-        "📝 <b>Interactive Form Component</b> - A beautifully designed form with <span style='color: #3b82f6;'>validation</span>, <span style='color: #8b5cf6;'>animations</span>, and <span style='color: #10b981;'>accessibility support</span>. Perfect for authentication, contact, or feedback sections.",
+        "📝 <b>Interactive Form Component</b> - Beautifully animated, validated, and accessible forms.",
     },
   ],
   "Text Animation": [
@@ -318,7 +333,7 @@ export const componentMap: ComponentCategoryMap = {
       route: "/text-animation/animated-number",
       path: "components/vui/text/AnimatedNumber.tsx",
       description:
-        "🔢 <b>Dynamic Number Animations</b> - Create stunning countdown timers and number transitions with <span style='color: #3b82f6;'>smooth easing</span> and customizable <span style='color: #8b5cf6;'>duration</span>. <i>Perfect for dashboards and analytics.</i>",
+        "🔢 <b>Dynamic Number Animations</b> - Smooth transitions and customizable duration.",
     },
     {
       name: "Blur Text",
@@ -327,7 +342,7 @@ export const componentMap: ComponentCategoryMap = {
       route: "/text-animation/blur-text",
       path: "components/vui/text/BlurText.tsx",
       description:
-        "✨ <b>Blur-In Text Animation</b> - Create captivating text reveals with <span style='color: #8b5cf6;'>smooth blur transitions</span> and <span style='color: #3b82f6;'>directional animations</span>. Features <span style='color: #10b981;'>word-by-word</span> or <span style='color: #f59e0b;'>letter-by-letter</span> modes. <i>Perfect for hero sections and attention-grabbing headlines.</i>",
+        "✨ <b>Blur-In Text Animation</b> - Smooth blur transitions and directional animations.",
     },
     {
       name: "Counting Number",
@@ -336,7 +351,7 @@ export const componentMap: ComponentCategoryMap = {
       route: "/text-animation/counting-number",
       path: "components/vui/text/CountUp.tsx",
       description:
-        "📈 <b>Count-Up Animations</b> - Animate numbers from zero to target values with <span style='color: #10b981;'>configurable speed</span> and <span style='color: #f59e0b;'>decimal precision</span>. <i>Ideal for displaying statistics and metrics.</i>",
+        "📈 <b>Count-Up Animations</b> - Animate numbers with configurable speed and precision.",
     },
     {
       name: "Decryption Text",
@@ -345,7 +360,7 @@ export const componentMap: ComponentCategoryMap = {
       route: "/text-animation/decryption-text",
       path: "components/vui/text/TextDecryption.tsx",
       description:
-        "🔐 <b>Matrix-Style Text Reveal</b> - Create captivating text animations that simulate <span style='color: #ef4444;'>decryption effects</span>. Features <span style='color: #8b5cf6;'>character scrambling</span> and smooth reveal transitions.",
+        "🔐 <b>Matrix-Style Text Reveal</b> - Character scrambling and reveal transitions.",
     },
     {
       name: "Flipping Text",
@@ -354,7 +369,7 @@ export const componentMap: ComponentCategoryMap = {
       route: "/text-animation/flipping-text",
       path: "components/vui/text/FlipText.tsx",
       description:
-        "🔄 <b>Flipping Text Effect</b> - Create mesmerizing text animations with <span style='color: #3b82f6;'>smooth flip effects</span>. Features <span style='color: #10b981;'>configurable speed</span> and <span style='color: #f59e0b;'>customizable colors</span>.",
+        "🔄 <b>Flipping Text Effect</b> - Smooth flip animations with configurable speed.",
     },
     {
       name: "Typing Text",
@@ -363,7 +378,7 @@ export const componentMap: ComponentCategoryMap = {
       route: "/text-animation/typing-text",
       path: "components/vui/text/TypingText.tsx",
       description:
-        "⌨️ <b>Typewriter Effect</b> - Simulate realistic typing animations with <span style='color: #3b82f6;'>customizable speed</span>, <span style='color: #10b981;'>cursor blinking</span>, and <span style='color: #f59e0b;'>backspace effects</span>. <i>Great for hero sections and presentations.</i>",
+        "⌨️ <b>Typewriter Effect</b> - Realistic typing animation with cursor blinking and backspace effects.",
     },
     {
       name: "Waving Text",
@@ -372,7 +387,7 @@ export const componentMap: ComponentCategoryMap = {
       route: "/text-animation/waving-text",
       path: "components/vui/text/WavingText.tsx",
       description:
-        "🌊 <b>Waving Text Effect</b> - Create mesmerizing text animations with <span style='color: #3b82f6;'>smooth wave effects</span>. Features <span style='color: #10b981;'>configurable speed</span> and <span style='color: #f59e0b;'>customizable colors</span>.",
+        "🌊 <b>Waving Text Effect</b> - Smooth wave effects with customizable speed and colors.",
     },
   ],
 };

@@ -237,4 +237,4 @@ Your contributions make Vyoma UI better for everyone. Whether you're fixing a bu
 
 **Happy coding!** 🚀
 
-Questions? Reach out to [@srijanbaniyal](https://github.com/srijanbaniyal) or open an issue ✨.
+Questions? Reach out to [@Srijan-Baniyal](https://github.com/Srijan-Baniyal) or open an issue ✨.

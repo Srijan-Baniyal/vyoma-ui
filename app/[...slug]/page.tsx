@@ -1,14 +1,13 @@
+import parser from "html-react-parser";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { componentMap } from "@/data/ComponentMapping";
 import ComponentShowCaseTable from "@/components/ComponentShowCaseTable";
+import { componentMap } from "@/data/ComponentMapping";
 import {
+  getComponentPropsInfo,
   getComponentSourceCode,
   getDefaultProps,
-  getComponentPropsInfo,
 } from "@/lib/ComponentSourceReader";
-import type { Metadata } from "next";
-import parser from "html-react-parser";
-
 
 function normalize(str: string) {
   return str.replace(/[-_\s&]/g, "").toLowerCase();
@@ -16,12 +15,14 @@ function normalize(str: string) {
 
 function truncateDescription(
   description: string | React.JSX.Element | React.JSX.Element[],
-  wordLimit: number = 25
+  wordLimit = 25
 ): string | React.JSX.Element | React.JSX.Element[] {
   if (typeof description === "string") {
     const words = description.split(" ");
-    if (words.length <= wordLimit) return description;
-    return words.slice(0, wordLimit).join(" ") + "...";
+    if (words.length <= wordLimit) {
+      return description;
+    }
+    return `${words.slice(0, wordLimit).join(" ")}...`;
   }
   const extractText = (
     element: React.JSX.Element | React.JSX.Element[]
@@ -43,8 +44,10 @@ function truncateDescription(
   };
   const textContent = extractText(description);
   const words = textContent.split(" ").filter(Boolean);
-  if (words.length <= wordLimit) return description;
-  return words.slice(0, wordLimit).join(" ") + "...";
+  if (words.length <= wordLimit) {
+    return description;
+  }
+  return `${words.slice(0, wordLimit).join(" ")}...`;
 }
 
 function findComponentByCategoryAndName(category: string, name: string) {
@@ -52,9 +55,13 @@ function findComponentByCategoryAndName(category: string, name: string) {
   const actualCategory = Object.keys(componentMap).find(
     (key) => normalize(key) === normalizedCategory
   );
-  if (!actualCategory) return null;
+  if (!actualCategory) {
+    return null;
+  }
   const components = componentMap[actualCategory];
-  if (!components) return null;
+  if (!components) {
+    return null;
+  }
   const normalizedName = normalize(name);
   return components.find((c) => normalize(c.name) === normalizedName) || null;
 }
@@ -99,9 +106,9 @@ export default async function Page({
     componentName: componentEntry.name,
     description: truncateDescription(parsedDescription, 25),
     component: componentEntry.component,
-    defaultProps: defaultProps,
+    defaultProps,
     codeString: sourceCode,
-    propsInfo: propsInfo,
+    propsInfo,
   };
 
   return (
@@ -114,22 +121,22 @@ export default async function Page({
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  const params = [];
-  
+  const params: { slug: string[] }[] = [];
+
   // Generate params for all components in componentMap
   for (const [, components] of Object.entries(componentMap)) {
     for (const component of components) {
       if (component.route) {
-        const routeParts = component.route.split('/').filter(Boolean);
+        const routeParts = component.route.split("/").filter(Boolean);
         if (routeParts.length === 2) {
           params.push({
-            slug: routeParts
+            slug: routeParts,
           });
         }
       }
     }
   }
-  
+
   return params;
 }
 
@@ -159,9 +166,13 @@ export async function generateMetadata({
     const actualCategory = Object.keys(componentMap).find(
       (key) => normalize(key) === normalizedCategory
     );
-    if (!actualCategory) return null;
+    if (!actualCategory) {
+      return null;
+    }
     const components = componentMap[actualCategory];
-    if (!components) return null;
+    if (!components) {
+      return null;
+    }
     const normalizedName = normalize(name);
     return components.find((c) => normalize(c.name) === normalizedName) || null;
   }
@@ -169,16 +180,18 @@ export async function generateMetadata({
     category,
     componentName
   );
-  
+
   if (!componentEntry) {
     // For non-existent components, return generic metadata
     const slug = `${category}/${componentName}`;
     return {
       title: "Component Not Found | VUI React UI Library",
-      description: "This component doesn't exist yet. I am planning to build that.",
+      description:
+        "This component doesn't exist yet. I am planning to build that.",
       openGraph: {
         title: "Component Not Found",
-        description: "This component doesn't exist yet. I am planning to build that.",
+        description:
+          "This component doesn't exist yet. I am planning to build that.",
         url: `https://vyomaui.design/${slug}`,
         type: "website",
         siteName: "VUI React UI Library",
@@ -193,7 +206,8 @@ export async function generateMetadata({
       twitter: {
         card: "summary_large_image",
         title: "Component Not Found",
-        description: "This component doesn't exist yet. I am planning to build that.",
+        description:
+          "This component doesn't exist yet. I am planning to build that.",
         images: [
           {
             url: `https://vyomaui.design/api/og?title=component-not-found&description=this-component-doesnt-exist-yet-i-am-planning-to-build-that&path=${encodeURIComponent(`/${slug}`)}`,
@@ -209,11 +223,13 @@ export async function generateMetadata({
   const humanCategory = humanize(category);
   const humanComponent = humanize(componentEntry.name);
   const title = `${humanComponent} | ${humanCategory} | VUI React UI Library`;
-  
+
   // Keep original description with emojis for OG, but clean version for meta description
-  const cleanDescription = componentEntry.description.replace(/<[^>]*>/g, "").trim();
+  const cleanDescription = componentEntry.description
+    .replace(/<[^>]*>/g, "")
+    .trim();
   const richDescription = componentEntry.description; // Keep original with emojis and HTML
-  
+
   const canonicalUrl = `https://vyomaui.design/${componentEntry.route}`;
   const keywords = [
     humanComponent,
@@ -226,7 +242,7 @@ export async function generateMetadata({
     "Customizable",
     "Interactive",
   ];
-  
+
   return {
     title,
     description: cleanDescription, // Clean version for meta description

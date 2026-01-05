@@ -1,15 +1,14 @@
-
 "use client";
 
 import {
+  FlaskConicalIcon,
+  GlobeIcon,
   Loader2Icon,
+  MicIcon,
+  PlusIcon,
   SendIcon,
   SquareIcon,
   XIcon,
-  GlobeIcon,
-  MicIcon,
-  PlusIcon,
-  FlaskConicalIcon,
 } from "lucide-react";
 import type {
   ComponentProps,
@@ -18,6 +17,7 @@ import type {
 } from "react";
 import {
   Children,
+  type FormEventHandler,
   useCallback,
   useEffect,
   useMemo,
@@ -34,12 +34,11 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import { type FormEventHandler } from "react";
 
-type UseAutoResizeTextareaProps = {
+interface UseAutoResizeTextareaProps {
   minHeight: number;
   maxHeight?: number;
-};
+}
 
 const useAutoResizeTextarea = ({
   minHeight,
@@ -50,7 +49,9 @@ const useAutoResizeTextarea = ({
   const adjustHeight = useCallback(
     (reset?: boolean) => {
       const el = textareaRef.current;
-      if (!el) return;
+      if (!el) {
+        return;
+      }
 
       // Reset for accurate measurement
       el.style.height = reset ? `${minHeight}px` : `${minHeight}px`;
@@ -114,7 +115,6 @@ export const AIInput = ({ className, ...props }: AIInputProps) => (
   />
 );
 
-
 export type AIInputTextareaProps = ComponentProps<typeof Textarea> & {
   minHeight?: number;
   maxHeight?: number;
@@ -136,7 +136,9 @@ export const AIInputTextarea = ({
   const handleKeyDown: KeyboardEventHandler<HTMLTextAreaElement> = (e) => {
     // Respect IME composition to avoid premature submit on mobile
     // @ts-expect-error - composition API exists on event target at runtime
-    if (e.isComposing) return;
+    if (e.isComposing) {
+      return;
+    }
 
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -146,33 +148,33 @@ export const AIInputTextarea = ({
 
   return (
     <Textarea
+      aria-label="Message"
+      autoCorrect="on"
       className={cn(
-        "w-full resize-none rounded-none border-none p-3 sm:p-4 shadow-none",
-        "text-base leading-relaxed sm:text-[1rem] font-medium",
+        "w-full resize-none rounded-none border-none p-3 shadow-none sm:p-4",
+        "font-medium text-base leading-relaxed sm:text-[1rem]",
         "bg-transparent dark:bg-transparent",
         "placeholder:text-muted-foreground/60",
         "focus-visible:ring-0",
         motionSafe,
         // Remove scrollbars
         "scrollbar-none overflow-hidden overflow-x-hidden overflow-y-hidden",
-        "[&::-webkit-scrollbar]:hidden [&::-webkit-scrollbar]:w-0 [&::-webkit-scrollbar]:h-0",
+        "[&::-webkit-scrollbar]:hidden [&::-webkit-scrollbar]:h-0 [&::-webkit-scrollbar]:w-0",
         "[-ms-overflow-style:none] [scrollbar-width:none]",
         // Better mobile tap
         "touch-manipulation",
         className
       )}
       inputMode="text"
-      autoCorrect="on"
-      spellCheck
-      aria-label="Message"
       name="message"
-      placeholder={placeholder}
-      ref={textareaRef}
       onChange={(e) => {
         adjustHeight();
         onChange?.(e);
       }}
       onKeyDown={handleKeyDown}
+      placeholder={placeholder}
+      ref={textareaRef}
+      spellCheck
       {...props}
     />
   );
@@ -199,9 +201,9 @@ export const AIInputTools = ({ className, ...props }: AIInputToolsProps) => (
   <div
     className={cn(
       "flex items-center gap-1.5 sm:gap-2",
-      "overflow-x-auto overflow-y-hidden no-scrollbar",
+      "no-scrollbar overflow-x-auto overflow-y-hidden",
       "max-w-[calc(100vw-6rem)] sm:max-w-none",
-      "pl-1 -ml-1 pr-2",
+      "-ml-1 pr-2 pl-1",
       className
     )}
     {...props}
@@ -345,12 +347,15 @@ export const AIInputSubmit = ({
   ...props
 }: AIInputSubmitProps) => {
   let Icon = (
-    <SendIcon className="motion-safe:transition-transform motion-safe:duration-300 group-hover/submit:translate-x-0.5" />
+    <SendIcon className="group-hover/submit:translate-x-0.5 motion-safe:transition-transform motion-safe:duration-300" />
   );
-  if (status === "submitted") Icon = <Loader2Icon className="animate-spin" />;
-  else if (status === "streaming")
+  if (status === "submitted") {
+    Icon = <Loader2Icon className="animate-spin" />;
+  } else if (status === "streaming") {
     Icon = <SquareIcon className="animate-pulse" />;
-  else if (status === "error") Icon = <XIcon className="animate-bounce" />;
+  } else if (status === "error") {
+    Icon = <XIcon className="animate-bounce" />;
+  }
 
   const isDisabled = status === "submitted" || status === "streaming";
 
@@ -404,7 +409,7 @@ export const AIInputModelSelectTrigger = ({
       "active:scale-95",
       "backdrop-blur-sm",
       subtleFocus,
-      "min-w-[120px] sm:min-w-[140px] px-2.5 py-2",
+      "min-w-[120px] px-2.5 py-2 sm:min-w-[140px]",
       className
     )}
     {...props}
@@ -439,7 +444,7 @@ export const AIInputModelSelectItem = ({
 }: AIInputModelSelectItemProps) => (
   <SelectItem
     className={cn(
-      "rounded-lg mx-1 my-0.5",
+      "mx-1 my-0.5 rounded-lg",
       "hover:bg-accent/70 focus:bg-accent/70",
       motionSafe,
       "cursor-pointer",
@@ -456,7 +461,6 @@ export const AIInputModelSelectValue = ({
 }: AIInputModelSelectValueProps) => (
   <SelectValue className={cn("font-semibold", className)} {...props} />
 );
-
 
 const models = [
   { id: "gpt-4", name: "GPT-4" },
@@ -482,7 +486,9 @@ export default function MagicalChatInput() {
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
-    if (!text.trim()) return;
+    if (!text.trim()) {
+      return;
+    }
 
     alert(`You entered: ${text}`);
     setStatus("submitted");
@@ -494,18 +500,18 @@ export default function MagicalChatInput() {
   const pillContent = useMemo(() => {
     if (isWebSearchEnabled || isDeepResearchEnabled) {
       return (
-        <div className="flex items-center justify-center gap-4 sm:gap-6 text-xs sm:text-sm">
+        <div className="flex items-center justify-center gap-4 text-xs sm:gap-6 sm:text-sm">
           <div className="flex items-center gap-2 text-muted-foreground">
-            <div className="w-2 h-2 bg-current rounded-full animate-pulse" />
+            <div className="h-2 w-2 animate-pulse rounded-full bg-current" />
             <span className="font-medium">Press Enter to send</span>
           </div>
           {isWebSearchEnabled && (
             <div className="flex items-center gap-2 text-purple-600 dark:text-purple-400">
               <GlobeIcon
-                size={16}
-                className="animate-spin"
-                style={{ animationDuration: "3s" }}
                 aria-hidden
+                className="animate-spin"
+                size={16}
+                style={{ animationDuration: "3s" }}
               />
               <span className="font-semibold">Web search active</span>
             </div>
@@ -513,9 +519,9 @@ export default function MagicalChatInput() {
           {isDeepResearchEnabled && (
             <div className="flex items-center gap-2 text-orange-600 dark:text-orange-400">
               <FlaskConicalIcon
-                size={16}
-                className="animate-bounce"
                 aria-hidden
+                className="animate-bounce"
+                size={16}
               />
               <span className="font-semibold">Research mode</span>
             </div>
@@ -524,46 +530,46 @@ export default function MagicalChatInput() {
       );
     }
     return (
-      <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
-        <div className="w-1.5 h-1.5 bg-current rounded-full animate-pulse" />
+      <div className="flex items-center gap-2 text-muted-foreground text-xs sm:text-sm">
+        <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-current" />
         <span className="font-medium">Press Enter to send</span>
       </div>
     );
   }, [isWebSearchEnabled, isDeepResearchEnabled]);
 
   return (
-    <div className="relative group flex items-center justify-center py-6 sm:py-10">
+    <div className="group relative flex items-center justify-center py-6 sm:py-10">
       {/* Soft ambient gradient glow (mobile-friendly) */}
       <div
         aria-hidden
         className={cn(
-          "absolute inset-0 pointer-events-none",
+          "pointer-events-none absolute inset-0",
           "opacity-60 sm:opacity-80"
         )}
       >
-        <div className="absolute inset-0 m-auto max-w-5xl h-[40%] sm:h-[50%] blur-2xl sm:blur-3xl rounded-[48px] bg-gradient-to-r from-primary/15 via-purple-500/15 to-primary/15" />
+        <div className="absolute inset-0 m-auto h-[40%] max-w-5xl rounded-[48px] bg-gradient-to-r from-primary/15 via-purple-500/15 to-primary/15 blur-2xl sm:h-[50%] sm:blur-3xl" />
       </div>
 
       <AIInput
-        onSubmit={handleSubmit}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
         className={cn(
           "relative z-10 w-full",
           "max-w-[min(100%,48rem)]", // 768px max
           motionSafe,
           isFocused && "ring-1 ring-primary/30"
         )}
+        onBlur={() => setIsFocused(false)}
+        onFocus={() => setIsFocused(true)}
+        onSubmit={handleSubmit}
       >
         <AIInputTextarea
-          onChange={(e) => setText(e.target.value)}
-          value={text}
           className={cn(
             motionSafe,
             isFocused && "placeholder:text-muted-foreground/40",
             text.length > 0 && "font-semibold"
           )}
+          onChange={(e) => setText(e.target.value)}
           placeholder="Ask me anything... ✨"
+          value={text}
         />
 
         <AIInputToolbar
@@ -574,32 +580,32 @@ export default function MagicalChatInput() {
           )}
         >
           <AIInputTools>
-            <AIInputButton colorScheme="blue" aria-label="Add attachment">
+            <AIInputButton aria-label="Add attachment" colorScheme="blue">
               <PlusIcon size={18} />
             </AIInputButton>
 
-            <AIInputButton colorScheme="green" aria-label="Record voice">
+            <AIInputButton aria-label="Record voice" colorScheme="green">
               <MicIcon size={18} />
             </AIInputButton>
 
             <AIInputToggleButton
+              aria-label="Toggle web search"
+              colorScheme="purple"
               isActive={isWebSearchEnabled}
               onClick={() => setIsWebSearchEnabled((v) => !v)}
-              colorScheme="purple"
-              aria-label="Toggle web search"
             >
               <GlobeIcon size={18} />
-              <span className="hidden sm:inline font-semibold">Web Search</span>
+              <span className="hidden font-semibold sm:inline">Web Search</span>
             </AIInputToggleButton>
 
             <AIInputToggleButton
+              aria-label="Toggle research mode"
+              colorScheme="orange"
               isActive={isDeepResearchEnabled}
               onClick={() => setIsDeepResearchEnabled((v) => !v)}
-              colorScheme="orange"
-              aria-label="Toggle research mode"
             >
               <FlaskConicalIcon size={18} />
-              <span className="hidden sm:inline font-semibold">Research</span>
+              <span className="hidden font-semibold sm:inline">Research</span>
             </AIInputToggleButton>
 
             <AIInputModelSelect onValueChange={setModel} value={model}>
@@ -609,10 +615,10 @@ export default function MagicalChatInput() {
               <AIInputModelSelectContent>
                 {models.map((m) => (
                   <AIInputModelSelectItem key={m.id} value={m.id}>
-                    <div className="flex items-center justify-between w-full">
+                    <div className="flex w-full items-center justify-between">
                       <span className="font-medium">{m.name}</span>
                       {m.id === "gpt-4" && (
-                        <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full ml-3 font-semibold">
+                        <span className="ml-3 rounded-full bg-primary/10 px-2 py-1 font-semibold text-primary text-xs">
                           Popular
                         </span>
                       )}
@@ -624,25 +630,25 @@ export default function MagicalChatInput() {
           </AIInputTools>
 
           <AIInputSubmit
-            status={status}
             className={cn(
-              "relative overflow-hidden z-10",
+              "relative z-10 overflow-hidden",
               text.length > 0 && "shadow-lg",
               status === "ready" && text.length > 0 && "animate-none"
             )}
+            status={status}
           />
         </AIInputToolbar>
       </AIInput>
 
       {/* Footer hint pill */}
       {showFooterPill && (
-        <div className="absolute -bottom-12 sm:-bottom-14 left-0 right-0 flex justify-center px-3">
+        <div className="absolute right-0 -bottom-12 left-0 flex justify-center px-3 sm:-bottom-14">
           <div
             className={cn(
-              "px-4 py-2 sm:px-6 sm:py-3 rounded-full",
+              "rounded-full px-4 py-2 sm:px-6 sm:py-3",
               glassPanel,
               "text-[0.8rem]",
-              "animate-in fade-in-0 slide-in-from-bottom-2 duration-300"
+              "fade-in-0 slide-in-from-bottom-2 animate-in duration-300"
             )}
           >
             {pillContent}
@@ -655,11 +661,11 @@ export default function MagicalChatInput() {
         <>
           <div
             aria-hidden
-            className="absolute inset-0 rounded-3xl border-2 border-primary/40 animate-ping"
+            className="absolute inset-0 animate-ping rounded-3xl border-2 border-primary/40"
           />
           <div
             aria-hidden
-            className="absolute inset-0 rounded-3xl bg-primary/5 animate-pulse"
+            className="absolute inset-0 animate-pulse rounded-3xl bg-primary/5"
           />
         </>
       )}

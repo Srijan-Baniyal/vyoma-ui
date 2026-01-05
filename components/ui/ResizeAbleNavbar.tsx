@@ -1,15 +1,15 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import { IconMenu2, IconX } from "@tabler/icons-react";
 import {
-  motion,
   AnimatePresence,
-  useScroll,
+  motion,
   useMotionValueEvent,
+  useScroll,
 } from "motion/react";
-import React, { useRef, useState } from "react";
 import Image from "next/image";
+import React, { useRef, useState } from "react";
+import { cn } from "@/lib/utils";
 import VyomaUI from "@/public/VyomaUI.svg";
 
 interface NavbarProps {
@@ -65,8 +65,8 @@ export const Navbar = ({ children, className }: NavbarProps) => {
 
   return (
     <motion.div
-      ref={ref}
       className={cn("sticky inset-x-0 top-5 z-50 w-full", className)}
+      ref={ref}
     >
       {React.Children.map(children, (child) =>
         React.isValidElement(child)
@@ -93,25 +93,25 @@ export const NavBody = ({ children, className, visible }: NavBodyProps) => {
         y: visible ? 12 : 0,
         scale: visible ? 0.98 : 1,
       }}
-      transition={{
-        type: "spring",
-        stiffness: 300,
-        damping: 40,
-        mass: 0.8,
-      }}
+      className={cn(
+        "relative z-60 mx-auto hidden w-full max-w-7xl items-center px-6 py-3 lg:grid lg:grid-cols-3",
+        visible
+          ? "rounded-2xl border border-white/20 bg-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.08)] dark:border-white/10 dark:bg-black/10 dark:shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
+          : "border-0",
+        className
+      )}
       style={{
         minWidth: "800px",
         backgroundColor: visible
           ? "rgba(255, 255, 255, 0.1)"
           : "rgba(255, 255, 255, 0)",
       }}
-      className={cn(
-        "relative z-[60] mx-auto hidden w-full max-w-7xl items-center px-6 py-3 lg:grid lg:grid-cols-3",
-        visible
-          ? "border border-white/20 dark:border-white/10 rounded-2xl bg-white/10 dark:bg-black/10 shadow-[0_8px_32px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
-          : "border-0",
-        className
-      )}
+      transition={{
+        type: "spring",
+        stiffness: 300,
+        damping: 40,
+        mass: 0.8,
+      }}
     >
       <div className="flex justify-start">
         {React.Children.toArray(children)[0]}
@@ -131,31 +131,31 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
 
   return (
     <motion.div
-      onMouseLeave={() => setHovered(null)}
       className={cn(
-        "hidden flex-row items-center justify-center space-x-1 text-sm font-medium lg:flex",
+        "hidden flex-row items-center justify-center space-x-1 font-medium text-sm lg:flex",
         className
       )}
+      onMouseLeave={() => setHovered(null)}
     >
       {items.map((item, idx) => (
         <motion.a
-          onMouseEnter={() => setHovered(idx)}
-          onClick={onItemClick}
           className="relative px-4 py-2.5 text-neutral-700 transition-colors duration-200 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white"
-          key={`link-${idx}`}
           href={item.link}
-          target={item.link.startsWith("http") ? "_blank" : undefined}
+          key={item.name}
+          onClick={onItemClick}
+          onMouseEnter={() => setHovered(idx)}
           rel={item.link.startsWith("http") ? "noopener noreferrer" : undefined}
+          target={item.link.startsWith("http") ? "_blank" : undefined}
           whileHover={{ y: -1 }}
           whileTap={{ scale: 0.98 }}
         >
           {hovered === idx && (
             <motion.div
-              layoutId="hovered"
-              className="absolute inset-0 h-full w-full rounded-xl bg-white/20 dark:bg-white/10 backdrop-blur-sm"
-              initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
+              className="absolute inset-0 h-full w-full rounded-xl bg-white/20 backdrop-blur-sm dark:bg-white/10"
               exit={{ opacity: 0, scale: 0.8 }}
+              initial={{ opacity: 0, scale: 0.8 }}
+              layoutId="hovered"
               transition={{ duration: 0.15 }}
             />
           )}
@@ -182,24 +182,24 @@ export const MobileNav = ({ children, className, visible }: MobileNavProps) => {
         y: visible ? 16 : 0,
         scale: visible ? 0.98 : 0.98,
       }}
+      className={cn(
+        "relative z-50 mx-auto flex w-full max-w-[calc(100vw-1rem)] flex-col items-center justify-between py-3 lg:hidden",
+        visible
+          ? "border border-white/20 bg-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.08)] dark:border-white/10 dark:bg-black/10 dark:shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
+          : "border-0",
+        className
+      )}
+      style={{
+        backgroundColor: visible
+          ? "rgba(255, 255, 255, 0.1)"
+          : "rgba(255, 255, 255, 0)",
+      }}
       transition={{
         type: "spring",
         stiffness: 300,
         damping: 40,
         mass: 0.8,
       }}
-      style={{
-        backgroundColor: visible
-          ? "rgba(255, 255, 255, 0.1)"
-          : "rgba(255, 255, 255, 0)",
-      }}
-      className={cn(
-        "relative z-50 mx-auto flex w-full max-w-[calc(100vw-1rem)] flex-col items-center justify-between py-3 lg:hidden",
-        visible
-          ? "border border-white/20 dark:border-white/10 bg-white/10 dark:bg-black/10 shadow-[0_8px_32px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
-          : "border-0",
-        className
-      )}
     >
       {children}
     </motion.div>
@@ -242,17 +242,17 @@ export const MobileNavMenu = ({
             borderRadius: "16px",
             scale: 0.98,
           }}
+          className={cn(
+            "relative z-50 mx-auto flex w-full max-w-[calc(100vw-1rem)] flex-col items-center justify-between py-3 lg:hidden",
+            "border border-white/20 bg-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.08)] dark:border-white/10 dark:bg-black/10 dark:shadow-[0_8px_32px_rgba(0,0,0,0.3)]",
+            className
+          )}
           transition={{
             type: "spring",
             stiffness: 300,
             damping: 40,
             mass: 0.8,
           }}
-          className={cn(
-            "relative z-50 mx-auto flex w-full max-w-[calc(100vw-1rem)] flex-col items-center justify-between py-3 lg:hidden",
-            "border border-white/20 dark:border-white/10 bg-white/10 dark:bg-black/10 shadow-[0_8px_32px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.3)]",
-            className
-          )}
         >
           {children}
         </motion.div>
@@ -270,28 +270,28 @@ export const MobileNavToggle = ({
 }) => {
   return (
     <motion.button
+      className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/20 backdrop-blur-sm transition-colors hover:bg-white/10 dark:border-white/10 dark:hover:bg-white/5"
       onClick={onClick}
-      className="flex h-10 w-10 items-center justify-center rounded-xl transition-colors hover:bg-white/10 dark:hover:bg-white/5 backdrop-blur-sm border border-white/20 dark:border-white/10"
-      whileTap={{ scale: 0.9 }}
       transition={{ duration: 0.1 }}
+      whileTap={{ scale: 0.9 }}
     >
       <AnimatePresence mode="wait">
         {isOpen ? (
           <motion.div
-            key="close"
-            initial={{ rotate: -90, opacity: 0 }}
             animate={{ rotate: 0, opacity: 1 }}
             exit={{ rotate: 90, opacity: 0 }}
+            initial={{ rotate: -90, opacity: 0 }}
+            key="close"
             transition={{ duration: 0.15 }}
           >
             <IconX className="h-5 w-5 text-neutral-700 dark:text-neutral-300" />
           </motion.div>
         ) : (
           <motion.div
-            key="menu"
-            initial={{ rotate: 90, opacity: 0 }}
             animate={{ rotate: 0, opacity: 1 }}
             exit={{ rotate: -90, opacity: 0 }}
+            initial={{ rotate: 90, opacity: 0 }}
+            key="menu"
             transition={{ duration: 0.15 }}
           >
             <IconMenu2 className="h-5 w-5 text-neutral-700 dark:text-neutral-300" />
@@ -305,29 +305,29 @@ export const MobileNavToggle = ({
 export const NavbarLogo = () => {
   return (
     <motion.a
+      className="relative z-20 flex items-center space-x-3 px-2 py-1 font-normal text-sm"
       href="/"
-      className="relative z-20 flex items-center space-x-3 px-2 py-1 text-sm font-normal"
+      transition={{ duration: 0.15 }}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      transition={{ duration: 0.15 }}
     >
       <motion.div
         className="flex items-center justify-center"
-        whileHover={{ rotate: 5 }}
         transition={{ duration: 0.2 }}
+        whileHover={{ rotate: 5 }}
       >
-        <div className="h-10 w-10 rounded-lg flex items-center justify-center shadow-lg">
+        <div className="flex h-10 w-10 items-center justify-center rounded-lg shadow-lg">
           <Image
-            src={VyomaUI}
             alt="Vyoma UI"
-            width={40}
             height={40}
             priority
             quality={100}
+            src={VyomaUI}
+            width={40}
           />
         </div>
       </motion.div>
-      <span className="text-lg font-semibold text-neutral-800 dark:text-white">
+      <span className="font-semibold text-lg text-neutral-800 dark:text-white">
         Vyoma UI
       </span>
     </motion.a>
@@ -368,13 +368,13 @@ export const NavbarButton = ({
 
   return (
     <motion.div
+      transition={{ duration: 0.15 }}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      transition={{ duration: 0.15 }}
     >
       <Tag
-        href={href || undefined}
         className={cn(baseStyles, variantStyles[variant], className)}
+        href={href || undefined}
         {...props}
       >
         {children}

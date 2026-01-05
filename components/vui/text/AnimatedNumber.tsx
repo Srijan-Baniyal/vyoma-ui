@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import NumberFlow from "@number-flow/react";
+import { useEffect, useState } from "react";
 
 interface CountdownProps {
   endDate: Date;
@@ -56,38 +56,38 @@ export function AnimatedNumberCountdown({
 
   if (compactPreview) {
     return (
-      <div className="min-h-14 flex items-center justify-center gap-1 h-full w-full p-1">
+      <div className="flex h-full min-h-14 w-full items-center justify-center gap-1 p-1">
         <div className="flex flex-col items-center">
           <NumberFlow
-            value={timeLeft.days}
-            className="text-4xl font-bold text-foreground leading-none"
+            className="font-bold text-4xl text-foreground leading-none"
             format={{ minimumIntegerDigits: 2 }}
+            value={timeLeft.days}
           />
         </div>
-        <span className="text-4xl font-bold text-muted-foreground mx-0.5">
+        <span className="mx-0.5 font-bold text-4xl text-muted-foreground">
           :
         </span>
         <div className="flex flex-col items-center">
           <NumberFlow
+            className="font-bold text-4xl text-foreground leading-none"
+            format={{ minimumIntegerDigits: 2 }}
             value={timeLeft.hours}
-            className="text-4xl font-bold text-foreground leading-none"
-            format={{ minimumIntegerDigits: 2 }}
           />
         </div>
-        <span className="text-3xl font-bold text-muted-foreground">:</span>
+        <span className="font-bold text-3xl text-muted-foreground">:</span>
         <div className="flex flex-col items-center">
           <NumberFlow
+            className="font-bold text-4xl text-foreground leading-none"
+            format={{ minimumIntegerDigits: 2 }}
             value={timeLeft.minutes}
-            className="text-4xl font-bold text-foreground leading-none"
-            format={{ minimumIntegerDigits: 2 }}
           />
         </div>
-        <span className="text-3xl font-bold text-muted-foreground">:</span>
+        <span className="font-bold text-3xl text-muted-foreground">:</span>
         <div className="flex flex-col items-center">
           <NumberFlow
-            value={timeLeft.seconds}
-            className="text-4xl font-bold text-foreground leading-none"
+            className="font-bold text-4xl text-foreground leading-none"
             format={{ minimumIntegerDigits: 2 }}
+            value={timeLeft.seconds}
           />
         </div>
       </div>
@@ -95,107 +95,107 @@ export function AnimatedNumberCountdown({
   }
 
   return (
-    <div className={`w-full max-w-4xl mx-auto px-4 ${className}`}>
+    <div className={`mx-auto w-full max-w-4xl px-4 ${className}`}>
       {/* Mobile Layout (< 640px) */}
       <div className="sm:hidden">
         <div className="grid grid-cols-2 gap-3">
-          <div className="flex flex-col items-center rounded-lg p-3 bg-card dark:bg-card border border-border">
+          <div className="flex flex-col items-center rounded-lg border border-border bg-card p-3 dark:bg-card">
             <NumberFlow
+              className="font-semibold text-2xl text-foreground tracking-tighter"
+              format={{ minimumIntegerDigits: 2 }}
               value={timeLeft.days}
-              className="text-2xl font-semibold tracking-tighter text-foreground"
-              format={{ minimumIntegerDigits: 2 }}
             />
           </div>
-          <div className="flex flex-col items-center rounded-lg p-3 bg-card dark:bg-card border border-border">
+          <div className="flex flex-col items-center rounded-lg border border-border bg-card p-3 dark:bg-card">
             <NumberFlow
+              className="font-semibold text-2xl text-foreground tracking-tighter"
+              format={{ minimumIntegerDigits: 2 }}
               value={timeLeft.hours}
-              className="text-2xl font-semibold tracking-tighter text-foreground"
-              format={{ minimumIntegerDigits: 2 }}
             />
           </div>
-          <div className="flex flex-col items-center rounded-lg p-3 bg-card dark:bg-card border border-border">
+          <div className="flex flex-col items-center rounded-lg border border-border bg-card p-3 dark:bg-card">
             <NumberFlow
+              className="font-semibold text-2xl text-foreground tracking-tighter"
+              format={{ minimumIntegerDigits: 2 }}
               value={timeLeft.minutes}
-              className="text-2xl font-semibold tracking-tighter text-foreground"
-              format={{ minimumIntegerDigits: 2 }}
             />
           </div>
-          <div className="flex flex-col items-center rounded-lg p-3 bg-card dark:bg-card border border-border">
+          <div className="flex flex-col items-center rounded-lg border border-border bg-card p-3 dark:bg-card">
             <NumberFlow
-              value={timeLeft.seconds}
-              className="text-2xl font-semibold tracking-tighter text-foreground"
+              className="font-semibold text-2xl text-foreground tracking-tighter"
               format={{ minimumIntegerDigits: 2 }}
+              value={timeLeft.seconds}
             />
           </div>
         </div>
       </div>
 
       {/* Tablet Layout (640px - 1024px) */}
-      <div className="hidden sm:flex lg:hidden items-center justify-center gap-2">
+      <div className="hidden items-center justify-center gap-2 sm:flex lg:hidden">
         <div className="flex flex-col items-center">
           <NumberFlow
+            className="font-semibold text-3xl text-foreground tracking-tighter"
+            format={{ minimumIntegerDigits: 2 }}
             value={timeLeft.days}
-            className="text-3xl font-semibold tracking-tighter text-foreground"
-            format={{ minimumIntegerDigits: 2 }}
           />
         </div>
-        <div className="text-xl font-bold mx-1 text-muted-foreground">:</div>
+        <div className="mx-1 font-bold text-muted-foreground text-xl">:</div>
         <div className="flex flex-col items-center">
           <NumberFlow
+            className="font-semibold text-3xl text-foreground tracking-tighter"
+            format={{ minimumIntegerDigits: 2 }}
             value={timeLeft.hours}
-            className="text-3xl font-semibold tracking-tighter text-foreground"
-            format={{ minimumIntegerDigits: 2 }}
           />
         </div>
-        <div className="text-xl font-bold mx-1 text-muted-foreground">:</div>
+        <div className="mx-1 font-bold text-muted-foreground text-xl">:</div>
         <div className="flex flex-col items-center">
           <NumberFlow
+            className="font-semibold text-3xl text-foreground tracking-tighter"
+            format={{ minimumIntegerDigits: 2 }}
             value={timeLeft.minutes}
-            className="text-3xl font-semibold tracking-tighter text-foreground"
-            format={{ minimumIntegerDigits: 2 }}
           />
         </div>
-        <div className="text-xl font-bold mx-1 text-muted-foreground">:</div>
+        <div className="mx-1 font-bold text-muted-foreground text-xl">:</div>
         <div className="flex flex-col items-center">
           <NumberFlow
-            value={timeLeft.seconds}
-            className="text-3xl font-semibold tracking-tighter text-foreground"
+            className="font-semibold text-3xl text-foreground tracking-tighter"
             format={{ minimumIntegerDigits: 2 }}
+            value={timeLeft.seconds}
           />
         </div>
       </div>
 
       {/* Desktop Layout (>= 1024px) */}
-      <div className="hidden lg:flex items-center justify-center gap-4">
+      <div className="hidden items-center justify-center gap-4 lg:flex">
         <div className="flex flex-col items-center">
           <NumberFlow
+            className="font-semibold text-5xl text-foreground tracking-tighter"
+            format={{ minimumIntegerDigits: 2 }}
             value={timeLeft.days}
-            className="text-5xl font-semibold tracking-tighter text-foreground"
-            format={{ minimumIntegerDigits: 2 }}
           />
         </div>
-        <div className="text-2xl font-bold text-muted-foreground">:</div>
+        <div className="font-bold text-2xl text-muted-foreground">:</div>
         <div className="flex flex-col items-center">
           <NumberFlow
+            className="font-semibold text-5xl text-foreground tracking-tighter"
+            format={{ minimumIntegerDigits: 2 }}
             value={timeLeft.hours}
-            className="text-5xl font-semibold tracking-tighter text-foreground"
-            format={{ minimumIntegerDigits: 2 }}
           />
         </div>
-        <div className="text-2xl font-bold text-muted-foreground">:</div>
+        <div className="font-bold text-2xl text-muted-foreground">:</div>
         <div className="flex flex-col items-center">
           <NumberFlow
+            className="font-semibold text-5xl text-foreground tracking-tighter"
+            format={{ minimumIntegerDigits: 2 }}
             value={timeLeft.minutes}
-            className="text-5xl font-semibold tracking-tighter text-foreground"
-            format={{ minimumIntegerDigits: 2 }}
           />
         </div>
-        <div className="text-2xl font-bold text-muted-foreground">:</div>
+        <div className="font-bold text-2xl text-muted-foreground">:</div>
         <div className="flex flex-col items-center">
           <NumberFlow
-            value={timeLeft.seconds}
-            className="text-5xl font-semibold tracking-tighter text-foreground"
+            className="font-semibold text-5xl text-foreground tracking-tighter"
             format={{ minimumIntegerDigits: 2 }}
+            value={timeLeft.seconds}
           />
         </div>
       </div>
@@ -205,11 +205,11 @@ export function AnimatedNumberCountdown({
 
 export function AnimatedNumberCountdownShowcase() {
   return (
-    <div className="flex flex-col p-4 bg-background">
+    <div className="flex flex-col bg-background p-4">
       <AnimatedNumberCountdown
-        endDate={new Date("2025-10-09")}
         className="my-4"
         compactPreview={true}
+        endDate={new Date("2025-10-09")}
       />
     </div>
   );
@@ -217,12 +217,10 @@ export function AnimatedNumberCountdownShowcase() {
 
 export function AnimatedNumberCountdownTheme() {
   return (
-    <>
-      <AnimatedNumberCountdown
-        endDate={new Date("2025-10-09")}
-        className="my-4"
-        compactPreview={true}
-      />
-    </>
+    <AnimatedNumberCountdown
+      className="my-4"
+      compactPreview={true}
+      endDate={new Date("2025-10-09")}
+    />
   );
 }

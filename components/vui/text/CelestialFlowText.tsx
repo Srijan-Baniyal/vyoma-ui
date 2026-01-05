@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useMotionValue, useTransform } from "framer-motion";
+import { motion, useMotionValue } from "framer-motion";
 import { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 
@@ -19,11 +19,11 @@ export default function CelestialFlowText({
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
-  
-
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
+    if (!el) {
+      return;
+    }
 
     const handleMouseMove = (e: MouseEvent) => {
       const rect = el.getBoundingClientRect();
@@ -37,26 +37,22 @@ export default function CelestialFlowText({
 
   return (
     <motion.div
+      className={cn(className)}
       ref={ref}
-      style={{  perspective: 1000 }}
-      className={cn(className
-)}
-
+      style={{ perspective: 1000 }}
     >
       {text.split("").map((char, i) => (
         <motion.span
-          key={i}
-          initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
+          className="relative inline-block animate-gradient select-none bg-[length:400%_400%] bg-gradient-to-r from-violet-400 via-pink-400 to-cyan-400 bg-clip-text font-bold text-5xl text-transparent tracking-wide drop-shadow-[0_0_10px_rgba(200,200,255,0.6)] md:text-7xl dark:from-amber-400 dark:via-pink-400 dark:to-purple-500"
+          initial={{ opacity: 0, y: 25 }}
+          key={i}
           transition={{
             delay: i * delay,
             type: "spring",
             stiffness: 150,
             damping: 12,
           }}
-          className="inline-block drop-shadow-[0_0_10px_rgba(200,200,255,0.6)] relative text-5xl md:text-7xl font-bold select-none tracking-wide
-     bg-gradient-to-r from-violet-400 via-pink-400 to-cyan-400 dark:from-amber-400 dark:via-pink-400 dark:to-purple-500
-     bg-clip-text text-transparent animate-gradient bg-[length:400%_400%]"
         >
           {char === " " ? "\u00A0" : char}
         </motion.span>

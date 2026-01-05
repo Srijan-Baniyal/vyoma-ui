@@ -1,7 +1,7 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import * as THREE from "three";
-import { useRef, useEffect } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 export default function TunnelShowcase() {
@@ -9,7 +9,9 @@ export default function TunnelShowcase() {
   const isMobile = useIsMobile();
 
   useEffect(() => {
-    if (!canvasRef.current) return;
+    if (!canvasRef.current) {
+      return;
+    }
     const canvas = canvasRef.current;
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -178,31 +180,39 @@ export default function TunnelShowcase() {
   }, []);
 
   return (
-    <>
-      <div className="bg-black text-white min-h-screen overflow-hidden relative">
-        <canvas
-          ref={canvasRef}
-          className="fixed top-0 left-0 w-full h-full"
-          id="tunnel-canvas"
-        />
-        <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-4 text-center">
-          <div className={`${isMobile ? "mb-4 space-y-2" : "mb-8 space-y-3 md:space-y-6"}`}>
-            <div className="inline-block">
-              <h1 className={`${isMobile ? "text-3xl" : "text-6xl md:text-8xl"} font-black tracking-tighter bg-gradient-to-r from-white via-gray-200 to-white bg-clip-text text-transparent animate-pulse`}>
-                TUNNEL
-              </h1>
-              <div className={`h-1 w-full bg-gradient-to-r from-transparent via-white to-transparent ${isMobile ? "mt-2" : "mt-4"} animate-pulse`} />
-            </div>
-            
-            <p className={`${isMobile ? "text-sm px-4 leading-relaxed" : "text-lg md:text-xl px-0 leading-relaxed"} text-gray-300 max-w-2xl font-light`}>
-              Experience an infinite journey through space and time with this mesmerizing 
-              <span className="text-white font-medium"> Three.js </span> 
-              powered tunnel effect that responds to your {isMobile ? "touch" : "movement"}
-            </p>
+    <div className="relative min-h-screen overflow-hidden bg-black text-white">
+      <canvas
+        className="fixed top-0 left-0 h-full w-full"
+        id="tunnel-canvas"
+        ref={canvasRef}
+      />
+      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center p-4 text-center">
+        <div
+          className={`${isMobile ? "mb-4 space-y-2" : "mb-8 space-y-3 md:space-y-6"}`}
+        >
+          <div className="inline-block">
+            <h1
+              className={`${isMobile ? "text-3xl" : "text-6xl md:text-8xl"} animate-pulse bg-gradient-to-r from-white via-gray-200 to-white bg-clip-text font-black text-transparent tracking-tighter`}
+            >
+              TUNNEL
+            </h1>
+            <div
+              className={`h-1 w-full bg-gradient-to-r from-transparent via-white to-transparent ${isMobile ? "mt-2" : "mt-4"} animate-pulse`}
+            />
           </div>
+
+          <p
+            className={`${isMobile ? "px-4 text-sm leading-relaxed" : "px-0 text-lg leading-relaxed md:text-xl"} max-w-2xl font-light text-gray-300`}
+          >
+            Experience an infinite journey through space and time with this
+            mesmerizing
+            <span className="font-medium text-white"> Three.js </span>
+            powered tunnel effect that responds to your{" "}
+            {isMobile ? "touch" : "movement"}
+          </p>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
@@ -211,17 +221,21 @@ export function TunnelTheme() {
   const isMobile = useIsMobile();
 
   useEffect(() => {
-    if (!canvasRef.current) return;
+    if (!canvasRef.current) {
+      return;
+    }
     const canvas = canvasRef.current;
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-    
+
     // Get container dimensions instead of window dimensions
     const container = canvas.parentElement;
-    if (!container) return;
-    
+    if (!container) {
+      return;
+    }
+
     const width = container.clientWidth;
     const height = container.clientHeight;
-    
+
     renderer.setSize(width, height);
 
     const scene = new THREE.Scene();
@@ -361,7 +375,9 @@ export function TunnelTheme() {
 
     // Handle container resize
     function handleResize() {
-      if (!container) return;
+      if (!container) {
+        return;
+      }
       const newWidth = container.clientWidth;
       const newHeight = container.clientHeight;
       renderer.setSize(newWidth, newHeight);
@@ -386,27 +402,22 @@ export function TunnelTheme() {
   }, []);
 
   return (
-    <div className="relative w-full h-96 bg-black overflow-hidden rounded-lg">
+    <div className="relative h-96 w-full overflow-hidden rounded-lg bg-black">
       {/* Canvas container */}
-      <canvas
-        ref={canvasRef}
-        className="w-full h-full"
-      />
-      
+      <canvas className="h-full w-full" ref={canvasRef} />
+
       {/* Overlay content */}
-      <div className="absolute inset-0 flex items-center justify-center z-10">
+      <div className="absolute inset-0 z-10 flex items-center justify-center">
         <div className="text-center text-white">
           <h2
             className={`${
               isMobile ? "text-2xl" : "text-4xl"
-            } font-bold mb-2 md:mb-4`}
+            } mb-2 font-bold md:mb-4`}
           >
             TUNNEL
           </h2>
           <p className={`${isMobile ? "text-sm" : "text-lg"} opacity-80`}>
-            {isMobile
-              ? "Touch to interact"
-              : "Experience the infinite journey"}
+            {isMobile ? "Touch to interact" : "Experience the infinite journey"}
           </p>
         </div>
       </div>

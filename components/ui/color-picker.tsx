@@ -12,50 +12,72 @@ interface ColorPickerProps {
   className?: string;
 }
 
+// Regex patterns at top level for performance
+const HSL_REGEX = /hsl\(([^)]+)\)/;
+const HSL_SPLIT_REGEX = /[\s,]+/;
+
 function hslToHex(hsl: string): string {
   // Parse HSL string like "hsl(222.2 84% 4.9%)" or "hsl(0 0% 14.5%)"
-  const match = hsl.match(/hsl\(([^)]+)\)/);
-  if (!match) return "#000000";
-  
-  const parts = match[1].split(/[\s,]+/).filter(Boolean);
-  if (parts.length < 3) return "#000000";
-  
+  const match = hsl.match(HSL_REGEX);
+  if (!match) {
+    return "#000000";
+  }
+
+  const parts = match[1].split(HSL_SPLIT_REGEX).filter(Boolean);
+  if (parts.length < 3) {
+    return "#000000";
+  }
+
   const [h, s, l] = parts.map((val, index) => {
-    const num = parseFloat(val.replace('%', ''));
+    const num = Number.parseFloat(val.replace("%", ""));
     return index === 0 ? num : num / 100;
   });
 
   const c = (1 - Math.abs(2 * l - 1)) * s;
-  const x = c * (1 - Math.abs((h / 60) % 2 - 1));
+  const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
   const m = l - c / 2;
 
-  let r = 0, g = 0, b = 0;
+  let r = 0,
+    g = 0,
+    b = 0;
 
   if (0 <= h && h < 60) {
-    r = c; g = x; b = 0;
+    r = c;
+    g = x;
+    b = 0;
   } else if (60 <= h && h < 120) {
-    r = x; g = c; b = 0;
+    r = x;
+    g = c;
+    b = 0;
   } else if (120 <= h && h < 180) {
-    r = 0; g = c; b = x;
+    r = 0;
+    g = c;
+    b = x;
   } else if (180 <= h && h < 240) {
-    r = 0; g = x; b = c;
+    r = 0;
+    g = x;
+    b = c;
   } else if (240 <= h && h < 300) {
-    r = x; g = 0; b = c;
+    r = x;
+    g = 0;
+    b = c;
   } else if (300 <= h && h < 360) {
-    r = c; g = 0; b = x;
+    r = c;
+    g = 0;
+    b = x;
   }
 
   r = Math.round((r + m) * 255);
   g = Math.round((g + m) * 255);
   b = Math.round((b + m) * 255);
 
-  return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+  return `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
 }
 
 function hexToHsl(hex: string): string {
-  const r = parseInt(hex.slice(1, 3), 16) / 255;
-  const g = parseInt(hex.slice(3, 5), 16) / 255;
-  const b = parseInt(hex.slice(5, 7), 16) / 255;
+  const r = Number.parseInt(hex.slice(1, 3), 16) / 255;
+  const g = Number.parseInt(hex.slice(3, 5), 16) / 255;
+  const b = Number.parseInt(hex.slice(5, 7), 16) / 255;
 
   const max = Math.max(r, g, b);
   const min = Math.min(r, g, b);
@@ -79,6 +101,9 @@ function hexToHsl(hex: string): string {
       case b:
         h = (r - g) / diff + 4;
         break;
+      default:
+        h = 0;
+        break;
     }
     h /= 6;
   }
@@ -86,12 +111,17 @@ function hexToHsl(hex: string): string {
   return `hsl(${Math.round(h * 360)} ${Math.round(s * 100)}% ${Math.round(l * 100)}%)`;
 }
 
-export function ColorPicker({ value, onChange, label, className }: ColorPickerProps) {
+export function ColorPicker({
+  value,
+  onChange,
+  label,
+  className,
+}: ColorPickerProps) {
   const [hexValue, setHexValue] = React.useState(() => {
     try {
       return hslToHex(value);
     } catch (error) {
-      console.error('Error converting HSL to Hex:', value, error);
+      console.error("Error converting HSL to Hex:", value, error);
       return "#000000";
     }
   });
@@ -100,7 +130,7 @@ export function ColorPicker({ value, onChange, label, className }: ColorPickerPr
     try {
       setHexValue(hslToHex(value));
     } catch (error) {
-      console.error('Error converting HSL to Hex in effect:', value, error);
+      console.error("Error converting HSL to Hex in effect:", value, error);
       setHexValue("#000000");
     }
   }, [value]);
@@ -118,33 +148,33 @@ export function ColorPicker({ value, onChange, label, className }: ColorPickerPr
 
   // Debug logging
   React.useEffect(() => {
-    console.log('ColorPicker rendered:', { label, value, hexValue });
+    console.log("ColorPicker rendered:", { label, value, hexValue });
   }, [label, value, hexValue]);
 
   return (
     <div className={cn("space-y-2", className)}>
-      {label && <Label className="text-sm font-medium">{label}</Label>}
-      <div className="flex gap-2 items-center">
-        <div className="relative w-10 h-8">
+      {label && <Label className="font-medium text-sm">{label}</Label>}
+      <div className="flex items-center gap-2">
+        <div className="relative h-8 w-10">
           <input
+            className="absolute inset-0 h-full w-full cursor-pointer rounded border border-input"
+            onChange={handleColorChange}
+            style={{ backgroundColor: hexValue }}
             type="color"
             value={hexValue}
-            onChange={handleColorChange}
-            className="absolute inset-0 w-full h-full rounded border border-input cursor-pointer"
-            style={{ backgroundColor: hexValue }}
           />
         </div>
         <Input
-          value={value}
+          className="flex-1 font-mono text-sm"
           onChange={handleInputChange}
           placeholder="hsl(0 0% 0%)"
-          className="flex-1 text-sm font-mono"
+          value={value}
         />
       </div>
       {/* Debug info */}
-      <div className="text-xs text-muted-foreground">
+      <div className="text-muted-foreground text-xs">
         HSL: {value} | Hex: {hexValue}
       </div>
     </div>
   );
-} 
+}

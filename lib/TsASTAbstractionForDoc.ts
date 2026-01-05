@@ -41,9 +41,9 @@ export interface ParseOptions {
  * TypeScript AST Parser for React Component Props
  */
 export class TypeScriptASTParser {
-  private sourceFile: ts.SourceFile;
+  private readonly sourceFile: ts.SourceFile;
 
-  constructor(sourceCode: string, fileName: string = "component.tsx") {
+  constructor(sourceCode: string, fileName = "component.tsx") {
     try {
       // Create a simpler TypeScript setup without full program
       this.sourceFile = ts.createSourceFile(
@@ -65,7 +65,7 @@ export class TypeScriptASTParser {
   /**
    * Extract component props information from the source code
    */
-  public extractComponentProps(
+  extractComponentProps(
     componentName?: string,
     options: ParseOptions = {}
   ): ComponentPropsInfo | null {
@@ -84,8 +84,9 @@ export class TypeScriptASTParser {
         return null;
       }
 
-      const actualComponentName = this.getComponentName(component) || componentName || "Unknown";
-      
+      const actualComponentName =
+        this.getComponentName(component) || componentName || "Unknown";
+
       // Extract props interface/type
       const propsInfo = this.extractPropsFromComponent(component, {
         includePrivateProps,
@@ -116,8 +117,16 @@ export class TypeScriptASTParser {
   /**
    * Find all components in the source file
    */
-  public findAllComponents(): Array<{ node: ts.Node; name: string; hasProps: boolean }> {
-    const components: Array<{ node: ts.Node; name: string; hasProps: boolean }> = [];
+  findAllComponents(): Array<{
+    node: ts.Node;
+    name: string;
+    hasProps: boolean;
+  }> {
+    const components: Array<{
+      node: ts.Node;
+      name: string;
+      hasProps: boolean;
+    }> = [];
 
     const visit = (node: ts.Node): void => {
       let componentName: string | undefined;
@@ -132,7 +141,10 @@ export class TypeScriptASTParser {
       // Look for arrow function variable declarations
       if (ts.isVariableDeclaration(node) && node.initializer) {
         const name = ts.isIdentifier(node.name) ? node.name.text : undefined;
-        if (ts.isArrowFunction(node.initializer) || ts.isFunctionExpression(node.initializer)) {
+        if (
+          ts.isArrowFunction(node.initializer) ||
+          ts.isFunctionExpression(node.initializer)
+        ) {
           componentName = name;
           componentNode = node;
         }
@@ -147,15 +159,15 @@ export class TypeScriptASTParser {
       if (componentName && componentNode) {
         // Check if this component has props
         const propsType = this.findPropsType(componentNode);
-        const hasProps = !!propsType && (
-          ts.isTypeReferenceNode(propsType) || 
-          (ts.isTypeLiteralNode(propsType) && propsType.members.length > 0)
-        );
+        const hasProps =
+          !!propsType &&
+          (ts.isTypeReferenceNode(propsType) ||
+            (ts.isTypeLiteralNode(propsType) && propsType.members.length > 0));
 
         components.push({
           node: componentNode,
           name: componentName,
-          hasProps
+          hasProps,
         });
       }
 
@@ -178,15 +190,23 @@ export class TypeScriptASTParser {
 
     // If a specific component name is provided, try to find it first
     if (componentName) {
-      const exactMatch = allComponents.find(comp => comp.name === componentName);
+      const exactMatch = allComponents.find(
+        (comp) => comp.name === componentName
+      );
       if (exactMatch) {
         return exactMatch.node;
       }
 
       // Try partial matching for component names
-      const partialMatch = allComponents.find(comp => 
-        comp.name.toLowerCase().includes(componentName.toLowerCase().replace(/\s/g, '')) ||
-        componentName.toLowerCase().replace(/\s/g, '').includes(comp.name.toLowerCase())
+      const partialMatch = allComponents.find(
+        (comp) =>
+          comp.name
+            .toLowerCase()
+            .includes(componentName.toLowerCase().replace(/\s/g, "")) ||
+          componentName
+            .toLowerCase()
+            .replace(/\s/g, "")
+            .includes(comp.name.toLowerCase())
       );
       if (partialMatch) {
         return partialMatch.node;
@@ -194,19 +214,22 @@ export class TypeScriptASTParser {
     }
 
     // Prioritize components with props interfaces
-    const componentsWithProps = allComponents.filter(comp => comp.hasProps);
+    const componentsWithProps = allComponents.filter((comp) => comp.hasProps);
     if (componentsWithProps.length > 0) {
       // Return the first component with props that's not a showcase/theme variant
-      const mainComponent = componentsWithProps.find(comp => 
-        !comp.name.toLowerCase().includes('showcase') &&
-        !comp.name.toLowerCase().includes('theme') &&
-        !comp.name.toLowerCase().includes('example')
+      const mainComponent = componentsWithProps.find(
+        (comp) =>
+          !(
+            comp.name.toLowerCase().includes("showcase") ||
+            comp.name.toLowerCase().includes("theme") ||
+            comp.name.toLowerCase().includes("example")
+          )
       );
-      
+
       if (mainComponent) {
         return mainComponent.node;
       }
-      
+
       // Fallback to any component with props
       return componentsWithProps[0].node;
     }
@@ -236,8 +259,16 @@ export class TypeScriptASTParser {
    */
   private extractPropsFromComponent(
     component: ts.Node,
-    options: { includePrivateProps: boolean; resolveUnions: boolean; maxDepth: number }
-  ): { props: PropDefinition[]; interfaceName?: string; extendsFrom?: string[] } {
+    options: {
+      includePrivateProps: boolean;
+      resolveUnions: boolean;
+      maxDepth: number;
+    }
+  ): {
+    props: PropDefinition[];
+    interfaceName?: string;
+    extendsFrom?: string[];
+  } {
     // Find props parameter type
     const propsType = this.findPropsType(component);
     if (!propsType) {
@@ -249,17 +280,19 @@ export class TypeScriptASTParser {
 
     // If it's a type reference, resolve it
     if (ts.isTypeReferenceNode(propsType)) {
-      const typeName = ts.isIdentifier(propsType.typeName) ? propsType.typeName.text : undefined;
+      const typeName = ts.isIdentifier(propsType.typeName)
+        ? propsType.typeName.text
+        : undefined;
       if (typeName) {
         const interfaceDecl = this.findInterface(typeName);
         if (interfaceDecl) {
           const props = this.extractPropsFromInterface(interfaceDecl, options);
           // Merge default values with props
-          const propsWithDefaults = props.map(prop => ({
+          const propsWithDefaults = props.map((prop) => ({
             ...prop,
-            defaultValue: defaultValues[prop.name] ?? prop.defaultValue
+            defaultValue: defaultValues[prop.name] ?? prop.defaultValue,
           }));
-          
+
           return {
             props: propsWithDefaults,
             interfaceName: typeName,
@@ -273,11 +306,11 @@ export class TypeScriptASTParser {
     if (ts.isTypeLiteralNode(propsType)) {
       const props = this.extractPropsFromTypeLiteral(propsType, options);
       // Merge default values with props
-      const propsWithDefaults = props.map(prop => ({
+      const propsWithDefaults = props.map((prop) => ({
         ...prop,
-        defaultValue: defaultValues[prop.name] ?? prop.defaultValue
+        defaultValue: defaultValues[prop.name] ?? prop.defaultValue,
       }));
-      
+
       return {
         props: propsWithDefaults,
       };
@@ -290,18 +323,28 @@ export class TypeScriptASTParser {
    * Find props type from component parameters
    */
   private findPropsType(component: ts.Node): ts.TypeNode | undefined {
-    if (ts.isFunctionDeclaration(component) || ts.isArrowFunction(component) || ts.isFunctionExpression(component)) {
-      const func = component as ts.FunctionDeclaration | ts.ArrowFunction | ts.FunctionExpression;
+    if (
+      ts.isFunctionDeclaration(component) ||
+      ts.isArrowFunction(component) ||
+      ts.isFunctionExpression(component)
+    ) {
+      const func = component as
+        | ts.FunctionDeclaration
+        | ts.ArrowFunction
+        | ts.FunctionExpression;
       const firstParam = func.parameters[0];
-      if (firstParam && firstParam.type) {
+      if (firstParam?.type) {
         return firstParam.type;
       }
     }
 
-    if (ts.isVariableDeclaration(component) && component.initializer) {
-      if (ts.isArrowFunction(component.initializer) || ts.isFunctionExpression(component.initializer)) {
-        return this.findPropsType(component.initializer);
-      }
+    if (
+      ts.isVariableDeclaration(component) &&
+      component.initializer &&
+      (ts.isArrowFunction(component.initializer) ||
+        ts.isFunctionExpression(component.initializer))
+    ) {
+      return this.findPropsType(component.initializer);
     }
 
     return undefined;
@@ -330,14 +373,21 @@ export class TypeScriptASTParser {
    */
   private extractPropsFromInterface(
     interfaceDecl: ts.InterfaceDeclaration,
-    options: { includePrivateProps: boolean; resolveUnions: boolean; maxDepth: number }
+    options: {
+      includePrivateProps: boolean;
+      resolveUnions: boolean;
+      maxDepth: number;
+    }
   ): PropDefinition[] {
     const props: PropDefinition[] = [];
 
     for (const member of interfaceDecl.members) {
       if (ts.isPropertySignature(member)) {
         const prop = this.extractPropFromPropertySignature(member, options);
-        if (prop && (options.includePrivateProps || !prop.name.startsWith('_'))) {
+        if (
+          prop &&
+          (options.includePrivateProps || !prop.name.startsWith("_"))
+        ) {
           props.push(prop);
         }
       }
@@ -351,14 +401,21 @@ export class TypeScriptASTParser {
    */
   private extractPropsFromTypeLiteral(
     typeLiteral: ts.TypeLiteralNode,
-    options: { includePrivateProps: boolean; resolveUnions: boolean; maxDepth: number }
+    options: {
+      includePrivateProps: boolean;
+      resolveUnions: boolean;
+      maxDepth: number;
+    }
   ): PropDefinition[] {
     const props: PropDefinition[] = [];
 
     for (const member of typeLiteral.members) {
       if (ts.isPropertySignature(member)) {
         const prop = this.extractPropFromPropertySignature(member, options);
-        if (prop && (options.includePrivateProps || !prop.name.startsWith('_'))) {
+        if (
+          prop &&
+          (options.includePrivateProps || !prop.name.startsWith("_"))
+        ) {
           props.push(prop);
         }
       }
@@ -375,15 +432,20 @@ export class TypeScriptASTParser {
     options: { resolveUnions: boolean; maxDepth: number }
   ): PropDefinition | null {
     const name = this.getPropertyName(prop);
-    if (!name) return null;
+    if (!name) {
+      return null;
+    }
 
     const required = !prop.questionToken;
     const type = this.getTypeString(prop.type);
     const description = this.extractJSDocDescription(prop);
     const tags = this.extractJSDocTags(prop);
-    
+
     // Extract union types and enum values
-    const { isUnion, unionTypes, enumValues } = this.analyzeType(prop.type, options);
+    const { isUnion, unionTypes, enumValues } = this.analyzeType(
+      prop.type,
+      options
+    );
 
     return {
       name,
@@ -414,7 +476,9 @@ export class TypeScriptASTParser {
    * Get type string representation
    */
   private getTypeString(typeNode: ts.TypeNode | undefined): string {
-    if (!typeNode) return "unknown";
+    if (!typeNode) {
+      return "unknown";
+    }
 
     switch (typeNode.kind) {
       case ts.SyntaxKind.StringKeyword:
@@ -445,15 +509,15 @@ export class TypeScriptASTParser {
     typeNode: ts.TypeNode | undefined,
     options: { resolveUnions: boolean; maxDepth: number }
   ): { isUnion: boolean; unionTypes?: string[]; enumValues?: string[] } {
-    if (!typeNode || !options.resolveUnions) {
+    if (!(typeNode && options.resolveUnions)) {
       return { isUnion: false };
     }
 
     if (ts.isUnionTypeNode(typeNode)) {
-      const unionTypes = typeNode.types.map(t => this.getTypeString(t));
+      const unionTypes = typeNode.types.map((t) => this.getTypeString(t));
       const enumValues = typeNode.types
         .filter(ts.isLiteralTypeNode)
-        .map(t => t.literal.getText(this.sourceFile))
+        .map((t) => t.literal.getText(this.sourceFile))
         .filter(Boolean);
 
       return {
@@ -471,14 +535,17 @@ export class TypeScriptASTParser {
    */
   private extractJSDocDescription(node: ts.Node): string | undefined {
     const jsDocNodes = ts.getJSDocCommentsAndTags(node);
-    
+
     for (const jsDoc of jsDocNodes) {
       if (ts.isJSDoc(jsDoc) && jsDoc.comment) {
         if (typeof jsDoc.comment === "string") {
           return jsDoc.comment.trim();
         }
         if (Array.isArray(jsDoc.comment)) {
-          return jsDoc.comment.map(c => c.text).join(" ").trim();
+          return jsDoc.comment
+            .map((c) => c.text)
+            .join(" ")
+            .trim();
         }
       }
     }
@@ -510,10 +577,12 @@ export class TypeScriptASTParser {
    * Get extends clause from interface
    */
   private getExtendsClause(interfaceDecl: ts.InterfaceDeclaration): string[] {
-    if (!interfaceDecl.heritageClauses) return [];
+    if (!interfaceDecl.heritageClauses) {
+      return [];
+    }
 
     const extendsFrom: string[] = [];
-    
+
     for (const heritage of interfaceDecl.heritageClauses) {
       if (heritage.token === ts.SyntaxKind.ExtendsKeyword) {
         for (const type of heritage.types) {
@@ -530,17 +599,19 @@ export class TypeScriptASTParser {
    */
   private extractUsageExamples(): string[] {
     const examples: string[] = [];
-    
+
     const visit = (node: ts.Node): void => {
       const jsDocNodes = ts.getJSDocCommentsAndTags(node);
-      
+
       for (const jsDoc of jsDocNodes) {
         if (ts.isJSDoc(jsDoc) && jsDoc.tags) {
           for (const tag of jsDoc.tags) {
-            if (tag.tagName?.text === "example" && tag.comment) {
-              if (typeof tag.comment === "string") {
-                examples.push(tag.comment.trim());
-              }
+            if (
+              tag.tagName?.text === "example" &&
+              tag.comment &&
+              typeof tag.comment === "string"
+            ) {
+              examples.push(tag.comment.trim());
             }
           }
         }
@@ -556,35 +627,48 @@ export class TypeScriptASTParser {
   /**
    * Extract default values from a component node's parameters
    */
-  public extractDefaultValuesFromNode(node: ts.Node): Record<string, unknown> {
+  extractDefaultValuesFromNode(node: ts.Node): Record<string, unknown> {
     const defaultValues: Record<string, unknown> = {};
 
     // Extract from function parameters
-    const extractFromFunction = (func: ts.FunctionDeclaration | ts.ArrowFunction | ts.FunctionExpression) => {
+    const extractFromFunction = (
+      func: ts.FunctionDeclaration | ts.ArrowFunction | ts.FunctionExpression
+    ) => {
       const firstParam = func.parameters[0];
-      if (!firstParam) return;
+      if (!firstParam) {
+        return;
+      }
 
       // Handle destructured parameters with defaults
       if (ts.isObjectBindingPattern(firstParam.name)) {
         for (const element of firstParam.name.elements) {
           if (ts.isBindingElement(element) && element.initializer) {
-            const name = ts.isIdentifier(element.name) ? element.name.text : undefined;
+            const name = ts.isIdentifier(element.name)
+              ? element.name.text
+              : undefined;
             if (name) {
-              defaultValues[name] = this.evaluateExpression(element.initializer);
+              defaultValues[name] = this.evaluateExpression(
+                element.initializer
+              );
             }
           }
         }
       }
 
       // Handle default parameter values
-      if (firstParam.initializer) {
-        if (ts.isObjectLiteralExpression(firstParam.initializer)) {
-          for (const property of firstParam.initializer.properties) {
-            if (ts.isPropertyAssignment(property)) {
-              const name = ts.isIdentifier(property.name) ? property.name.text : undefined;
-              if (name) {
-                defaultValues[name] = this.evaluateExpression(property.initializer);
-              }
+      if (
+        firstParam.initializer &&
+        ts.isObjectLiteralExpression(firstParam.initializer)
+      ) {
+        for (const property of firstParam.initializer.properties) {
+          if (ts.isPropertyAssignment(property)) {
+            const name = ts.isIdentifier(property.name)
+              ? property.name.text
+              : undefined;
+            if (name) {
+              defaultValues[name] = this.evaluateExpression(
+                property.initializer
+              );
             }
           }
         }
@@ -593,10 +677,13 @@ export class TypeScriptASTParser {
 
     if (ts.isFunctionDeclaration(node)) {
       extractFromFunction(node);
-    } else if (ts.isVariableDeclaration(node) && node.initializer) {
-      if (ts.isArrowFunction(node.initializer) || ts.isFunctionExpression(node.initializer)) {
-        extractFromFunction(node.initializer);
-      }
+    } else if (
+      ts.isVariableDeclaration(node) &&
+      node.initializer &&
+      (ts.isArrowFunction(node.initializer) ||
+        ts.isFunctionExpression(node.initializer))
+    ) {
+      extractFromFunction(node.initializer);
     }
 
     return defaultValues;
@@ -625,13 +712,15 @@ export class TypeScriptASTParser {
       return undefined;
     }
     if (ts.isArrayLiteralExpression(expr)) {
-      return expr.elements.map(e => this.evaluateExpression(e));
+      return expr.elements.map((e) => this.evaluateExpression(e));
     }
     if (ts.isObjectLiteralExpression(expr)) {
       const obj: Record<string, unknown> = {};
       for (const property of expr.properties) {
         if (ts.isPropertyAssignment(property)) {
-          const name = ts.isIdentifier(property.name) ? property.name.text : undefined;
+          const name = ts.isIdentifier(property.name)
+            ? property.name.text
+            : undefined;
           if (name) {
             obj[name] = this.evaluateExpression(property.initializer);
           }
@@ -639,7 +728,7 @@ export class TypeScriptASTParser {
       }
       return obj;
     }
-    
+
     // Fallback: return the text representation
     return expr.getText(this.sourceFile);
   }
@@ -665,14 +754,16 @@ export function extractComponentPropsFromSource(
 /**
  * Extract default values from component function parameters using TypeScript AST
  */
-export function extractDefaultValuesFromSource(sourceCode: string): Record<string, unknown> {
+export function extractDefaultValuesFromSource(
+  sourceCode: string
+): Record<string, unknown> {
   try {
     const parser = new TypeScriptASTParser(sourceCode);
     const defaultValues: Record<string, unknown> = {};
 
     // Find all components and extract default values from their parameters
     const allComponents = parser.findAllComponents();
-    
+
     for (const { node } of allComponents) {
       const extractedDefaults = parser.extractDefaultValuesFromNode(node);
       Object.assign(defaultValues, extractedDefaults);

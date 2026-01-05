@@ -1,21 +1,32 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import * as THREE from "three";
-import { useRef, useEffect } from "react";
 
 export default function ShinyParticleGalaxy() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    if (typeof window === "undefined" || !canvasRef.current) return;
+    if (typeof window === "undefined" || !canvasRef.current) {
+      return;
+    }
 
     const canvas = canvasRef.current;
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      antialias: true,
+      alpha: true,
+    });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
 
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(
+      75,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      1000
+    );
     camera.position.z = 50;
 
     const layers = [
@@ -37,7 +48,10 @@ export default function ShinyParticleGalaxy() {
       }
 
       const geometry = new THREE.BufferGeometry();
-      geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+      geometry.setAttribute(
+        "position",
+        new THREE.BufferAttribute(positions, 3)
+      );
 
       const material = new THREE.PointsMaterial({
         color: layer.color,
@@ -101,13 +115,13 @@ export default function ShinyParticleGalaxy() {
   }, []);
 
   return (
-    <div className="relative w-full h-screen overflow-hidden bg-black">
-      <canvas ref={canvasRef} className="absolute top-0 left-0 w-full h-full" />
-      <div className="relative z-10 flex flex-col items-center justify-center h-full text-center text-white px-4">
-        <h1 className="text-6xl md:text-8xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-[#FFEE93] via-[#94D82A] to-[#0B405B]">
+    <div className="relative h-screen w-full overflow-hidden bg-black">
+      <canvas className="absolute top-0 left-0 h-full w-full" ref={canvasRef} />
+      <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 text-center text-white">
+        <h1 className="bg-gradient-to-r from-[#FFEE93] via-[#94D82A] to-[#0B405B] bg-clip-text font-black text-6xl text-transparent tracking-tighter md:text-8xl">
           GALAXY
         </h1>
-        <p className="mt-4 text-gray-300 max-w-2xl text-lg md:text-xl">
+        <p className="mt-4 max-w-2xl text-gray-300 text-lg md:text-xl">
           Fly through a mesmerizing galaxy of shining particles.
         </p>
       </div>

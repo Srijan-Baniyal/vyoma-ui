@@ -1,6 +1,10 @@
-import { readFile, readdir } from "fs/promises";
-import { join } from "path";
-import { extractComponentPropsFromSource, extractDefaultValuesFromSource, type ComponentPropsInfo } from "./TsASTAbstractionForDoc";
+import { readdir, readFile } from "node:fs/promises";
+import { join } from "node:path";
+import {
+  type ComponentPropsInfo,
+  extractComponentPropsFromSource,
+  extractDefaultValuesFromSource,
+} from "./TsASTAbstractionForDoc";
 
 // Import the pre-generated source map - ALWAYS prioritized
 let componentSourceMap: Record<string, string> = {};
@@ -84,7 +88,7 @@ async function getComponentMappingImports(): Promise<Record<string, string>> {
     while ((match = defaultImportRegex.exec(mappingContent)) !== null) {
       const [, componentName, importPath] = match;
       // Convert @/ path to actual file path
-      const actualPath = importPath.replace("@/", "") + ".tsx";
+      const actualPath = `${importPath.replace("@/", "")}.tsx`;
       imports[componentName] = actualPath;
     }
 
@@ -92,7 +96,7 @@ async function getComponentMappingImports(): Promise<Record<string, string>> {
     while ((match = destructuredImportRegex.exec(mappingContent)) !== null) {
       const [, componentNames, importPath] = match;
       // Convert @/ path to actual file path
-      const actualPath = importPath.replace("@/", "") + ".tsx";
+      const actualPath = `${importPath.replace("@/", "")}.tsx`;
 
       // Handle multiple destructured imports
       const names = componentNames.split(",").map((name) => name.trim());
@@ -124,7 +128,7 @@ async function findComponentFile(
     "components/vui/text",
     "components/vui/buttons",
     "components/vui/backgrounds",
-    "components/vui/ai"
+    "components/vui/ai",
   ];
   const possibleNames = [
     `${componentName}.tsx`,
@@ -143,14 +147,10 @@ async function findComponentFile(
           try {
             await readFile(join(process.cwd(), filePath), "utf-8");
             return filePath;
-          } catch {
-            continue;
-          }
+          } catch {}
         }
       }
-    } catch {
-      continue;
-    }
+    } catch {}
   }
   return null;
 }
@@ -202,8 +202,10 @@ export async function getComponentSourceCode(
 
     // 🔄 FALLBACK: Only use filesystem in development if not in componentSourceCode.ts
     if (!isProduction) {
-      console.log(`⚠️ ${componentName} not found in componentSourceCode.ts, trying filesystem fallback...`);
-      
+      console.log(
+        `⚠️ ${componentName} not found in componentSourceCode.ts, trying filesystem fallback...`
+      );
+
       // Try to get the exact path from ComponentMapping
       let filePath = await getComponentPathFromMapping(componentName);
 
@@ -212,10 +214,15 @@ export async function getComponentSourceCode(
         try {
           const fullPath = join(process.cwd(), filePath);
           const sourceCode = await readFile(fullPath, "utf-8");
-          console.log(`📖 Successfully read ${sourceCode.split("\n").length} lines from ${filePath}`);
+          console.log(
+            `📖 Successfully read ${sourceCode.split("\n").length} lines from ${filePath}`
+          );
           return sourceCode;
         } catch (error) {
-          console.error(`❌ Error reading from direct path ${filePath}:`, error);
+          console.error(
+            `❌ Error reading from direct path ${filePath}:`,
+            error
+          );
         }
       }
 
@@ -239,7 +246,9 @@ export async function getComponentSourceCode(
         try {
           const fullPath = join(process.cwd(), filePath);
           const sourceCode = await readFile(fullPath, "utf-8");
-          console.log(`🔍 Found via search: ${filePath} (${sourceCode.split("\n").length} lines)`);
+          console.log(
+            `🔍 Found via search: ${filePath} (${sourceCode.split("\n").length} lines)`
+          );
           return sourceCode;
         } catch (error) {
           console.error(`❌ Error reading found file ${filePath}:`, error);
@@ -249,8 +258,10 @@ export async function getComponentSourceCode(
 
     // 🚫 Component not found anywhere
     const environment = isProduction ? "production" : "development";
-    console.error(`❌ Component "${componentName}" not found in componentSourceCode.ts${!isProduction ? ' or filesystem' : ''} (${environment} mode)`);
-    
+    console.error(
+      `❌ Component "${componentName}" not found in componentSourceCode.ts${isProduction ? "" : " or filesystem"} (${environment} mode)`
+    );
+
     return `// ❌ Component source not found for "${componentName}"
 // Environment: ${environment}
 // Expected: Component should be in componentSourceCode.ts
@@ -276,7 +287,10 @@ export default function ${componentName.replace(/\s+/g, "")}() {
   );
 }`;
   } catch (error) {
-    console.error(`💥 Critical error loading source for ${componentName}:`, error);
+    console.error(
+      `💥 Critical error loading source for ${componentName}:`,
+      error
+    );
     return `// 💥 Critical error loading source code for "${componentName}"
 // Error: ${error instanceof Error ? error.message : "Unknown error"}
 
@@ -311,13 +325,14 @@ export async function getComponentUsageExample(
             .map(([key, value]) => {
               if (typeof value === "string") {
                 return `${key}="${value}"`;
-              } else if (typeof value === "boolean") {
-                return value ? key : `${key}={false}`;
-              } else if (typeof value === "number") {
-                return `${key}={${value}}`;
-              } else {
-                return `${key}={${JSON.stringify(value)}}`;
               }
+              if (typeof value === "boolean") {
+                return value ? key : `${key}={false}`;
+              }
+              if (typeof value === "number") {
+                return `${key}={${value}}`;
+              }
+              return `${key}={${JSON.stringify(value)}}`;
             })
             .join(" ")
         : "";
@@ -344,13 +359,14 @@ export default function Example() {
           .map(([key, value]) => {
             if (typeof value === "string") {
               return `${key}="${value}"`;
-            } else if (typeof value === "boolean") {
-              return value ? key : `${key}={false}`;
-            } else if (typeof value === "number") {
-              return `${key}={${value}}`;
-            } else {
-              return `${key}={${JSON.stringify(value)}}`;
             }
+            if (typeof value === "boolean") {
+              return value ? key : `${key}={false}`;
+            }
+            if (typeof value === "number") {
+              return `${key}={${value}}`;
+            }
+            return `${key}={${JSON.stringify(value)}}`;
           })
           .join(" ")
       : "";
@@ -378,10 +394,14 @@ export async function getComponentPropsInfo(
 ): Promise<ComponentPropsInfo | null> {
   try {
     console.log(`🔍 Extracting props info for component: ${componentName}`);
-    
+
     // Get source code (which now prioritizes componentSourceCode.ts)
     const sourceCode = await getComponentSourceCode(componentName);
-    if (!sourceCode || sourceCode.includes("// ❌ Component source not found") || sourceCode.includes("// 💥 Critical error")) {
+    if (
+      !sourceCode ||
+      sourceCode.includes("// ❌ Component source not found") ||
+      sourceCode.includes("// 💥 Critical error")
+    ) {
       console.warn(`❌ No valid source code available for ${componentName}`);
       return null;
     }
@@ -390,12 +410,14 @@ export async function getComponentPropsInfo(
     const componentNameVariations = [
       componentName,
       componentName.replace(/\s+/g, ""), // Remove spaces: "Animated Number" -> "AnimatedNumber"
-      componentName.replace(/\s+/g, "") + "Countdown", // Add Countdown: "AnimatedNumber" -> "AnimatedNumberCountdown"
-      componentName.replace(/\s+/g, "") + "Component", // Add Component suffix
+      `${componentName.replace(/\s+/g, "")}Countdown`, // Add Countdown: "AnimatedNumber" -> "AnimatedNumberCountdown"
+      `${componentName.replace(/\s+/g, "")}Component`, // Add Component suffix
       undefined, // Let AST parser auto-detect best component
     ];
 
-    console.log(`🎯 Trying ${componentNameVariations.length} name variations for AST parsing...`);
+    console.log(
+      `🎯 Trying ${componentNameVariations.length} name variations for AST parsing...`
+    );
 
     // Try each variation until we find props
     for (const nameVariation of componentNameVariations) {
@@ -412,16 +434,21 @@ export async function getComponentPropsInfo(
 
       if (propsInfo && propsInfo.props.length > 0) {
         console.log(
-          `✅ Successfully extracted ${propsInfo.props.length} props for ${componentName} using variation: ${nameVariation || 'auto-detect'}`
+          `✅ Successfully extracted ${propsInfo.props.length} props for ${componentName} using variation: ${nameVariation || "auto-detect"}`
         );
         return propsInfo;
       }
     }
 
-    console.warn(`⚠️ No props found for ${componentName} with any name variation (may have no props interface)`);
+    console.warn(
+      `⚠️ No props found for ${componentName} with any name variation (may have no props interface)`
+    );
     return null;
   } catch (error) {
-    console.error(`💥 Error extracting props info for ${componentName}:`, error);
+    console.error(
+      `💥 Error extracting props info for ${componentName}:`,
+      error
+    );
     return null;
   }
 }
@@ -431,27 +458,43 @@ export async function getDefaultProps(
 ): Promise<Record<string, unknown>> {
   try {
     console.log(`🔍 Extracting default props for component: ${componentName}`);
-    
+
     // Get source code (which now prioritizes componentSourceCode.ts)
     const sourceCode = await getComponentSourceCode(componentName);
-    if (!sourceCode || sourceCode.includes("// ❌ Component source not found") || sourceCode.includes("// 💥 Critical error")) {
-      console.warn(`❌ No valid source code available for ${componentName} - cannot extract default props`);
+    if (
+      !sourceCode ||
+      sourceCode.includes("// ❌ Component source not found") ||
+      sourceCode.includes("// 💥 Critical error")
+    ) {
+      console.warn(
+        `❌ No valid source code available for ${componentName} - cannot extract default props`
+      );
       return {};
     }
 
     // 🧠 100% TypeScript AST-based extraction
-    console.log(`🔬 Using TypeScript AST parser to extract default props for ${componentName}`);
+    console.log(
+      `🔬 Using TypeScript AST parser to extract default props for ${componentName}`
+    );
     const astDefaultValues = extractDefaultValuesFromSource(sourceCode);
-    
+
     if (Object.keys(astDefaultValues).length > 0) {
-      console.log(`✅ AST parser found ${Object.keys(astDefaultValues).length} default values for ${componentName}:`, Object.keys(astDefaultValues));
+      console.log(
+        `✅ AST parser found ${Object.keys(astDefaultValues).length} default values for ${componentName}:`,
+        Object.keys(astDefaultValues)
+      );
       return astDefaultValues;
     }
 
-    console.log(`ℹ️ No default values found for ${componentName} (normal if component has no defaults)`);
+    console.log(
+      `ℹ️ No default values found for ${componentName} (normal if component has no defaults)`
+    );
     return {};
   } catch (error) {
-    console.error(`💥 Error extracting default props for ${componentName}:`, error);
+    console.error(
+      `💥 Error extracting default props for ${componentName}:`,
+      error
+    );
     return {};
   }
 }

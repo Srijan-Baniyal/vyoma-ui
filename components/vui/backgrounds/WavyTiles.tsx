@@ -83,8 +83,8 @@ export default function Background() {
               minWidth: 200.0,
               scale: isMobile ? 0.8 : 1.0,
               scaleMobile: 0.8,
-              color: 0x1a1a2e, // Consistent color scheme
-              backgroundColor: 0x0f0f23, // Consistent background
+              color: 0x1a_1a_2e, // Consistent color scheme
+              backgroundColor: 0x0f_0f_23, // Consistent background
               shininess: isMobile ? 25.0 : 30.0,
               waveHeight: isMobile ? 15.0 : 20.0,
               waveSpeed: isMobile ? 0.8 : 1.0,
@@ -117,33 +117,33 @@ export default function Background() {
   }, [isMobile]);
 
   return (
-    <section className="relative h-screen flex items-center overflow-hidden">
+    <section className="relative flex h-screen items-center overflow-hidden">
       {/* Fallback background - consistent with showcase */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 to-slate-800 z-0"></div>
+      <div className="absolute inset-0 z-0 bg-gradient-to-br from-slate-900 to-slate-800" />
 
       {/* Vanta.js container */}
       <div
-        ref={vantaRef}
         className="absolute inset-0 z-10"
+        ref={vantaRef}
         style={{
           width: "100%",
           height: "100%",
         }}
-      ></div>
+      />
 
       {/* Loading indicator */}
       {!vantaLoaded && (
         <div className="absolute inset-0 z-20 flex items-center justify-center">
           <div
             className={`${
-              isMobile ? "w-6 h-6" : "w-8 h-8"
-            } border-2 border-white border-t-transparent rounded-full animate-spin`}
-          ></div>
+              isMobile ? "h-6 w-6" : "h-8 w-8"
+            } animate-spin rounded-full border-2 border-white border-t-transparent`}
+          />
         </div>
       )}
 
       {/* Content - consistent responsive styling */}
-      <div className="relative z-30 flex flex-col items-center justify-center min-h-screen p-4 text-center">
+      <div className="relative z-30 flex min-h-screen flex-col items-center justify-center p-4 text-center">
         <div
           className={`${
             isMobile ? "mb-4 space-y-2" : "mb-8 space-y-3 md:space-y-6"
@@ -153,7 +153,7 @@ export default function Background() {
             <h1
               className={`${
                 isMobile ? "text-3xl" : "text-6xl md:text-8xl"
-              } font-black tracking-tighter bg-gradient-to-r from-white via-gray-200 to-white bg-clip-text text-transparent animate-pulse`}
+              } animate-pulse bg-gradient-to-r from-white via-gray-200 to-white bg-clip-text font-black text-transparent tracking-tighter`}
             >
               INTERACTIVE WAVES
             </h1>
@@ -167,13 +167,14 @@ export default function Background() {
           <p
             className={`${
               isMobile
-                ? "text-sm px-4 leading-relaxed"
-                : "text-lg md:text-xl px-0 leading-relaxed"
-            } text-gray-300 max-w-2xl font-light`}
+                ? "px-4 text-sm leading-relaxed"
+                : "px-0 text-lg leading-relaxed md:text-xl"
+            } max-w-2xl font-light text-gray-300`}
           >
             Experience mesmerizing fluid dynamics with
-            <span className="text-white font-medium"> Vanta.js </span>
-            powered interactive waves that respond to your {isMobile ? "touch" : "movement"}
+            <span className="font-medium text-white"> Vanta.js </span>
+            powered interactive waves that respond to your{" "}
+            {isMobile ? "touch" : "movement"}
           </p>
         </div>
       </div>
@@ -235,8 +236,8 @@ export function WavyTilesShowcase() {
               minWidth: 200.0,
               scale: isMobile ? 0.8 : 1.0,
               scaleMobile: 0.8,
-              color: 0x1a1a2e,
-              backgroundColor: 0x0f0f23,
+              color: 0x1a_1a_2e,
+              backgroundColor: 0x0f_0f_23,
               shininess: isMobile ? 25.0 : 30.0,
               waveHeight: isMobile ? 15.0 : 20.0,
               waveSpeed: isMobile ? 0.8 : 1.0,
@@ -271,38 +272,38 @@ export function WavyTilesShowcase() {
     <div className="space-y-6 md:space-y-8">
       <div className="space-y-4 md:space-y-6">
         {/* Showcase Container */}
-        <div className="relative w-full h-96 rounded-lg overflow-hidden border">
+        <div className="relative h-96 w-full overflow-hidden rounded-lg border">
           {/* Fallback background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-slate-900 to-slate-800"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-900 to-slate-800" />
 
           {/* Vanta.js container */}
           <div
-            ref={vantaRef}
             className="absolute inset-0"
+            ref={vantaRef}
             style={{
               width: "100%",
               height: "100%",
             }}
-          ></div>
+          />
 
           {/* Loading indicator */}
           {!vantaLoaded && (
             <div className="absolute inset-0 flex items-center justify-center">
               <div
                 className={`${
-                  isMobile ? "w-6 h-6" : "w-8 h-8"
-                } border-2 border-white border-t-transparent rounded-full animate-spin`}
-              ></div>
+                  isMobile ? "h-6 w-6" : "h-8 w-8"
+                } animate-spin rounded-full border-2 border-white border-t-transparent`}
+              />
             </div>
           )}
 
           {/* Overlay content */}
-          <div className="absolute inset-0 flex items-center justify-center z-10">
+          <div className="absolute inset-0 z-10 flex items-center justify-center">
             <div className="text-center text-white">
               <h2
                 className={`${
                   isMobile ? "text-2xl" : "text-4xl"
-                } font-bold mb-2 md:mb-4`}
+                } mb-2 font-bold md:mb-4`}
               >
                 Interactive Waves
               </h2>
@@ -372,8 +373,8 @@ export function WavyTilesTheme() {
               minWidth: 200.0,
               scale: isMobile ? 0.8 : 1.0,
               scaleMobile: 0.8,
-              color: 0x1a1a2e,
-              backgroundColor: 0x0f0f23,
+              color: 0x1a_1a_2e,
+              backgroundColor: 0x0f_0f_23,
               shininess: isMobile ? 25.0 : 30.0,
               waveHeight: isMobile ? 15.0 : 20.0,
               waveSpeed: isMobile ? 0.8 : 1.0,
@@ -405,35 +406,35 @@ export function WavyTilesTheme() {
   }, [isMobile]);
 
   return (
-    <div className="relative w-full h-96 bg-black overflow-hidden rounded-lg">
+    <div className="relative h-96 w-full overflow-hidden rounded-lg bg-black">
       {/* Vanta.js container */}
       <div
-        ref={vantaRef}
         className="absolute inset-0"
+        ref={vantaRef}
         style={{
           width: "100%",
           height: "100%",
         }}
-      ></div>
+      />
 
       {/* Loading indicator */}
       {!vantaLoaded && (
         <div className="absolute inset-0 flex items-center justify-center">
           <div
             className={`${
-              isMobile ? "w-6 h-6" : "w-8 h-8"
-            } border-2 border-white border-t-transparent rounded-full animate-spin`}
-          ></div>
+              isMobile ? "h-6 w-6" : "h-8 w-8"
+            } animate-spin rounded-full border-2 border-white border-t-transparent`}
+          />
         </div>
       )}
 
       {/* Overlay content */}
-      <div className="absolute inset-0 flex items-center justify-center z-10">
+      <div className="absolute inset-0 z-10 flex items-center justify-center">
         <div className="text-center text-white">
           <h2
             className={`${
               isMobile ? "text-2xl" : "text-4xl"
-            } font-bold mb-2 md:mb-4`}
+            } mb-2 font-bold md:mb-4`}
           >
             Interactive Waves
           </h2>

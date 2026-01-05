@@ -1,10 +1,14 @@
 "use client";
 
-import { motion, Transition, Easing as FramerEasing } from "framer-motion";
-import { useEffect, useRef, useState, useMemo } from "react";
+import {
+  type Easing as FramerEasing,
+  motion,
+  type Transition,
+} from "framer-motion";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
-type BlurTextProps = {
+interface BlurTextProps {
   text?: string;
   delay?: number;
   className?: string;
@@ -13,16 +17,16 @@ type BlurTextProps = {
   threshold?: number;
   rootMargin?: string;
   animationFrom?: Record<string, string | number>;
-  animationTo?: Array<Record<string, string | number>>;
+  animationTo?: Record<string, string | number>[];
   easing?: FramerEasing | FramerEasing[];
   onAnimationComplete?: () => void;
   stepDuration?: number;
   autoPlay?: boolean;
-};
+}
 
 const buildKeyframes = (
   from: Record<string, string | number>,
-  steps: Array<Record<string, string | number>>
+  steps: Record<string, string | number>[]
 ): Record<string, Array<string | number>> => {
   const keys = new Set<string>([
     ...Object.keys(from),
@@ -61,7 +65,9 @@ const BlurText: React.FC<BlurTextProps> = ({
   }, []);
 
   useEffect(() => {
-    if (!ref.current || !mounted || autoPlay) return;
+    if (!(ref.current && mounted) || autoPlay) {
+      return;
+    }
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -105,11 +111,8 @@ const BlurText: React.FC<BlurTextProps> = ({
   );
 
   return (
-    <p ref={ref} className={cn("blur-text flex flex-wrap", className)}>
-      {!mounted ? (
-        // Show plain text on server to prevent hydration issues
-        <span className="opacity-100">{text}</span>
-      ) : (
+    <p className={cn("flex flex-wrap blur-text", className)} ref={ref}>
+      {mounted ? (
         elements.map((segment, index) => {
           const animateKeyframes = buildKeyframes(fromSnapshot, toSnapshots);
 
@@ -122,10 +125,9 @@ const BlurText: React.FC<BlurTextProps> = ({
 
           return (
             <motion.span
-              key={index}
-              initial={fromSnapshot}
               animate={inView ? animateKeyframes : fromSnapshot}
-              transition={spanTransition}
+              initial={fromSnapshot}
+              key={index}
               onAnimationComplete={
                 index === elements.length - 1 ? onAnimationComplete : undefined
               }
@@ -133,12 +135,16 @@ const BlurText: React.FC<BlurTextProps> = ({
                 display: "inline-block",
                 willChange: "transform, filter, opacity",
               }}
+              transition={spanTransition}
             >
               {segment === " " ? "\u00A0" : segment}
               {animateBy === "words" && index < elements.length - 1 && "\u00A0"}
             </motion.span>
           );
         })
+      ) : (
+        // Show plain text on server to prevent hydration issues
+        <span className="opacity-100">{text}</span>
       )}
     </p>
   );
@@ -150,76 +156,76 @@ export default BlurText;
 export function BlurTextShowcase() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background p-8">
-      <div className="max-w-7xl mx-auto space-y-16">
+      <div className="mx-auto max-w-7xl space-y-16">
         {/* Hero Section */}
-        <section className="text-center space-y-6">
-          <div className="relative p-12 rounded-3xl bg-card/50 backdrop-blur-sm border border-border/50 shadow-2xl">
+        <section className="space-y-6 text-center">
+          <div className="relative rounded-3xl border border-border/50 bg-card/50 p-12 shadow-2xl backdrop-blur-sm">
             <BlurText
-              text="Beautiful Blur Animations"
               animateBy="words"
-              direction="top"
-              delay={350}
               autoPlay={true}
+              className="font-bold text-4xl text-primary md:text-5xl"
+              delay={350}
+              direction="top"
               stepDuration={0.6}
-              className="text-4xl md:text-5xl font-bold text-primary"
+              text="Beautiful Blur Animations"
             />
           </div>
         </section>
 
         {/* Animation Direction */}
         <section className="space-y-8">
-          <h2 className="text-3xl font-bold text-center text-foreground">
+          <h2 className="text-center font-bold text-3xl text-foreground">
             Animation Directions
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {/* From Top */}
-            <div className="group p-8 rounded-2xl bg-gradient-to-br from-blue-50/50 to-blue-100/30 dark:from-blue-950/30 dark:to-blue-900/20 border border-blue-200/50 dark:border-blue-800/30 hover:shadow-lg transition-all duration-300">
+            <div className="group rounded-2xl border border-blue-200/50 bg-gradient-to-br from-blue-50/50 to-blue-100/30 p-8 transition-all duration-300 hover:shadow-lg dark:border-blue-800/30 dark:from-blue-950/30 dark:to-blue-900/20">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-blue-700 dark:text-blue-300">
+                  <h3 className="font-semibold text-blue-700 text-lg dark:text-blue-300">
                     From Top
                   </h3>
-                  <span className="text-xs bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-2 py-1 rounded">
+                  <span className="rounded bg-blue-100 px-2 py-1 text-blue-700 text-xs dark:bg-blue-900 dark:text-blue-300">
                     ↓
                   </span>
                 </div>
-                <div className="min-h-24 flex items-center justify-center">
+                <div className="flex min-h-24 items-center justify-center">
                   <BlurText
-                    text="Descending from above"
-                    direction="top"
+                    className="font-semibold text-2xl text-blue-600 dark:text-blue-400"
                     delay={250}
+                    direction="top"
                     stepDuration={0.5}
-                    className="text-2xl font-semibold text-blue-600 dark:text-blue-400"
+                    text="Descending from above"
                   />
                 </div>
-                <p className="text-sm text-blue-600 dark:text-blue-400">
+                <p className="text-blue-600 text-sm dark:text-blue-400">
                   Text blurs in from the top downwards
                 </p>
               </div>
             </div>
 
             {/* From Bottom */}
-            <div className="group p-8 rounded-2xl bg-gradient-to-br from-purple-50/50 to-violet-100/30 dark:from-purple-950/30 dark:to-violet-900/20 border border-purple-200/50 dark:border-purple-800/30 hover:shadow-lg transition-all duration-300">
+            <div className="group rounded-2xl border border-purple-200/50 bg-gradient-to-br from-purple-50/50 to-violet-100/30 p-8 transition-all duration-300 hover:shadow-lg dark:border-purple-800/30 dark:from-purple-950/30 dark:to-violet-900/20">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-purple-700 dark:text-purple-300">
+                  <h3 className="font-semibold text-lg text-purple-700 dark:text-purple-300">
                     From Bottom
                   </h3>
-                  <span className="text-xs bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 px-2 py-1 rounded">
+                  <span className="rounded bg-purple-100 px-2 py-1 text-purple-700 text-xs dark:bg-purple-900 dark:text-purple-300">
                     ↑
                   </span>
                 </div>
-                <div className="min-h-24 flex items-center justify-center">
+                <div className="flex min-h-24 items-center justify-center">
                   <BlurText
-                    text="Rising from below"
-                    direction="bottom"
+                    className="font-semibold text-2xl text-purple-600 dark:text-purple-400"
                     delay={250}
+                    direction="bottom"
                     stepDuration={0.5}
-                    className="text-2xl font-semibold text-purple-600 dark:text-purple-400"
+                    text="Rising from below"
                   />
                 </div>
-                <p className="text-sm text-purple-600 dark:text-purple-400">
+                <p className="text-purple-600 text-sm dark:text-purple-400">
                   Text blurs in from the bottom upwards
                 </p>
               </div>
@@ -229,57 +235,57 @@ export function BlurTextShowcase() {
 
         {/* Animation Modes */}
         <section className="space-y-8">
-          <h2 className="text-3xl font-bold text-center text-foreground">
+          <h2 className="text-center font-bold text-3xl text-foreground">
             Animation Modes
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {/* By Words */}
-            <div className="p-8 rounded-2xl bg-gradient-to-br from-green-50/50 to-emerald-100/30 dark:from-green-950/30 dark:to-emerald-900/20 border border-green-200/50 dark:border-green-800/30">
+            <div className="rounded-2xl border border-green-200/50 bg-gradient-to-br from-green-50/50 to-emerald-100/30 p-8 dark:border-green-800/30 dark:from-green-950/30 dark:to-emerald-900/20">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-green-700 dark:text-green-300">
+                  <h3 className="font-semibold text-green-700 text-lg dark:text-green-300">
                     Word by Word
                   </h3>
-                  <span className="text-xs bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 px-2 py-1 rounded">
+                  <span className="rounded bg-green-100 px-2 py-1 text-green-700 text-xs dark:bg-green-900 dark:text-green-300">
                     WORDS
                   </span>
                 </div>
-                <div className="min-h-24 flex items-center justify-center">
+                <div className="flex min-h-24 items-center justify-center">
                   <BlurText
-                    text="Each word appears sequentially"
                     animateBy="words"
+                    className="font-semibold text-2xl text-green-600 dark:text-green-400"
                     delay={300}
                     stepDuration={0.5}
-                    className="text-2xl font-semibold text-green-600 dark:text-green-400"
+                    text="Each word appears sequentially"
                   />
                 </div>
-                <p className="text-sm text-green-600 dark:text-green-400">
+                <p className="text-green-600 text-sm dark:text-green-400">
                   Animates one word at a time
                 </p>
               </div>
             </div>
 
             {/* By Letters */}
-            <div className="p-8 rounded-2xl bg-gradient-to-br from-orange-50/50 to-amber-100/30 dark:from-orange-950/30 dark:to-amber-900/20 border border-orange-200/50 dark:border-orange-800/30">
+            <div className="rounded-2xl border border-orange-200/50 bg-gradient-to-br from-orange-50/50 to-amber-100/30 p-8 dark:border-orange-800/30 dark:from-orange-950/30 dark:to-amber-900/20">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-orange-700 dark:text-orange-300">
+                  <h3 className="font-semibold text-lg text-orange-700 dark:text-orange-300">
                     Letter by Letter
                   </h3>
-                  <span className="text-xs bg-orange-100 dark:bg-orange-900 text-orange-700 dark:text-orange-300 px-2 py-1 rounded">
+                  <span className="rounded bg-orange-100 px-2 py-1 text-orange-700 text-xs dark:bg-orange-900 dark:text-orange-300">
                     LETTERS
                   </span>
                 </div>
-                <div className="min-h-24 flex items-center justify-center">
+                <div className="flex min-h-24 items-center justify-center">
                   <BlurText
-                    text="Character by character"
                     animateBy="letters"
+                    className="font-semibold text-2xl text-orange-600 dark:text-orange-400"
                     delay={50}
-                    className="text-2xl font-semibold text-orange-600 dark:text-orange-400"
+                    text="Character by character"
                   />
                 </div>
-                <p className="text-sm text-orange-600 dark:text-orange-400">
+                <p className="text-orange-600 text-sm dark:text-orange-400">
                   Animates one letter at a time
                 </p>
               </div>
@@ -289,66 +295,62 @@ export function BlurTextShowcase() {
 
         {/* Speed Variations */}
         <section className="space-y-8">
-          <h2 className="text-3xl font-bold text-center text-foreground">
+          <h2 className="text-center font-bold text-3xl text-foreground">
             Speed Variations
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
             {/* Fast */}
-            <div className="p-6 rounded-2xl bg-card border border-border">
+            <div className="rounded-2xl border border-border bg-card p-6">
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-foreground">
-                  Fast
-                </h3>
-                <div className="min-h-20 flex items-center justify-center">
+                <h3 className="font-semibold text-foreground text-lg">Fast</h3>
+                <div className="flex min-h-20 items-center justify-center">
                   <BlurText
-                    text="Quick and snappy!"
+                    className="font-semibold text-red-500 text-xl"
                     delay={50}
                     stepDuration={0.2}
-                    className="text-xl font-semibold text-red-500"
+                    text="Quick and snappy!"
                   />
                 </div>
-                <div className="text-sm text-muted-foreground font-mono bg-muted p-2 rounded">
+                <div className="rounded bg-muted p-2 font-mono text-muted-foreground text-sm">
                   delay: 50ms
                 </div>
               </div>
             </div>
 
             {/* Medium */}
-            <div className="p-6 rounded-2xl bg-card border border-border">
+            <div className="rounded-2xl border border-border bg-card p-6">
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-foreground">
+                <h3 className="font-semibold text-foreground text-lg">
                   Medium
                 </h3>
-                <div className="min-h-20 flex items-center justify-center">
+                <div className="flex min-h-20 items-center justify-center">
                   <BlurText
-                    text="Balanced timing"
+                    className="font-semibold text-xl text-yellow-500"
                     delay={150}
                     stepDuration={0.35}
-                    className="text-xl font-semibold text-yellow-500"
+                    text="Balanced timing"
                   />
                 </div>
-                <div className="text-sm text-muted-foreground font-mono bg-muted p-2 rounded">
+                <div className="rounded bg-muted p-2 font-mono text-muted-foreground text-sm">
                   delay: 150ms
                 </div>
               </div>
             </div>
 
             {/* Slow */}
-            <div className="p-6 rounded-2xl bg-card border border-border">
+            <div className="rounded-2xl border border-border bg-card p-6">
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-foreground">
-                  Slow
-                </h3>
-                <div className="min-h-20 flex items-center justify-center">
+                <h3 className="font-semibold text-foreground text-lg">Slow</h3>
+                <div className="flex min-h-20 items-center justify-center">
                   <BlurText
-                    text="Smooth elegance"
+                    className="font-semibold text-cyan-500 text-xl"
                     delay={300}
                     stepDuration={0.5}
-                    className="text-xl font-semibold text-cyan-500"
+                    text="Smooth elegance"
                   />
                 </div>
-                <div className="text-sm text-muted-foreground font-mono bg-muted p-2 rounded">
+                <div className="rounded bg-muted p-2 font-mono text-muted-foreground text-sm">
                   delay: 300ms
                 </div>
               </div>
@@ -358,28 +360,28 @@ export function BlurTextShowcase() {
 
         {/* Use Cases */}
         <section className="space-y-8">
-          <h2 className="text-3xl font-bold text-center text-foreground">
+          <h2 className="text-center font-bold text-3xl text-foreground">
             Real-World Examples
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
             {/* Hero Title */}
-            <div className="p-8 rounded-2xl bg-card border border-border">
+            <div className="rounded-2xl border border-border bg-card p-8">
               <div className="space-y-4">
-                <h3 className="text-xl font-semibold text-foreground">
+                <h3 className="font-semibold text-foreground text-xl">
                   Hero Title
                 </h3>
-                <div className="min-h-32 flex items-center justify-center">
+                <div className="flex min-h-32 items-center justify-center">
                   <BlurText
-                    text="Welcome to the Future"
                     animateBy="words"
-                    direction="top"
+                    className="font-bold text-3xl text-foreground"
                     delay={300}
+                    direction="top"
                     stepDuration={0.5}
-                    className="text-3xl font-bold text-foreground"
+                    text="Welcome to the Future"
                   />
                 </div>
-                <div className="text-sm text-muted-foreground font-mono bg-muted p-3 rounded">
+                <div className="rounded bg-muted p-3 font-mono text-muted-foreground text-sm">
                   {`<BlurText 
   text="Welcome to the Future"
   animateBy="words"
@@ -391,21 +393,21 @@ export function BlurTextShowcase() {
             </div>
 
             {/* Subtitle */}
-            <div className="p-8 rounded-2xl bg-card border border-border">
+            <div className="rounded-2xl border border-border bg-card p-8">
               <div className="space-y-4">
-                <h3 className="text-xl font-semibold text-foreground">
+                <h3 className="font-semibold text-foreground text-xl">
                   Subtitle Effect
                 </h3>
-                <div className="min-h-32 flex items-center justify-center">
+                <div className="flex min-h-32 items-center justify-center">
                   <BlurText
-                    text="Building amazing experiences with blur animations"
                     animateBy="letters"
-                    direction="bottom"
+                    className="text-center text-lg text-muted-foreground"
                     delay={30}
-                    className="text-lg text-muted-foreground text-center"
+                    direction="bottom"
+                    text="Building amazing experiences with blur animations"
                   />
                 </div>
-                <div className="text-sm text-muted-foreground font-mono bg-muted p-3 rounded">
+                <div className="rounded bg-muted p-3 font-mono text-muted-foreground text-sm">
                   {`<BlurText 
   text="Building amazing experiences..."
   animateBy="letters"
@@ -416,22 +418,22 @@ export function BlurTextShowcase() {
             </div>
 
             {/* Call to Action */}
-            <div className="p-8 rounded-2xl bg-card border border-border">
+            <div className="rounded-2xl border border-border bg-card p-8">
               <div className="space-y-4">
-                <h3 className="text-xl font-semibold text-foreground">
+                <h3 className="font-semibold text-foreground text-xl">
                   Call to Action
                 </h3>
-                <div className="min-h-32 flex items-center justify-center">
+                <div className="flex min-h-32 items-center justify-center">
                   <BlurText
-                    text="Get Started Today! 🚀"
                     animateBy="words"
-                    direction="top"
+                    className="font-bold text-2xl text-primary"
                     delay={150}
+                    direction="top"
                     stepDuration={0.3}
-                    className="text-2xl font-bold text-primary"
+                    text="Get Started Today! 🚀"
                   />
                 </div>
-                <div className="text-sm text-muted-foreground font-mono bg-muted p-3 rounded">
+                <div className="rounded bg-muted p-3 font-mono text-muted-foreground text-sm">
                   {`<BlurText 
   text="Get Started Today! 🚀"
   animateBy="words"
@@ -442,21 +444,21 @@ export function BlurTextShowcase() {
             </div>
 
             {/* Feature Highlight */}
-            <div className="p-8 rounded-2xl bg-card border border-border">
+            <div className="rounded-2xl border border-border bg-card p-8">
               <div className="space-y-4">
-                <h3 className="text-xl font-semibold text-foreground">
+                <h3 className="font-semibold text-foreground text-xl">
                   Feature Highlight
                 </h3>
-                <div className="min-h-32 flex items-center justify-center">
+                <div className="flex min-h-32 items-center justify-center">
                   <BlurText
-                    text="✨ Smooth • Fast • Beautiful ✨"
                     animateBy="letters"
-                    direction="bottom"
+                    className="font-medium text-pink-500 text-xl"
                     delay={40}
-                    className="text-xl font-medium text-pink-500"
+                    direction="bottom"
+                    text="✨ Smooth • Fast • Beautiful ✨"
                   />
                 </div>
-                <div className="text-sm text-muted-foreground font-mono bg-muted p-3 rounded">
+                <div className="rounded bg-muted p-3 font-mono text-muted-foreground text-sm">
                   {`<BlurText 
   text="✨ Smooth • Fast • Beautiful ✨"
   animateBy="letters"
@@ -471,17 +473,17 @@ export function BlurTextShowcase() {
   );
 }
 
-// Theme Component for Documentation  
+// Theme Component for Documentation
 export function BlurTextTheme() {
   return (
     <BlurText
-      text="Beautiful blur-in text animations"
       animateBy="words"
-      direction="top"
-      delay={300}
       autoPlay={true}
+      className="font-medium text-foreground text-lg"
+      delay={300}
+      direction="top"
       stepDuration={0.5}
-      className="text-foreground font-medium text-lg"
+      text="Beautiful blur-in text animations"
     />
   );
 }

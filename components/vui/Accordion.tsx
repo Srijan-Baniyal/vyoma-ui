@@ -1,8 +1,8 @@
 "use client";
 
+import { AnimatePresence, motion } from "motion/react";
 import type React from "react";
 import { useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
 
 /**
@@ -68,9 +68,10 @@ export default function Accordion({
 
   return (
     <motion.div
+      animate={{ opacity: 1, y: 0, scale: 1 }}
       className={cn(
         // Mobile-first responsive design
-        "w-full max-w-none mx-auto rounded-xl border border-border/50 bg-card/50 backdrop-blur-sm shadow-lg overflow-hidden",
+        "mx-auto w-full max-w-none overflow-hidden rounded-xl border border-border/50 bg-card/50 shadow-lg backdrop-blur-sm",
         // Tablet and up
         "sm:max-w-[90vw] sm:rounded-2xl",
         // Desktop
@@ -78,7 +79,6 @@ export default function Accordion({
         className
       )}
       initial={{ opacity: 0, y: 20, scale: 0.98 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
     >
       {items.map((item, index) => {
@@ -88,17 +88,17 @@ export default function Accordion({
 
         return (
           <motion.div
-            key={item.id}
-            className="relative border-b border-border/30 last:border-b-0"
-            initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
+            className="relative border-border/30 border-b last:border-b-0"
+            initial={{ opacity: 0 }}
+            key={item.id}
             transition={{ delay: index * 0.1 + 0.2, duration: 0.3 }}
           >
             {/* Decorative gradient line - hidden on mobile for cleaner look */}
             <motion.div
-              className="absolute left-0 top-0 h-px w-full bg-gradient-to-r from-transparent via-primary/60 to-transparent hidden sm:block"
-              initial={{ scaleX: 0, opacity: 0 }}
               animate={{ scaleX: 1, opacity: 1 }}
+              className="absolute top-0 left-0 hidden h-px w-full bg-gradient-to-r from-transparent via-primary/60 to-transparent sm:block"
+              initial={{ scaleX: 0, opacity: 0 }}
               transition={{
                 delay: index * 0.15 + 0.4,
                 duration: 0.8,
@@ -108,9 +108,9 @@ export default function Accordion({
 
             {/* Vertical accent line - simplified for mobile */}
             <motion.div
-              className="absolute left-2 sm:left-4 top-0 w-0.5 h-full bg-gradient-to-b from-primary/30 via-primary/50 to-primary/30 rounded-full"
-              initial={{ scaleY: 0, opacity: 0 }}
               animate={{ scaleY: 1, opacity: 1 }}
+              className="absolute top-0 left-2 h-full w-0.5 rounded-full bg-gradient-to-b from-primary/30 via-primary/50 to-primary/30 sm:left-4"
+              initial={{ scaleY: 0, opacity: 0 }}
               transition={{
                 delay: index * 0.15 + 0.6,
                 duration: 0.6,
@@ -120,37 +120,38 @@ export default function Accordion({
 
             <h3 className="relative">
               <motion.button
-                id={buttonId}
-                type="button"
+                animate={{ opacity: 1, x: 0 }}
+                aria-controls={panelId}
+                aria-expanded={isOpen}
                 className={cn(
-                  "group relative w-full flex items-center justify-between gap-3",
+                  "group relative flex w-full items-center justify-between gap-3",
                   // Mobile-optimized touch targets and spacing
-                  "py-5 pl-6 pr-4 min-h-[60px]",
+                  "min-h-[60px] py-5 pr-4 pl-6",
                   // Tablet and up
-                  "sm:py-6 sm:pl-10 sm:pr-6 sm:min-h-[72px]",
+                  "sm:min-h-[72px] sm:py-6 sm:pr-6 sm:pl-10",
                   // Desktop
-                  "lg:pl-12 lg:pr-8",
+                  "lg:pr-8 lg:pl-12",
                   "text-left font-medium text-foreground",
                   "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
                   "transition-all duration-200 hover:bg-muted/30",
                   // Mobile-specific active states
-                  "active:bg-muted/50 active:scale-[0.99]"
+                  "active:scale-[0.99] active:bg-muted/50"
                 )}
-                aria-expanded={isOpen}
-                aria-controls={panelId}
-                onClick={() => toggleItem(item.id)}
+                id={buttonId}
                 initial={{ opacity: 0, x: -16 }}
-                animate={{ opacity: 1, x: 0 }}
+                onClick={() => toggleItem(item.id)}
                 transition={{
                   delay: index * 0.15 + 0.8,
                   duration: 0.4,
                   ease: [0.25, 0.46, 0.45, 0.94],
                 }}
+                type="button"
                 whileTap={{ scale: 0.98 }}
               >
                 <motion.span
+                  animate={{ opacity: 1, y: 0 }}
                   className={cn(
-                    "font-semibold tracking-tight flex-1 min-w-0 pr-2",
+                    "min-w-0 flex-1 pr-2 font-semibold tracking-tight",
                     // Mobile-first typography
                     "text-base leading-snug",
                     // Tablet and up
@@ -159,7 +160,6 @@ export default function Accordion({
                     "lg:text-xl"
                   )}
                   initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
                   transition={{
                     delay: index * 0.15 + 1.0,
                     duration: 0.3,
@@ -170,19 +170,19 @@ export default function Accordion({
                 </motion.span>
 
                 <motion.div
-                  className={cn(
-                    "relative flex items-center justify-center rounded-full bg-primary/10 group-hover:bg-primary/20 group-active:bg-primary/30 transition-colors duration-200 flex-shrink-0",
-                    // Mobile-optimized touch target
-                    "w-10 h-10 min-w-[40px]",
-                    // Tablet and up
-                    "sm:w-12 sm:h-12 sm:min-w-[48px]"
-                  )}
-                  initial={{ opacity: 0, scale: 0, rotate: -90 }}
                   animate={{
                     opacity: 1,
                     scale: 1,
                     rotate: isOpen ? 180 : 0,
                   }}
+                  className={cn(
+                    "relative flex flex-shrink-0 items-center justify-center rounded-full bg-primary/10 transition-colors duration-200 group-hover:bg-primary/20 group-active:bg-primary/30",
+                    // Mobile-optimized touch target
+                    "h-10 w-10 min-w-[40px]",
+                    // Tablet and up
+                    "sm:h-12 sm:w-12 sm:min-w-[48px]"
+                  )}
+                  initial={{ opacity: 0, scale: 0, rotate: -90 }}
                   transition={{
                     opacity: { delay: index * 0.15 + 1.2, duration: 0.2 },
                     scale: {
@@ -196,43 +196,44 @@ export default function Accordion({
                   whileTap={{ scale: 0.9 }}
                 >
                   <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={2.5}
-                    stroke="currentColor"
                     className="h-5 w-5 text-primary"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2.5}
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
+                    <title>Toggle accordion</title>
                     <path
+                      d="M19.5 8.25l-7.5 7.5-7.5-7.5"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      d="M19.5 8.25l-7.5 7.5-7.5-7.5"
                     />
                   </svg>
                 </motion.div>
               </motion.button>
             </h3>
 
-            <div className="overflow-hidden w-full">
+            <div className="w-full overflow-hidden">
               <AnimatePresence initial={false}>
                 {isOpen && (
                   <motion.div
-                    key="content"
-                    id={panelId}
-                    role="region"
+                    animate={{ opacity: 1, y: 0, height: "auto" }}
                     aria-labelledby={buttonId}
                     className={cn(
-                      "relative w-full box-border",
+                      "relative box-border w-full",
                       // Mobile-optimized spacing
-                      "pl-6 pr-4 pb-6 pt-2",
+                      "pt-2 pr-4 pb-6 pl-6",
                       // Tablet and up
-                      "sm:pl-10 sm:pr-6 sm:pb-8 sm:pt-3",
+                      "sm:pt-3 sm:pr-6 sm:pb-8 sm:pl-10",
                       // Desktop
-                      "lg:pl-12 lg:pr-8"
+                      "lg:pr-8 lg:pl-12"
                     )}
-                    initial={{ opacity: 0, y: -10, height: 0 }}
-                    animate={{ opacity: 1, y: 0, height: "auto" }}
                     exit={{ opacity: 0, y: -5, height: 0 }}
+                    id={panelId}
+                    initial={{ opacity: 0, y: -10, height: 0 }}
+                    key="content"
+                    role="region"
                     transition={{
                       duration: 0.3,
                       ease: [0.25, 0.46, 0.45, 0.94],
@@ -240,15 +241,15 @@ export default function Accordion({
                     }}
                   >
                     {/* Vertical accent line for content */}
-                    <div className="absolute left-2 sm:left-4 top-0 w-0.5 h-full bg-gradient-to-b from-primary/40 to-transparent rounded-full" />
+                    <div className="absolute top-0 left-2 h-full w-0.5 rounded-full bg-gradient-to-b from-primary/40 to-transparent sm:left-4" />
 
                     <div
                       className={cn(
-                        "text-muted-foreground leading-relaxed w-full overflow-hidden",
+                        "w-full overflow-hidden text-muted-foreground leading-relaxed",
                         // Mobile-first content spacing
-                        "pl-4 text-sm min-h-[80px]",
+                        "min-h-[80px] pl-4 text-sm",
                         // Tablet and up
-                        "sm:pl-6 sm:text-base sm:min-h-[100px]",
+                        "sm:min-h-[100px] sm:pl-6 sm:text-base",
                         // Desktop
                         "lg:text-base"
                       )}
@@ -271,11 +272,13 @@ export default function Accordion({
 export function AccordionShowcase() {
   return (
     <div className="min-h-1.5 bg-gradient-to-br from-background via-muted/20 to-background p-4 sm:p-8">
-      <div className="max-w-5xl mx-auto space-y-8 sm:space-y-16">
-        <div className="text-center space-y-4 sm:space-y-6">
-          <div className="relative p-4 sm:p-8 rounded-2xl sm:rounded-3xl bg-card/30 backdrop-blur-sm border border-border/50 shadow-2xl">
+      <div className="mx-auto max-w-5xl space-y-8 sm:space-y-16">
+        <div className="space-y-4 text-center sm:space-y-6">
+          <div className="relative rounded-2xl border border-border/50 bg-card/30 p-4 shadow-2xl backdrop-blur-sm sm:rounded-3xl sm:p-8">
             <div className="flex justify-center">
               <Accordion
+                allowMultiple={true}
+                defaultOpenIds={[]}
                 items={[
                   {
                     id: "demo-1",
@@ -288,13 +291,13 @@ export function AccordionShowcase() {
                           design that scales beautifully across all devices.
                         </p>
                         <div className="flex flex-wrap gap-2">
-                          <span className="px-2 py-1 sm:px-3 bg-primary/10 text-primary rounded-full text-xs sm:text-sm font-medium">
+                          <span className="rounded-full bg-primary/10 px-2 py-1 font-medium text-primary text-xs sm:px-3 sm:text-sm">
                             Touch Optimized
                           </span>
-                          <span className="px-2 py-1 sm:px-3 bg-primary/10 text-primary rounded-full text-xs sm:text-sm font-medium">
+                          <span className="rounded-full bg-primary/10 px-2 py-1 font-medium text-primary text-xs sm:px-3 sm:text-sm">
                             Responsive
                           </span>
-                          <span className="px-2 py-1 sm:px-3 bg-primary/10 text-primary rounded-full text-xs sm:text-sm font-medium">
+                          <span className="rounded-full bg-primary/10 px-2 py-1 font-medium text-primary text-xs sm:px-3 sm:text-sm">
                             Fast
                           </span>
                         </div>
@@ -311,8 +314,8 @@ export function AccordionShowcase() {
                           devices with reduced motion complexity and faster
                           transitions for better user experience.
                         </p>
-                        <div className="bg-muted/50 rounded-lg p-3 sm:p-4 border">
-                          <code className="text-xs sm:text-sm text-foreground/80 break-all">
+                        <div className="rounded-lg border bg-muted/50 p-3 sm:p-4">
+                          <code className="break-all text-foreground/80 text-xs sm:text-sm">
                             {"duration: 0.3s + spring(200)"}
                           </code>
                         </div>
@@ -329,22 +332,22 @@ export function AccordionShowcase() {
                           mobile-specific interactions for the best possible
                           touch experience.
                         </p>
-                        <ul className="space-y-2 ml-2 sm:ml-4">
+                        <ul className="ml-2 space-y-2 sm:ml-4">
                           <li className="flex items-center gap-2">
-                            <div className="w-1.5 h-1.5 bg-primary rounded-full flex-shrink-0" />
-                            <span className="text-xs sm:text-sm text-muted-foreground">
+                            <div className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-primary" />
+                            <span className="text-muted-foreground text-xs sm:text-sm">
                               60px minimum touch targets
                             </span>
                           </li>
                           <li className="flex items-center gap-2">
-                            <div className="w-1.5 h-1.5 bg-primary rounded-full flex-shrink-0" />
-                            <span className="text-xs sm:text-sm text-muted-foreground">
+                            <div className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-primary" />
+                            <span className="text-muted-foreground text-xs sm:text-sm">
                               Active state feedback
                             </span>
                           </li>
                           <li className="flex items-center gap-2">
-                            <div className="w-1.5 h-1.5 bg-primary rounded-full flex-shrink-0" />
-                            <span className="text-xs sm:text-sm text-muted-foreground">
+                            <div className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-primary" />
+                            <span className="text-muted-foreground text-xs sm:text-sm">
                               Optimized spacing
                             </span>
                           </li>
@@ -353,8 +356,6 @@ export function AccordionShowcase() {
                     ),
                   },
                 ]}
-                defaultOpenIds={[]}
-                allowMultiple={true}
               />
             </div>
           </div>
@@ -368,6 +369,7 @@ export function AccordionTheme() {
   return (
     <div className="p-4 sm:p-0">
       <Accordion
+        defaultOpenIds={[]}
         items={[
           {
             id: "demo-1",
@@ -380,13 +382,13 @@ export function AccordionTheme() {
                   perfectly on any device size.
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  <span className="px-2 py-1 sm:px-3 bg-primary/10 text-primary rounded-full text-xs sm:text-sm font-medium">
+                  <span className="rounded-full bg-primary/10 px-2 py-1 font-medium text-primary text-xs sm:px-3 sm:text-sm">
                     Touch Friendly
                   </span>
-                  <span className="px-2 py-1 sm:px-3 bg-primary/10 text-primary rounded-full text-xs sm:text-sm font-medium">
+                  <span className="rounded-full bg-primary/10 px-2 py-1 font-medium text-primary text-xs sm:px-3 sm:text-sm">
                     Responsive
                   </span>
-                  <span className="px-2 py-1 sm:px-3 bg-primary/10 text-primary rounded-full text-xs sm:text-sm font-medium">
+                  <span className="rounded-full bg-primary/10 px-2 py-1 font-medium text-primary text-xs sm:px-3 sm:text-sm">
                     Accessible
                   </span>
                 </div>
@@ -403,8 +405,8 @@ export function AccordionTheme() {
                   performance on mobile devices, with reduced complexity where
                   it matters most.
                 </p>
-                <div className="bg-muted/50 rounded-lg p-3 sm:p-4 border">
-                  <code className="text-xs sm:text-sm text-foreground/80">
+                <div className="rounded-lg border bg-muted/50 p-3 sm:p-4">
+                  <code className="text-foreground/80 text-xs sm:text-sm">
                     {"mobile: { duration: 0.3, spring: 200 }"}
                   </code>
                 </div>
@@ -420,22 +422,22 @@ export function AccordionTheme() {
                   Full ARIA support with mobile-optimized focus management,
                   larger touch targets, and improved screen reader experience.
                 </p>
-                <ul className="space-y-2 ml-2 sm:ml-4">
+                <ul className="ml-2 space-y-2 sm:ml-4">
                   <li className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-primary rounded-full flex-shrink-0" />
-                    <span className="text-xs sm:text-sm text-muted-foreground">
+                    <div className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-primary" />
+                    <span className="text-muted-foreground text-xs sm:text-sm">
                       WCAG 2.1 compliant touch targets
                     </span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-primary rounded-full flex-shrink-0" />
-                    <span className="text-xs sm:text-sm text-muted-foreground">
+                    <div className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-primary" />
+                    <span className="text-muted-foreground text-xs sm:text-sm">
                       Enhanced focus indicators
                     </span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-primary rounded-full flex-shrink-0" />
-                    <span className="text-xs sm:text-sm text-muted-foreground">
+                    <div className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-primary" />
+                    <span className="text-muted-foreground text-xs sm:text-sm">
                       Screen reader optimized
                     </span>
                   </li>
@@ -444,7 +446,6 @@ export function AccordionTheme() {
             ),
           },
         ]}
-        defaultOpenIds={[]}
       />
     </div>
   );

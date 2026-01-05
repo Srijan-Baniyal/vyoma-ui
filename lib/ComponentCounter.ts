@@ -1,11 +1,14 @@
-import { componentMap, ComponentCategoryMap } from "@/data/ComponentMapping";
+import {
+  type ComponentCategoryMap,
+  componentMap,
+} from "@/data/ComponentMapping";
 
-type FilterOptions = {
+interface FilterOptions {
   excludeCategories?: string[];
   includeCategories?: string[];
   minComponentsInCategory?: number;
   maxComponentsInCategory?: number;
-};
+}
 
 export function countComponents(
   options?: FilterOptions,
@@ -24,12 +27,18 @@ export function countComponents(
   Object.entries(mapToUse).forEach(([categoryName, components]) => {
     const componentCount = components.length;
 
-    if (includeCategories && !includeCategories.includes(categoryName)) return;
-    if (excludeCategories.includes(categoryName)) return;
-    if (minComponentsInCategory && componentCount < minComponentsInCategory)
+    if (includeCategories && !includeCategories.includes(categoryName)) {
       return;
-    if (maxComponentsInCategory && componentCount > maxComponentsInCategory)
+    }
+    if (excludeCategories.includes(categoryName)) {
       return;
+    }
+    if (minComponentsInCategory && componentCount < minComponentsInCategory) {
+      return;
+    }
+    if (maxComponentsInCategory && componentCount > maxComponentsInCategory) {
+      return;
+    }
 
     totalCount += componentCount;
   });
@@ -61,12 +70,18 @@ export function getComponentCountBreakdown(
   Object.entries(mapToUse).forEach(([categoryName, components]) => {
     const componentCount = components.length;
 
-    if (includeCategories && !includeCategories.includes(categoryName)) return;
-    if (excludeCategories.includes(categoryName)) return;
-    if (minComponentsInCategory && componentCount < minComponentsInCategory)
+    if (includeCategories && !includeCategories.includes(categoryName)) {
       return;
-    if (maxComponentsInCategory && componentCount > maxComponentsInCategory)
+    }
+    if (excludeCategories.includes(categoryName)) {
       return;
+    }
+    if (minComponentsInCategory && componentCount < minComponentsInCategory) {
+      return;
+    }
+    if (maxComponentsInCategory && componentCount > maxComponentsInCategory) {
+      return;
+    }
 
     breakdown[categoryName] = greatestIntegerFunction(componentCount);
   });
@@ -107,7 +122,7 @@ export function getDynamicStats(
     ),
     smallestCategory: Object.entries(breakdown).reduce(
       (min, [name, count]) => (count < min.count ? { name, count } : min),
-      { name: "", count: Infinity }
+      { name: "", count: Number.POSITIVE_INFINITY }
     ),
   };
 }

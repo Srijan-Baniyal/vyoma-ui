@@ -1,11 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { Download, Heart, User, X } from "lucide-react";
 import Image from "next/image";
-import { Heart, Download, X, User } from "lucide-react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/buttonShadcn";
-import React from "react";
 
 // Static Unsplash images - replace these URLs with your preferred images
 const staticImages = [
@@ -240,49 +239,51 @@ function ImageDialog({
   // Reset image loaded state when image changes
   React.useEffect(() => {
     setImageLoaded(false);
-  }, [image]);
+  }, []);
 
-  if (!image) return null;
+  if (!image) {
+    return null;
+  }
 
   return (
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-2 backdrop-blur-md sm:p-4"
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.3, ease: "easeOut" }}
-          className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/90 backdrop-blur-md"
+          initial={{ opacity: 0 }}
           onClick={onClose}
+          transition={{ duration: 0.3, ease: "easeOut" }}
         >
           <motion.div
-            initial={{ scale: 0.5, opacity: 0, rotateX: -15 }}
             animate={{ scale: 1, opacity: 1, rotateX: 0 }}
+            className="relative max-h-[95vh] w-full max-w-5xl overflow-hidden rounded-2xl border border-white/10 bg-white shadow-2xl sm:rounded-3xl dark:bg-gray-900"
             exit={{ scale: 0.5, opacity: 0, rotateX: 15 }}
+            initial={{ scale: 0.5, opacity: 0, rotateX: -15 }}
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              transformStyle: "preserve-3d",
+              perspective: "1000px",
+            }}
             transition={{
               type: "spring",
               duration: 0.6,
               bounce: 0.3,
               ease: "easeOut",
             }}
-            className="relative max-w-5xl max-h-[95vh] w-full bg-white dark:bg-gray-900 rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border border-white/10"
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              transformStyle: "preserve-3d",
-              perspective: "1000px",
-            }}
           >
             {/* Enhanced Close Button */}
             <motion.button
-              initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              transition={{ delay: 0.2 }}
-              onClick={onClose}
-              className="absolute top-2 right-2 sm:top-4 sm:right-4 z-20 p-2 sm:p-3 bg-black/30 hover:bg-black/50 text-white rounded-full backdrop-blur-lg transition-all duration-200 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-white/50"
               aria-label="Close dialog"
+              className="absolute top-2 right-2 z-20 rounded-full bg-black/30 p-2 text-white backdrop-blur-lg transition-all duration-200 hover:scale-110 hover:bg-black/50 focus:outline-none focus:ring-2 focus:ring-white/50 sm:top-4 sm:right-4 sm:p-3"
+              exit={{ opacity: 0, scale: 0.8 }}
+              initial={{ opacity: 0, scale: 0.8 }}
+              onClick={onClose}
+              transition={{ delay: 0.2 }}
             >
-              <X className="w-4 h-4 sm:w-5 sm:h-5" />
+              <X className="h-4 w-4 sm:h-5 sm:w-5" />
             </motion.button>
 
             {/* Image Container with Loading State */}
@@ -291,69 +292,69 @@ function ImageDialog({
                 <div className="absolute inset-0 flex items-center justify-center">
                   <motion.div
                     animate={{ rotate: 360 }}
+                    className="h-6 w-6 rounded-full border-2 border-gray-300 border-t-blue-500 sm:h-8 sm:w-8 dark:border-gray-600"
                     transition={{
                       duration: 1,
                       repeat: Number.POSITIVE_INFINITY,
                       ease: "linear",
                     }}
-                    className="w-6 h-6 sm:w-8 sm:h-8 border-2 border-gray-300 dark:border-gray-600 border-t-blue-500 rounded-full"
                   />
                 </div>
               )}
 
               <motion.div
-                initial={{ opacity: 0, scale: 1.1 }}
                 animate={{ opacity: imageLoaded ? 1 : 0, scale: 1 }}
+                initial={{ opacity: 0, scale: 1.1 }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
               >
                 <Image
-                  src={image.url || "/placeholder.svg"}
                   alt={image.alt}
-                  fill
                   className="object-cover"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 90vw, 1200px"
-                  priority
+                  fill
                   onLoad={() => setImageLoaded(true)}
+                  priority
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 90vw, 1200px"
+                  src={image.url || "/placeholder.svg"}
                 />
               </motion.div>
 
               {/* Image Overlay Gradient */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
             </div>
 
             {/* Enhanced Image Info */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
+              className="border-gray-100 border-t bg-white p-4 sm:p-6 lg:p-8 dark:border-gray-800 dark:bg-gray-900"
+              initial={{ opacity: 0, y: 20 }}
               transition={{ delay: 0.3, duration: 0.4 }}
-              className="p-4 sm:p-6 lg:p-8 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800"
             >
-              <div className="flex flex-col sm:flex-row sm:items-start justify-between mb-4 sm:mb-6 gap-4">
+              <div className="mb-4 flex flex-col justify-between gap-4 sm:mb-6 sm:flex-row sm:items-start">
                 <div className="flex-1">
                   <motion.h3
-                    initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
+                    className="mb-2 font-bold text-gray-900 text-lg leading-tight sm:mb-3 sm:text-xl lg:text-2xl dark:text-white"
+                    initial={{ opacity: 0, x: -20 }}
                     transition={{ delay: 0.4 }}
-                    className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 dark:text-white mb-2 sm:mb-3 leading-tight"
                   >
                     {image.alt}
                   </motion.h3>
 
                   <motion.div
-                    initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
+                    className="mb-4 flex items-center text-gray-600 dark:text-gray-300"
+                    initial={{ opacity: 0, x: -20 }}
                     transition={{ delay: 0.5 }}
-                    className="flex items-center text-gray-600 dark:text-gray-300 mb-4"
                   >
-                    <div className="flex items-center bg-gray-100 dark:bg-gray-800 px-2 sm:px-3 py-1 sm:py-2 rounded-full text-sm">
-                      <User className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                    <div className="flex items-center rounded-full bg-gray-100 px-2 py-1 text-sm sm:px-3 sm:py-2 dark:bg-gray-800">
+                      <User className="mr-1 h-3 w-3 sm:mr-2 sm:h-4 sm:w-4" />
                       <span className="font-semibold">
                         {image.photographer}
                       </span>
-                      <span className="mx-1 sm:mx-2 text-gray-400 dark:text-gray-500">
+                      <span className="mx-1 text-gray-400 sm:mx-2 dark:text-gray-500">
                         •
                       </span>
-                      <span className="text-xs sm:text-sm opacity-75">
+                      <span className="text-xs opacity-75 sm:text-sm">
                         @{image.username}
                       </span>
                     </div>
@@ -361,42 +362,42 @@ function ImageDialog({
                 </div>
               </div>
 
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
                 <motion.div
-                  initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6 }}
                   className="flex items-center space-x-4 sm:space-x-8"
+                  initial={{ opacity: 0, y: 10 }}
+                  transition={{ delay: 0.6 }}
                 >
-                  <div className="flex items-center bg-red-50 dark:bg-red-900/20 px-3 sm:px-4 py-1 sm:py-2 rounded-full">
-                    <Heart className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2 text-red-500" />
-                    <span className="font-bold text-sm sm:text-base text-gray-900 dark:text-white">
+                  <div className="flex items-center rounded-full bg-red-50 px-3 py-1 sm:px-4 sm:py-2 dark:bg-red-900/20">
+                    <Heart className="mr-1 h-4 w-4 text-red-500 sm:mr-2 sm:h-5 sm:w-5" />
+                    <span className="font-bold text-gray-900 text-sm sm:text-base dark:text-white">
                       {image.likes.toLocaleString()}
                     </span>
-                    <span className="ml-1 text-xs sm:text-sm text-gray-500 dark:text-gray-400 hidden sm:inline">
+                    <span className="ml-1 hidden text-gray-500 text-xs sm:inline sm:text-sm dark:text-gray-400">
                       likes
                     </span>
                   </div>
 
-                  <div className="flex items-center bg-blue-50 dark:bg-blue-900/20 px-3 sm:px-4 py-1 sm:py-2 rounded-full">
-                    <Download className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2 text-blue-500" />
-                    <span className="font-bold text-sm sm:text-base text-gray-900 dark:text-white">
+                  <div className="flex items-center rounded-full bg-blue-50 px-3 py-1 sm:px-4 sm:py-2 dark:bg-blue-900/20">
+                    <Download className="mr-1 h-4 w-4 text-blue-500 sm:mr-2 sm:h-5 sm:w-5" />
+                    <span className="font-bold text-gray-900 text-sm sm:text-base dark:text-white">
                       {image.downloads.toLocaleString()}
                     </span>
-                    <span className="ml-1 text-xs sm:text-sm text-gray-500 dark:text-gray-400 hidden sm:inline">
+                    <span className="ml-1 hidden text-gray-500 text-xs sm:inline sm:text-sm dark:text-gray-400">
                       downloads
                     </span>
                   </div>
                 </motion.div>
 
                 <motion.div
-                  initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.7 }}
                   className="w-full sm:w-auto"
+                  initial={{ opacity: 0, x: 20 }}
+                  transition={{ delay: 0.7 }}
                 >
                   <Button
-                    className="w-full sm:w-auto bg-gray-900 hover:bg-gray-800 dark:bg-white dark:hover:bg-gray-100 text-white dark:text-gray-900 px-4 sm:px-6 lg:px-8 py-2 sm:py-3 rounded-full font-semibold transition-all duration-200 hover:scale-105 hover:shadow-lg focus:ring-2 focus:ring-gray-500 dark:focus:ring-gray-300 text-sm sm:text-base"
+                    className="w-full rounded-full bg-gray-900 px-4 py-2 font-semibold text-sm text-white transition-all duration-200 hover:scale-105 hover:bg-gray-800 hover:shadow-lg focus:ring-2 focus:ring-gray-500 sm:w-auto sm:px-6 sm:py-3 sm:text-base lg:px-8 dark:bg-white dark:text-gray-900 dark:focus:ring-gray-300 dark:hover:bg-gray-100"
                     onClick={() =>
                       window.open(
                         `https://unsplash.com/@${image.username}`,
@@ -411,14 +412,14 @@ function ImageDialog({
 
               {/* Additional Info */}
               <motion.div
-                initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
+                className="mt-4 border-gray-100 border-t pt-4 sm:mt-6 sm:pt-6 dark:border-gray-800"
+                initial={{ opacity: 0 }}
                 transition={{ delay: 0.8 }}
-                className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-gray-100 dark:border-gray-800"
               >
-                <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 text-center">
+                <p className="text-center text-gray-500 text-xs sm:text-sm dark:text-gray-400">
                   Press{" "}
-                  <kbd className="px-1 sm:px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded text-xs font-mono">
+                  <kbd className="rounded bg-gray-100 px-1 py-1 font-mono text-xs sm:px-2 dark:bg-gray-800">
                     ESC
                   </kbd>{" "}
                   to close
@@ -452,21 +453,30 @@ export default function BentoGrid() {
 
   return (
     <div className="space-y-4 sm:space-y-6 lg:space-y-8">
-      <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-6 gap-2 sm:gap-3 lg:gap-4 auto-rows-[150px] sm:auto-rows-[180px] lg:auto-rows-[200px]">
+      <div className="grid auto-rows-[150px] grid-cols-2 gap-2 sm:auto-rows-[180px] sm:grid-cols-4 sm:gap-3 md:grid-cols-4 lg:auto-rows-[200px] lg:grid-cols-6 lg:gap-4">
         <AnimatePresence mode="wait">
           {gridItems.map((item, index) => {
             const image = staticImages[index];
-            if (!image) return null;
+            if (!image) {
+              return null;
+            }
 
             const isHovered = hoveredItem === image.id;
 
             return (
               <motion.div
-                key={`${image.id}-${refreshKey}`}
-                className={`${item.className} relative group overflow-hidden rounded-xl sm:rounded-2xl bg-gray-200 dark:bg-gray-700 cursor-pointer`}
-                initial={{ opacity: 0, scale: 0.8, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
+                className={`${item.className} group relative cursor-pointer overflow-hidden rounded-xl bg-gray-200 sm:rounded-2xl dark:bg-gray-700`}
                 exit={{ opacity: 0, scale: 0.8, y: -20 }}
+                initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                key={`${image.id}-${refreshKey}`}
+                onClick={() => openImageDialog(image)}
+                onHoverEnd={() => setHoveredItem(null)}
+                onHoverStart={() => setHoveredItem(image.id)}
+                style={{
+                  transformStyle: "preserve-3d",
+                  transformOrigin: "center center",
+                }}
                 transition={{
                   duration: 0.6,
                   delay: index * 0.08,
@@ -485,38 +495,31 @@ export default function BentoGrid() {
                   scale: 0.98,
                   transition: { duration: 0.1 },
                 }}
-                onHoverStart={() => setHoveredItem(image.id)}
-                onHoverEnd={() => setHoveredItem(null)}
-                onClick={() => openImageDialog(image)}
-                style={{
-                  transformStyle: "preserve-3d",
-                  transformOrigin: "center center",
-                }}
               >
                 <Image
-                  src={image.url || "/placeholder.svg"}
                   alt={image.alt}
-                  fill
                   className="object-cover transition-all duration-700 group-hover:scale-110 group-hover:brightness-110 group-hover:contrast-110"
+                  fill
                   sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
+                  src={image.url || "/placeholder.svg"}
                 />
 
                 {/* Enhanced Overlay with gradient animation */}
                 <motion.div
+                  animate={{ opacity: isHovered ? 1 : 0 }}
                   className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"
                   initial={{ opacity: 0 }}
-                  animate={{ opacity: isHovered ? 1 : 0 }}
                   transition={{ duration: 0.3, ease: "easeInOut" }}
                 />
 
                 {/* Enhanced Content overlay with staggered animations */}
                 <motion.div
-                  className="absolute bottom-0 left-0 right-0 p-2 sm:p-3 lg:p-4 text-white"
-                  initial={{ y: "100%", opacity: 0 }}
                   animate={{
                     y: isHovered ? "0%" : "100%",
                     opacity: isHovered ? 1 : 0,
                   }}
+                  className="absolute right-0 bottom-0 left-0 p-2 text-white sm:p-3 lg:p-4"
+                  initial={{ y: "100%", opacity: 0 }}
                   transition={{
                     duration: 0.4,
                     ease: [0.4, 0.0, 0.2, 1],
@@ -525,40 +528,40 @@ export default function BentoGrid() {
                 >
                   <div className="space-y-2 sm:space-y-3">
                     <motion.div
-                      initial={{ opacity: 0, y: 10 }}
                       animate={{
                         opacity: isHovered ? 1 : 0,
                         y: isHovered ? 0 : 10,
                       }}
+                      initial={{ opacity: 0, y: 10 }}
                       transition={{ delay: isHovered ? 0.2 : 0, duration: 0.3 }}
                     >
-                      <p className="font-bold text-xs sm:text-sm truncate mb-1 drop-shadow-lg">
+                      <p className="mb-1 truncate font-bold text-xs drop-shadow-lg sm:text-sm">
                         {image.alt}
                       </p>
-                      <p className="text-xs opacity-90 truncate drop-shadow-md">
+                      <p className="truncate text-xs opacity-90 drop-shadow-md">
                         by {image.photographer}
                       </p>
                     </motion.div>
 
                     <motion.div
-                      className="flex items-center justify-between text-xs flex-wrap gap-1 sm:gap-2"
-                      initial={{ opacity: 0, y: 10 }}
                       animate={{
                         opacity: isHovered ? 1 : 0,
                         y: isHovered ? 0 : 10,
                       }}
+                      className="flex flex-wrap items-center justify-between gap-1 text-xs sm:gap-2"
+                      initial={{ opacity: 0, y: 10 }}
                       transition={{ delay: isHovered ? 0.3 : 0, duration: 0.3 }}
                     >
-                      <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
+                      <div className="flex flex-shrink-0 items-center space-x-1 sm:space-x-2">
                         <motion.span
-                          className="flex items-center bg-white/20 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full backdrop-blur-md border border-white/20 text-xs"
+                          className="flex items-center rounded-full border border-white/20 bg-white/20 px-1.5 py-0.5 text-xs backdrop-blur-md sm:px-2 sm:py-1"
+                          transition={{ duration: 0.2 }}
                           whileHover={{
                             scale: 1.05,
                             backgroundColor: "rgba(255,255,255,0.3)",
                           }}
-                          transition={{ duration: 0.2 }}
                         >
-                          <Heart className="w-2.5 h-2.5 sm:w-3 sm:h-3 mr-0.5 sm:mr-1 text-red-400" />
+                          <Heart className="mr-0.5 h-2.5 w-2.5 text-red-400 sm:mr-1 sm:h-3 sm:w-3" />
                           <span className="hidden sm:inline">
                             {image.likes}
                           </span>
@@ -567,14 +570,14 @@ export default function BentoGrid() {
                           </span>
                         </motion.span>
                         <motion.span
-                          className="flex items-center bg-white/20 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full backdrop-blur-md border border-white/20 text-xs"
+                          className="flex items-center rounded-full border border-white/20 bg-white/20 px-1.5 py-0.5 text-xs backdrop-blur-md sm:px-2 sm:py-1"
+                          transition={{ duration: 0.2 }}
                           whileHover={{
                             scale: 1.05,
                             backgroundColor: "rgba(255,255,255,0.3)",
                           }}
-                          transition={{ duration: 0.2 }}
                         >
-                          <Download className="w-2.5 h-2.5 sm:w-3 sm:h-3 mr-0.5 sm:mr-1 text-blue-400" />
+                          <Download className="mr-0.5 h-2.5 w-2.5 text-blue-400 sm:mr-1 sm:h-3 sm:w-3" />
                           <span className="hidden sm:inline">
                             {image.downloads}
                           </span>
@@ -584,11 +587,11 @@ export default function BentoGrid() {
                         </motion.span>
                       </div>
                       <motion.div
-                        className="text-xs bg-white/30 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full backdrop-blur-md border border-white/40 font-medium whitespace-nowrap flex-shrink-0"
                         animate={{
                           scale: isHovered ? [1, 1.02, 1] : 1,
                           opacity: isHovered ? [0.9, 1, 0.95] : 0.9,
                         }}
+                        className="flex-shrink-0 whitespace-nowrap rounded-full border border-white/40 bg-white/30 px-1.5 py-0.5 font-medium text-xs backdrop-blur-md sm:px-2 sm:py-1"
                         transition={{
                           duration: 1.5,
                           repeat: isHovered ? Number.POSITIVE_INFINITY : 0,
@@ -606,17 +609,17 @@ export default function BentoGrid() {
 
                 {/* Enhanced Hover border effect with animated gradient */}
                 <motion.div
-                  className="absolute inset-0 rounded-xl sm:rounded-2xl opacity-0 pointer-events-none"
-                  style={{
-                    background:
-                      "linear-gradient(45deg, rgba(255,255,255,0.4), rgba(255,255,255,0.1), rgba(255,255,255,0.4))",
-                    backgroundSize: "200% 200%",
-                  }}
                   animate={{
                     opacity: isHovered ? 1 : 0,
                     backgroundPosition: isHovered
                       ? ["0% 0%", "100% 100%"]
                       : "0% 0%",
+                  }}
+                  className="pointer-events-none absolute inset-0 rounded-xl opacity-0 sm:rounded-2xl"
+                  style={{
+                    background:
+                      "linear-gradient(45deg, rgba(255,255,255,0.4), rgba(255,255,255,0.1), rgba(255,255,255,0.4))",
+                    backgroundSize: "200% 200%",
                   }}
                   transition={{
                     opacity: { duration: 0.3 },
@@ -630,11 +633,11 @@ export default function BentoGrid() {
 
                 {/* Shimmer effect on hover - enhanced */}
                 <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none"
-                  initial={{ x: "-100%" }}
                   animate={{
                     x: isHovered ? "100%" : "-100%",
                   }}
+                  className="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                  initial={{ x: "-100%" }}
                   transition={{
                     duration: 1.2,
                     ease: "easeInOut",
@@ -645,12 +648,12 @@ export default function BentoGrid() {
 
                 {/* Corner accent */}
                 <motion.div
-                  className="absolute top-2 left-2 sm:top-3 sm:left-3 w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white/60 rounded-full backdrop-blur-sm"
-                  initial={{ scale: 0, opacity: 0 }}
                   animate={{
                     scale: isHovered ? 1 : 0,
                     opacity: isHovered ? 1 : 0,
                   }}
+                  className="absolute top-2 left-2 h-1.5 w-1.5 rounded-full bg-white/60 backdrop-blur-sm sm:top-3 sm:left-3 sm:h-2 sm:w-2"
+                  initial={{ scale: 0, opacity: 0 }}
                   transition={{ duration: 0.3, delay: isHovered ? 0.4 : 0 }}
                 />
               </motion.div>
@@ -671,7 +674,7 @@ export default function BentoGrid() {
 
 export function BentoGridShowcase() {
   return (
-    <div className="space-y-4 sm:space-y-6 lg:space-y-8 p-4 sm:p-6 lg:p-8 bg-background">
+    <div className="space-y-4 bg-background p-4 sm:space-y-6 sm:p-6 lg:space-y-8 lg:p-8">
       <BentoGrid />
     </div>
   );
@@ -697,19 +700,28 @@ export function BentoGridTheme() {
 
   return (
     <>
-      <div className="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-7 lg:grid-cols-8 gap-2 sm:gap-3 lg:gap-4 auto-rows-[150px] sm:auto-rows-[180px] lg:auto-rows-[200px]">
+      <div className="grid auto-rows-[150px] grid-cols-5 gap-2 sm:auto-rows-[180px] sm:grid-cols-6 sm:gap-3 md:grid-cols-7 lg:auto-rows-[200px] lg:grid-cols-8 lg:gap-4">
         <AnimatePresence mode="wait">
           {gridItems2.map((item, index) => {
             const image = staticImages[index];
-            if (!image) return null;
+            if (!image) {
+              return null;
+            }
             const isHovered = hoveredItem === image.id;
             return (
               <motion.div
-                key={`${image.id}-${refreshKey}`}
-                className={`${item.className} relative group overflow-hidden rounded-xl sm:rounded-2xl bg-gray-200 dark:bg-gray-700 cursor-pointer`}
-                initial={{ opacity: 0, scale: 0.8, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
+                className={`${item.className} group relative cursor-pointer overflow-hidden rounded-xl bg-gray-200 sm:rounded-2xl dark:bg-gray-700`}
                 exit={{ opacity: 0, scale: 0.8, y: -20 }}
+                initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                key={`${image.id}-${refreshKey}`}
+                onClick={() => openImageDialog(image)}
+                onHoverEnd={() => setHoveredItem(null)}
+                onHoverStart={() => setHoveredItem(image.id)}
+                style={{
+                  transformStyle: "preserve-3d",
+                  transformOrigin: "center center",
+                }}
                 transition={{
                   duration: 0.6,
                   delay: index * 0.08,
@@ -728,38 +740,31 @@ export function BentoGridTheme() {
                   scale: 0.98,
                   transition: { duration: 0.1 },
                 }}
-                onHoverStart={() => setHoveredItem(image.id)}
-                onHoverEnd={() => setHoveredItem(null)}
-                onClick={() => openImageDialog(image)}
-                style={{
-                  transformStyle: "preserve-3d",
-                  transformOrigin: "center center",
-                }}
               >
                 <Image
-                  src={image.url || "/placeholder.svg"}
                   alt={image.alt}
-                  fill
                   className="object-cover transition-all duration-700 group-hover:scale-110 group-hover:brightness-110 group-hover:contrast-110"
+                  fill
                   sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
+                  src={image.url || "/placeholder.svg"}
                 />
 
                 {/* Enhanced Overlay with gradient animation */}
                 <motion.div
+                  animate={{ opacity: isHovered ? 1 : 0 }}
                   className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"
                   initial={{ opacity: 0 }}
-                  animate={{ opacity: isHovered ? 1 : 0 }}
                   transition={{ duration: 0.3, ease: "easeInOut" }}
                 />
 
                 {/* Enhanced Content overlay with staggered animations */}
                 <motion.div
-                  className="absolute bottom-0 left-0 right-0 p-2 sm:p-3 lg:p-4 text-white"
-                  initial={{ y: "100%", opacity: 0 }}
                   animate={{
                     y: isHovered ? "0%" : "100%",
                     opacity: isHovered ? 1 : 0,
                   }}
+                  className="absolute right-0 bottom-0 left-0 p-2 text-white sm:p-3 lg:p-4"
+                  initial={{ y: "100%", opacity: 0 }}
                   transition={{
                     duration: 0.4,
                     ease: [0.4, 0.0, 0.2, 1],
@@ -768,40 +773,40 @@ export function BentoGridTheme() {
                 >
                   <div className="space-y-2 sm:space-y-3">
                     <motion.div
-                      initial={{ opacity: 0, y: 10 }}
                       animate={{
                         opacity: isHovered ? 1 : 0,
                         y: isHovered ? 0 : 10,
                       }}
+                      initial={{ opacity: 0, y: 10 }}
                       transition={{ delay: isHovered ? 0.2 : 0, duration: 0.3 }}
                     >
-                      <p className="font-bold text-xs sm:text-sm truncate mb-1 drop-shadow-lg">
+                      <p className="mb-1 truncate font-bold text-xs drop-shadow-lg sm:text-sm">
                         {image.alt}
                       </p>
-                      <p className="text-xs opacity-90 truncate drop-shadow-md">
+                      <p className="truncate text-xs opacity-90 drop-shadow-md">
                         by {image.photographer}
                       </p>
                     </motion.div>
 
                     <motion.div
-                      className="flex items-center justify-between text-xs flex-wrap gap-1 sm:gap-2"
-                      initial={{ opacity: 0, y: 10 }}
                       animate={{
                         opacity: isHovered ? 1 : 0,
                         y: isHovered ? 0 : 10,
                       }}
+                      className="flex flex-wrap items-center justify-between gap-1 text-xs sm:gap-2"
+                      initial={{ opacity: 0, y: 10 }}
                       transition={{ delay: isHovered ? 0.3 : 0, duration: 0.3 }}
                     >
-                      <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
+                      <div className="flex flex-shrink-0 items-center space-x-1 sm:space-x-2">
                         <motion.span
-                          className="flex items-center bg-white/20 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full backdrop-blur-md border border-white/20 text-xs"
+                          className="flex items-center rounded-full border border-white/20 bg-white/20 px-1.5 py-0.5 text-xs backdrop-blur-md sm:px-2 sm:py-1"
+                          transition={{ duration: 0.2 }}
                           whileHover={{
                             scale: 1.05,
                             backgroundColor: "rgba(255,255,255,0.3)",
                           }}
-                          transition={{ duration: 0.2 }}
                         >
-                          <Heart className="w-2.5 h-2.5 sm:w-3 sm:h-3 mr-0.5 sm:mr-1 text-red-400" />
+                          <Heart className="mr-0.5 h-2.5 w-2.5 text-red-400 sm:mr-1 sm:h-3 sm:w-3" />
                           <span className="hidden sm:inline">
                             {image.likes}
                           </span>
@@ -810,14 +815,14 @@ export function BentoGridTheme() {
                           </span>
                         </motion.span>
                         <motion.span
-                          className="flex items-center bg-white/20 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full backdrop-blur-md border border-white/20 text-xs"
+                          className="flex items-center rounded-full border border-white/20 bg-white/20 px-1.5 py-0.5 text-xs backdrop-blur-md sm:px-2 sm:py-1"
+                          transition={{ duration: 0.2 }}
                           whileHover={{
                             scale: 1.05,
                             backgroundColor: "rgba(255,255,255,0.3)",
                           }}
-                          transition={{ duration: 0.2 }}
                         >
-                          <Download className="w-2.5 h-2.5 sm:w-3 sm:h-3 mr-0.5 sm:mr-1 text-blue-400" />
+                          <Download className="mr-0.5 h-2.5 w-2.5 text-blue-400 sm:mr-1 sm:h-3 sm:w-3" />
                           <span className="hidden sm:inline">
                             {image.downloads}
                           </span>
@@ -827,11 +832,11 @@ export function BentoGridTheme() {
                         </motion.span>
                       </div>
                       <motion.div
-                        className="text-xs bg-white/30 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full backdrop-blur-md border border-white/40 font-medium whitespace-nowrap flex-shrink-0"
                         animate={{
                           scale: isHovered ? [1, 1.02, 1] : 1,
                           opacity: isHovered ? [0.9, 1, 0.95] : 0.9,
                         }}
+                        className="flex-shrink-0 whitespace-nowrap rounded-full border border-white/40 bg-white/30 px-1.5 py-0.5 font-medium text-xs backdrop-blur-md sm:px-2 sm:py-1"
                         transition={{
                           duration: 1.5,
                           repeat: isHovered ? Number.POSITIVE_INFINITY : 0,
@@ -849,17 +854,17 @@ export function BentoGridTheme() {
 
                 {/* Enhanced Hover border effect with animated gradient */}
                 <motion.div
-                  className="absolute inset-0 rounded-xl sm:rounded-2xl opacity-0 pointer-events-none"
-                  style={{
-                    background:
-                      "linear-gradient(45deg, rgba(255,255,255,0.4), rgba(255,255,255,0.1), rgba(255,255,255,0.4))",
-                    backgroundSize: "200% 200%",
-                  }}
                   animate={{
                     opacity: isHovered ? 1 : 0,
                     backgroundPosition: isHovered
                       ? ["0% 0%", "100% 100%"]
                       : "0% 0%",
+                  }}
+                  className="pointer-events-none absolute inset-0 rounded-xl opacity-0 sm:rounded-2xl"
+                  style={{
+                    background:
+                      "linear-gradient(45deg, rgba(255,255,255,0.4), rgba(255,255,255,0.1), rgba(255,255,255,0.4))",
+                    backgroundSize: "200% 200%",
                   }}
                   transition={{
                     opacity: { duration: 0.3 },
@@ -873,11 +878,11 @@ export function BentoGridTheme() {
 
                 {/* Shimmer effect on hover - enhanced */}
                 <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none"
-                  initial={{ x: "-100%" }}
                   animate={{
                     x: isHovered ? "100%" : "-100%",
                   }}
+                  className="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                  initial={{ x: "-100%" }}
                   transition={{
                     duration: 1.2,
                     ease: "easeInOut",
@@ -888,12 +893,12 @@ export function BentoGridTheme() {
 
                 {/* Corner accent */}
                 <motion.div
-                  className="absolute top-2 left-2 sm:top-3 sm:left-3 w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white/60 rounded-full backdrop-blur-sm"
-                  initial={{ scale: 0, opacity: 0 }}
                   animate={{
                     scale: isHovered ? 1 : 0,
                     opacity: isHovered ? 1 : 0,
                   }}
+                  className="absolute top-2 left-2 h-1.5 w-1.5 rounded-full bg-white/60 backdrop-blur-sm sm:top-3 sm:left-3 sm:h-2 sm:w-2"
+                  initial={{ scale: 0, opacity: 0 }}
                   transition={{ duration: 0.3, delay: isHovered ? 0.4 : 0 }}
                 />
               </motion.div>

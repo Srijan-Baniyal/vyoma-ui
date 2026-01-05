@@ -1,8 +1,8 @@
 "use client";
 
 import { Check, Clipboard } from "lucide-react";
-import { Button } from "./ui/buttonShadcn";
 import { useState } from "react";
+import { Button } from "./ui/buttonShadcn";
 
 export default function Copy({ content }: { content: string }) {
   const [isCopied, setIsCopied] = useState(false);
@@ -22,16 +22,16 @@ export default function Copy({ content }: { content: string }) {
 
   return (
     <Button
-      variant="ghost"
-      size="sm"
-      onClick={handleCopy}
-      className="h-8 w-8 p-0 hover:bg-primary/10 transition-all duration-200 group flex items-center justify-center"
       aria-label={isCopied ? "Copied!" : "Copy to clipboard"}
+      className="group flex h-8 w-8 items-center justify-center p-0 transition-all duration-200 hover:bg-primary/10"
+      onClick={handleCopy}
+      size="sm"
+      variant="ghost"
     >
       {isCopied ? (
-        <Check className="w-3.5 h-3.5 text-green-600 animate-in zoom-in-50 duration-200" />
+        <Check className="zoom-in-50 h-3.5 w-3.5 animate-in text-green-600 duration-200" />
       ) : (
-        <Clipboard className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary transition-colors duration-200" />
+        <Clipboard className="h-3.5 w-3.5 text-muted-foreground transition-colors duration-200 group-hover:text-primary" />
       )}
     </Button>
   );

@@ -1,54 +1,58 @@
-"use client"
-import { useState, useRef, useEffect, useCallback } from "react"
-import type React from "react"
+"use client";
+import type React from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export default function MagicalCaret() {
-  const [text, setText] = useState("Let's make")
-  const [isFocused, setIsFocused] = useState(false)
-  const [isHovered, setIsHovered] = useState(false)
-  const [caretPosition, setCaretPosition] = useState(0)
-  const [caretHeight, setCaretHeight] = useState(72)
-  const [hasStartedTyping, setHasStartedTyping] = useState(false)
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-  const inputRef = useRef<HTMLInputElement>(null)
-  const measureRef = useRef<HTMLSpanElement>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
+  const [text, setText] = useState("Let's make");
+  const [isFocused, setIsFocused] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [caretPosition, setCaretPosition] = useState(0);
+  const [caretHeight, setCaretHeight] = useState(72);
+  const [hasStartedTyping, setHasStartedTyping] = useState(false);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const inputRef = useRef<HTMLInputElement>(null);
+  const measureRef = useRef<HTMLSpanElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // Track mouse for interactive effects
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY })
-    }
-    window.addEventListener("mousemove", handleMouseMove)
-    return () => window.removeEventListener("mousemove", handleMouseMove)
-  }, [])
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
 
   // Enhanced caret positioning with sub-pixel precision
   const updateCaretPosition = useCallback(() => {
-    if (!measureRef.current || !inputRef.current || hasStartedTyping) return
+    if (!(measureRef.current && inputRef.current) || hasStartedTyping) {
+      return;
+    }
 
-    const input = inputRef.current
-    const measure = measureRef.current
+    const input = inputRef.current;
+    const measure = measureRef.current;
 
-    const cursorPos = input.selectionStart || 0
-    const textBeforeCaret = text.substring(0, cursorPos)
+    const cursorPos = input.selectionStart || 0;
+    const textBeforeCaret = text.substring(0, cursorPos);
 
-    measure.textContent = textBeforeCaret
-    const rect = measure.getBoundingClientRect()
-    const textWidth = rect.width
+    measure.textContent = textBeforeCaret;
+    const rect = measure.getBoundingClientRect();
+    const textWidth = rect.width;
 
-    const computedStyle = window.getComputedStyle(input)
-    const fontSize = Number.parseFloat(computedStyle.fontSize)
-    const newCaretHeight = fontSize * 1.2
+    const computedStyle = window.getComputedStyle(input);
+    const fontSize = Number.parseFloat(computedStyle.fontSize);
+    const newCaretHeight = fontSize * 1.2;
 
-    setCaretPosition(textWidth)
-    setCaretHeight(newCaretHeight)
-  }, [text, hasStartedTyping])
+    setCaretPosition(textWidth);
+    setCaretHeight(newCaretHeight);
+  }, [text, hasStartedTyping]);
 
   // Event handling
   useEffect(() => {
-    const input = inputRef.current
-    if (!input || hasStartedTyping) return
+    const input = inputRef.current;
+    if (!input || hasStartedTyping) {
+      return;
+    }
 
     const events = [
       "keyup",
@@ -61,147 +65,149 @@ export default function MagicalCaret() {
       "selectionchange",
       "mouseup",
       "touchend",
-    ]
+    ];
 
     const handleUpdate = () => {
       requestAnimationFrame(() => {
-        updateCaretPosition()
-      })
-    }
+        updateCaretPosition();
+      });
+    };
 
     events.forEach((event) => {
-      input.addEventListener(event, handleUpdate)
-    })
+      input.addEventListener(event, handleUpdate);
+    });
 
-    document.addEventListener("selectionchange", handleUpdate)
+    document.addEventListener("selectionchange", handleUpdate);
 
     return () => {
       events.forEach((event) => {
-        input.removeEventListener(event, handleUpdate)
-      })
-      document.removeEventListener("selectionchange", handleUpdate)
-    }
-  }, [updateCaretPosition, hasStartedTyping])
+        input.removeEventListener(event, handleUpdate);
+      });
+      document.removeEventListener("selectionchange", handleUpdate);
+    };
+  }, [updateCaretPosition, hasStartedTyping]);
 
   useEffect(() => {
     if (!hasStartedTyping) {
-      updateCaretPosition()
+      updateCaretPosition();
     }
-  }, [text, updateCaretPosition, hasStartedTyping])
+  }, [updateCaretPosition, hasStartedTyping]);
 
   useEffect(() => {
     // Auto-focus on mount to show demo
     if (inputRef.current && !hasStartedTyping) {
-      const input = inputRef.current
-      input.focus()
-      
+      const input = inputRef.current;
+      input.focus();
+
       // Simulate a random key press to trigger positioning
       setTimeout(() => {
         // Create a synthetic keyboard event to trigger positioning
-        const randomKeys = ['ArrowRight', 'End', 'Home', 'ArrowLeft']
-        const randomKey = randomKeys[Math.floor(Math.random() * randomKeys.length)]
-        
+        const randomKeys = ["ArrowRight", "End", "Home", "ArrowLeft"];
+        const randomKey =
+          randomKeys[Math.floor(Math.random() * randomKeys.length)];
+
         // Simulate key press event
-        const keyEvent = new KeyboardEvent('keydown', {
+        const keyEvent = new KeyboardEvent("keydown", {
           key: randomKey,
           code: randomKey,
           bubbles: true,
-          cancelable: true
-        })
-        
-        input.dispatchEvent(keyEvent)
-        
+          cancelable: true,
+        });
+
+        input.dispatchEvent(keyEvent);
+
         // Also simulate keyup to complete the cycle
-        const keyUpEvent = new KeyboardEvent('keyup', {
+        const keyUpEvent = new KeyboardEvent("keyup", {
           key: randomKey,
           code: randomKey,
           bubbles: true,
-          cancelable: true
-        })
-        
-        input.dispatchEvent(keyUpEvent)
-        
+          cancelable: true,
+        });
+
+        input.dispatchEvent(keyUpEvent);
+
         // Ensure cursor is at end of text after simulation
         setTimeout(() => {
-          input.setSelectionRange(text.length, text.length)
-          updateCaretPosition()
-        }, 10)
-      }, 100)
+          input.setSelectionRange(text.length, text.length);
+          updateCaretPosition();
+        }, 10);
+      }, 100);
     }
-  }, [hasStartedTyping, text, updateCaretPosition])
+  }, [hasStartedTyping, text, updateCaretPosition]);
 
   const handleFocus = () => {
-    setIsFocused(true)
-  }
+    setIsFocused(true);
+  };
 
   const handleBlur = () => {
-    setIsFocused(false)
-  }
+    setIsFocused(false);
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!hasStartedTyping) {
-      setHasStartedTyping(true)
+      setHasStartedTyping(true);
     }
-    setText(e.target.value)
-  }
+    setText(e.target.value);
+  };
 
   const handleMouseEnter = () => {
-    setIsHovered(true)
-  }
+    setIsHovered(true);
+  };
 
   const handleMouseLeave = () => {
-    setIsHovered(false)
-  }
+    setIsHovered(false);
+  };
 
   const handleReset = () => {
-    setText("Let's make")
-    setHasStartedTyping(false)
-    setIsFocused(false)
+    setText("Let's make");
+    setHasStartedTyping(false);
+    setIsFocused(false);
     // Focus the input to show the demo effect
     setTimeout(() => {
       if (inputRef.current) {
-        const input = inputRef.current
-        input.focus()
-        setIsFocused(true)
-        
+        const input = inputRef.current;
+        input.focus();
+        setIsFocused(true);
+
         // Simulate random key press after reset
         setTimeout(() => {
-          const randomKeys = ['ArrowRight', 'End', 'Home', 'ArrowLeft']
-          const randomKey = randomKeys[Math.floor(Math.random() * randomKeys.length)]
-          
-          const keyEvent = new KeyboardEvent('keydown', {
+          const randomKeys = ["ArrowRight", "End", "Home", "ArrowLeft"];
+          const randomKey =
+            randomKeys[Math.floor(Math.random() * randomKeys.length)];
+
+          const keyEvent = new KeyboardEvent("keydown", {
             key: randomKey,
             code: randomKey,
             bubbles: true,
-            cancelable: true
-          })
-          
-          input.dispatchEvent(keyEvent)
-          
-          const keyUpEvent = new KeyboardEvent('keyup', {
+            cancelable: true,
+          });
+
+          input.dispatchEvent(keyEvent);
+
+          const keyUpEvent = new KeyboardEvent("keyup", {
             key: randomKey,
             code: randomKey,
             bubbles: true,
-            cancelable: true
-          })
-          
-          input.dispatchEvent(keyUpEvent)
-          
+            cancelable: true,
+          });
+
+          input.dispatchEvent(keyUpEvent);
+
           // Ensure proper positioning
           setTimeout(() => {
-            input.setSelectionRange("Let's make".length, "Let's make".length)
-            updateCaretPosition()
-          }, 10)
-        }, 50)
+            input.setSelectionRange("Let's make".length, "Let's make".length);
+            updateCaretPosition();
+          }, 10);
+        }, 50);
       }
-    }, 100)
-  }
+    }, 100);
+  };
 
   // Calculate dynamic effects
-  const glowIntensity = isFocused ? 1 : isHovered ? 0.7 : 0.4
+  const glowIntensity = isFocused ? 1 : isHovered ? 0.7 : 0.4;
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
+    <div className="relative min-h-screen overflow-hidden">
       {/* Animated background with gradient mesh */}
       <div
         className="absolute inset-0 transition-all duration-1000"
@@ -224,11 +230,11 @@ export default function MagicalCaret() {
       />
 
       {/* Floating particles */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(20)].map((_, i) => (
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        {[...new Array(20)].map((_, i) => (
           <div
+            className="absolute h-1 w-1 animate-pulse rounded-full bg-white/10"
             key={i}
-            className="absolute w-1 h-1 bg-white/10 rounded-full animate-pulse"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
@@ -239,15 +245,15 @@ export default function MagicalCaret() {
         ))}
       </div>
 
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-8">
+      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center p-8">
         {/* Main text area with premium styling */}
-        <div className="w-full max-w-6xl mb-16">
+        <div className="mb-16 w-full max-w-6xl">
           <div
-            ref={containerRef}
-            className="relative group transition-all duration-500 ease-out"
+            className="group relative transition-all duration-500 ease-out"
+            onClick={() => inputRef.current?.focus()}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-            onClick={() => inputRef.current?.focus()}
+            ref={containerRef}
           >
             {/* Backdrop with advanced glassmorphism */}
             <div
@@ -271,14 +277,15 @@ export default function MagicalCaret() {
             />
 
             {/* Content container */}
-            <div className="relative p-16 cursor-text">
+            <div className="relative cursor-text p-16">
               {/* Hidden measuring span */}
               {!hasStartedTyping && (
                 <span
+                  className="pointer-events-none invisible absolute whitespace-pre font-extralight text-6xl md:text-7xl"
                   ref={measureRef}
-                  className="absolute invisible whitespace-pre text-6xl md:text-7xl font-extralight pointer-events-none"
                   style={{
-                    fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                    fontFamily:
+                      "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
                     left: "64px",
                     top: "64px",
                     lineHeight: "1.1",
@@ -289,29 +296,32 @@ export default function MagicalCaret() {
 
               {/* Premium input field */}
               <input
-                ref={inputRef}
-                type="text"
-                value={text}
+                autoComplete="off"
+                className="relative z-20 w-full border-none bg-transparent font-extralight text-6xl text-white placeholder-slate-400/60 transition-all duration-300 focus:outline-none md:text-7xl"
+                onBlur={handleBlur}
                 onChange={handleChange}
                 onFocus={handleFocus}
-                onBlur={handleBlur}
-                className="w-full bg-transparent text-6xl md:text-7xl font-extralight text-white placeholder-slate-400/60 focus:outline-none border-none relative z-20 transition-all duration-300"
                 placeholder="Let's make a miracle"
+                ref={inputRef}
+                spellCheck="false"
                 style={{
-                  fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                  fontFamily:
+                    "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
                   caretColor: hasStartedTyping ? "#ffffff" : "transparent",
                   lineHeight: "1.1",
                   letterSpacing: "-0.02em",
-                  textShadow: isFocused ? "0 0 30px rgba(255, 255, 255, 0.3)" : "none",
+                  textShadow: isFocused
+                    ? "0 0 30px rgba(255, 255, 255, 0.3)"
+                    : "none",
                 }}
-                autoComplete="off"
-                spellCheck="false"
+                type="text"
+                value={text}
               />
 
               {/* Ultra-premium cursor animation - FIXED */}
               {!hasStartedTyping && isFocused && (
                 <div
-                  className="absolute pointer-events-none z-30 transition-all duration-200 ease-out"
+                  className="pointer-events-none absolute z-30 transition-all duration-200 ease-out"
                   style={{
                     left: `${caretPosition + 64}px`,
                     top: "64px",
@@ -324,7 +334,8 @@ export default function MagicalCaret() {
                     style={{
                       width: "3px",
                       height: `${caretHeight}px`,
-                      background: "linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)",
+                      background:
+                        "linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)",
                       borderRadius: "2px",
                       boxShadow: `
                         0 0 4px rgba(255, 255, 255, 0.9),
@@ -336,7 +347,7 @@ export default function MagicalCaret() {
 
                   {/* Primary light burst */}
                   <div
-                    className="absolute top-0 left-0 pointer-events-none z-25 animate-caret-blink"
+                    className="pointer-events-none absolute top-0 left-0 z-25 animate-caret-blink"
                     style={{
                       width: "600px",
                       height: `${caretHeight * 2.5}px`,
@@ -360,7 +371,7 @@ export default function MagicalCaret() {
 
                   {/* Secondary atmospheric glow */}
                   <div
-                    className="absolute top-0 left-0 pointer-events-none z-20 animate-caret-blink"
+                    className="pointer-events-none absolute top-0 left-0 z-20 animate-caret-blink"
                     style={{
                       width: "800px",
                       height: `${caretHeight * 3}px`,
@@ -386,11 +397,12 @@ export default function MagicalCaret() {
               {/* Continuation text with FIXED spacing */}
               {text === "Let's make" && !hasStartedTyping && (
                 <div
-                  className="absolute pointer-events-none text-6xl md:text-7xl font-extralight transition-all duration-300"
+                  className="pointer-events-none absolute font-extralight text-6xl transition-all duration-300 md:text-7xl"
                   style={{
                     left: `${caretPosition + 64 + 20}px`, // Added proper spacing
                     top: "64px",
-                    fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                    fontFamily:
+                      "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
                     color: `rgba(156, 163, 175, ${0.6 + glowIntensity * 0.3})`,
                     lineHeight: "1.1",
                     letterSpacing: "-0.02em",
@@ -405,35 +417,37 @@ export default function MagicalCaret() {
         </div>
 
         {/* Enhanced search bar */}
-        <div className="w-full max-w-3xl mb-12">
-          <div className="relative group">
+        <div className="mb-12 w-full max-w-3xl">
+          <div className="group relative">
             <div
               className="absolute inset-0 rounded-2xl transition-all duration-300"
               style={{
-                background: "linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%)",
+                background:
+                  "linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%)",
                 backdropFilter: "blur(20px)",
                 border: "1px solid rgba(255, 255, 255, 0.1)",
-                boxShadow: "0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
+                boxShadow:
+                  "0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
               }}
             />
             <div className="relative flex items-center gap-6 p-6">
               {/* Avatar with glow */}
               <div className="relative">
-                <div className="w-14 h-14 rounded-full bg-gradient-to-br from-slate-500 to-slate-700 flex items-center justify-center shadow-lg">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-slate-300 to-slate-500"></div>
+                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-slate-500 to-slate-700 shadow-lg">
+                  <div className="h-10 w-10 rounded-full bg-gradient-to-br from-slate-300 to-slate-500" />
                 </div>
-                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-400/20 to-purple-400/20 blur-sm"></div>
+                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-400/20 to-purple-400/20 blur-sm" />
               </div>
 
               {/* Link icon */}
-              <div className="w-10 h-10 rounded-xl bg-slate-700/50 backdrop-blur-sm flex items-center justify-center border border-slate-600/30">
-                <div className="w-5 h-5 border-2 border-slate-400 rounded transform rotate-45"></div>
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-600/30 bg-slate-700/50 backdrop-blur-sm">
+                <div className="h-5 w-5 rotate-45 transform rounded border-2 border-slate-400" />
               </div>
 
               {/* Search section */}
               <div className="flex items-center gap-3 text-slate-300">
-                <div className="w-7 h-7 rounded-full border-2 border-slate-400/60"></div>
-                <span className="text-xl font-light">Search</span>
+                <div className="h-7 w-7 rounded-full border-2 border-slate-400/60" />
+                <span className="font-light text-xl">Search</span>
               </div>
             </div>
           </div>
@@ -441,16 +455,16 @@ export default function MagicalCaret() {
 
         {/* Status indicator with reset button */}
         <div className="text-center">
-          <div className="flex items-center justify-center gap-4 mb-4">
-            <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/5 backdrop-blur-sm border border-white/10">
+          <div className="mb-4 flex items-center justify-center gap-4">
+            <div className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-6 py-3 backdrop-blur-sm">
               <div
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                className={`h-2 w-2 rounded-full transition-all duration-300 ${
                   hasStartedTyping
-                    ? "bg-green-400 shadow-lg shadow-green-400/50"
-                    : "bg-amber-400 shadow-lg shadow-amber-400/50 animate-pulse"
+                    ? "bg-green-400 shadow-green-400/50 shadow-lg"
+                    : "animate-pulse bg-amber-400 shadow-amber-400/50 shadow-lg"
                 }`}
               />
-              <span className="text-slate-300 text-sm font-medium">
+              <span className="font-medium text-slate-300 text-sm">
                 {hasStartedTyping ? "Normal typing mode" : "Demo mode active"}
               </span>
             </div>
@@ -458,21 +472,21 @@ export default function MagicalCaret() {
             {/* Reset button */}
             {hasStartedTyping && (
               <button
+                className="group relative inline-flex items-center gap-2 rounded-full border border-blue-400/30 bg-gradient-to-r from-blue-500/20 to-purple-500/20 px-6 py-3 font-medium text-blue-300 text-sm backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:border-blue-400/50 hover:from-blue-500/30 hover:to-purple-500/30 hover:text-blue-200 hover:shadow-blue-500/25 hover:shadow-lg active:scale-95"
                 onClick={handleReset}
-                className="group relative inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-blue-500/20 to-purple-500/20 backdrop-blur-sm border border-blue-400/30 text-blue-300 text-sm font-medium transition-all duration-300 hover:from-blue-500/30 hover:to-purple-500/30 hover:border-blue-400/50 hover:text-blue-200 hover:shadow-lg hover:shadow-blue-500/25 hover:scale-105 active:scale-95"
               >
-                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-400/10 to-purple-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-400/10 to-purple-400/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                 <svg
-                  className="w-4 h-4 transition-transform duration-300 group-hover:rotate-180"
+                  className="h-4 w-4 transition-transform duration-300 group-hover:rotate-180"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
                 >
                   <path
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
                   />
                 </svg>
                 <span className="relative z-10">Reset to Demo</span>
@@ -480,7 +494,7 @@ export default function MagicalCaret() {
             )}
           </div>
 
-          <p className="text-slate-500 text-xs max-w-md mx-auto leading-relaxed">
+          <p className="mx-auto max-w-md text-slate-500 text-xs leading-relaxed">
             {hasStartedTyping
               ? "You're now in standard input mode - click reset to see the premium cursor animation again"
               : "Experience the premium cursor animation - start typing to switch to normal mode"}
@@ -503,5 +517,5 @@ export default function MagicalCaret() {
         }
       `}</style>
     </div>
-  )
+  );
 }

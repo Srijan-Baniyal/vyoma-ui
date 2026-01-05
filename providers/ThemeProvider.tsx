@@ -16,16 +16,14 @@ export default function ThemeProvider({
     return null;
   }
   return (
-    <>
-      <NextThemesProvider
-        attribute="class"
-        defaultTheme="system"
-        enableSystem
-        disableTransitionOnChange
-        storageKey="vyoma-ui-theme"
-      >
-        {children}
-      </NextThemesProvider>
-    </>
+    <NextThemesProvider
+      attribute="class"
+      defaultTheme="system"
+      disableTransitionOnChange
+      enableSystem
+      storageKey="vyoma-ui-theme"
+    >
+      {children}
+    </NextThemesProvider>
   );
 }

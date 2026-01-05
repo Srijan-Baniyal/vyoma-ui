@@ -1,25 +1,32 @@
 "use client";
 
-import type * as React from "react";
-import Link from "next/link";
-import { useState } from "react";
 import {
+  BookOpenIcon,
+  ChevronDownIcon,
   CircleCheckIcon,
   CircleHelpIcon,
   CircleIcon,
-  BookOpenIcon,
   CodeIcon,
+  ExternalLinkIcon,
+  GithubIcon,
+  HeartIcon,
+  MenuIcon,
+  MessageCircleIcon,
   PaletteIcon,
   RocketIcon,
   SparklesIcon,
-  GithubIcon,
   TwitterIcon,
-  MessageCircleIcon,
-  HeartIcon,
-  MenuIcon,
-  ChevronDownIcon,
-  ExternalLinkIcon,
 } from "lucide-react";
+import Link from "next/link";
+import type * as React from "react";
+import { useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/buttonShadcn";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -29,20 +36,13 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { Button } from "@/components/ui/buttonShadcn";
 import {
   Sheet,
   SheetContent,
-  SheetTrigger,
   SheetHeader,
   SheetTitle,
+  SheetTrigger,
 } from "@/components/ui/sheet";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import { Badge } from "@/components/ui/badge";
 
 const components = [
   {
@@ -50,7 +50,7 @@ const components = [
     href: "/components/button",
     description: "Displays a button or a component that looks like a button.",
     icon: (
-      <div className="w-4 h-4 bg-gradient-to-br from-blue-400 to-blue-600 rounded shadow-sm" />
+      <div className="h-4 w-4 rounded bg-gradient-to-br from-blue-400 to-blue-600 shadow-sm" />
     ),
   },
   {
@@ -58,7 +58,7 @@ const components = [
     href: "/components/card",
     description: "Displays a card with header, content, and footer.",
     icon: (
-      <div className="w-4 h-4 bg-gradient-to-br from-green-400 to-green-600 rounded shadow-sm" />
+      <div className="h-4 w-4 rounded bg-gradient-to-br from-green-400 to-green-600 shadow-sm" />
     ),
   },
   {
@@ -67,7 +67,7 @@ const components = [
     description:
       "A window overlaid on either the primary window or another dialog window.",
     icon: (
-      <div className="w-4 h-4 bg-gradient-to-br from-purple-400 to-purple-600 rounded shadow-sm" />
+      <div className="h-4 w-4 rounded bg-gradient-to-br from-purple-400 to-purple-600 shadow-sm" />
     ),
   },
   {
@@ -76,7 +76,7 @@ const components = [
     description:
       "Displays a form input field or a component that looks like an input field.",
     icon: (
-      <div className="w-4 h-4 bg-gradient-to-br from-orange-400 to-orange-600 rounded shadow-sm" />
+      <div className="h-4 w-4 rounded bg-gradient-to-br from-orange-400 to-orange-600 shadow-sm" />
     ),
   },
   {
@@ -85,7 +85,7 @@ const components = [
     description:
       "Displays an indicator showing the completion progress of a task.",
     icon: (
-      <div className="w-4 h-4 bg-gradient-to-br from-red-400 to-red-600 rounded shadow-sm" />
+      <div className="h-4 w-4 rounded bg-gradient-to-br from-red-400 to-red-600 shadow-sm" />
     ),
   },
   {
@@ -94,7 +94,7 @@ const components = [
     description:
       "A popup that displays information related to an element when hovered.",
     icon: (
-      <div className="w-4 h-4 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded shadow-sm" />
+      <div className="h-4 w-4 rounded bg-gradient-to-br from-yellow-400 to-yellow-600 shadow-sm" />
     ),
   },
 ];
@@ -196,23 +196,23 @@ function ListItem({
   return (
     <li {...props}>
       <Link
+        className="group block select-none space-y-1 rounded-lg border border-transparent p-4 leading-none no-underline outline-none transition-all duration-200 hover:border-border/50 hover:bg-accent hover:text-accent-foreground hover:shadow-md focus:bg-accent focus:text-accent-foreground focus:shadow-md"
         href={href}
-        target={external ? "_blank" : undefined}
         rel={external ? "noopener noreferrer" : undefined}
-        className="group block select-none space-y-1 rounded-lg p-4 leading-none no-underline outline-none transition-all duration-200 hover:bg-accent hover:text-accent-foreground hover:shadow-md focus:bg-accent focus:text-accent-foreground focus:shadow-md border border-transparent hover:border-border/50"
+        target={external ? "_blank" : undefined}
       >
         <div className="flex items-center gap-3">
           <div className="transition-transform duration-200 group-hover:scale-110">
             {icon}
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-sm font-semibold leading-none tracking-tight">
+            <span className="font-semibold text-sm leading-none tracking-tight">
               {title}
             </span>
             {external && <ExternalLinkIcon className="h-3 w-3 opacity-50" />}
           </div>
         </div>
-        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground group-hover:text-foreground/80 transition-colors duration-200">
+        <p className="line-clamp-2 text-muted-foreground text-sm leading-snug transition-colors duration-200 group-hover:text-foreground/80">
           {children}
         </p>
       </Link>
@@ -235,22 +235,22 @@ function StatusItem({
   return (
     <li {...props}>
       <Link
+        className="group flex items-center gap-3 rounded-lg border border-transparent p-4 transition-all duration-200 hover:border-border/50 hover:bg-accent hover:text-accent-foreground hover:shadow-md"
         href="#"
-        className="group flex items-center gap-3 rounded-lg p-4 transition-all duration-200 hover:bg-accent hover:text-accent-foreground hover:shadow-md border border-transparent hover:border-border/50"
       >
         <div className="transition-transform duration-200 group-hover:scale-110">
           {icon}
         </div>
         <div className="flex-1">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-semibold tracking-tight">
+            <span className="font-semibold text-sm tracking-tight">
               {title}
             </span>
-            <Badge variant="secondary" className="text-xs">
+            <Badge className="text-xs" variant="secondary">
               {count}
             </Badge>
           </div>
-          <div className="text-sm text-muted-foreground group-hover:text-foreground/80 transition-colors duration-200">
+          <div className="text-muted-foreground text-sm transition-colors duration-200 group-hover:text-foreground/80">
             {description}
           </div>
         </div>
@@ -278,7 +278,7 @@ function MobileNavItem({
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+    <Collapsible onOpenChange={setIsOpen} open={isOpen}>
       <CollapsibleTrigger className="flex w-full items-center justify-between rounded-lg px-4 py-3 text-left font-medium transition-colors hover:bg-accent hover:text-accent-foreground">
         <div className="flex items-center gap-3">
           {icon}
@@ -293,11 +293,11 @@ function MobileNavItem({
       <CollapsibleContent className="space-y-1 px-4 pb-2">
         {items.map((item, index) => (
           <Link
-            key={index}
-            href={item.href}
-            target={item.external ? "_blank" : undefined}
-            rel={item.external ? "noopener noreferrer" : undefined}
             className="flex items-center gap-3 rounded-md px-4 py-2 text-sm transition-colors hover:bg-accent hover:text-accent-foreground"
+            href={item.href}
+            key={index}
+            rel={item.external ? "noopener noreferrer" : undefined}
+            target={item.external ? "_blank" : undefined}
           >
             {item.icon}
             <div className="flex-1">
@@ -307,12 +307,12 @@ function MobileNavItem({
                   <ExternalLinkIcon className="h-3 w-3 opacity-50" />
                 )}
                 {item.count && (
-                  <Badge variant="secondary" className="text-xs">
+                  <Badge className="text-xs" variant="secondary">
                     {item.count}
                   </Badge>
                 )}
               </div>
-              <div className="text-xs text-muted-foreground">
+              <div className="text-muted-foreground text-xs">
                 {item.description}
               </div>
             </div>
@@ -327,17 +327,17 @@ export default function NavigationShowcase() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background justify-center items-center flex">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-background via-muted/20 to-background">
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto px-4">
           <div className="flex h-16 items-center justify-between">
             {/* Logo */}
-            <Link href="/" className="flex items-center space-x-2 group">
+            <Link className="group flex items-center space-x-2" href="/">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-primary/80 text-primary-foreground transition-transform duration-200 group-hover:scale-105">
                 <SparklesIcon className="h-4 w-4" />
               </div>
-              <span className="text-xl font-bold tracking-tight">VyomaUI</span>
+              <span className="font-bold text-xl tracking-tight">VyomaUI</span>
             </Link>
 
             {/* Desktop Navigation */}
@@ -346,7 +346,7 @@ export default function NavigationShowcase() {
                 <NavigationMenuList className="gap-1">
                   {/* Home */}
                   <NavigationMenuItem>
-                    <NavigationMenuTrigger className="text-sm font-medium">
+                    <NavigationMenuTrigger className="font-medium text-sm">
                       Home
                     </NavigationMenuTrigger>
                     <NavigationMenuContent>
@@ -356,40 +356,39 @@ export default function NavigationShowcase() {
                             className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
                             href="/"
                           >
-                            <div className="mb-2 mt-4 text-lg font-medium">
+                            <div className="mt-4 mb-2 font-medium text-lg">
                               VyomaUI
                             </div>
-                            <p className="text-sm leading-tight text-muted-foreground">
-                              Beautiful components for modern web
-                              applications. Built with React, TypeScript, and
-                              Tailwind CSS.
+                            <p className="text-muted-foreground text-sm leading-tight">
+                              Beautiful components for modern web applications.
+                              Built with React, TypeScript, and Tailwind CSS.
                             </p>
                           </Link>
                         </li>
                         <ListItem
                           href="/docs"
-                          title="Introduction"
                           icon={
                             <BookOpenIcon className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                           }
+                          title="Introduction"
                         >
                           Get started with our component library
                         </ListItem>
                         <ListItem
                           href="/docs/installation"
-                          title="Installation"
                           icon={
                             <RocketIcon className="h-4 w-4 text-green-600 dark:text-green-400" />
                           }
+                          title="Installation"
                         >
                           Quick setup and installation guide
                         </ListItem>
                         <ListItem
                           href="/docs/examples"
-                          title="Examples"
                           icon={
                             <CodeIcon className="h-4 w-4 text-purple-600 dark:text-purple-400" />
                           }
+                          title="Examples"
                         >
                           Real-world examples and use cases
                         </ListItem>
@@ -399,17 +398,17 @@ export default function NavigationShowcase() {
 
                   {/* Components */}
                   <NavigationMenuItem>
-                    <NavigationMenuTrigger className="text-sm font-medium">
+                    <NavigationMenuTrigger className="font-medium text-sm">
                       Components
                     </NavigationMenuTrigger>
                     <NavigationMenuContent>
                       <ul className="grid w-[400px] gap-3 p-6 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                         {components.map((component) => (
                           <ListItem
-                            key={component.title}
-                            title={component.title}
                             href={component.href}
                             icon={component.icon}
+                            key={component.title}
+                            title={component.title}
                           >
                             {component.description}
                           </ListItem>
@@ -420,17 +419,17 @@ export default function NavigationShowcase() {
 
                   {/* Resources */}
                   <NavigationMenuItem>
-                    <NavigationMenuTrigger className="text-sm font-medium">
+                    <NavigationMenuTrigger className="font-medium text-sm">
                       Resources
                     </NavigationMenuTrigger>
                     <NavigationMenuContent>
                       <ul className="grid w-[300px] gap-3 p-6">
                         {resources.map((resource) => (
                           <ListItem
-                            key={resource.title}
-                            title={resource.title}
                             href={resource.href}
                             icon={resource.icon}
+                            key={resource.title}
+                            title={resource.title}
                           >
                             {resource.description}
                           </ListItem>
@@ -441,18 +440,18 @@ export default function NavigationShowcase() {
 
                   {/* Status */}
                   <NavigationMenuItem>
-                    <NavigationMenuTrigger className="text-sm font-medium">
+                    <NavigationMenuTrigger className="font-medium text-sm">
                       Status
                     </NavigationMenuTrigger>
                     <NavigationMenuContent>
                       <ul className="grid w-[280px] gap-2 p-6">
                         {statusItems.map((item) => (
                           <StatusItem
-                            key={item.title}
-                            title={item.title}
+                            count={item.count}
                             description={item.description}
                             icon={item.icon}
-                            count={item.count}
+                            key={item.title}
+                            title={item.title}
                           />
                         ))}
                       </ul>
@@ -461,18 +460,18 @@ export default function NavigationShowcase() {
 
                   {/* Community */}
                   <NavigationMenuItem>
-                    <NavigationMenuTrigger className="text-sm font-medium">
+                    <NavigationMenuTrigger className="font-medium text-sm">
                       Community
                     </NavigationMenuTrigger>
                     <NavigationMenuContent>
                       <ul className="grid w-[260px] gap-3 p-6">
                         {community.map((item) => (
                           <ListItem
-                            key={item.title}
-                            title={item.title}
+                            external={item.external}
                             href={item.href}
                             icon={item.icon}
-                            external={item.external}
+                            key={item.title}
+                            title={item.title}
                           >
                             {item.description}
                           </ListItem>
@@ -484,7 +483,10 @@ export default function NavigationShowcase() {
                   {/* Documentation Link */}
                   <NavigationMenuItem>
                     <NavigationMenuLink asChild>
-                      <Link href="/docs" className={navigationMenuTriggerStyle()}>
+                      <Link
+                        className={navigationMenuTriggerStyle()}
+                        href="/docs"
+                      >
                         Documentation
                       </Link>
                     </NavigationMenuLink>
@@ -494,11 +496,11 @@ export default function NavigationShowcase() {
             </div>
 
             {/* Desktop CTA */}
-            <div className="hidden lg:flex items-center gap-4">
-              <Button variant="outline" size="sm" asChild>
+            <div className="hidden items-center gap-4 lg:flex">
+              <Button asChild size="sm" variant="outline">
                 <Link href="/docs">Get Started</Link>
               </Button>
-              <Button size="sm" asChild>
+              <Button asChild size="sm">
                 <Link href="/support">
                   <HeartIcon className="mr-2 h-4 w-4" />
                   Support Us
@@ -507,14 +509,14 @@ export default function NavigationShowcase() {
             </div>
 
             {/* Mobile Menu Button */}
-            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+            <Sheet onOpenChange={setMobileMenuOpen} open={mobileMenuOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="sm" className="lg:hidden">
+                <Button className="lg:hidden" size="sm" variant="ghost">
                   <MenuIcon className="h-5 w-5" />
                   <span className="sr-only">Toggle menu</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+              <SheetContent className="w-[300px] sm:w-[400px]" side="right">
                 <SheetHeader>
                   <SheetTitle className="flex items-center gap-2">
                     <div className="flex h-6 w-6 items-center justify-center rounded-md bg-gradient-to-br from-primary to-primary/80 text-primary-foreground">
@@ -525,7 +527,6 @@ export default function NavigationShowcase() {
                 </SheetHeader>
                 <div className="mt-6 space-y-4">
                   <MobileNavItem
-                    title="Home"
                     icon={<SparklesIcon className="h-4 w-4" />}
                     items={[
                       {
@@ -553,35 +554,36 @@ export default function NavigationShowcase() {
                         ),
                       },
                     ]}
+                    title="Home"
                   />
                   <MobileNavItem
-                    title="Components"
                     icon={<CodeIcon className="h-4 w-4" />}
                     items={components}
+                    title="Components"
                   />
                   <MobileNavItem
-                    title="Resources"
                     icon={<BookOpenIcon className="h-4 w-4" />}
                     items={resources}
+                    title="Resources"
                   />
                   <MobileNavItem
-                    title="Status"
                     icon={<CircleCheckIcon className="h-4 w-4" />}
                     items={statusItems.map((item) => ({
                       ...item,
                       href: "#",
                     }))}
+                    title="Status"
                   />
                   <MobileNavItem
-                    title="Community"
                     icon={<MessageCircleIcon className="h-4 w-4" />}
                     items={community}
+                    title="Community"
                   />
 
                   <div className="border-t pt-4">
                     <Link
+                      className="flex items-center gap-3 rounded-lg px-4 py-3 font-medium text-sm transition-colors hover:bg-accent hover:text-accent-foreground"
                       href="/docs"
-                      className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       <BookOpenIcon className="h-4 w-4" />
@@ -590,7 +592,7 @@ export default function NavigationShowcase() {
                   </div>
 
                   <div className="flex flex-col gap-2 pt-4">
-                    <Button variant="outline" size="sm" asChild>
+                    <Button asChild size="sm" variant="outline">
                       <Link
                         href="/docs"
                         onClick={() => setMobileMenuOpen(false)}
@@ -598,7 +600,7 @@ export default function NavigationShowcase() {
                         Get Started
                       </Link>
                     </Button>
-                    <Button size="sm" asChild>
+                    <Button asChild size="sm">
                       <Link
                         href="/support"
                         onClick={() => setMobileMenuOpen(false)}

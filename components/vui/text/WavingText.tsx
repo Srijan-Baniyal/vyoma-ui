@@ -1,8 +1,12 @@
 "use client";
 
-import { motion, HTMLMotionProps, TargetAndTransition } from "framer-motion";
+import {
+  type HTMLMotionProps,
+  motion,
+  type TargetAndTransition,
+} from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
-import { useEffect, useState, useRef } from "react";
 
 interface WaveVariant extends TargetAndTransition {
   y?: number[];
@@ -169,16 +173,21 @@ const WavingText = ({
       texts.length > 1 &&
       (trigger === "continuous" || (trigger === "view" && isVisible))
     ) {
-      const interval = setInterval(() => {
-        setCurrentTextIndex((prev) => (prev + 1) % texts.length);
-      }, (duration || speed * 1000) * 2);
+      const interval = setInterval(
+        () => {
+          setCurrentTextIndex((prev) => (prev + 1) % texts.length);
+        },
+        (duration || speed * 1000) * 2
+      );
       return () => clearInterval(interval);
     }
   }, [texts.length, trigger, isVisible, speed, duration]);
 
   // Intersection Observer for view trigger
   useEffect(() => {
-    if (trigger !== "view") return;
+    if (trigger !== "view") {
+      return;
+    }
 
     const {
       threshold = 0.1,
@@ -207,10 +216,12 @@ const WavingText = ({
 
   // Get animation variant
   const getAnimationVariant = (): WaveVariant => {
-    if (customWave) return customWave;
+    if (customWave) {
+      return customWave;
+    }
 
     // Ensure variant and intensity exist in waveVariants
-    if (waveVariants[variant] && waveVariants[variant][intensity]) {
+    if (waveVariants[variant]?.[intensity]) {
       return waveVariants[variant][intensity];
     }
 
@@ -250,7 +261,7 @@ const WavingText = ({
 
     const transition = {
       duration: duration || speed,
-      repeat: loop ? Infinity : 0,
+      repeat: loop ? Number.POSITIVE_INFINITY : 0,
       repeatType: (direction === "alternate" ? "reverse" : "loop") as
         | "loop"
         | "reverse"
@@ -270,7 +281,9 @@ const WavingText = ({
     }
     // Use Array.from() or spread operator to properly handle Unicode characters including emojis
     const characters = Array.from(text);
-    return preserveSpaces ? characters : characters.filter(char => !/\s/.test(char));
+    return preserveSpaces
+      ? characters
+      : characters.filter((char) => !/\s/.test(char));
   };
 
   const textUnits = splitTextIntoUnits(currentText);
@@ -286,8 +299,8 @@ const WavingText = ({
 
   return (
     <motion.div
-      ref={containerRef}
       className={cn("inline-flex items-baseline", containerClassName)}
+      ref={containerRef}
       {...hoverProps}
       {...props}
     >
@@ -297,7 +310,7 @@ const WavingText = ({
 
         if (isSpace && preserveSpaces) {
           return (
-            <span key={`space-${index}`} className="whitespace-pre">
+            <span className="whitespace-pre" key={`space-${index}`}>
               {unit}
             </span>
           );
@@ -308,23 +321,23 @@ const WavingText = ({
         }
 
         return (
-        <motion.span
-            key={`${currentTextIndex}-${index}-${unit}`}
+          <motion.span
+            animate={shouldAnimate() ? animationVariant : getInitialVariant()}
             className={cn(
               "inline-block",
               animateAsWords ? wordClassName : letterClassName,
               className
             )}
             initial={getInitialVariant()}
-            animate={shouldAnimate() ? animationVariant : getInitialVariant()}
-            transition={createTransition(index)}
+            key={`${currentTextIndex}-${index}-${unit}`}
             onAnimationComplete={index === 0 ? onAnimationComplete : undefined}
             style={{
               transformOrigin: "center center",
             }}
+            transition={createTransition(index)}
           >
             {unit}
-        </motion.span>
+          </motion.span>
         );
       })}
     </motion.div>
@@ -337,26 +350,29 @@ export default WavingText;
 export function WavingTextShowcase() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background p-8">
-      <div className="max-w-7xl mx-auto space-y-16">
-
+      <div className="mx-auto max-w-7xl space-y-16">
         {/* Variant Showcase */}
         <section className="space-y-8">
-          <h2 className="text-3xl font-bold text-center text-foreground">
+          <h2 className="text-center font-bold text-3xl text-foreground">
             Animation Variants
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
             {Object.keys(waveVariants).map((variantKey) => (
               <div
+                className="group rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:border-primary/50"
                 key={variantKey}
-                className="group p-6 rounded-2xl bg-card border border-border hover:border-primary/50 transition-all duration-300"
               >
                 <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-foreground capitalize">
+                  <h3 className="font-semibold text-foreground text-lg capitalize">
                     {variantKey}
                   </h3>
-                  <div className="h-16 flex items-center justify-center">
+                  <div className="flex h-16 items-center justify-center">
                     <WavingText
+                      className="font-medium text-primary"
+                      intensity="normal"
+                      speed={2}
+                      stagger={0.1}
                       text={`${
                         variantKey.charAt(0).toUpperCase() + variantKey.slice(1)
                       } Wave`}
@@ -371,13 +387,9 @@ export function WavingTextShowcase() {
                           | "dance"
                           | "quantum"
                       }
-                      intensity="normal"
-                      speed={2}
-                      stagger={0.1}
-                      className="text-primary font-medium"
                     />
                   </div>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-muted-foreground text-sm">
                     {variantKey === "sine" && "Classic sine wave motion"}
                     {variantKey === "bounce" && "Energetic bouncing effect"}
                     {variantKey === "elastic" && "Spring-like elasticity"}
@@ -395,28 +407,23 @@ export function WavingTextShowcase() {
 
         {/* Intensity Levels */}
         <section className="space-y-8">
-          <h2 className="text-3xl font-bold text-center text-foreground">
+          <h2 className="text-center font-bold text-3xl text-foreground">
             Intensity Levels
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
             {(["subtle", "normal", "strong", "extreme"] as const).map(
               (intensityLevel) => (
                 <div
+                  className="rounded-2xl border border-border bg-card p-6"
                   key={intensityLevel}
-                  className="p-6 rounded-2xl bg-card border border-border"
                 >
                   <div className="space-y-4">
-                    <h3 className="text-lg font-semibold text-foreground capitalize">
+                    <h3 className="font-semibold text-foreground text-lg capitalize">
                       {intensityLevel}
                     </h3>
-                    <div className="h-16 flex items-center justify-center">
+                    <div className="flex h-16 items-center justify-center">
                       <WavingText
-                        text="Wave Text"
-                        variant="bounce"
-                        intensity={intensityLevel}
-                        speed={2}
-                        stagger={0.15}
                         className={cn(
                           "font-semibold",
                           intensityLevel === "subtle" && "text-blue-500",
@@ -424,6 +431,11 @@ export function WavingTextShowcase() {
                           intensityLevel === "strong" && "text-orange-500",
                           intensityLevel === "extreme" && "text-red-500"
                         )}
+                        intensity={intensityLevel}
+                        speed={2}
+                        stagger={0.15}
+                        text="Wave Text"
+                        variant="bounce"
                       />
                     </div>
                   </div>
@@ -435,87 +447,87 @@ export function WavingTextShowcase() {
 
         {/* Trigger Types */}
         <section className="space-y-8">
-          <h2 className="text-3xl font-bold text-center text-foreground">
+          <h2 className="text-center font-bold text-3xl text-foreground">
             Animation Triggers
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {/* Continuous */}
-            <div className="p-6 rounded-2xl bg-gradient-to-br from-green-50/50 to-emerald-100/30 dark:from-green-950/30 dark:to-emerald-900/20 border border-green-200/50 dark:border-green-800/30">
+            <div className="rounded-2xl border border-green-200/50 bg-gradient-to-br from-green-50/50 to-emerald-100/30 p-6 dark:border-green-800/30 dark:from-green-950/30 dark:to-emerald-900/20">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-green-700 dark:text-green-300">
+                  <h3 className="font-semibold text-green-700 text-lg dark:text-green-300">
                     Continuous
                   </h3>
-                  <span className="text-xs bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 px-2 py-1 rounded">
+                  <span className="rounded bg-green-100 px-2 py-1 text-green-700 text-xs dark:bg-green-900 dark:text-green-300">
                     AUTO
                   </span>
                 </div>
-                <div className="h-16 flex items-center justify-center">
+                <div className="flex h-16 items-center justify-center">
                   <WavingText
-                    text="Always Waving!"
-                    variant="sine"
+                    className="font-medium text-green-600 dark:text-green-400"
                     intensity="normal"
                     speed={2}
+                    text="Always Waving!"
                     trigger="continuous"
-                    className="text-green-600 dark:text-green-400 font-medium"
+                    variant="sine"
                   />
                 </div>
-                <p className="text-sm text-green-600 dark:text-green-400">
+                <p className="text-green-600 text-sm dark:text-green-400">
                   Animations run continuously
                 </p>
               </div>
             </div>
 
             {/* Hover */}
-            <div className="p-6 rounded-2xl bg-gradient-to-br from-blue-50/50 to-blue-100/30 dark:from-blue-950/30 dark:to-blue-900/20 border border-blue-200/50 dark:border-blue-800/30">
+            <div className="rounded-2xl border border-blue-200/50 bg-gradient-to-br from-blue-50/50 to-blue-100/30 p-6 dark:border-blue-800/30 dark:from-blue-950/30 dark:to-blue-900/20">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-blue-700 dark:text-blue-300">
+                  <h3 className="font-semibold text-blue-700 text-lg dark:text-blue-300">
                     Hover
                   </h3>
-                  <span className="text-xs bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-2 py-1 rounded">
+                  <span className="rounded bg-blue-100 px-2 py-1 text-blue-700 text-xs dark:bg-blue-900 dark:text-blue-300">
                     HOVER
                   </span>
                 </div>
-                <div className="h-16 flex items-center justify-center">
+                <div className="flex h-16 items-center justify-center">
                   <WavingText
-                    text="Hover over me!"
-                    variant="bounce"
+                    className="cursor-pointer font-medium text-blue-600 dark:text-blue-400"
                     intensity="strong"
                     speed={1.5}
+                    text="Hover over me!"
                     trigger="hover"
-                    className="text-blue-600 dark:text-blue-400 font-medium cursor-pointer"
+                    variant="bounce"
                   />
                 </div>
-                <p className="text-sm text-blue-600 dark:text-blue-400">
+                <p className="text-blue-600 text-sm dark:text-blue-400">
                   Waves on mouse hover
                 </p>
               </div>
             </div>
 
             {/* View */}
-            <div className="p-6 rounded-2xl bg-gradient-to-br from-purple-50/50 to-violet-100/30 dark:from-purple-950/30 dark:to-violet-900/20 border border-purple-200/50 dark:border-purple-800/30">
+            <div className="rounded-2xl border border-purple-200/50 bg-gradient-to-br from-purple-50/50 to-violet-100/30 p-6 dark:border-purple-800/30 dark:from-purple-950/30 dark:to-violet-900/20">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-purple-700 dark:text-purple-300">
+                  <h3 className="font-semibold text-lg text-purple-700 dark:text-purple-300">
                     On View
                   </h3>
-                  <span className="text-xs bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 px-2 py-1 rounded">
+                  <span className="rounded bg-purple-100 px-2 py-1 text-purple-700 text-xs dark:bg-purple-900 dark:text-purple-300">
                     VIEW
                   </span>
                 </div>
-                <div className="h-16 flex items-center justify-center">
+                <div className="flex h-16 items-center justify-center">
                   <WavingText
-                    text="Scroll to see me!"
-                    variant="elastic"
+                    className="font-medium text-purple-600 dark:text-purple-400"
                     intensity="normal"
                     speed={2}
+                    text="Scroll to see me!"
                     trigger="view"
-                    className="text-purple-600 dark:text-purple-400 font-medium"
+                    variant="elastic"
                   />
                 </div>
-                <p className="text-sm text-purple-600 dark:text-purple-400">
+                <p className="text-purple-600 text-sm dark:text-purple-400">
                   Animates when in viewport
                 </p>
               </div>
@@ -525,29 +537,29 @@ export function WavingTextShowcase() {
 
         {/* Advanced Features */}
         <section className="space-y-8">
-          <h2 className="text-3xl font-bold text-center text-foreground">
+          <h2 className="text-center font-bold text-3xl text-foreground">
             Advanced Features
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
             {/* Word Animation */}
-            <div className="p-8 rounded-2xl bg-card border border-border">
+            <div className="rounded-2xl border border-border bg-card p-8">
               <div className="space-y-4">
-                <h3 className="text-xl font-semibold text-foreground">
+                <h3 className="font-semibold text-foreground text-xl">
                   Word-based Animation
                 </h3>
-                <div className="h-20 flex items-center justify-center">
+                <div className="flex h-20 items-center justify-center">
                   <WavingText
-                    text="Each word waves separately!"
-                    variant="rotate"
+                    animateAsWords={true}
+                    className="font-medium text-lg text-orange-500"
                     intensity="normal"
                     speed={2}
-                    animateAsWords={true}
                     stagger={0.3}
-                    className="text-orange-500 font-medium text-lg"
+                    text="Each word waves separately!"
+                    variant="rotate"
                   />
                 </div>
-                <div className="text-sm text-muted-foreground font-mono bg-muted p-3 rounded">
+                <div className="rounded bg-muted p-3 font-mono text-muted-foreground text-sm">
                   {`<WavingText 
   text="Each word waves separately!" 
   animateAsWords={true} 
@@ -558,22 +570,22 @@ export function WavingTextShowcase() {
             </div>
 
             {/* Multiple Texts */}
-            <div className="p-8 rounded-2xl bg-card border border-border">
+            <div className="rounded-2xl border border-border bg-card p-8">
               <div className="space-y-4">
-                <h3 className="text-xl font-semibold text-foreground">
+                <h3 className="font-semibold text-foreground text-xl">
                   Multiple Texts
                 </h3>
-                <div className="h-20 flex items-center justify-center">
+                <div className="flex h-20 items-center justify-center">
                   <WavingText
-                    text={["First Message", "Second Message", "Third Message"]}
-                    variant="dance"
+                    className="font-medium text-lg text-pink-500"
                     intensity="normal"
                     speed={2}
                     stagger={0.1}
-                    className="text-pink-500 font-medium text-lg"
+                    text={["First Message", "Second Message", "Third Message"]}
+                    variant="dance"
                   />
                 </div>
-                <div className="text-sm text-muted-foreground font-mono bg-muted p-3 rounded">
+                <div className="rounded bg-muted p-3 font-mono text-muted-foreground text-sm">
                   {`<WavingText 
   text={["First Message", "Second Message", "Third Message"]} 
   variant="dance" 
@@ -583,48 +595,48 @@ export function WavingTextShowcase() {
             </div>
 
             {/* Direction Control */}
-            <div className="p-8 rounded-2xl bg-card border border-border">
+            <div className="rounded-2xl border border-border bg-card p-8">
               <div className="space-y-6">
-                <h3 className="text-xl font-semibold text-foreground">
+                <h3 className="font-semibold text-foreground text-xl">
                   Direction Control
                 </h3>
                 <div className="space-y-6">
                   <div className="text-center">
-                    <p className="text-sm text-muted-foreground mb-4">
+                    <p className="mb-4 text-muted-foreground text-sm">
                       Forward
                     </p>
-                    <div className="h-16 flex items-center justify-center">
+                    <div className="flex h-16 items-center justify-center">
                       <WavingText
-                        text="Left to Right"
-                        variant="scale"
+                        className="font-medium text-cyan-500 text-lg"
                         direction="forward"
-                        stagger={0.15}
-                        speed={2}
-                        trigger="continuous"
                         intensity="normal"
-                        className="text-cyan-500 font-medium text-lg"
+                        speed={2}
+                        stagger={0.15}
+                        text="Left to Right"
+                        trigger="continuous"
+                        variant="scale"
                       />
                     </div>
                   </div>
                   <div className="text-center">
-                    <p className="text-sm text-muted-foreground mb-4">
+                    <p className="mb-4 text-muted-foreground text-sm">
                       Reverse
                     </p>
-                    <div className="h-16 flex items-center justify-center">
+                    <div className="flex h-16 items-center justify-center">
                       <WavingText
-                        text="Right to Left"
-                        variant="scale"
+                        className="font-medium text-cyan-500 text-lg"
                         direction="reverse"
-                        stagger={0.15}
-                        speed={2}
-                        trigger="continuous"
                         intensity="normal"
-                        className="text-cyan-500 font-medium text-lg"
+                        speed={2}
+                        stagger={0.15}
+                        text="Right to Left"
+                        trigger="continuous"
+                        variant="scale"
                       />
                     </div>
                   </div>
                 </div>
-                <div className="text-sm text-muted-foreground font-mono bg-muted p-3 rounded">
+                <div className="rounded bg-muted p-3 font-mono text-muted-foreground text-sm">
                   {`<WavingText 
   text="Left to Right" 
   direction="forward" 
@@ -640,23 +652,23 @@ export function WavingTextShowcase() {
             </div>
 
             {/* Custom Styling */}
-            <div className="p-8 rounded-2xl bg-card border border-border">
+            <div className="rounded-2xl border border-border bg-card p-8">
               <div className="space-y-4">
-                <h3 className="text-xl font-semibold text-foreground">
+                <h3 className="font-semibold text-foreground text-xl">
                   Custom Styling
                 </h3>
-                <div className="h-60 flex items-center justify-center">
+                <div className="flex h-60 items-center justify-center">
                   <WavingText
-                    text="🌊 Styled Waves 🌊"
-                    variant="quantum"
+                    className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text font-bold text-2xl text-transparent"
                     intensity="strong"
                     speed={2}
                     stagger={0.1}
+                    text="🌊 Styled Waves 🌊"
                     trigger="continuous"
-                    className="text-transparent bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text font-bold text-2xl"
+                    variant="quantum"
                   />
                 </div>
-                <div className="text-sm text-muted-foreground font-mono bg-muted p-3 rounded">
+                <div className="rounded bg-muted p-3 font-mono text-muted-foreground text-sm">
                   {`<WavingText 
   text="🌊 Styled Waves 🌊" 
   className="text-transparent bg-gradient-to-r 
@@ -677,12 +689,12 @@ export function WavingTextShowcase() {
 export function WavingTextTheme() {
   return (
     <WavingText
-      text="Beautiful wave animations for your text content"
-      variant="sine"
+      className="font-medium text-primary"
       intensity="normal"
       speed={2.5}
       stagger={0.08}
-      className="text-primary font-medium"
+      text="Beautiful wave animations for your text content"
+      variant="sine"
     />
   );
 }

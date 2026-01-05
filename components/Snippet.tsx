@@ -1,7 +1,7 @@
 "use client";
 
-import { Card } from "@/components/ui/card";
 import Copy from "@/components/Copy";
+import { Card } from "@/components/ui/card";
 
 interface SnippetProps {
   text: string;
@@ -34,7 +34,7 @@ export function Snippet({
 
   return (
     <Card
-      className={`relative flex flex-nowrap p-3 w-full transition-all duration-200 group ${
+      className={`group relative flex w-full flex-nowrap p-3 transition-all duration-200 ${
         variantStyles[variant]
       } ${
         width
@@ -42,17 +42,17 @@ export function Snippet({
           : "max-w-[300px] sm:max-w-[400px] md:max-w-[500px] lg:max-w-[740px]"
       }`}
     >
-      <div className="flex items-center gap-3 flex-1 min-w-0">
+      <div className="flex min-w-0 flex-1 items-center gap-3">
         {showIndicator && (
           <div
-            className={`w-2 h-2 rounded-full ${indicatorColors[variant]} opacity-60 group-hover:opacity-100 transition-opacity flex-shrink-0`}
-          ></div>
+            className={`h-2 w-2 rounded-full ${indicatorColors[variant]} flex-shrink-0 opacity-60 transition-opacity group-hover:opacity-100`}
+          />
         )}
-        <div className="flex items-center flex-1 min-w-0">
-          <code className="text-sm font-mono text-foreground/90 flex-1 select-all whitespace-nowrap overflow-hidden">
+        <div className="flex min-w-0 flex-1 items-center">
+          <code className="flex-1 select-all overflow-hidden whitespace-nowrap font-mono text-foreground/90 text-sm">
             {text}
           </code>
-          <div className="flex-shrink-0 ml-3">
+          <div className="ml-3 flex-shrink-0">
             <Copy content={text} />
           </div>
         </div>

@@ -8,18 +8,18 @@ export default function Component() {
   return (
     <div className="flex items-center justify-center">
       <button
+        className="group relative overflow-hidden rounded-2xl border-4 border-white shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-3xl focus:outline-none focus:ring-4 focus:ring-blue-500/50"
         onClick={() => console.log("Button clicked!")}
-        className="relative overflow-hidden rounded-2xl border-4 border-white shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-3xl focus:outline-none focus:ring-4 focus:ring-blue-500/50 group"
         style={{ width: "320px", height: "180px" }}
       >
         {/* Video Background */}
         <video
-          ref={videoRef}
-          className="absolute inset-0 w-full h-full object-cover"
           autoPlay
-          muted
+          className="absolute inset-0 h-full w-full object-cover"
           loop
+          muted
           playsInline
+          ref={videoRef}
         >
           <source
             src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
@@ -28,12 +28,12 @@ export default function Component() {
         </video>
 
         {/* Dark Overlay */}
-        <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors duration-300" />
+        <div className="absolute inset-0 bg-black/30 transition-colors duration-300 group-hover:bg-black/20" />
 
         {/* Content Overlay */}
-        <div className="relative z-10 flex items-center justify-center h-full text-white">
-          <div className="px-8 py-4 bg-white/20 backdrop-blur-sm rounded-full border border-white/30 transition-all duration-300 group-hover:scale-125 group-hover:bg-white/30">
-            <span className="text-2xl font-bold tracking-wide uppercase">
+        <div className="relative z-10 flex h-full items-center justify-center text-white">
+          <div className="rounded-full border border-white/30 bg-white/20 px-8 py-4 backdrop-blur-sm transition-all duration-300 group-hover:scale-125 group-hover:bg-white/30">
+            <span className="font-bold text-2xl uppercase tracking-wide">
               Use Me
             </span>
           </div>
@@ -41,10 +41,10 @@ export default function Component() {
 
         {/* Animated Border */}
         <div
-          className="absolute inset-0 rounded-2xl border-2 border-transparent bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"
+          className="absolute inset-0 -z-10 rounded-2xl border-2 border-transparent bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
           style={{ padding: "2px" }}
         >
-          <div className="w-full h-full bg-transparent rounded-2xl" />
+          <div className="h-full w-full rounded-2xl bg-transparent" />
         </div>
       </button>
     </div>

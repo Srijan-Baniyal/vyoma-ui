@@ -1,14 +1,15 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
 import { motion, useMotionValue, useSpring } from "motion/react";
+import type React from "react";
+import { useEffect, useRef, useState } from "react";
 
 const SPRING_CONFIG = { damping: 100, stiffness: 400 };
 
-type MagneticButtonType = {
+interface MagneticButtonType {
   children: React.ReactNode;
   distance?: number;
-};
+}
 
 function MagneticButton({ children, distance = 0.6 }: MagneticButtonType) {
   const [isHovered, setIsHovered] = useState(false);
@@ -44,13 +45,13 @@ function MagneticButton({ children, distance = 0.6 }: MagneticButtonType) {
     return () => {
       document.removeEventListener("mousemove", calculateDistance);
     };
-  }, [ref, isHovered, distance, x, y]);
+  }, [isHovered, distance, x, y]);
 
   return (
     <motion.div
-      ref={ref}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      ref={ref}
       style={{
         x: springX,
         y: springY,

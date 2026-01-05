@@ -1,11 +1,10 @@
 "use client";
 
-import * as React from "react";
 import {
   type HTMLMotionProps,
+  motion,
   type Transition,
   type Variant,
-  motion,
 } from "motion/react";
 import { cn } from "@/lib/utils";
 
@@ -62,37 +61,37 @@ function FlipButton({
 
   return (
     <motion.button
+      className={cn(
+        "perspective-[1000px] relative inline-block h-10 cursor-pointer px-4 py-2 font-medium text-sm focus:outline-none",
+        className
+      )}
       data-slot="flip-button"
       initial="initial"
       whileHover="hover"
       whileTap={{ scale: 0.95 }}
-      className={cn(
-        "relative inline-block h-10 px-4 py-2 text-sm font-medium cursor-pointer perspective-[1000px] focus:outline-none",
-        className
-      )}
       {...props}
     >
       <motion.span
-        data-slot="flip-button-front"
-        variants={frontVariants}
-        transition={transition}
         className={cn(
           DEFAULT_SPAN_CLASS_NAME,
           "bg-muted text-black dark:text-white",
           frontClassName
         )}
+        data-slot="flip-button-front"
+        transition={transition}
+        variants={frontVariants}
       >
         {frontText}
       </motion.span>
       <motion.span
-        data-slot="flip-button-back"
-        variants={backVariants}
-        transition={transition}
         className={cn(
           DEFAULT_SPAN_CLASS_NAME,
           "bg-primary text-primary-foreground",
           backClassName
         )}
+        data-slot="flip-button-back"
+        transition={transition}
+        variants={backVariants}
       >
         {backText}
       </motion.span>

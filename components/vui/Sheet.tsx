@@ -1,29 +1,29 @@
 "use client";
 
-import * as React from "react";
-import { motion, AnimatePresence } from "motion/react";
 import {
-  X,
+  BarChart3,
+  Camera,
+  FileText,
+  Home,
+  ImageIcon,
   Menu,
   Settings,
-  Camera,
-  ImageIcon,
-  FileText,
-  BarChart3,
   Users,
-  Home,
+  X,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { AnimatePresence, motion } from "motion/react";
+import * as React from "react";
 import {
   Sheet as BaseSheet,
-  SheetTrigger as BaseSheetTrigger,
   SheetClose as BaseSheetClose,
   SheetContent as BaseSheetContent,
-  SheetHeader as BaseSheetHeader,
-  SheetFooter as BaseSheetFooter,
-  SheetTitle as BaseSheetTitle,
   SheetDescription as BaseSheetDescription,
+  SheetFooter as BaseSheetFooter,
+  SheetHeader as BaseSheetHeader,
+  SheetTitle as BaseSheetTitle,
+  SheetTrigger as BaseSheetTrigger,
 } from "@/components/ui/sheet";
+import { cn } from "@/lib/utils";
 
 /**
  * Enhanced VUI Sheet Properties
@@ -156,18 +156,16 @@ const VUISheetContent = React.forwardRef<
 
     return (
       <BaseSheetContent
-        ref={ref}
-        side={side}
         className={cn(
           // Base styles
-          "bg-background/95 border-border/50 focus:outline-none",
-          glassmorphism && "backdrop-blur-xl bg-background/80",
+          "border-border/50 bg-background/95 focus:outline-none",
+          glassmorphism && "bg-background/80 backdrop-blur-xl",
 
           // Size classes
           getSizeClasses(),
 
           // Enhanced shadow and border
-          "shadow-2xl border-2",
+          "border-2 shadow-2xl",
           showGradientBorder && "border-primary/20",
 
           // Position specific styles
@@ -175,55 +173,54 @@ const VUISheetContent = React.forwardRef<
 
           className
         )}
+        ref={ref}
+        side={side}
         {...props}
       >
         {/* Gradient accent line */}
         <AnimatePresence>
           {showGradientBorder && (
             <motion.div
+              animate="animate"
               className={cn(
-                "absolute bg-gradient-to-r from-primary/60 via-primary to-primary/60 z-10",
+                "absolute z-10 bg-gradient-to-r from-primary/60 via-primary to-primary/60",
                 getGradientPosition()
               )}
               custom={side}
-              variants={animationVariants.gradientBorder}
-              initial="initial"
-              animate="animate"
               exit="initial"
+              initial="initial"
               transition={{
                 delay: 0.15,
                 duration: animationDuration * 1.1,
                 ease: [0.25, 0.46, 0.45, 0.94],
               }}
+              variants={animationVariants.gradientBorder}
             />
           )}
         </AnimatePresence>
 
         {/* Content wrapper with stagger animation */}
         <motion.div
-          className="flex flex-col h-full relative z-20"
-          custom={side}
-          variants={animationVariants.content}
-          initial="initial"
           animate="animate"
+          className="relative z-20 flex h-full flex-col"
+          custom={side}
           exit="exit"
+          initial="initial"
           transition={{
             delay: 0.05,
             duration: animationDuration,
             ease: [0.23, 1, 0.32, 1],
           }}
+          variants={animationVariants.content}
         >
           {children}
         </motion.div>
 
         {/* Enhanced close button */}
         <motion.div
-          className="absolute top-4 right-4 z-30"
-          variants={animationVariants.closeButton}
-          initial="initial"
           animate="animate"
-          whileHover="hover"
-          whileTap="tap"
+          className="absolute top-4 right-4 z-30"
+          initial="initial"
           transition={{
             delay: 0.3,
             duration: 0.5,
@@ -231,19 +228,22 @@ const VUISheetContent = React.forwardRef<
             stiffness: 400,
             damping: 25,
           }}
+          variants={animationVariants.closeButton}
+          whileHover="hover"
+          whileTap="tap"
         >
           <BaseSheetClose
+            aria-label="Close sheet"
             className={cn(
-              "rounded-full w-8 h-8 flex items-center justify-center",
-              "bg-muted/50 hover:bg-muted/80 backdrop-blur-sm",
+              "flex h-8 w-8 items-center justify-center rounded-full",
+              "bg-muted/50 backdrop-blur-sm hover:bg-muted/80",
               "border border-border/50 hover:border-border",
               "transition-all duration-200 ease-out",
               "focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background",
-              "focus:outline-none group"
+              "group focus:outline-none"
             )}
-            aria-label="Close sheet"
           >
-            <X className="size-4 text-muted-foreground group-hover:text-foreground transition-colors" />
+            <X className="size-4 text-muted-foreground transition-colors group-hover:text-foreground" />
           </BaseSheetClose>
         </motion.div>
       </BaseSheetContent>
@@ -261,16 +261,16 @@ const VUISheetHeader = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof BaseSheetHeader>
 >(({ className, children, ...props }, ref) => (
   <BaseSheetHeader
-    ref={ref}
     className={cn(
-      "border-b border-border/30 bg-gradient-to-r from-background/50 to-background/30 backdrop-blur-sm px-6 py-4",
+      "border-border/30 border-b bg-gradient-to-r from-background/50 to-background/30 px-6 py-4 backdrop-blur-sm",
       className
     )}
+    ref={ref}
     {...props}
   >
     <motion.div
-      initial={{ opacity: 0, y: -15, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
+      initial={{ opacity: 0, y: -15, scale: 0.95 }}
       transition={{
         delay: 0.15,
         duration: 0.6,
@@ -292,16 +292,16 @@ const VUISheetFooter = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof BaseSheetFooter>
 >(({ className, children, ...props }, ref) => (
   <BaseSheetFooter
-    ref={ref}
     className={cn(
-      "border-t border-border/30 bg-gradient-to-r from-background/30 to-background/50 backdrop-blur-sm px-6 py-4",
+      "border-border/30 border-t bg-gradient-to-r from-background/30 to-background/50 px-6 py-4 backdrop-blur-sm",
       className
     )}
+    ref={ref}
     {...props}
   >
     <motion.div
-      initial={{ opacity: 0, y: 15, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
+      initial={{ opacity: 0, y: 15, scale: 0.95 }}
       transition={{
         delay: 0.25,
         duration: 0.6,
@@ -325,8 +325,8 @@ const VUISheetTitle = React.forwardRef<
   }
 >(({ className, gradient = true, children, ...props }, ref) => (
   <motion.div
-    initial={{ opacity: 0, x: -12, scale: 0.98 }}
     animate={{ opacity: 1, x: 0, scale: 1 }}
+    initial={{ opacity: 0, x: -12, scale: 0.98 }}
     transition={{
       delay: 0.2,
       duration: 0.5,
@@ -334,13 +334,13 @@ const VUISheetTitle = React.forwardRef<
     }}
   >
     <BaseSheetTitle
-      ref={ref}
       className={cn(
-        "text-xl font-semibold tracking-tight",
+        "font-semibold text-xl tracking-tight",
         gradient &&
           "bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent",
         className
       )}
+      ref={ref}
       {...props}
     >
       {children}
@@ -358,8 +358,8 @@ const VUISheetDescription = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof BaseSheetDescription>
 >(({ className, children, ...props }, ref) => (
   <motion.div
-    initial={{ opacity: 0, y: 3 }}
     animate={{ opacity: 1, y: 0 }}
+    initial={{ opacity: 0, y: 3 }}
     transition={{
       delay: 0.3,
       duration: 0.5,
@@ -367,8 +367,8 @@ const VUISheetDescription = React.forwardRef<
     }}
   >
     <BaseSheetDescription
+      className={cn("text-muted-foreground text-sm leading-relaxed", className)}
       ref={ref}
-      className={cn("text-sm text-muted-foreground leading-relaxed", className)}
       {...props}
     >
       {children}
@@ -385,16 +385,16 @@ const VUISheetTrigger = React.forwardRef<
   React.ComponentRef<typeof BaseSheetTrigger>,
   React.ComponentPropsWithoutRef<typeof BaseSheetTrigger>
 >(({ className, children, ...props }, ref) => (
-  <BaseSheetTrigger ref={ref} className={cn("group", className)} {...props}>
+  <BaseSheetTrigger className={cn("group", className)} ref={ref} {...props}>
     <motion.div
-      whileHover={{ scale: 1.02, y: -1 }}
-      whileTap={{ scale: 0.98 }}
       transition={{
         type: "spring",
         stiffness: 500,
         damping: 30,
         mass: 0.8,
       }}
+      whileHover={{ scale: 1.02, y: -1 }}
+      whileTap={{ scale: 0.98 }}
     >
       {children}
     </motion.div>
@@ -411,13 +411,13 @@ const VUISheetBody = React.forwardRef<
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, children, ...props }, ref) => (
   <div
-    ref={ref}
     className={cn("flex-1 overflow-auto px-6 py-4", className)}
+    ref={ref}
     {...props}
   >
     <motion.div
-      initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 8 }}
       transition={{
         delay: 0.35,
         duration: 0.6,
@@ -458,50 +458,55 @@ const EnhancedButton = React.forwardRef<
     variant?: "primary" | "secondary" | "outline" | "ghost";
     size?: "sm" | "md" | "lg";
   }
->(({ className, variant = "primary", size = "md", children, ...props }, ref) => {
-  const baseClasses =
-    "font-medium rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2";
+>(
+  (
+    { className, variant = "primary", size = "md", children, ...props },
+    ref
+  ) => {
+    const baseClasses =
+      "font-medium rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2";
 
-  const variantClasses = {
-    primary:
-      "bg-primary text-primary-foreground hover:bg-primary/90 focus:ring-primary/50",
-    secondary:
-      "bg-secondary text-secondary-foreground hover:bg-secondary/80 focus:ring-secondary/50",
-    outline:
-      "border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground focus:ring-primary/50",
-    ghost: "text-foreground hover:bg-muted focus:ring-muted/50",
-  };
+    const variantClasses = {
+      primary:
+        "bg-primary text-primary-foreground hover:bg-primary/90 focus:ring-primary/50",
+      secondary:
+        "bg-secondary text-secondary-foreground hover:bg-secondary/80 focus:ring-secondary/50",
+      outline:
+        "border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground focus:ring-primary/50",
+      ghost: "text-foreground hover:bg-muted focus:ring-muted/50",
+    };
 
-  const sizeClasses = {
-    sm: "px-4 py-2 text-sm",
-    md: "px-6 py-3 text-base",
-    lg: "px-8 py-4 text-lg",
-  };
+    const sizeClasses = {
+      sm: "px-4 py-2 text-sm",
+      md: "px-6 py-3 text-base",
+      lg: "px-8 py-4 text-lg",
+    };
 
-  return (
-    <motion.button
-      type="button"
-      ref={ref}
-      className={cn(
-        baseClasses,
-        variantClasses[variant],
-        sizeClasses[size],
-        className
-      )}
-      whileHover={{ scale: 1.02, y: -2 }}
-      whileTap={{ scale: 0.98, y: 0 }}
-      transition={{
-        type: "spring",
-        stiffness: 400,
-        damping: 17,
-        mass: 0.8,
-      }}
-      {...props}
-    >
-      {children}
-    </motion.button>
-  );
-});
+    return (
+      <motion.button
+        className={cn(
+          baseClasses,
+          variantClasses[variant],
+          sizeClasses[size],
+          className
+        )}
+        ref={ref}
+        transition={{
+          type: "spring",
+          stiffness: 400,
+          damping: 17,
+          mass: 0.8,
+        }}
+        type="button"
+        whileHover={{ scale: 1.02, y: -2 }}
+        whileTap={{ scale: 0.98, y: 0 }}
+        {...props}
+      >
+        {children}
+      </motion.button>
+    );
+  }
+);
 
 EnhancedButton.displayName = "EnhancedButton";
 
@@ -516,17 +521,17 @@ const FeatureCard: React.FC<{
 }> = ({ icon, title, description, color }) => (
   <motion.div
     className={cn(
-      "p-4 rounded-lg border transition-all duration-200 hover:shadow-md",
+      "rounded-lg border p-4 transition-all duration-200 hover:shadow-md",
       `bg-${color}-500/10 border-${color}-500/20 hover:border-${color}-500/30`
     )}
-    whileHover={{ scale: 1.02, y: -2 }}
     transition={{ type: "spring", stiffness: 300, damping: 20 }}
+    whileHover={{ scale: 1.02, y: -2 }}
   >
-    <div className={cn("flex items-center gap-3 mb-2", `text-${color}-600`)}>
+    <div className={cn("mb-2 flex items-center gap-3", `text-${color}-600`)}>
       {icon}
       <h4 className="font-medium">{title}</h4>
     </div>
-    <p className="text-sm text-muted-foreground">{description}</p>
+    <p className="text-muted-foreground text-sm">{description}</p>
   </motion.div>
 );
 
@@ -540,13 +545,13 @@ const NavItem: React.FC<{
   onClick?: () => void;
 }> = ({ icon, label, href = "#", onClick }) => (
   <motion.a
+    className="group flex items-center gap-3 rounded-md p-3 transition-colors hover:bg-muted/50"
     href={href}
     onClick={onClick}
-    className="flex items-center gap-3 p-3 rounded-md hover:bg-muted/50 transition-colors group"
-    whileHover={{ x: 4 }}
     transition={{ type: "spring", stiffness: 300, damping: 20 }}
+    whileHover={{ x: 4 }}
   >
-    <div className="w-5 h-5 text-muted-foreground group-hover:text-foreground transition-colors">
+    <div className="h-5 w-5 text-muted-foreground transition-colors group-hover:text-foreground">
       {icon}
     </div>
     <span className="text-foreground group-hover:text-foreground/90">
@@ -564,18 +569,18 @@ const ToggleSwitch: React.FC<{
   onChange?: (checked: boolean) => void;
 }> = ({ label, checked = false, onChange }) => (
   <div className="flex items-center justify-between">
-    <label className="text-sm font-medium">{label}</label>
+    <label className="font-medium text-sm">{label}</label>
     <motion.button
       className={cn(
-        "w-11 h-6 rounded-full p-1 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50",
+        "h-6 w-11 rounded-full p-1 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50",
         checked ? "bg-primary" : "bg-muted"
       )}
       onClick={() => onChange?.(!checked)}
       whileTap={{ scale: 0.95 }}
     >
       <motion.div
-        className="w-4 h-4 bg-white rounded-full shadow-sm"
         animate={{ x: checked ? 20 : 0 }}
+        className="h-4 w-4 rounded-full bg-white shadow-sm"
         transition={{ type: "spring", stiffness: 500, damping: 30 }}
       />
     </motion.button>
@@ -592,18 +597,18 @@ export function VUISheetShowcase() {
 
   return (
     <div className="min-h-5 bg-gradient-to-br from-background via-background to-muted/30 p-4 md:p-8">
-      <div className="max-w-6xl mx-auto space-y-12 justify-center items-center">
+      <div className="mx-auto max-w-6xl items-center justify-center space-y-12">
         {/* Sheet Variations */}
         <div className="space-y-12">
           {/* Right Side Sheets */}
           <motion.section
+            animate={{ opacity: 1, x: 0 }}
             className="space-y-6"
             initial={{ opacity: 0, x: -60 }}
-            animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3, duration: 0.8, ease: [0.23, 1, 0.32, 1] }}
           >
-            <h2 className="text-2xl font-semibold">Right Side Sheets</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <h2 className="font-semibold text-2xl">Right Side Sheets</h2>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {/* Standard Right Sheet */}
               <VUISheet>
                 <VUISheetTrigger asChild>
@@ -621,8 +626,8 @@ export function VUISheetShowcase() {
                   </VUISheetHeader>
                   <VUISheetBody>
                     <div className="space-y-6">
-                      <div className="p-4 bg-muted/30 rounded-lg border border-border/50">
-                        <h3 className="font-medium mb-3 text-foreground">
+                      <div className="rounded-lg border border-border/50 bg-muted/30 p-4">
+                        <h3 className="mb-3 font-medium text-foreground">
                           Key Features
                         </h3>
                         <ul className="space-y-3 text-sm">
@@ -635,36 +640,36 @@ export function VUISheetShowcase() {
                             "TypeScript support",
                           ].map((feature, index) => (
                             <motion.li
-                              key={feature}
+                              animate={{ opacity: 1, x: 0 }}
                               className="flex items-center gap-3 text-muted-foreground"
                               initial={{ opacity: 0, x: -10 }}
-                              animate={{ opacity: 1, x: 0 }}
+                              key={feature}
                               transition={{ delay: 0.1 * index }}
                             >
-                              <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0"></div>
+                              <div className="h-2 w-2 flex-shrink-0 rounded-full bg-primary" />
                               {feature}
                             </motion.li>
                           ))}
                         </ul>
                       </div>
                       <div className="space-y-3">
-                        <label className="text-sm font-medium block">
+                        <label className="block font-medium text-sm">
                           Sample Form Field
                         </label>
                         <input
-                          type="text"
+                          className="w-full rounded-md border border-border bg-background px-3 py-2 transition-all focus:border-transparent focus:ring-2 focus:ring-primary"
                           placeholder="Enter some text..."
-                          className="w-full px-3 py-2 bg-background border border-border rounded-md focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                          type="text"
                         />
                       </div>
                     </div>
                   </VUISheetBody>
                   <VUISheetFooter>
-                    <div className="flex gap-3 ml-auto">
-                      <EnhancedButton variant="ghost" size="sm">
+                    <div className="ml-auto flex gap-3">
+                      <EnhancedButton size="sm" variant="ghost">
                         Cancel
                       </EnhancedButton>
-                      <EnhancedButton variant="primary" size="sm">
+                      <EnhancedButton size="sm" variant="primary">
                         Save Changes
                       </EnhancedButton>
                     </div>
@@ -676,8 +681,8 @@ export function VUISheetShowcase() {
               <VUISheet>
                 <VUISheetTrigger asChild>
                   <EnhancedButton
-                    variant="secondary"
                     className="bg-emerald-600 text-white hover:bg-emerald-700"
+                    variant="secondary"
                   >
                     Large (LG)
                   </EnhancedButton>
@@ -691,31 +696,31 @@ export function VUISheetShowcase() {
                   </VUISheetHeader>
                   <VUISheetBody>
                     <div className="space-y-6">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <FeatureCard
-                          icon={<BarChart3 className="w-5 h-5" />}
-                          title="Analytics"
-                          description="View detailed analytics and insights"
                           color="blue"
+                          description="View detailed analytics and insights"
+                          icon={<BarChart3 className="h-5 w-5" />}
+                          title="Analytics"
                         />
                         <FeatureCard
-                          icon={<Settings className="w-5 h-5" />}
-                          title="Settings"
-                          description="Configure your preferences"
                           color="purple"
+                          description="Configure your preferences"
+                          icon={<Settings className="h-5 w-5" />}
+                          title="Settings"
                         />
                       </div>
                       <div className="space-y-4">
                         <h3 className="font-medium">Configuration</h3>
                         <div className="space-y-4">
                           <ToggleSwitch
-                            label="Enable notifications"
                             checked={notifications}
+                            label="Enable notifications"
                             onChange={setNotifications}
                           />
                           <ToggleSwitch
-                            label="Dark mode"
                             checked={darkMode}
+                            label="Dark mode"
                             onChange={setDarkMode}
                           />
                         </div>
@@ -729,8 +734,8 @@ export function VUISheetShowcase() {
               <VUISheet>
                 <VUISheetTrigger asChild>
                   <EnhancedButton
-                    variant="secondary"
                     className="bg-orange-600 text-white hover:bg-orange-700"
+                    variant="secondary"
                   >
                     Small (SM)
                   </EnhancedButton>
@@ -746,36 +751,36 @@ export function VUISheetShowcase() {
                     <div className="space-y-2">
                       {[
                         {
-                          icon: <FileText className="w-4 h-4" />,
+                          icon: <FileText className="h-4 w-4" />,
                           title: "Export Data",
                           desc: "Download your data",
                         },
                         {
-                          icon: <Users className="w-4 h-4" />,
+                          icon: <Users className="h-4 w-4" />,
                           title: "Share",
                           desc: "Share with others",
                         },
                         {
-                          icon: <X className="w-4 h-4" />,
+                          icon: <X className="h-4 w-4" />,
                           title: "Delete",
                           desc: "Remove permanently",
                         },
                       ].map((action, index) => (
                         <motion.button
-                          key={action.title}
-                          className="w-full p-3 text-left rounded-md hover:bg-muted/50 transition-colors group"
-                          initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
+                          className="group w-full rounded-md p-3 text-left transition-colors hover:bg-muted/50"
+                          initial={{ opacity: 0, y: 10 }}
+                          key={action.title}
                           transition={{ delay: 0.1 * index }}
                           whileHover={{ x: 4 }}
                         >
-                          <div className="flex items-center gap-3 mb-1">
-                            <div className="text-muted-foreground group-hover:text-foreground transition-colors">
+                          <div className="mb-1 flex items-center gap-3">
+                            <div className="text-muted-foreground transition-colors group-hover:text-foreground">
                               {action.icon}
                             </div>
                             <div className="font-medium">{action.title}</div>
                           </div>
-                          <div className="text-sm text-muted-foreground ml-7">
+                          <div className="ml-7 text-muted-foreground text-sm">
                             {action.desc}
                           </div>
                         </motion.button>
@@ -789,18 +794,18 @@ export function VUISheetShowcase() {
 
           {/* Bottom Sheets */}
           <motion.section
+            animate={{ opacity: 1, y: 0 }}
             className="space-y-6"
             initial={{ opacity: 0, y: 60 }}
-            animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.8, ease: [0.23, 1, 0.32, 1] }}
           >
-            <h2 className="text-2xl font-semibold">Bottom Sheets</h2>
-            <div className="flex flex-wrap gap-4 justify-center items-center">
+            <h2 className="font-semibold text-2xl">Bottom Sheets</h2>
+            <div className="flex flex-wrap items-center justify-center gap-4">
               <VUISheet>
                 <VUISheetTrigger asChild>
                   <EnhancedButton
-                    variant="secondary"
                     className="bg-violet-600 text-white hover:bg-violet-700"
+                    variant="secondary"
                   >
                     Bottom Sheet
                   </EnhancedButton>
@@ -815,24 +820,24 @@ export function VUISheetShowcase() {
                     </VUISheetDescription>
                   </VUISheetHeader>
                   <VUISheetBody>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                       <FeatureCard
-                        icon={<Camera className="w-5 h-5" />}
-                        title="Camera"
-                        description="Take a new photo"
                         color="blue"
+                        description="Take a new photo"
+                        icon={<Camera className="h-5 w-5" />}
+                        title="Camera"
                       />
                       <FeatureCard
-                        icon={<ImageIcon className="w-5 h-5" />}
-                        title="Gallery"
-                        description="Choose from gallery"
                         color="green"
+                        description="Choose from gallery"
+                        icon={<ImageIcon className="h-5 w-5" />}
+                        title="Gallery"
                       />
                       <FeatureCard
-                        icon={<FileText className="w-5 h-5" />}
-                        title="Documents"
-                        description="Upload documents"
                         color="purple"
+                        description="Upload documents"
+                        icon={<FileText className="h-5 w-5" />}
+                        title="Documents"
                       />
                     </div>
                   </VUISheetBody>
@@ -842,16 +847,16 @@ export function VUISheetShowcase() {
               <VUISheet>
                 <VUISheetTrigger asChild>
                   <EnhancedButton
+                    className="border-rose-600 bg-white text-rose-600 hover:bg-rose-600 hover:text-white"
                     variant="outline"
-                    className="bg-white text-rose-600 border-rose-600 hover:bg-rose-600 hover:text-white"
                   >
                     No Gradient Border
                   </EnhancedButton>
                 </VUISheetTrigger>
                 <VUISheetContent
+                  showGradientBorder={false}
                   side="bottom"
                   size="md"
-                  showGradientBorder={false}
                 >
                   <VUISheetHeader>
                     <VUISheetTitle>Clean Design</VUISheetTitle>
@@ -860,7 +865,7 @@ export function VUISheetShowcase() {
                     </VUISheetDescription>
                   </VUISheetHeader>
                   <VUISheetBody>
-                    <div className="text-center py-8">
+                    <div className="py-8 text-center">
                       <p className="text-muted-foreground">
                         This sheet has the gradient border disabled for a
                         cleaner, more minimal look.
@@ -874,20 +879,20 @@ export function VUISheetShowcase() {
 
           {/* Left Sheet */}
           <motion.section
+            animate={{ opacity: 1, x: 0 }}
             className="space-y-6"
             initial={{ opacity: 0, x: 60 }}
-            animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.9, duration: 0.8, ease: [0.23, 1, 0.32, 1] }}
           >
-            <h2 className="text-2xl font-semibold">Left Side Sheets</h2>
-            <div className="flex flex-wrap gap-4 justify-center items-center">
+            <h2 className="font-semibold text-2xl">Left Side Sheets</h2>
+            <div className="flex flex-wrap items-center justify-center gap-4">
               <VUISheet>
                 <VUISheetTrigger asChild>
                   <EnhancedButton
-                    variant="secondary"
                     className="bg-cyan-600 text-white hover:bg-cyan-700"
+                    variant="secondary"
                   >
-                    <Menu className="w-4 h-4 mr-2" />
+                    <Menu className="mr-2 h-4 w-4" />
                     Left Navigation
                   </EnhancedButton>
                 </VUISheetTrigger>

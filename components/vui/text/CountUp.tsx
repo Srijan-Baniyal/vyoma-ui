@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
-import { useInView, useMotionValue, useSpring, motion } from "framer-motion";
+import { motion, useInView, useMotionValue, useSpring } from "framer-motion";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 // Enhanced types for better developer experience
 type NumberFormat =
@@ -148,7 +148,7 @@ export function CountUp({
           }).format(roundedValue);
           break;
 
-        default:
+        default: {
           const options: Intl.NumberFormatOptions = {
             useGrouping: !!separator,
             minimumFractionDigits: decimals,
@@ -163,6 +163,7 @@ export function CountUp({
             formattedValue = formattedValue.replace(/,/g, separator);
           }
           break;
+        }
       }
 
       return `${prefix}${formattedValue}${suffix}`;
@@ -193,11 +194,14 @@ export function CountUp({
         motionValue.set(direction === "down" ? from : to);
       }, delay * 1000);
 
-      const durationTimeoutId = setTimeout(() => {
-        if (typeof onEnd === "function") {
-          onEnd();
-        }
-      }, delay * 1000 + duration * 1000);
+      const durationTimeoutId = setTimeout(
+        () => {
+          if (typeof onEnd === "function") {
+            onEnd();
+          }
+        },
+        delay * 1000 + duration * 1000
+      );
 
       return () => {
         clearTimeout(timeoutId);
@@ -283,12 +287,12 @@ export function CountUp({
   // Dynamic styles
   const dynamicStyles = {
     ...style,
-    filter: enableGlow ? `drop-shadow(0 0 10px currentColor)` : style.filter,
+    filter: enableGlow ? "drop-shadow(0 0 10px currentColor)" : style.filter,
     transition: hoverEffect ? "all 0.3s ease" : style.transition,
     cursor: hoverEffect ? "pointer" : style.cursor,
     ...(isHovered &&
       hoverEffect && {
-        transform: `scale(1.05)`,
+        transform: "scale(1.05)",
         filter: `brightness(1.2) ${
           enableGlow ? "drop-shadow(0 0 10px currentColor)" : ""
         }`,
@@ -311,12 +315,12 @@ export function CountUp({
 
   return (
     <motion.span
-      ref={ref}
-      className={`inline-block ${className}`}
-      style={dynamicStyles}
       animate={getEffectAnimation()}
-      onHoverStart={() => setIsHovered(true)}
+      className={`inline-block ${className}`}
       onHoverEnd={() => setIsHovered(false)}
+      onHoverStart={() => setIsHovered(true)}
+      ref={ref}
+      style={dynamicStyles}
       {...accessibilityProps}
     >
       {content}
@@ -328,53 +332,53 @@ export function CountUp({
 export default function CountUpShowcase() {
   return (
     <div className="space-y-8 p-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
         <div className="text-center">
-          <h3 className="text-lg font-semibold mb-2">Basic Count Up</h3>
-          <div className="text-3xl font-bold text-primary">
-            <CountUp to={100} duration={2} />
+          <h3 className="mb-2 font-semibold text-lg">Basic Count Up</h3>
+          <div className="font-bold text-3xl text-primary">
+            <CountUp duration={2} to={100} />
           </div>
         </div>
 
         <div className="text-center">
-          <h3 className="text-lg font-semibold mb-2">With Prefix/Suffix</h3>
-          <div className="text-3xl font-bold text-green-600">
-            <CountUp to={100} prefix="$" suffix="K" duration={2.5} />
+          <h3 className="mb-2 font-semibold text-lg">With Prefix/Suffix</h3>
+          <div className="font-bold text-3xl text-green-600">
+            <CountUp duration={2.5} prefix="$" suffix="K" to={100} />
           </div>
         </div>
 
         <div className="text-center">
-          <h3 className="text-lg font-semibold mb-2">Percentage</h3>
-          <div className="text-3xl font-bold text-blue-600">
-            <CountUp to={100} suffix="%" duration={2} />
+          <h3 className="mb-2 font-semibold text-lg">Percentage</h3>
+          <div className="font-bold text-3xl text-blue-600">
+            <CountUp duration={2} suffix="%" to={100} />
           </div>
         </div>
 
         <div className="text-center">
-          <h3 className="text-lg font-semibold mb-2">Bounce Effect</h3>
-          <div className="text-3xl font-bold text-purple-600">
-            <CountUp to={1000} effect="bounce" duration={3} />
+          <h3 className="mb-2 font-semibold text-lg">Bounce Effect</h3>
+          <div className="font-bold text-3xl text-purple-600">
+            <CountUp duration={3} effect="bounce" to={1000} />
           </div>
         </div>
 
         <div className="text-center">
-          <h3 className="text-lg font-semibold mb-2">Elastic Effect</h3>
-          <div className="text-3xl font-bold text-orange-600">
-            <CountUp to={1000} effect="elastic" duration={2.5} />
+          <h3 className="mb-2 font-semibold text-lg">Elastic Effect</h3>
+          <div className="font-bold text-3xl text-orange-600">
+            <CountUp duration={2.5} effect="elastic" to={1000} />
           </div>
         </div>
 
         <div className="text-center">
-          <h3 className="text-lg font-semibold mb-2">Custom Render</h3>
-          <div className="text-3xl font-bold">
+          <h3 className="mb-2 font-semibold text-lg">Custom Render</h3>
+          <div className="font-bold text-3xl">
             <CountUp
-              to={999}
               duration={2}
               renderValue={() => (
                 <span className="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 bg-clip-text text-transparent">
                   ∞
                 </span>
               )}
+              to={999}
             />
           </div>
         </div>
@@ -384,9 +388,5 @@ export default function CountUpShowcase() {
 }
 
 export function CountUpTheme() {
-  return (
-    <>
-      <CountUp to={100} duration={2} />
-    </>
-  );
+  return <CountUp duration={2} to={100} />;
 }

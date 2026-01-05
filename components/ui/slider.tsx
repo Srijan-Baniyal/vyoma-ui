@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import type * as React from "react";
 import { cn } from "@/lib/utils";
 import { Label } from "./label";
 
@@ -23,7 +23,7 @@ export function Slider({
   step = 1,
   label,
   unit = "",
-  className
+  className,
 }: SliderProps) {
   const percentage = ((value - min) / (max - min)) * 100;
 
@@ -34,33 +34,34 @@ export function Slider({
   return (
     <div className={cn("space-y-2", className)}>
       {label && (
-        <div className="flex justify-between items-center">
-          <Label className="text-sm font-medium">{label}</Label>
-          <span className="text-sm text-muted-foreground font-mono">
-            {value}{unit}
+        <div className="flex items-center justify-between">
+          <Label className="font-medium text-sm">{label}</Label>
+          <span className="font-mono text-muted-foreground text-sm">
+            {value}
+            {unit}
           </span>
         </div>
       )}
       <div className="relative">
         <input
-          type="range"
-          min={min}
-          max={max}
-          step={step}
-          value={value}
-          onChange={handleChange}
           className={cn(
-            "w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer",
-            "slider-thumb:appearance-none slider-thumb:h-4 slider-thumb:w-4 slider-thumb:rounded-full",
-            "slider-thumb:bg-primary slider-thumb:cursor-pointer slider-thumb:shadow-sm",
+            "h-2 w-full cursor-pointer appearance-none rounded-lg bg-muted",
+            "slider-thumb:h-4 slider-thumb:w-4 slider-thumb:appearance-none slider-thumb:rounded-full",
+            "slider-thumb:cursor-pointer slider-thumb:bg-primary slider-thumb:shadow-sm",
             "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
-            "disabled:opacity-50 disabled:cursor-not-allowed"
+            "disabled:cursor-not-allowed disabled:opacity-50"
           )}
+          max={max}
+          min={min}
+          onChange={handleChange}
+          step={step}
           style={{
-            background: `linear-gradient(to right, hsl(var(--primary)) 0%, hsl(var(--primary)) ${percentage}%, hsl(var(--muted)) ${percentage}%, hsl(var(--muted)) 100%)`
+            background: `linear-gradient(to right, hsl(var(--primary)) 0%, hsl(var(--primary)) ${percentage}%, hsl(var(--muted)) ${percentage}%, hsl(var(--muted)) 100%)`,
           }}
+          type="range"
+          value={value}
         />
       </div>
     </div>
   );
-} 
+}

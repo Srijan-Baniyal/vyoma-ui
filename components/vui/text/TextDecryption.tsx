@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
-import { motion, HTMLMotionProps } from "framer-motion";
+import { type HTMLMotionProps, motion } from "framer-motion";
 import { useTheme } from "next-themes";
+import { useEffect, useRef, useState } from "react";
 
 interface TextDecryptionProps extends HTMLMotionProps<"span"> {
   text: string;
@@ -54,7 +54,9 @@ function TextDecryption({
 
   // Theme-aware default styling classes
   const getThemeAwareClasses = () => {
-    if (className) return className;
+    if (className) {
+      return className;
+    }
 
     return theme === "dark"
       ? "text-green-400 font-mono transition-all duration-300"
@@ -62,7 +64,9 @@ function TextDecryption({
   };
 
   const getThemeAwareEncryptedClasses = () => {
-    if (encryptedClassName) return encryptedClassName;
+    if (encryptedClassName) {
+      return encryptedClassName;
+    }
 
     return theme === "dark"
       ? "text-gray-500 font-mono opacity-70 transition-all duration-150"
@@ -70,7 +74,9 @@ function TextDecryption({
   };
 
   const getThemeAwareParentClasses = () => {
-    if (parentClassName) return parentClassName;
+    if (parentClassName) {
+      return parentClassName;
+    }
 
     return "inline-block cursor-pointer transition-all duration-300";
   };
@@ -104,7 +110,9 @@ function TextDecryption({
             return nextIndex;
           }
           for (let i = 0; i < textLength; i++) {
-            if (!revealedSet.has(i)) return i;
+            if (!revealedSet.has(i)) {
+              return i;
+            }
           }
           return 0;
         }
@@ -145,7 +153,7 @@ function TextDecryption({
         }));
 
         const nonSpecialChars = positions
-          .filter((p) => !p.isSpace && !p.isEmoji && !p.isRevealed)
+          .filter((p) => !(p.isSpace || p.isEmoji || p.isRevealed))
           .map((p) => p.char);
 
         for (let i = nonSpecialChars.length - 1; i > 0; i--) {
@@ -159,22 +167,29 @@ function TextDecryption({
         let charIndex = 0;
         return positions
           .map((p) => {
-            if (p.isSpace || p.isEmoji) return p.char; // Preserve spaces and emojis
-            if (p.isRevealed) return textChars[p.index];
+            if (p.isSpace || p.isEmoji) {
+              return p.char; // Preserve spaces and emojis
+            }
+            if (p.isRevealed) {
+              return textChars[p.index];
+            }
             return nonSpecialChars[charIndex++] || p.char;
           })
           .join("");
-      } else {
-        return textChars
-          .map((char, i) => {
-            if (char === " " || isEmojiOrSpecial(char)) return char; // Preserve spaces and emojis
-            if (currentRevealed.has(i)) return textChars[i];
-            return availableChars[
-              Math.floor(Math.random() * availableChars.length)
-            ];
-          })
-          .join("");
       }
+      return textChars
+        .map((char, i) => {
+          if (char === " " || isEmojiOrSpecial(char)) {
+            return char; // Preserve spaces and emojis
+          }
+          if (currentRevealed.has(i)) {
+            return textChars[i];
+          }
+          return availableChars[
+            Math.floor(Math.random() * availableChars.length)
+          ];
+        })
+        .join("");
     };
 
     if (isHovering) {
@@ -188,48 +203,46 @@ function TextDecryption({
               newRevealed.add(nextIndex);
               setDisplayText(shuffleText(text, newRevealed));
               return newRevealed;
-            } else {
-              clearInterval(interval);
-              setIsScrambling(false);
-
-              // Start loop if enabled and on view animation
-              if (loop && animateOn === "view" && !isLooping) {
-                setIsLooping(true);
-                loopTimeoutRef.current = setTimeout(() => {
-                  setRevealedIndices(new Set());
-                  setIsHovering(false);
-                  setIsLooping(false);
-                  setTimeout(() => {
-                    setIsHovering(true);
-                  }, 100);
-                }, loopDelay);
-              }
-
-              return prevRevealed;
             }
-          } else {
-            setDisplayText(shuffleText(text, prevRevealed));
-            currentIteration++;
-            if (currentIteration >= maxIterations) {
-              clearInterval(interval);
-              setIsScrambling(false);
-              setDisplayText(text);
+            clearInterval(interval);
+            setIsScrambling(false);
 
-              // Start loop if enabled and on view animation
-              if (loop && animateOn === "view" && !isLooping) {
-                setIsLooping(true);
-                loopTimeoutRef.current = setTimeout(() => {
-                  setRevealedIndices(new Set());
-                  setIsHovering(false);
-                  setIsLooping(false);
-                  setTimeout(() => {
-                    setIsHovering(true);
-                  }, 100);
-                }, loopDelay);
-              }
+            // Start loop if enabled and on view animation
+            if (loop && animateOn === "view" && !isLooping) {
+              setIsLooping(true);
+              loopTimeoutRef.current = setTimeout(() => {
+                setRevealedIndices(new Set());
+                setIsHovering(false);
+                setIsLooping(false);
+                setTimeout(() => {
+                  setIsHovering(true);
+                }, 100);
+              }, loopDelay);
             }
+
             return prevRevealed;
           }
+          setDisplayText(shuffleText(text, prevRevealed));
+          currentIteration++;
+          if (currentIteration >= maxIterations) {
+            clearInterval(interval);
+            setIsScrambling(false);
+            setDisplayText(text);
+
+            // Start loop if enabled and on view animation
+            if (loop && animateOn === "view" && !isLooping) {
+              setIsLooping(true);
+              loopTimeoutRef.current = setTimeout(() => {
+                setRevealedIndices(new Set());
+                setIsHovering(false);
+                setIsLooping(false);
+                setTimeout(() => {
+                  setIsHovering(true);
+                }, 100);
+              }, loopDelay);
+            }
+          }
+          return prevRevealed;
         });
       }, speed);
     } else {
@@ -239,8 +252,12 @@ function TextDecryption({
     }
 
     return () => {
-      if (interval) clearInterval(interval);
-      if (loopTimeoutRef.current) clearTimeout(loopTimeoutRef.current);
+      if (interval) {
+        clearInterval(interval);
+      }
+      if (loopTimeoutRef.current) {
+        clearTimeout(loopTimeoutRef.current);
+      }
     };
   }, [
     isHovering,
@@ -255,17 +272,20 @@ function TextDecryption({
     loopDelay,
     animateOn,
     isLooping,
-    theme,
   ]);
 
   useEffect(() => {
-    if (animateOn !== "view") return;
+    if (animateOn !== "view") {
+      return;
+    }
 
     const observerCallback = (entries: IntersectionObserverEntry[]) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting && (!hasAnimated || loop)) {
           setIsHovering(true);
-          if (!loop) setHasAnimated(true);
+          if (!loop) {
+            setHasAnimated(true);
+          }
         }
       });
     };
@@ -286,7 +306,9 @@ function TextDecryption({
     }
 
     return () => {
-      if (currentRef) observer.unobserve(currentRef);
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
     };
   }, [animateOn, hasAnimated, loop]);
 
@@ -299,7 +321,9 @@ function TextDecryption({
       : {};
 
   const getThemeAwareGlow = () => {
-    if (!glowEffect || !isHovering) return "";
+    if (!(glowEffect && isHovering)) {
+      return "";
+    }
 
     return theme === "dark"
       ? "drop-shadow-[0_0_10px_rgba(34,197,94,0.5)]"
@@ -316,10 +340,10 @@ function TextDecryption({
 
   return (
     <motion.span
-      ref={containerRef}
+      animate={{ opacity: 1, y: 0 }}
       className={`inline-block whitespace-pre-wrap ${containerClasses}`}
       initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
+      ref={containerRef}
       transition={{ duration: 0.5, ease: "easeOut" }}
       {...hoverProps}
       {...props}
@@ -335,20 +359,20 @@ function TextDecryption({
 
           return (
             <motion.span
-              key={`${index}-${char}`}
+              animate={
+                typewriterEffect && isRevealedOrDone
+                  ? { opacity: 1, scale: 1 }
+                  : typewriterEffect
+                    ? { opacity: 0.7, scale: 0.9 }
+                    : undefined
+              }
               className={`${
                 isRevealedOrDone ? defaultClassName : defaultEncryptedClassName
               } relative inline-block`}
               initial={
                 typewriterEffect ? { opacity: 0, scale: 0.8 } : undefined
               }
-              animate={
-                typewriterEffect && isRevealedOrDone
-                  ? { opacity: 1, scale: 1 }
-                  : typewriterEffect
-                  ? { opacity: 0.7, scale: 0.9 }
-                  : undefined
-              }
+              key={`${index}-${char}`}
               transition={{
                 duration: 0.2,
                 delay: typewriterEffect ? index * 0.05 : 0,
@@ -358,7 +382,7 @@ function TextDecryption({
               {char}
               {/* Subtle glow effect for revealed characters */}
               {glowEffect && isRevealedOrDone && (
-                <span className="absolute inset-0 text-green-400 opacity-50 blur-sm pointer-events-none">
+                <span className="pointer-events-none absolute inset-0 text-green-400 opacity-50 blur-sm">
                   {char}
                 </span>
               )}
@@ -369,11 +393,11 @@ function TextDecryption({
         {/* Cursor effect for typewriter mode */}
         {typewriterEffect && isScrambling && (
           <motion.span
-            className="inline-block w-0.5 h-5 bg-green-400 ml-1"
             animate={{ opacity: [1, 0] }}
+            className="ml-1 inline-block h-5 w-0.5 bg-green-400"
             transition={{
               duration: 0.8,
-              repeat: Infinity,
+              repeat: Number.POSITIVE_INFINITY,
               repeatType: "reverse",
             }}
           />
@@ -385,26 +409,26 @@ function TextDecryption({
 
 export default function TextDecryptionShowcase() {
   return (
-    <div className="max-w-6xl mx-auto p-8 space-y-16 bg-background text-foreground min-h-screen">
+    <div className="mx-auto min-h-screen max-w-6xl space-y-16 bg-background p-8 text-foreground">
       <section className="space-y-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="group p-8 border border-border rounded-xl bg-card hover:border-green-500 dark:hover:border-green-400 transition-all duration-300">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-medium text-card-foreground">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+          <div className="group rounded-xl border border-border bg-card p-8 transition-all duration-300 hover:border-green-500 dark:hover:border-green-400">
+            <div className="mb-4 flex items-center justify-between">
+              <h3 className="font-medium text-card-foreground text-xl">
                 Hover to Decrypt
               </h3>
-              <span className="text-xs bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 px-2 py-1 rounded">
+              <span className="rounded bg-green-100 px-2 py-1 text-green-700 text-xs dark:bg-green-900 dark:text-green-300">
                 HOVER
               </span>
             </div>
-            <div className="mb-6 p-4 bg-muted rounded-lg">
+            <div className="mb-6 rounded-lg bg-muted p-4">
               <TextDecryption
-                text="Hover over me to see the magic!"
                 animateOn="hover"
-                className="text-green-600 dark:text-green-400 text-xl"
+                className="text-green-600 text-xl dark:text-green-400"
+                text="Hover over me to see the magic!"
               />
             </div>
-            <div className="text-xs text-muted-foreground font-mono bg-muted p-3 rounded">
+            <div className="rounded bg-muted p-3 font-mono text-muted-foreground text-xs">
               {`<TextDecryption 
   text="Hover over me to see the magic!" 
   animateOn="hover" 
@@ -412,28 +436,28 @@ export default function TextDecryptionShowcase() {
             </div>
           </div>
 
-          <div className="group p-8 border border-border rounded-xl bg-card hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-300">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-medium text-card-foreground">
+          <div className="group rounded-xl border border-border bg-card p-8 transition-all duration-300 hover:border-blue-500 dark:hover:border-blue-400">
+            <div className="mb-4 flex items-center justify-between">
+              <h3 className="font-medium text-card-foreground text-xl">
                 Auto Decrypt on View
               </h3>
-              <span className="text-xs bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-2 py-1 rounded">
+              <span className="rounded bg-blue-100 px-2 py-1 text-blue-700 text-xs dark:bg-blue-900 dark:text-blue-300">
                 AUTO
               </span>
             </div>
-            <div className="mb-6 p-4 bg-muted rounded-lg">
+            <div className="mb-6 rounded-lg bg-muted p-4">
               <TextDecryption
-                text="I decrypt when you see me"
-                sequential={true}
-                revealDirection="start"
-                speed={120}
                 animateOn="view"
+                className="text-blue-600 text-xl dark:text-blue-400"
                 loop={true}
                 loopDelay={1000}
-                className="text-blue-600 dark:text-blue-400 text-xl"
+                revealDirection="start"
+                sequential={true}
+                speed={120}
+                text="I decrypt when you see me"
               />
             </div>
-            <div className="text-xs text-muted-foreground font-mono bg-muted p-3 rounded">
+            <div className="rounded bg-muted p-3 font-mono text-muted-foreground text-xs">
               {`<TextDecryption 
   text="I decrypt automatically when you see me" 
   animateOn="view"
@@ -448,7 +472,7 @@ export default function TextDecryptionShowcase() {
       {/* Sequential vs Random */}
       <section className="space-y-8">
         <div className="text-center">
-          <h2 className="text-3xl font-semibold text-primary mb-3">
+          <h2 className="mb-3 font-semibold text-3xl text-primary">
             Sequential vs Random Decryption
           </h2>
           <p className="text-muted-foreground">
@@ -456,30 +480,30 @@ export default function TextDecryptionShowcase() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="p-6 border border-border rounded-lg bg-card">
-            <h3 className="text-lg font-medium text-card-foreground mb-3">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <div className="rounded-lg border border-border bg-card p-6">
+            <h3 className="mb-3 font-medium text-card-foreground text-lg">
               Sequential (Left to Right)
             </h3>
             <TextDecryption
-              text="Sequential decryption from start"
-              sequential={true}
-              revealDirection="start"
               animateOn="hover"
-              className="text-purple-600 dark:text-purple-400 text-lg"
+              className="text-lg text-purple-600 dark:text-purple-400"
+              revealDirection="start"
+              sequential={true}
+              text="Sequential decryption from start"
             />
           </div>
 
-          <div className="p-6 border border-border rounded-lg bg-card">
-            <h3 className="text-lg font-medium text-card-foreground mb-3">
+          <div className="rounded-lg border border-border bg-card p-6">
+            <h3 className="mb-3 font-medium text-card-foreground text-lg">
               Random Scramble
             </h3>
             <TextDecryption
-              text="Random character scrambling"
-              sequential={false}
-              maxIterations={15}
               animateOn="hover"
-              className="text-yellow-600 dark:text-yellow-400 text-lg"
+              className="text-lg text-yellow-600 dark:text-yellow-400"
+              maxIterations={15}
+              sequential={false}
+              text="Random character scrambling"
             />
           </div>
         </div>
@@ -487,45 +511,45 @@ export default function TextDecryptionShowcase() {
 
       {/* Reveal Directions */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold text-green-300 border-b border-green-800 pb-2">
+        <h2 className="border-green-800 border-b pb-2 font-semibold text-2xl text-green-300">
           Reveal Directions
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="p-4 border border-gray-700 rounded-lg bg-gray-900">
-            <h3 className="text-sm font-medium text-gray-200 mb-3">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <div className="rounded-lg border border-gray-700 bg-gray-900 p-4">
+            <h3 className="mb-3 font-medium text-gray-200 text-sm">
               From Start
             </h3>
             <TextDecryption
-              text="Start to End"
-              sequential={true}
-              revealDirection="start"
               animateOn="hover"
               className="text-green-400"
+              revealDirection="start"
+              sequential={true}
+              text="Start to End"
             />
           </div>
 
-          <div className="p-4 border border-gray-700 rounded-lg bg-gray-900">
-            <h3 className="text-sm font-medium text-gray-200 mb-3">From End</h3>
+          <div className="rounded-lg border border-gray-700 bg-gray-900 p-4">
+            <h3 className="mb-3 font-medium text-gray-200 text-sm">From End</h3>
             <TextDecryption
-              text="End to Start"
-              sequential={true}
-              revealDirection="end"
               animateOn="hover"
               className="text-red-400"
+              revealDirection="end"
+              sequential={true}
+              text="End to Start"
             />
           </div>
 
-          <div className="p-4 border border-gray-700 rounded-lg bg-gray-900">
-            <h3 className="text-sm font-medium text-gray-200 mb-3">
+          <div className="rounded-lg border border-gray-700 bg-gray-900 p-4">
+            <h3 className="mb-3 font-medium text-gray-200 text-sm">
               From Center
             </h3>
             <TextDecryption
-              text="Center Outward"
-              sequential={true}
-              revealDirection="center"
               animateOn="hover"
               className="text-cyan-400"
+              revealDirection="center"
+              sequential={true}
+              text="Center Outward"
             />
           </div>
         </div>
@@ -533,47 +557,47 @@ export default function TextDecryptionShowcase() {
 
       {/* Speed Variations */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold text-green-300 border-b border-green-800 pb-2">
+        <h2 className="border-green-800 border-b pb-2 font-semibold text-2xl text-green-300">
           Speed Variations
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="p-4 border border-gray-700 rounded-lg bg-gray-900">
-            <h3 className="text-sm font-medium text-gray-200 mb-3">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <div className="rounded-lg border border-gray-700 bg-gray-900 p-4">
+            <h3 className="mb-3 font-medium text-gray-200 text-sm">
               Slow (200ms)
             </h3>
             <TextDecryption
-              text="Slow and steady"
-              speed={200}
-              sequential={true}
               animateOn="hover"
               className="text-orange-400"
+              sequential={true}
+              speed={200}
+              text="Slow and steady"
             />
           </div>
 
-          <div className="p-4 border border-gray-700 rounded-lg bg-gray-900">
-            <h3 className="text-sm font-medium text-gray-200 mb-3">
+          <div className="rounded-lg border border-gray-700 bg-gray-900 p-4">
+            <h3 className="mb-3 font-medium text-gray-200 text-sm">
               Normal (50ms)
             </h3>
             <TextDecryption
-              text="Normal speed"
-              speed={50}
-              sequential={true}
               animateOn="hover"
               className="text-pink-400"
+              sequential={true}
+              speed={50}
+              text="Normal speed"
             />
           </div>
 
-          <div className="p-4 border border-gray-700 rounded-lg bg-gray-900">
-            <h3 className="text-sm font-medium text-gray-200 mb-3">
+          <div className="rounded-lg border border-gray-700 bg-gray-900 p-4">
+            <h3 className="mb-3 font-medium text-gray-200 text-sm">
               Fast (20ms)
             </h3>
             <TextDecryption
-              text="Lightning fast"
-              speed={20}
-              sequential={true}
               animateOn="hover"
               className="text-indigo-400"
+              sequential={true}
+              speed={20}
+              text="Lightning fast"
             />
           </div>
         </div>
@@ -581,34 +605,34 @@ export default function TextDecryptionShowcase() {
 
       {/* Character Sets */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold text-green-300 border-b border-green-800 pb-2">
+        <h2 className="border-green-800 border-b pb-2 font-semibold text-2xl text-green-300">
           Custom Character Sets
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="p-6 border border-gray-700 rounded-lg bg-gray-900">
-            <h3 className="text-lg font-medium text-gray-200 mb-3">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <div className="rounded-lg border border-gray-700 bg-gray-900 p-6">
+            <h3 className="mb-3 font-medium text-gray-200 text-lg">
               Numbers Only
             </h3>
             <TextDecryption
-              text="1234567890"
-              characters="0123456789"
-              sequential={true}
               animateOn="hover"
-              className="text-green-400 text-2xl font-mono"
+              characters="0123456789"
+              className="font-mono text-2xl text-green-400"
+              sequential={true}
+              text="1234567890"
             />
           </div>
 
-          <div className="p-6 border border-gray-700 rounded-lg bg-gray-900">
-            <h3 className="text-lg font-medium text-gray-200 mb-3">
+          <div className="rounded-lg border border-gray-700 bg-gray-900 p-6">
+            <h3 className="mb-3 font-medium text-gray-200 text-lg">
               Symbols Only
             </h3>
             <TextDecryption
-              text="!@#$%^&*()"
-              characters="!@#$%^&*()_+-=[]{}|;:,.<>?"
-              sequential={true}
               animateOn="hover"
-              className="text-red-400 text-2xl font-mono"
+              characters="!@#$%^&*()_+-=[]{}|;:,.<>?"
+              className="font-mono text-2xl text-red-400"
+              sequential={true}
+              text="!@#$%^&*()"
             />
           </div>
         </div>
@@ -616,55 +640,55 @@ export default function TextDecryptionShowcase() {
 
       {/* Original Characters Only */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold text-green-300 border-b border-green-800 pb-2">
+        <h2 className="border-green-800 border-b pb-2 font-semibold text-2xl text-green-300">
           Original Characters Mode
         </h2>
 
-        <div className="p-6 border border-gray-700 rounded-lg bg-gray-900">
-          <h3 className="text-lg font-medium text-gray-200 mb-3">
+        <div className="rounded-lg border border-gray-700 bg-gray-900 p-6">
+          <h3 className="mb-3 font-medium text-gray-200 text-lg">
             Scrambles only using characters from the original text
           </h3>
           <TextDecryption
+            animateOn="hover"
+            className="text-2xl text-cyan-400"
+            maxIterations={20}
+            sequential={false}
             text="Hello World"
             useOriginalCharsOnly={true}
-            sequential={false}
-            maxIterations={20}
-            animateOn="hover"
-            className="text-cyan-400 text-2xl"
           />
         </div>
       </section>
 
       {/* Visual Effects */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold text-green-300 border-b border-green-800 pb-2">
+        <h2 className="border-green-800 border-b pb-2 font-semibold text-2xl text-green-300">
           Visual Effects
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="p-6 border border-gray-700 rounded-lg bg-gray-900">
-            <h3 className="text-lg font-medium text-gray-200 mb-3">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <div className="rounded-lg border border-gray-700 bg-gray-900 p-6">
+            <h3 className="mb-3 font-medium text-gray-200 text-lg">
               Glow Effect
             </h3>
             <TextDecryption
-              text="Glowing text effect"
+              animateOn="hover"
+              className="font-bold text-green-400 text-xl"
               glowEffect={true}
               sequential={true}
-              animateOn="hover"
-              className="text-green-400 text-xl font-bold"
+              text="Glowing text effect"
             />
           </div>
 
-          <div className="p-6 border border-gray-700 rounded-lg bg-gray-900">
-            <h3 className="text-lg font-medium text-gray-200 mb-3">
+          <div className="rounded-lg border border-gray-700 bg-gray-900 p-6">
+            <h3 className="mb-3 font-medium text-gray-200 text-lg">
               Typewriter Effect
             </h3>
             <TextDecryption
-              text="Typewriter style reveal"
-              typewriterEffect={true}
-              sequential={true}
               animateOn="hover"
               className="text-blue-400 text-xl"
+              sequential={true}
+              text="Typewriter style reveal"
+              typewriterEffect={true}
             />
           </div>
         </div>
@@ -673,7 +697,7 @@ export default function TextDecryptionShowcase() {
       {/* Real-World Use Cases */}
       <section className="space-y-8">
         <div className="text-center">
-          <h2 className="text-3xl font-semibold text-primary mb-3">
+          <h2 className="mb-3 font-semibold text-3xl text-primary">
             Real-World Use Cases
           </h2>
           <p className="text-muted-foreground">
@@ -681,68 +705,68 @@ export default function TextDecryptionShowcase() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
           {/* Loading State */}
-          <div className="p-8 border border-border rounded-xl bg-card">
-            <h3 className="text-xl font-medium text-card-foreground mb-4">
+          <div className="rounded-xl border border-border bg-card p-8">
+            <h3 className="mb-4 font-medium text-card-foreground text-xl">
               Loading State
             </h3>
-            <div className="space-y-3 mb-6">
+            <div className="mb-6 space-y-3">
               <TextDecryption
-                text="Loading user profile..."
-                sequential={true}
-                speed={80}
                 animateOn="view"
+                className="text-blue-600 dark:text-blue-400"
                 loop={true}
                 loopDelay={2500}
-                className="text-blue-600 dark:text-blue-400"
+                sequential={true}
+                speed={80}
+                text="Loading user profile..."
               />
               <TextDecryption
-                text="Fetching data from server..."
-                sequential={true}
-                speed={90}
                 animateOn="view"
+                className="text-yellow-600 dark:text-yellow-400"
                 loop={true}
                 loopDelay={2800}
-                className="text-yellow-600 dark:text-yellow-400"
+                sequential={true}
+                speed={90}
+                text="Fetching data from server..."
               />
               <TextDecryption
-                text="Almost ready!"
-                sequential={true}
-                speed={60}
                 animateOn="view"
+                className="text-green-600 dark:text-green-400"
                 loop={true}
                 loopDelay={2200}
-                className="text-green-600 dark:text-green-400"
+                sequential={true}
+                speed={60}
+                text="Almost ready!"
               />
             </div>
           </div>
 
           {/* Hero Section */}
-          <div className="p-8 border border-border rounded-xl bg-card">
-            <h3 className="text-xl font-medium text-card-foreground mb-4">
+          <div className="rounded-xl border border-border bg-card p-8">
+            <h3 className="mb-4 font-medium text-card-foreground text-xl">
               Hero Section
             </h3>
-            <div className="space-y-4 mb-6">
+            <div className="mb-6 space-y-4">
               <TextDecryption
-                text="Welcome to the Future"
-                sequential={true}
-                revealDirection="center"
-                speed={120}
-                glowEffect={true}
                 animateOn="view"
+                className="font-bold text-2xl text-green-600 dark:text-green-400"
+                glowEffect={true}
                 loop={true}
                 loopDelay={4000}
-                className="text-green-600 dark:text-green-400 text-2xl font-bold"
+                revealDirection="center"
+                sequential={true}
+                speed={120}
+                text="Welcome to the Future"
               />
               <TextDecryption
-                text="Experience next-generation technology"
-                sequential={true}
-                speed={60}
                 animateOn="view"
+                className="text-muted-foreground"
                 loop={true}
                 loopDelay={3500}
-                className="text-muted-foreground"
+                sequential={true}
+                speed={60}
+                text="Experience next-generation technology"
               />
             </div>
           </div>
@@ -752,7 +776,7 @@ export default function TextDecryptionShowcase() {
       {/* Ultimate Showcase */}
       <section className="space-y-8">
         <div className="text-center">
-          <h2 className="text-3xl font-semibold text-primary mb-3">
+          <h2 className="mb-3 font-semibold text-3xl text-primary">
             Ultimate Showcase
           </h2>
           <p className="text-muted-foreground">
@@ -760,23 +784,23 @@ export default function TextDecryptionShowcase() {
           </p>
         </div>
 
-        <div className="p-12 border-2 border-primary rounded-2xl bg-card relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-blue-500/5 animate-pulse"></div>
-          <div className="relative text-center space-y-6">
+        <div className="relative overflow-hidden rounded-2xl border-2 border-primary bg-card p-12">
+          <div className="absolute inset-0 animate-pulse bg-gradient-to-r from-primary/5 to-blue-500/5" />
+          <div className="relative space-y-6 text-center">
             <TextDecryption
-              text="🚀 ADVANCED DECRYPTION PROTOCOL ACTIVATED 🚀"
-              sequential={true}
-              revealDirection="center"
-              speed={100}
-              glowEffect={true}
-              typewriterEffect={true}
               animateOn="view"
+              className="font-bold text-3xl text-green-600 tracking-wider dark:text-green-400"
+              encryptedClassName="text-red-600 dark:text-red-400 opacity-60"
+              glowEffect={true}
               loop={true}
               loopDelay={5000}
-              className="text-green-600 dark:text-green-400 text-3xl font-bold tracking-wider"
-              encryptedClassName="text-red-600 dark:text-red-400 opacity-60"
+              revealDirection="center"
+              sequential={true}
+              speed={100}
+              text="🚀 ADVANCED DECRYPTION PROTOCOL ACTIVATED 🚀"
+              typewriterEffect={true}
             />
-            <div className="text-sm text-muted-foreground font-mono bg-muted/50 p-4 rounded-lg backdrop-blur">
+            <div className="rounded-lg bg-muted/50 p-4 font-mono text-muted-foreground text-sm backdrop-blur">
               {`<TextDecryption
   text="🚀 ADVANCED DECRYPTION PROTOCOL ACTIVATED 🚀"
   sequential={true}
@@ -800,15 +824,15 @@ export default function TextDecryptionShowcase() {
 
 export function TextDecryptionTheme() {
   return (
-      <TextDecryption
-        text="I decrypt when you see me"
-        sequential={true}
-        revealDirection="start"
-        speed={120}
-        animateOn="view"
-        loop={true}
-        loopDelay={1000}
-        className="text-blue-600 dark:text-blue-400 text-xl"
-      />
+    <TextDecryption
+      animateOn="view"
+      className="text-blue-600 text-xl dark:text-blue-400"
+      loop={true}
+      loopDelay={1000}
+      revealDirection="start"
+      sequential={true}
+      speed={120}
+      text="I decrypt when you see me"
+    />
   );
 }

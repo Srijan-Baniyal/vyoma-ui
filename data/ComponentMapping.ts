@@ -1,77 +1,74 @@
+import Changelog from "@/components/ChangeLog";
 import Installation from "@/components/Installation";
 import Introduction from "@/components/Introduction";
 import StoryBehind from "@/components/StoryBehind";
-import Changelog from "@/components/ChangeLog";
-import FormShowcase from "@/components/vui/FormShowcase";
-import TextDecryptionShowcase, {
-  TextDecryptionTheme,
-} from "@/components/vui/text/TextDecryption";
-import CountUpShowcase, { CountUpTheme } from "@/components/vui/text/CountUp";
-import {
-  TypingTextShowcase,
-  TypingTextTheme,
-} from "@/components/vui/text/TypingText";
 import { AccordionShowcase, AccordionTheme } from "@/components/vui/Accordion";
-import {
-  WheelPickerDemo,
-  WheelPickerTheme,
-} from "@/components/vui/WheelPicker";
-import { SkeletonShowcase, SkeletonTheme } from "@/components/vui/Skeleton";
+import AIChatShowcase from "@/components/vui/ai/AIChatShowcase";
+import MagicalChatInput from "@/components/vui/ai/MagicalChatInput";
+import BeautifulFooterShowcase from "@/components/vui/BeautyFooter";
+import BeforeAfterSliderShowcase from "@/components/vui/BeforeAfterSlider";
+import { BentoGridShowcase, BentoGridTheme } from "@/components/vui/BentoGrid";
+import { ButtonShowcase, ButtonTheme } from "@/components/vui/Button";
+import CircuitFlow from "@/components/vui/backgrounds/CircuitFlow";
+import DrawingLinesShowcase from "@/components/vui/backgrounds/DrawingLines";
+import HexagonalShowcase from "@/components/vui/backgrounds/Hexagonal";
+import ShinyParticleGalaxyShowcase from "@/components/vui/backgrounds/ShinyParticleGalaxy";
+import SpaceShowcase from "@/components/vui/backgrounds/Space";
+import TunnelShowcase from "@/components/vui/backgrounds/Tunnel";
+import { WavyTilesShowcase } from "@/components/vui/backgrounds/WavyTiles";
+import CardShowcase, { CardTheme } from "@/components/vui/Card";
 import {
   CheckboxRefinedShowcase,
   CheckboxRefinedTheme,
 } from "@/components/vui/CheckboxUpgraded";
+import FormShowcase from "@/components/vui/FormShowcase";
+import MagicalCaret from "@/components/vui/MagicalCaret";
+import MagneticDock from "@/components/vui/MagneticDock";
+import NavigationShowcase from "@/components/vui/Navigation";
+import { PillShowcase, PillTheme } from "@/components/vui/pillcomponent";
 import SheetShowcase from "@/components/vui/Sheet";
+import { SkeletonShowcase, SkeletonTheme } from "@/components/vui/Skeleton";
+import ToolTipShowcase, { ToolTipTheme } from "@/components/vui/ToolTip";
 import {
   AnimatedNumberCountdownShowcase,
   AnimatedNumberCountdownTheme,
 } from "@/components/vui/text/AnimatedNumber";
-import { BentoGridShowcase, BentoGridTheme } from "@/components/vui/BentoGrid";
-import CardShowcase, { CardTheme } from "@/components/vui/Card";
-import TunnelShowcase from "@/components/vui/backgrounds/Tunnel";
-import SpaceShowcase from "@/components/vui/backgrounds/Space";
 import {
-  WavyTilesShowcase,
-  WavyTilesTheme,
-} from "@/components/vui/backgrounds/WavyTiles";
-import HexagonalShowcase from "@/components/vui/backgrounds/Hexagonal";
-import { ButtonShowcase, ButtonTheme } from "@/components/vui/Button";
-import ShinyParticleGalaxyShowcase from "@/components/vui/backgrounds/ShinyParticleGalaxy";
-import ToolTipShowcase, { ToolTipTheme } from "@/components/vui/ToolTip";
-import NavigationShowcase from "@/components/vui/Navigation";
-import { PillShowcase, PillTheme } from "@/components/vui/pillcomponent";
-import MagicalChatInput from "@/components/vui/ai/MagicalChatInput";
+  BlurTextShowcase,
+  BlurTextTheme,
+} from "@/components/vui/text/BlurText";
+import CountUpShowcase, { CountUpTheme } from "@/components/vui/text/CountUp";
+import FlipTextShowcase, {
+  FlipTextTheme,
+} from "@/components/vui/text/FlipText";
+import TextDecryptionShowcase, {
+  TextDecryptionTheme,
+} from "@/components/vui/text/TextDecryption";
+import {
+  TypingTextShowcase,
+  TypingTextTheme,
+} from "@/components/vui/text/TypingText";
 import {
   WavingTextShowcase,
   WavingTextTheme,
 } from "@/components/vui/text/WavingText";
-import BeautifulFooterShowcase from "@/components/vui/BeautyFooter";
-import MagicalCaret from "@/components/vui/MagicalCaret";
-import FlipTextShowcase, {
-  FlipTextTheme,
-} from "@/components/vui/text/FlipText";
-import { BlurTextShowcase, BlurTextTheme } from "@/components/vui/text/BlurText";
-import DrawingLinesShowcase from "@/components/vui/backgrounds/DrawingLines";
-import MagneticDock from "@/components/vui/MagneticDock";
-import BeforeAfterSliderShowcase from "@/components/vui/BeforeAfterSlider";
-import CircuitFlow from "@/components/vui/backgrounds/CircuitFlow";
-import AIChatShowcase from "@/components/vui/ai/AIChatShowcase";
+import {
+  WheelPickerDemo,
+  WheelPickerTheme,
+} from "@/components/vui/WheelPicker";
 
-// ✅ Import your new “Shining Star” component here
-import ShiningStarShowcase from "@/components/vui/backgrounds/ShinyParticleGalaxy";
-
-export type ComponentEntry = {
+export interface ComponentEntry {
   name: string;
   component: React.ComponentType;
   theme?: React.ComponentType;
   route: string;
   path: string | undefined;
   description: string;
-};
+}
 
-export type ComponentCategoryMap = {
+export interface ComponentCategoryMap {
   [category: string]: ComponentEntry[];
-};
+}
 
 export const componentMap: ComponentCategoryMap = {
   "Get Started": [
@@ -184,7 +181,6 @@ export const componentMap: ComponentCategoryMap = {
         "✨ <b>Shiny Particle Galaxy</b> - Stunning galaxy animation with twinkling stars, motion depth, and smooth particle effects. Great for hero sections.",
     },
     // ✅ Your new background entry
-
   ],
   Components: [
     {

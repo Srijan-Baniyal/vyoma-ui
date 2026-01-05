@@ -1,20 +1,39 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, useMemo } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import parser from "html-react-parser";
 import {
   ChevronRight,
-  Home,
-  X,
   ExternalLink,
-  Search,
+  Home,
   Moon,
+  Search,
   Sun,
+  X,
 } from "lucide-react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import Image from "next/image";
-import { cn } from "@/lib/utils";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import Footer from "@/components/Footer";
+import { Badge } from "@/components/ui/badge";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/buttonShadcn";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
 import {
   Sidebar,
   SidebarContent,
@@ -31,34 +50,15 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import { Separator } from "@/components/ui/separator";
-import { componentMap } from "@/data/ComponentMapping";
-import type { ComponentEntry } from "@/data/ComponentMapping";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Button } from "@/components/ui/buttonShadcn";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import type { ComponentEntry } from "@/data/ComponentMapping";
+import { componentMap } from "@/data/ComponentMapping";
+import { cn } from "@/lib/utils";
 import V from "@/public/VyomaUI.svg";
-import Footer from "@/components/Footer";
-import parser from "html-react-parser";
 
 interface SidebarComponentProps {
   children: React.ReactNode;
@@ -113,9 +113,9 @@ export default function SidebarComponent({ children }: SidebarComponentProps) {
 
       // Default: all categories open
       const initial: Record<string, boolean> = {};
-      Object.keys(componentMap).forEach((category) => {
+      for (const category of Object.keys(componentMap)) {
         initial[category] = true;
-      });
+      }
       return initial;
     }
   );
@@ -143,7 +143,7 @@ export default function SidebarComponent({ children }: SidebarComponentProps) {
     const query = debouncedSearchQuery.toLowerCase();
     const filtered: Record<string, ComponentEntry[]> = {};
 
-    Object.entries(componentMap).forEach(([category, components]) => {
+    for (const [category, components] of Object.entries(componentMap)) {
       const matchedComponents = components.filter(
         (comp) =>
           comp.name.toLowerCase().includes(query) ||
@@ -153,7 +153,7 @@ export default function SidebarComponent({ children }: SidebarComponentProps) {
       if (matchedComponents.length > 0) {
         filtered[category] = matchedComponents;
       }
-    });
+    }
 
     return filtered;
   }, [debouncedSearchQuery]);
@@ -229,12 +229,14 @@ export default function SidebarComponent({ children }: SidebarComponentProps) {
     // Fallback for unknown routes
     const segments = pathname.split("/").filter(Boolean);
     if (segments.length > 0) {
-      const lastSegment = segments[segments.length - 1];
-      items.push({
-        label: lastSegment.charAt(0).toUpperCase() + lastSegment.slice(1),
-        href: pathname,
-        isActive: true,
-      });
+      const lastSegment = segments.at(-1);
+      if (lastSegment) {
+        items.push({
+          label: lastSegment.charAt(0).toUpperCase() + lastSegment.slice(1),
+          href: pathname,
+          isActive: true,
+        });
+      }
     }
 
     return items;
@@ -247,14 +249,14 @@ export default function SidebarComponent({ children }: SidebarComponentProps) {
           <React.Fragment key={`${breadcrumb.href}-${index}`}>
             <BreadcrumbItem>
               {breadcrumb.isActive ? (
-                <BreadcrumbPage className="flex items-center gap-1.5 text-primary font-medium">
+                <BreadcrumbPage className="flex items-center gap-1.5 font-medium text-primary">
                   {index === 0 && <Home className="size-3.5" />}
                   {breadcrumb.label}
                 </BreadcrumbPage>
               ) : (
                 <BreadcrumbLink
                   asChild
-                  className="flex items-center gap-1.5 hover:text-primary transition-colors duration-200"
+                  className="flex items-center gap-1.5 transition-colors duration-200 hover:text-primary"
                 >
                   <Link href={breadcrumb.href}>
                     {index === 0 && <Home className="size-3.5" />}
@@ -281,35 +283,35 @@ export default function SidebarComponent({ children }: SidebarComponentProps) {
           <Tooltip>
             <TooltipTrigger asChild>
               <SidebarMenuButton
+                aria-current={isActive ? "page" : undefined}
                 asChild
                 className={cn(
-                  "group h-9 px-3 text-sm rounded-lg transition-all duration-200 flex items-center gap-2.5 relative overflow-hidden",
+                  "group relative flex h-9 items-center gap-2.5 overflow-hidden rounded-lg px-3 text-sm transition-all duration-200",
                   isActive
-                    ? "bg-primary/10 text-primary font-medium shadow-sm border border-primary/20"
+                    ? "border border-primary/20 bg-primary/10 font-medium text-primary shadow-sm"
                     : "hover:bg-accent/70 hover:text-accent-foreground hover:shadow-sm"
                 )}
-                aria-current={isActive ? "page" : undefined}
               >
                 <Link
+                  className="flex w-full min-w-0 items-center gap-2.5"
                   href={comp.route}
-                  className="flex items-center gap-2.5 w-full min-w-0"
                 >
                   <motion.div
+                    animate={isActive ? { scale: [1, 1.2, 1] } : {}}
                     className={cn(
-                      "size-2 rounded-full flex-shrink-0",
+                      "size-2 flex-shrink-0 rounded-full",
                       isActive
                         ? "bg-primary shadow-sm"
                         : "bg-muted-foreground/30 group-hover:bg-muted-foreground/50"
                     )}
-                    animate={isActive ? { scale: [1, 1.2, 1] } : {}}
                     transition={{ duration: 0.3 }}
                   />
                   <span className="truncate font-medium">{comp.name}</span>
                   {isActive && (
                     <motion.div
-                      className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent rounded-lg"
-                      initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
+                      className="absolute inset-0 rounded-lg bg-gradient-to-r from-primary/5 to-transparent"
+                      initial={{ opacity: 0 }}
                       transition={{ duration: 0.2 }}
                     />
                   )}
@@ -317,16 +319,16 @@ export default function SidebarComponent({ children }: SidebarComponentProps) {
               </SidebarMenuButton>
             </TooltipTrigger>
             <TooltipContent
+              className="max-w-[220px] border bg-background p-3 shadow-lg"
               side="right"
-              className="max-w-[220px] p-3 bg-background border shadow-lg"
               sideOffset={8}
             >
               <div className="space-y-1">
-                <p className="font-medium text-sm dark:text-white text-black">
+                <p className="font-medium text-black text-sm dark:text-white">
                   {comp.name}
                 </p>
                 {comp.description && (
-                  <p className="text-xs text-muted-foreground leading-relaxed">
+                  <p className="text-muted-foreground text-xs leading-relaxed">
                     {parser(comp.description)}
                   </p>
                 )}
@@ -341,52 +343,57 @@ export default function SidebarComponent({ children }: SidebarComponentProps) {
   SidebarMenuItemComponent.displayName = "SidebarMenuItemComponent";
 
   return (
-    <div onKeyDown={handleKeyDown}>
+    <button
+      className="w-full text-left"
+      onKeyDown={handleKeyDown}
+      style={{ all: "unset", display: "block", width: "100%" }}
+      type="button"
+    >
       <SidebarProvider>
-        <Sidebar className="border-r bg-background/98 backdrop-blur-md supports-[backdrop-filter]:bg-background/95 z-40 shadow-sm">
-          <SidebarHeader className="border-b border-border/50 p-0">
+        <Sidebar className="z-40 border-r bg-background/98 shadow-sm backdrop-blur-md supports-[backdrop-filter]:bg-background/95">
+          <SidebarHeader className="border-border/50 border-b p-0">
             <div className="flex items-center justify-between p-4">
               <Link
+                className="group -m-1 flex items-center gap-3 rounded-lg p-1 transition-all duration-200 hover:bg-accent/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 href="/"
-                className="group flex items-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-lg p-1 -m-1 transition-all duration-200 hover:bg-accent/50"
               >
-                <div className="flex aspect-square size-12 items-center justify-center rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20 group-hover:border-primary/30 transition-all duration-200">
+                <div className="flex aspect-square size-12 items-center justify-center rounded-xl border border-primary/20 bg-gradient-to-br from-primary/10 to-primary/5 transition-all duration-200 group-hover:border-primary/30">
                   <Image
-                    src={V}
                     alt="Vyoma UI Logo"
-                    width={32}
-                    height={32}
                     className="transition-transform duration-200 group-hover:scale-110"
+                    height={32}
+                    src={V}
+                    width={32}
                   />
                 </div>
                 <div className="flex flex-col gap-0.5 leading-none">
-                  <span className="font-semibold text-base group-hover:text-primary transition-colors duration-200">
+                  <span className="font-semibold text-base transition-colors duration-200 group-hover:text-primary">
                     Vyoma UI
                   </span>
-                  <span className="text-xs text-muted-foreground">
+                  <span className="text-muted-foreground text-xs">
                     Beautiful components
                   </span>
                 </div>
               </Link>
             </div>
             <div className="px-4 pb-4">
-              <div className="relative group">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors duration-200" />
+              <div className="group relative">
+                <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground transition-colors duration-200 group-focus-within:text-primary" />
                 <Input
-                  type="search"
-                  placeholder="Search components..."
-                  className="w-full pl-10 h-10 bg-background/50 border-border/50 focus:border-primary/50 focus:bg-background transition-all duration-200"
-                  value={searchQuery}
-                  onChange={handleSearchChange}
                   aria-label="Search components"
+                  className="h-10 w-full border-border/50 bg-background/50 pl-10 transition-all duration-200 focus:border-primary/50 focus:bg-background"
+                  onChange={handleSearchChange}
+                  placeholder="Search components..."
+                  type="search"
+                  value={searchQuery}
                 />
                 {searchQuery && (
                   <Button
-                    variant="ghost"
-                    size="icon"
-                    className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 hover:bg-accent/70"
-                    onClick={() => setSearchQuery("")}
                     aria-label="Clear search"
+                    className="absolute top-1/2 right-1 h-8 w-8 -translate-y-1/2 hover:bg-accent/70"
+                    onClick={() => setSearchQuery("")}
+                    size="icon"
+                    variant="ghost"
                   >
                     <X className="size-3" />
                   </Button>
@@ -395,22 +402,22 @@ export default function SidebarComponent({ children }: SidebarComponentProps) {
             </div>
           </SidebarHeader>
 
-          <SidebarContent className="flex flex-col flex-1 p-0">
+          <SidebarContent className="flex flex-1 flex-col p-0">
             <ScrollArea className="flex-1">
               <div className="p-3">
                 {Object.entries(filteredComponents).length === 0 ? (
                   <motion.div
-                    initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="px-4 py-12 text-center"
+                    initial={{ opacity: 0, y: 10 }}
                   >
-                    <div className="mx-auto w-16 h-16 bg-muted/50 rounded-full flex items-center justify-center mb-4">
-                      <Search className="w-6 h-6 text-muted-foreground" />
+                    <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted/50">
+                      <Search className="h-6 w-6 text-muted-foreground" />
                     </div>
-                    <p className="text-sm font-medium text-foreground mb-1">
+                    <p className="mb-1 font-medium text-foreground text-sm">
                       No components found
                     </p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-muted-foreground text-xs">
                       Try adjusting your search terms
                     </p>
                   </motion.div>
@@ -418,28 +425,28 @@ export default function SidebarComponent({ children }: SidebarComponentProps) {
                   Object.entries(filteredComponents).map(
                     ([category, components], index) => (
                       <Collapsible
-                        key={category}
-                        open={openCategories[category] === true}
-                        onOpenChange={() => toggleCategory(category)}
                         className="group/collapsible mb-3"
+                        key={category}
+                        onOpenChange={() => toggleCategory(category)}
+                        open={openCategories[category] === true}
                       >
                         <SidebarGroup className="p-0">
                           <CollapsibleTrigger asChild>
                             <SidebarGroupLabel
-                              className="group/label text-sm font-semibold hover:bg-accent/60 hover:text-accent-foreground rounded-lg transition-all duration-200 cursor-pointer flex items-center justify-between w-full px-3 py-2.5 border border-transparent hover:border-border/50"
                               aria-label={`${category} category`}
+                              className="group/label flex w-full cursor-pointer items-center justify-between rounded-lg border border-transparent px-3 py-2.5 font-semibold text-sm transition-all duration-200 hover:border-border/50 hover:bg-accent/60 hover:text-accent-foreground"
                             >
                               <span className="text-foreground">
                                 {category}
                               </span>
                               <div className="flex items-center gap-2">
                                 <Badge
+                                  className="border-0 bg-muted/70 px-2 py-0.5 font-medium text-muted-foreground text-xs"
                                   variant="secondary"
-                                  className="text-xs font-medium bg-muted/70 text-muted-foreground border-0 px-2 py-0.5"
                                 >
                                   {components.length}
                                 </Badge>
-                                <ChevronRight className="size-4 transition-transform duration-300 group-data-[state=open]/collapsible:rotate-90 text-muted-foreground group-hover/label:text-foreground" />
+                                <ChevronRight className="size-4 text-muted-foreground transition-transform duration-300 group-hover/label:text-foreground group-data-[state=open]/collapsible:rotate-90" />
                               </div>
                             </SidebarGroupLabel>
                           </CollapsibleTrigger>
@@ -473,12 +480,12 @@ export default function SidebarComponent({ children }: SidebarComponentProps) {
               </div>
             </ScrollArea>
 
-            <div className="border-t border-border/50 p-4 bg-background/50">
+            <div className="border-border/50 border-t bg-background/50 p-4">
               <Link
+                className="group flex w-full items-center justify-between rounded-lg border border-transparent p-3 text-muted-foreground text-sm transition-all duration-200 hover:border-border/50 hover:bg-accent/60 hover:text-foreground"
                 href="https://github.com/Srijan-Baniyal/vyoma-ui"
-                target="_blank"
                 rel="noopener noreferrer"
-                className="group flex items-center justify-between w-full text-sm text-muted-foreground hover:text-foreground transition-all duration-200 rounded-lg p-3 hover:bg-accent/60 border border-transparent hover:border-border/50"
+                target="_blank"
               >
                 <span className="font-medium">GitHub Repository</span>
                 <ExternalLink className="size-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -489,23 +496,23 @@ export default function SidebarComponent({ children }: SidebarComponentProps) {
           <SidebarRail />
         </Sidebar>
 
-        <SidebarInset className="flex flex-col min-h-screen">
-          <header className="sticky top-0 z-50 flex h-16 shrink-0 items-center gap-2 border-b border-border/50 bg-background/98 backdrop-blur-md supports-[backdrop-filter]:bg-background/95 px-4 shadow-sm">
-            <SidebarTrigger className="md:hidden mr-2 h-9 w-9" />
-            <SidebarTrigger className="-ml-1 hidden md:flex hover:bg-accent/70 transition-colors duration-200" />
+        <SidebarInset className="flex min-h-screen flex-col">
+          <header className="sticky top-0 z-50 flex h-16 shrink-0 items-center gap-2 border-border/50 border-b bg-background/98 px-4 shadow-sm backdrop-blur-md supports-[backdrop-filter]:bg-background/95">
+            <SidebarTrigger className="mr-2 h-9 w-9 md:hidden" />
+            <SidebarTrigger className="-ml-1 hidden transition-colors duration-200 hover:bg-accent/70 md:flex" />
             <Separator
+              className="mr-2 hidden h-4 bg-border/50 md:block"
               orientation="vertical"
-              className="mr-2 h-4 hidden md:block bg-border/50"
             />
             <BreadcrumbNavigation />
             <div className="ml-auto flex items-center gap-2">
               {/* More things will come here */}
               <Button
-                variant="ghost"
-                size="icon"
-                onClick={handleThemeToggle}
-                className="h-9 w-9 hover:bg-accent/70 transition-all duration-200 relative overflow-hidden"
                 aria-label="Toggle theme"
+                className="relative h-9 w-9 overflow-hidden transition-all duration-200 hover:bg-accent/70"
+                onClick={handleThemeToggle}
+                size="icon"
+                variant="ghost"
               >
                 <Sun className="h-[1.1rem] w-[1.1rem] rotate-0 scale-100 transition-all duration-300 dark:-rotate-90 dark:scale-0" />
                 <Moon className="absolute h-[1.1rem] w-[1.1rem] rotate-90 scale-0 transition-all duration-300 dark:rotate-0 dark:scale-100" />
@@ -513,9 +520,9 @@ export default function SidebarComponent({ children }: SidebarComponentProps) {
             </div>
           </header>
 
-          <div className="flex-1 flex flex-col">
-            <main className="flex-1 p-6 w-full">
-              <div className="max-w-7xl mx-auto">
+          <div className="flex flex-1 flex-col">
+            <main className="w-full flex-1 p-6">
+              <div className="mx-auto max-w-7xl">
                 <AnimatePresence mode="wait">
                   <motion.div key={pathname} {...animations.pageTransition}>
                     {children}
@@ -527,6 +534,6 @@ export default function SidebarComponent({ children }: SidebarComponentProps) {
           <Footer />
         </SidebarInset>
       </SidebarProvider>
-    </div>
+    </button>
   );
 }

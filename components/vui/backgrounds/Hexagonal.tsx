@@ -43,9 +43,9 @@ export default function HexagonalShowcase() {
             subtleShift 8s ease-in-out infinite 2s;
         }
       `}</style>
-      <div className="min-h-screen w-full bg-[#0f0f0f] relative text-white overflow-hidden">
+      <div className="relative min-h-screen w-full overflow-hidden bg-[#0f0f0f] text-white">
         <div
-          className="absolute inset-0 z-0 pointer-events-none animated-bg opacity-0"
+          className="animated-bg pointer-events-none absolute inset-0 z-0 opacity-0"
           style={{
             backgroundImage: `
         repeating-linear-gradient(60deg, rgba(255, 0, 100, 0.25) 0, rgba(255, 0, 100, 0.25) 1px, transparent 1px, transparent 22px),
@@ -55,11 +55,11 @@ export default function HexagonalShowcase() {
             backgroundSize: "44px 44px",
           }}
         />
-                 <div className="flex items-center justify-center min-h-screen">
-          <div className="flex flex-col items-center justify-center space-y-6 z-10 relative">
+        <div className="flex min-h-screen items-center justify-center">
+          <div className="relative z-10 flex flex-col items-center justify-center space-y-6">
             {/* Animated Main Title */}
             <div className="overflow-hidden">
-              <h1 className="text-6xl md:text-8xl font-bold text-white bg-clip-text text-wrap text-center">
+              <h1 className="text-wrap bg-clip-text text-center font-bold text-6xl text-white md:text-8xl">
                 Beautiful Background for Everyone
               </h1>
             </div>

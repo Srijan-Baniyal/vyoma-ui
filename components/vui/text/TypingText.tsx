@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
-import { motion, Variants } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
+import { useEffect, useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
 
 interface CursorAnimationVariants extends Variants {
@@ -36,7 +36,7 @@ const DEFAULT_CURSOR_VARIANTS: CursorAnimationVariants = {
     opacity: 1,
     transition: {
       duration: 0.01,
-      repeat: Infinity,
+      repeat: Number.POSITIVE_INFINITY,
       repeatDelay: 0.4,
       repeatType: "reverse",
     },
@@ -140,7 +140,6 @@ const TypingText = ({
       }
     };
   }, [
-    text,
     speed,
     deleteSpeed,
     waitTime,
@@ -166,10 +165,10 @@ const TypingText = ({
       <span>{displayText}</span>
       {showCursor && (
         <motion.span
-          variants={cursorAnimationVariants}
+          animate="animate"
           className={cn(cursorClassName, shouldHideCursor && "hidden")}
           initial="initial"
-          animate="animate"
+          variants={cursorAnimationVariants}
         >
           {cursorChar}
         </motion.span>
@@ -183,26 +182,26 @@ export default TypingText;
 export function TypingTextShowcase() {
   return (
     <div className="min-h-5 bg-gradient-to-br from-background via-muted/20 to-background p-8">
-      <div className="max-w-6xl mx-auto space-y-12">
+      <div className="mx-auto max-w-6xl space-y-12">
         {/* Hero Section */}
-        <div className="text-center space-y-6">
+        <div className="space-y-6 text-center">
           {/* Main Demo */}
-          <div className="relative p-8 rounded-3xl bg-card/50 backdrop-blur-sm border border-border/50 shadow-2xl">
+          <div className="relative rounded-3xl border border-border/50 bg-card/50 p-8 shadow-2xl backdrop-blur-sm">
             <div className="text-center">
               <TypingText
+                className="font-semibold text-2xl text-foreground md:text-3xl"
+                cursorClassName="text-primary font-bold"
+                deleteSpeed={40}
+                loop
+                showCursor
+                speed={60}
                 text={[
                   "Welcome to the future of UI! 🚀",
                   "Beautiful typing animations ✨",
                   "Smooth. Fast. Elegant. 💎",
                   "Built for modern web apps 🎯",
                 ]}
-                speed={60}
-                deleteSpeed={40}
                 waitTime={2000}
-                loop
-                showCursor
-                className="text-2xl md:text-3xl font-semibold text-foreground"
-                cursorClassName="text-primary font-bold"
               />
             </div>
           </div>
@@ -210,150 +209,162 @@ export function TypingTextShowcase() {
 
         {/* Examples Grid */}
         <div className="space-y-8">
-          <h2 className="text-3xl font-bold text-center mb-8">
+          <h2 className="mb-8 text-center font-bold text-3xl">
             Examples & Variations
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {/* Professional Use Case */}
-            <div className="group p-6 rounded-2xl bg-gradient-to-br from-blue-50/50 to-blue-100/30 dark:from-blue-950/30 dark:to-blue-900/20 border border-blue-200/50 dark:border-blue-800/30 hover:shadow-lg transition-all duration-300">
+            <div className="group rounded-2xl border border-blue-200/50 bg-gradient-to-br from-blue-50/50 to-blue-100/30 p-6 transition-all duration-300 hover:shadow-lg dark:border-blue-800/30 dark:from-blue-950/30 dark:to-blue-900/20">
               <div className="space-y-3">
-                <h3 className="text-lg font-semibold text-blue-700 dark:text-blue-300">
+                <h3 className="font-semibold text-blue-700 text-lg dark:text-blue-300">
                   Professional
                 </h3>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   Perfect for landing pages and hero sections
                 </p>
-                <div className="h-16 flex items-center">
+                <div className="flex h-16 items-center">
                   <TypingText
+                    className="font-medium text-blue-800 dark:text-blue-200"
+                    cursorChar="▋"
+                    cursorClassName="text-blue-600 dark:text-blue-400"
+                    deleteSpeed={50}
+                    loop
+                    speed={80}
                     text={[
                       "Building the future...",
                       "One component at a time...",
                       "Innovation never stops...",
                     ]}
-                    speed={80}
-                    deleteSpeed={50}
                     waitTime={1800}
-                    loop
-                    className="text-blue-800 dark:text-blue-200 font-medium"
-                    cursorChar="▋"
-                    cursorClassName="text-blue-600 dark:text-blue-400"
                   />
                 </div>
               </div>
             </div>
 
             {/* Fast & Energetic */}
-            <div className="group p-6 rounded-2xl bg-gradient-to-br from-green-50/50 to-emerald-100/30 dark:from-green-950/30 dark:to-emerald-900/20 border border-green-200/50 dark:border-green-800/30 hover:shadow-lg transition-all duration-300">
+            <div className="group rounded-2xl border border-green-200/50 bg-gradient-to-br from-green-50/50 to-emerald-100/30 p-6 transition-all duration-300 hover:shadow-lg dark:border-green-800/30 dark:from-green-950/30 dark:to-emerald-900/20">
               <div className="space-y-3">
-                <h3 className="text-lg font-semibold text-green-700 dark:text-green-300">
+                <h3 className="font-semibold text-green-700 text-lg dark:text-green-300">
                   Lightning Fast
                 </h3>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   High-speed typing for dynamic content
                 </p>
-                <div className="h-16 flex items-center">
+                <div className="flex h-16 items-center">
                   <TypingText
-                    text={["⚡ Super fast typing effect! Ready in milliseconds!", "Ready in milliseconds!"]}
-                    speed={25}
-                    loop={true}
-                    className="text-green-800 dark:text-green-200 font-semibold"
+                    className="font-semibold text-green-800 dark:text-green-200"
                     cursorChar="●"
                     cursorClassName="text-green-500 animate-pulse"
+                    loop={true}
+                    speed={25}
+                    text={[
+                      "⚡ Super fast typing effect! Ready in milliseconds!",
+                      "Ready in milliseconds!",
+                    ]}
                   />
                 </div>
               </div>
             </div>
 
             {/* Elegant & Slow */}
-            <div className="group p-6 rounded-2xl bg-gradient-to-br from-purple-50/50 to-violet-100/30 dark:from-purple-950/30 dark:to-violet-900/20 border border-purple-200/50 dark:border-purple-800/30 hover:shadow-lg transition-all duration-300">
+            <div className="group rounded-2xl border border-purple-200/50 bg-gradient-to-br from-purple-50/50 to-violet-100/30 p-6 transition-all duration-300 hover:shadow-lg dark:border-purple-800/30 dark:from-purple-950/30 dark:to-violet-900/20">
               <div className="space-y-3">
-                <h3 className="text-lg font-semibold text-purple-700 dark:text-purple-300">
+                <h3 className="font-semibold text-lg text-purple-700 dark:text-purple-300">
                   Elegant
                 </h3>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   Smooth and thoughtful pacing
                 </p>
-                <div className="h-16 flex items-center">
+                <div className="flex h-16 items-center">
                   <TypingText
-                    text={["Elegance in every keystroke... ✨", "Elegance is the key to success"]}
-                    speed={120}
-                    loop={true}
-                    initialDelay={500}
-                    className="text-purple-800 dark:text-purple-200 font-medium italic"
+                    className="font-medium text-purple-800 italic dark:text-purple-200"
                     cursorChar="│"
                     cursorClassName="text-purple-500"
+                    initialDelay={500}
+                    loop={true}
+                    speed={120}
+                    text={[
+                      "Elegance in every keystroke... ✨",
+                      "Elegance is the key to success",
+                    ]}
                   />
                 </div>
               </div>
             </div>
 
             {/* Code Style */}
-            <div className="group p-6 rounded-2xl bg-gradient-to-br from-slate-50/50 to-gray-100/30 dark:from-slate-950/30 dark:to-gray-900/20 border border-slate-200/50 dark:border-slate-800/30 hover:shadow-lg transition-all duration-300">
+            <div className="group rounded-2xl border border-slate-200/50 bg-gradient-to-br from-slate-50/50 to-gray-100/30 p-6 transition-all duration-300 hover:shadow-lg dark:border-slate-800/30 dark:from-slate-950/30 dark:to-gray-900/20">
               <div className="space-y-3">
-                <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-300">
+                <h3 className="font-semibold text-lg text-slate-700 dark:text-slate-300">
                   Code Terminal
                 </h3>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   Developer-friendly monospace styling
                 </p>
-                <div className="h-16 flex items-center">
+                <div className="flex h-16 items-center">
                   <TypingText
+                    className="rounded bg-slate-100/50 px-3 py-1 font-mono text-slate-800 text-sm dark:bg-slate-800/50 dark:text-slate-200"
+                    cursorChar="_"
+                    cursorClassName="text-slate-600 dark:text-slate-400"
+                    deleteSpeed={35}
+                    loop
+                    speed={70}
                     text={[
                       "$ npm install awesome-ui",
                       "$ yarn add beautiful-components",
                       "$ pnpm install modern-design",
                     ]}
-                    speed={70}
-                    deleteSpeed={35}
                     waitTime={2500}
-                    loop
-                    className="font-mono text-sm text-slate-800 dark:text-slate-200 bg-slate-100/50 dark:bg-slate-800/50 px-3 py-1 rounded"
-                    cursorChar="_"
-                    cursorClassName="text-slate-600 dark:text-slate-400"
                   />
                 </div>
               </div>
             </div>
 
             {/* No Cursor */}
-            <div className="group p-6 rounded-2xl bg-gradient-to-br from-orange-50/50 to-amber-100/30 dark:from-orange-950/30 dark:to-amber-900/20 border border-orange-200/50 dark:border-orange-800/30 hover:shadow-lg transition-all duration-300">
+            <div className="group rounded-2xl border border-orange-200/50 bg-gradient-to-br from-orange-50/50 to-amber-100/30 p-6 transition-all duration-300 hover:shadow-lg dark:border-orange-800/30 dark:from-orange-950/30 dark:to-amber-900/20">
               <div className="space-y-3">
-                <h3 className="text-lg font-semibold text-orange-700 dark:text-orange-300">
+                <h3 className="font-semibold text-lg text-orange-700 dark:text-orange-300">
                   Clean & Minimal
                 </h3>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   No cursor distraction
                 </p>
-                <div className="h-16 flex items-center">
+                <div className="flex h-16 items-center">
                   <TypingText
-                    text={["Pure text, no distractions", "Only the best for you"]}
-                    speed={90}
-                    showCursor={false}
+                    className="font-medium text-orange-800 dark:text-orange-200"
                     loop={true}
-                    className="text-orange-800 dark:text-orange-200 font-medium"
+                    showCursor={false}
+                    speed={90}
+                    text={[
+                      "Pure text, no distractions",
+                      "Only the best for you",
+                    ]}
                   />
                 </div>
               </div>
             </div>
 
             {/* Custom Styled */}
-            <div className="group p-6 rounded-2xl bg-gradient-to-br from-rose-50/50 to-pink-100/30 dark:from-rose-950/30 dark:to-pink-900/20 border border-rose-200/50 dark:border-rose-800/30 hover:shadow-lg transition-all duration-300">
+            <div className="group rounded-2xl border border-rose-200/50 bg-gradient-to-br from-rose-50/50 to-pink-100/30 p-6 transition-all duration-300 hover:shadow-lg dark:border-rose-800/30 dark:from-rose-950/30 dark:to-pink-900/20">
               <div className="space-y-3">
-                <h3 className="text-lg font-semibold text-rose-700 dark:text-rose-300">
+                <h3 className="font-semibold text-lg text-rose-700 dark:text-rose-300">
                   Creative Cursor
                 </h3>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   Custom cursor characters and styling
                 </p>
-                <div className="h-16 flex items-center">
+                <div className="flex h-16 items-center">
                   <TypingText
-                    text={["Creativity knows no bounds! 🎨", "Innovation never stops... 🚀"]}
-                    speed={75}
-                    loop={true}
+                    className="font-semibold text-rose-800 dark:text-rose-200"
                     cursorChar="✨"
                     cursorClassName="text-rose-500 text-lg"
-                    className="text-rose-800 dark:text-rose-200 font-semibold"
+                    loop={true}
+                    speed={75}
+                    text={[
+                      "Creativity knows no bounds! 🎨",
+                      "Innovation never stops... 🚀",
+                    ]}
                   />
                 </div>
               </div>
@@ -367,23 +378,21 @@ export function TypingTextShowcase() {
 
 export function TypingTextTheme() {
   return (
-    <>
-      <TypingText
-        text={[
-          "Welcome to the future of UI! 🚀",
-          "Beautiful typing animations ✨",
-          "Smooth. Fast. Elegant. 💎",
-          "Built for modern web apps 🎯",
-        ]}
-        speed={60}
-        deleteSpeed={40}
-        waitTime={2000}
-        loop={true}
-        showCursor={true}
-        className="text-2xl md:text-3xl font-semibold text-foreground"
-        cursorChar="✨"
-        cursorClassName="text-primary font-bold"
-      />
-    </>
+    <TypingText
+      className="font-semibold text-2xl text-foreground md:text-3xl"
+      cursorChar="✨"
+      cursorClassName="text-primary font-bold"
+      deleteSpeed={40}
+      loop={true}
+      showCursor={true}
+      speed={60}
+      text={[
+        "Welcome to the future of UI! 🚀",
+        "Beautiful typing animations ✨",
+        "Smooth. Fast. Elegant. 💎",
+        "Built for modern web apps 🎯",
+      ]}
+      waitTime={2000}
+    />
   );
 }

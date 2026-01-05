@@ -1,4 +1,7 @@
-import React, { CSSProperties, ComponentPropsWithoutRef } from "react";
+import React, {
+  type ComponentPropsWithoutRef,
+  type CSSProperties,
+} from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -31,6 +34,12 @@ export const ShimmerButton = React.forwardRef<
   ) => {
     return (
       <button
+        className={cn(
+          "group relative z-0 flex cursor-pointer items-center justify-center overflow-hidden whitespace-nowrap border border-white/10 px-6 py-3 text-white [background:var(--bg)] [border-radius:var(--radius)] dark:text-black",
+          "transform-gpu transition-transform duration-300 ease-in-out active:translate-y-px",
+          className
+        )}
+        ref={ref}
         style={
           {
             "--spread": "90deg",
@@ -41,12 +50,6 @@ export const ShimmerButton = React.forwardRef<
             "--bg": background,
           } as CSSProperties
         }
-        className={cn(
-          "group relative z-0 flex cursor-pointer items-center justify-center overflow-hidden whitespace-nowrap border border-white/10 px-6 py-3 text-white [background:var(--bg)] [border-radius:var(--radius)] dark:text-black",
-          "transform-gpu transition-transform duration-300 ease-in-out active:translate-y-px",
-          className
-        )}
-        ref={ref}
         {...props}
       >
         {/* spark container */}
@@ -69,7 +72,7 @@ export const ShimmerButton = React.forwardRef<
           className={cn(
             "insert-0 absolute size-full",
 
-            "rounded-2xl px-4 py-1.5 text-sm font-medium shadow-[inset_0_-8px_10px_#ffffff1f]",
+            "rounded-2xl px-4 py-1.5 font-medium text-sm shadow-[inset_0_-8px_10px_#ffffff1f]",
 
             // transition
             "transform-gpu transition-all duration-300 ease-in-out",

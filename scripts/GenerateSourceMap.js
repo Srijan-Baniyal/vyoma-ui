@@ -1,5 +1,12 @@
-import fs from "fs/promises";
-import path from "path";
+import fs from "node:fs/promises";
+import path from "node:path";
+
+// Top-level regex patterns for performance
+const PROPS_CONTENT_REGEX = /\{([^}]+)\}/;
+const DEFAULT_MATCH_REGEX = /(\w+)\s*=\s*([^,]+)/;
+const NAME_MATCH_REGEX = /name:\s*["']([^"']+)["']/;
+const PATH_MATCH_REGEX = /path:\s*["']([^"']+)["']/;
+const COMPONENT_MAP_REGEX = /export const componentMap[^=]*=\s*(\{[\s\S]*?\});/;
 
 // Function to read component source code
 async function readComponentSource(filePath) {
@@ -23,35 +30,19 @@ function extractDefaultProps(sourceCode, componentName) {
       /\{\s*([^}]+)\s*\}\s*=\s*props/g
     );
     if (destructureMatches) {
-      destructureMatches.forEach((match) => {
-        const propsContent = match.match(/\{([^}]+)\}/)?.[1];
+      for (const match of destructureMatches) {
+        const propsContent = match.match(PROPS_CONTENT_REGEX)?.[1];
         if (propsContent) {
           const propPairs = propsContent.split(",");
-          propPairs.forEach((pair) => {
-            const defaultMatch = pair.match(/(\w+)\s*=\s*([^,]+)/);
+          for (const pair of propPairs) {
+            const defaultMatch = pair.match(DEFAULT_MATCH_REGEX);
             if (defaultMatch) {
               const [, propName, defaultValue] = defaultMatch;
-              try {
-                // Try to parse the default value
-                if (defaultValue.includes('"') || defaultValue.includes("'")) {
-                  props[propName.trim()] = defaultValue.replace(/['"]/g, "");
-                } else if (
-                  defaultValue === "true" ||
-                  defaultValue === "false"
-                ) {
-                  props[propName.trim()] = defaultValue === "true";
-                } else if (!isNaN(Number(defaultValue))) {
-                  props[propName.trim()] = Number(defaultValue);
-                } else {
-                  props[propName.trim()] = defaultValue.trim();
-                }
-              } catch {
-                props[propName.trim()] = defaultValue.trim();
-              }
+              props[propName.trim()] = parseDefaultValue(defaultValue);
             }
-          });
+          }
         }
-      });
+      }
     }
 
     return props;
@@ -64,6 +55,76 @@ function extractDefaultProps(sourceCode, componentName) {
   }
 }
 
+// Helper function to parse default values
+function parseDefaultValue(defaultValue) {
+  try {
+    if (defaultValue.includes('"') || defaultValue.includes("'")) {
+      return defaultValue.replace(/['"]/g, "");
+    }
+    if (defaultValue === "true" || defaultValue === "false") {
+      return defaultValue === "true";
+    }
+    if (Number.isNaN(Number(defaultValue))) {
+      return defaultValue.trim();
+    }
+    return Number(defaultValue);
+  } catch {
+    return defaultValue.trim();
+  }
+}
+
+// Helper function to extract category content
+function extractCategoryContent(mapContent, startIndex) {
+  let bracketCount = 1;
+  let currentIndex = startIndex;
+  let categoryContent = "";
+
+  while (bracketCount > 0 && currentIndex < mapContent.length) {
+    const char = mapContent[currentIndex];
+    if (char === "[") {
+      bracketCount++;
+    } else if (char === "]") {
+      bracketCount--;
+    }
+
+    if (bracketCount > 0) {
+      categoryContent += char;
+    }
+    currentIndex++;
+  }
+
+  return categoryContent;
+}
+
+// Helper function to parse entries from category content
+function parseEntriesFromCategory(categoryContent, categoryName) {
+  const entries = [];
+  const entryPattern = /\{\s*([\s\S]*?)\s*\}/g;
+  let entryMatch = entryPattern.exec(categoryContent);
+
+  while (entryMatch !== null) {
+    const entryContent = entryMatch[1];
+
+    const nameMatch = entryContent.match(NAME_MATCH_REGEX);
+    const pathMatch = entryContent.match(PATH_MATCH_REGEX);
+
+    if (nameMatch) {
+      const componentName = nameMatch[1];
+      const componentPath = pathMatch ? pathMatch[1] : null;
+
+      entries.push({
+        name: componentName,
+        path: componentPath,
+        category: categoryName,
+      });
+    }
+
+    entryMatch = entryPattern.exec(categoryContent);
+  }
+
+  return entries;
+}
+
 // Function to parse component entries from the mapping structure
 function parseComponentEntries(mapContent) {
   const entries = [];
@@ -71,56 +132,24 @@ function parseComponentEntries(mapContent) {
   // More robust approach: find the balance of brackets for each category
   // Handle both quoted and unquoted property names
   const categoryStartPattern = /(?:"([^"]+)"|([a-zA-Z\s]+)):\s*\[/g;
-  let match;
+  let match = categoryStartPattern.exec(mapContent);
 
-  while ((match = categoryStartPattern.exec(mapContent)) !== null) {
+  while (match !== null) {
     // Handle both quoted and unquoted category names
     const categoryName = match[1] || match[2];
     const startIndex = match.index + match[0].length;
 
     // Skip "Get Started" as it contains documentation, not UI components
-    if (categoryName === "Get Started") {
-      continue;
+    if (categoryName !== "Get Started") {
+      const categoryContent = extractCategoryContent(mapContent, startIndex);
+      const categoryEntries = parseEntriesFromCategory(
+        categoryContent,
+        categoryName
+      );
+      entries.push(...categoryEntries);
     }
 
-    // Find the matching closing bracket
-    let bracketCount = 1;
-    let currentIndex = startIndex;
-    let categoryContent = "";
-
-    while (bracketCount > 0 && currentIndex < mapContent.length) {
-      const char = mapContent[currentIndex];
-      if (char === "[") bracketCount++;
-      else if (char === "]") bracketCount--;
-
-      if (bracketCount > 0) {
-        categoryContent += char;
-      }
-      currentIndex++;
-    }
-
-    // Now parse individual component entries within this category
-    const entryPattern = /\{\s*([\s\S]*?)\s*\}/g;
-    let entryMatch;
-
-    while ((entryMatch = entryPattern.exec(categoryContent)) !== null) {
-      const entryContent = entryMatch[1];
-
-      // Extract name and path from this specific entry
-      const nameMatch = entryContent.match(/name:\s*["']([^"']+)["']/);
-      const pathMatch = entryContent.match(/path:\s*["']([^"']+)["']/);
-
-      if (nameMatch) {
-        const componentName = nameMatch[1];
-        const componentPath = pathMatch ? pathMatch[1] : null;
-
-        entries.push({
-          name: componentName,
-          path: componentPath,
-          category: categoryName,
-        });
-      }
-    }
+    match = categoryStartPattern.exec(mapContent);
   }
 
   return entries;
@@ -136,9 +165,7 @@ async function generateSourceMap() {
     const propMap = {};
 
     // Parse the componentMap to find all components with paths
-    const componentMapMatch = mappingContent.match(
-      /export const componentMap[^=]*=\s*(\{[\s\S]*?\});/
-    );
+    const componentMapMatch = mappingContent.match(COMPONENT_MAP_REGEX);
     if (componentMapMatch) {
       const mapContent = componentMapMatch[1];
 
@@ -149,7 +176,7 @@ async function generateSourceMap() {
 
       // Process each component entry
       for (const entry of entries) {
-        if (entry.path && entry.path.endsWith(".tsx")) {
+        if (entry.path?.endsWith(".tsx")) {
           const sourceCode = await readComponentSource(entry.path);
 
           if (sourceCode) {

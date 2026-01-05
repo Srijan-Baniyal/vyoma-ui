@@ -1,24 +1,24 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 
 export default function DrawingLinesShowcase() {
-  const [isVisible, setIsVisible] = useState(false)
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     // Trigger animation after component mounts
-    const timer = setTimeout(() => setIsVisible(true), 100)
-    return () => clearTimeout(timer)
-  }, [])
+    const timer = setTimeout(() => setIsVisible(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
-    <div className="min-h-screen w-full bg-black relative overflow-hidden">
+    <div className="relative min-h-screen w-full overflow-hidden bg-black">
       {/* Horizontal lines animating from left and right */}
       <div className="absolute inset-0 z-0">
         {Array.from({ length: 30 }).map((_, i) => (
           <div
-            key={`h-${i}`}
             className="absolute h-px bg-gray-600 opacity-40"
+            key={`h-${i}`}
             style={{
               top: `${i * 40}px`,
               left: 0,
@@ -35,8 +35,8 @@ export default function DrawingLinesShowcase() {
       <div className="absolute inset-0 z-0">
         {Array.from({ length: 50 }).map((_, i) => (
           <div
-            key={`v-${i}`}
             className="absolute w-px bg-gray-600 opacity-40"
+            key={`v-${i}`}
             style={{
               left: `${i * 40}px`,
               top: 0,
@@ -50,27 +50,29 @@ export default function DrawingLinesShowcase() {
       </div>
 
       {/* Content */}
-      <div className="relative z-20 flex flex-col items-center justify-center min-h-screen px-6">
+      <div className="relative z-20 flex min-h-screen flex-col items-center justify-center px-6">
         <div
-          className={`text-center transition-all duration-1000 delay-1000 ease-out ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          className={`text-center transition-all delay-1000 duration-1000 ease-out ${
+            isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
           }`}
         >
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 font-sans">Grid Generation</h1>
-          <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl leading-relaxed">
-            Watch as each line draws itself into existence, creating a living grid that emerges from multiple directions
-            in perfect harmony.
+          <h1 className="mb-6 font-bold font-sans text-4xl text-white md:text-6xl">
+            Grid Generation
+          </h1>
+          <p className="mb-8 max-w-2xl text-gray-300 text-lg leading-relaxed md:text-xl">
+            Watch as each line draws itself into existence, creating a living
+            grid that emerges from multiple directions in perfect harmony.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="px-8 py-3 bg-white text-black font-medium rounded-lg hover:bg-gray-200 transition-colors duration-200">
+          <div className="flex flex-col justify-center gap-4 sm:flex-row">
+            <button className="rounded-lg bg-white px-8 py-3 font-medium text-black transition-colors duration-200 hover:bg-gray-200">
               Get Started
             </button>
-            <button className="px-8 py-3 border border-gray-600 text-white font-medium rounded-lg hover:border-gray-400 transition-colors duration-200">
+            <button className="rounded-lg border border-gray-600 px-8 py-3 font-medium text-white transition-colors duration-200 hover:border-gray-400">
               Learn More
             </button>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

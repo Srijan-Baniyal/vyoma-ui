@@ -374,7 +374,7 @@ export default function CountUpShowcase() {
             <CountUp
               duration={2}
               renderValue={() => (
-                <span className="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 bg-clip-text text-transparent">
+                <span className="bg-linear-to-r from-purple-500 via-pink-500 to-red-500 bg-clip-text text-transparent">
                   ∞
                 </span>
               )}

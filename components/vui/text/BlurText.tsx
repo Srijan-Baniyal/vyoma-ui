@@ -34,9 +34,9 @@ const buildKeyframes = (
   ]);
 
   const keyframes: Record<string, Array<string | number>> = {};
-  keys.forEach((k) => {
+  for (const k of keys) {
     keyframes[k] = [from[k], ...steps.map((s) => s[k])];
-  });
+  }
   return keyframes;
 };
 
@@ -127,7 +127,7 @@ const BlurText: React.FC<BlurTextProps> = ({
             <motion.span
               animate={inView ? animateKeyframes : fromSnapshot}
               initial={fromSnapshot}
-              key={index}
+              key={`${segment}-${index}-${text}`}
               onAnimationComplete={
                 index === elements.length - 1 ? onAnimationComplete : undefined
               }
@@ -155,7 +155,7 @@ export default BlurText;
 // Showcase Component
 export function BlurTextShowcase() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background p-8">
+    <div className="min-h-screen bg-linear-to-br from-background via-muted/20 to-background p-8">
       <div className="mx-auto max-w-7xl space-y-16">
         {/* Hero Section */}
         <section className="space-y-6 text-center">
@@ -180,7 +180,7 @@ export function BlurTextShowcase() {
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {/* From Top */}
-            <div className="group rounded-2xl border border-blue-200/50 bg-gradient-to-br from-blue-50/50 to-blue-100/30 p-8 transition-all duration-300 hover:shadow-lg dark:border-blue-800/30 dark:from-blue-950/30 dark:to-blue-900/20">
+            <div className="group rounded-2xl border border-blue-200/50 bg-linear-to-br from-blue-50/50 to-blue-100/30 p-8 transition-all duration-300 hover:shadow-lg dark:border-blue-800/30 dark:from-blue-950/30 dark:to-blue-900/20">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <h3 className="font-semibold text-blue-700 text-lg dark:text-blue-300">
@@ -206,7 +206,7 @@ export function BlurTextShowcase() {
             </div>
 
             {/* From Bottom */}
-            <div className="group rounded-2xl border border-purple-200/50 bg-gradient-to-br from-purple-50/50 to-violet-100/30 p-8 transition-all duration-300 hover:shadow-lg dark:border-purple-800/30 dark:from-purple-950/30 dark:to-violet-900/20">
+            <div className="group rounded-2xl border border-purple-200/50 bg-linear-to-br from-purple-50/50 to-violet-100/30 p-8 transition-all duration-300 hover:shadow-lg dark:border-purple-800/30 dark:from-purple-950/30 dark:to-violet-900/20">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <h3 className="font-semibold text-lg text-purple-700 dark:text-purple-300">
@@ -241,7 +241,7 @@ export function BlurTextShowcase() {
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {/* By Words */}
-            <div className="rounded-2xl border border-green-200/50 bg-gradient-to-br from-green-50/50 to-emerald-100/30 p-8 dark:border-green-800/30 dark:from-green-950/30 dark:to-emerald-900/20">
+            <div className="rounded-2xl border border-green-200/50 bg-linear-to-br from-green-50/50 to-emerald-100/30 p-8 dark:border-green-800/30 dark:from-green-950/30 dark:to-emerald-900/20">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <h3 className="font-semibold text-green-700 text-lg dark:text-green-300">
@@ -267,7 +267,7 @@ export function BlurTextShowcase() {
             </div>
 
             {/* By Letters */}
-            <div className="rounded-2xl border border-orange-200/50 bg-gradient-to-br from-orange-50/50 to-amber-100/30 p-8 dark:border-orange-800/30 dark:from-orange-950/30 dark:to-amber-900/20">
+            <div className="rounded-2xl border border-orange-200/50 bg-linear-to-br from-orange-50/50 to-amber-100/30 p-8 dark:border-orange-800/30 dark:from-orange-950/30 dark:to-amber-900/20">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <h3 className="font-semibold text-lg text-orange-700 dark:text-orange-300">
@@ -382,7 +382,7 @@ export function BlurTextShowcase() {
                   />
                 </div>
                 <div className="rounded bg-muted p-3 font-mono text-muted-foreground text-sm">
-                  {`<BlurText 
+                  {`<BlurText
   text="Welcome to the Future"
   animateBy="words"
   direction="top"
@@ -408,7 +408,7 @@ export function BlurTextShowcase() {
                   />
                 </div>
                 <div className="rounded bg-muted p-3 font-mono text-muted-foreground text-sm">
-                  {`<BlurText 
+                  {`<BlurText
   text="Building amazing experiences..."
   animateBy="letters"
   delay={30}
@@ -434,7 +434,7 @@ export function BlurTextShowcase() {
                   />
                 </div>
                 <div className="rounded bg-muted p-3 font-mono text-muted-foreground text-sm">
-                  {`<BlurText 
+                  {`<BlurText
   text="Get Started Today! 🚀"
   animateBy="words"
   stepDuration={0.3}
@@ -459,7 +459,7 @@ export function BlurTextShowcase() {
                   />
                 </div>
                 <div className="rounded bg-muted p-3 font-mono text-muted-foreground text-sm">
-                  {`<BlurText 
+                  {`<BlurText
   text="✨ Smooth • Fast • Beautiful ✨"
   animateBy="letters"
 />`}

@@ -84,14 +84,14 @@ export default function FeaturedComponents() {
   return (
     <section
       aria-labelledby="featured-heading"
-      className="relative overflow-hidden bg-gradient-to-b from-background via-background to-background/95 py-20 md:py-28"
+      className="relative overflow-hidden bg-linear-to-b from-background via-background to-background/95 py-20 md:py-28"
     >
       {/* Ambient background: subtle grid + blurred gradient orbs (very low opacity for uniform dark theme) */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:42px_42px] opacity-10" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-size[42px_42px] opacity-10" />
         <motion.div
           animate={{ scale: [1, 1.08, 1], opacity: [0.18, 0.28, 0.18] }}
-          className="absolute -top-40 -left-32 h-[520px] w-[520px] rounded-full bg-gradient-to-br from-purple-600/25 via-violet-700/10 to-transparent opacity-20 blur-3xl"
+          className="absolute -top-40 -left-32 h-130 w-130 rounded-full bg-linear-to-br from-purple-600/25 via-violet-700/10 to-transparent opacity-20 blur-3xl"
           transition={{
             duration: 18,
             repeat: Number.POSITIVE_INFINITY,
@@ -100,7 +100,7 @@ export default function FeaturedComponents() {
         />
         <motion.div
           animate={{ scale: [1, 1.1, 1], opacity: [0.18, 0.3, 0.18] }}
-          className="absolute -right-32 -bottom-44 h-[560px] w-[560px] rounded-full bg-gradient-to-tr from-sky-600/25 via-cyan-700/10 to-transparent opacity-20 blur-3xl"
+          className="absolute -right-32 -bottom-44 h-140 w-140 rounded-full bg-linear-to-tr from-sky-600/25 via-cyan-700/10 to-transparent opacity-20 blur-3xl"
           transition={{
             duration: 22,
             repeat: Number.POSITIVE_INFINITY,
@@ -113,13 +113,13 @@ export default function FeaturedComponents() {
         {/* Header */}
         <div className="mb-14 text-center md:mb-20">
           <motion.div
-            className="inline-flex items-center gap-2 rounded-full border border-border/40 bg-gradient-to-r from-primary/10 via-secondary/10 to-primary/10 px-4 py-2 font-medium text-xs backdrop-blur-sm md:text-sm"
+            className="inline-flex items-center gap-2 rounded-full border border-border/40 bg-linear-to-r from-primary/10 via-secondary/10 to-primary/10 px-4 py-2 font-medium text-xs backdrop-blur-sm md:text-sm"
             initial={{ opacity: 0, y: 12 }}
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
             whileInView={{ opacity: 1, y: 0 }}
           >
-            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent">
               Curated Highlights
             </span>
           </motion.div>
@@ -131,7 +131,7 @@ export default function FeaturedComponents() {
             viewport={{ once: true }}
             whileInView={{ opacity: 1, y: 0 }}
           >
-            <span className="bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
               Featured Components
             </span>
           </motion.h2>
@@ -176,7 +176,7 @@ export default function FeaturedComponents() {
                     <motion.div
                       animate={{ opacity: hoverIndex === i ? 1 : 0 }}
                       aria-hidden="true"
-                      className={`absolute inset-0 bg-gradient-to-br ${accent.grad}`}
+                      className={`absolute inset-0 bg-linear-to-br ${accent.grad}`}
                       initial={{ opacity: 0 }}
                       transition={{ duration: 0.4 }}
                     />
@@ -185,7 +185,7 @@ export default function FeaturedComponents() {
                     <motion.div
                       animate={{ x: hoverIndex === i ? "120%" : "-120%" }}
                       aria-hidden="true"
-                      className="absolute inset-0 skew-x-12 bg-gradient-to-r from-transparent via-white/10 to-transparent"
+                      className="absolute inset-0 skew-x-12 bg-linear-to-r from-transparent via-white/10 to-transparent"
                       initial={{ x: "-120%" }}
                       transition={{
                         duration: 1.8,
@@ -196,7 +196,7 @@ export default function FeaturedComponents() {
 
                     {/* Icon */}
                     <div
-                      className={`relative mb-5 flex h-14 w-14 items-center justify-center rounded-xl border border-white/10 bg-gradient-to-br ${accent.bg}`}
+                      className={`relative mb-5 flex h-14 w-14 items-center justify-center rounded-xl border border-white/10 bg-linear-to-br ${accent.bg}`}
                     >
                       <motion.div
                         animate={{
@@ -218,13 +218,13 @@ export default function FeaturedComponents() {
 
                     {/* Title */}
                     <h3 className="mb-2 font-semibold text-lg tracking-tight md:text-xl">
-                      <span className="bg-gradient-to-r from-white to-white/90 bg-clip-text text-black transition-colors duration-300 group-hover:from-primary group-hover:to-secondary dark:text-white">
+                      <span className="bg-linear-to-r from-white to-white/90 bg-clip-text text-black transition-colors duration-300 group-hover:from-primary group-hover:to-secondary dark:text-white">
                         {item.name}
                       </span>
                     </h3>
 
                     {/* Description */}
-                    <p className="flex-grow text-muted-foreground/90 text-xs leading-relaxed md:text-sm">
+                    <p className="grow text-muted-foreground/90 text-xs leading-relaxed md:text-sm">
                       {item.description}
                     </p>
 
@@ -271,7 +271,7 @@ export default function FeaturedComponents() {
             >
               <motion.div
                 aria-hidden="true"
-                className="absolute inset-0 skew-x-12 bg-gradient-to-r from-transparent via-primary/10 to-transparent"
+                className="absolute inset-0 skew-x-12 bg-linear-to-r from-transparent via-primary/10 to-transparent"
                 initial={{ x: "-110%" }}
                 transition={{ duration: 1.4, ease: "easeInOut" }}
                 whileHover={{ x: "110%" }}

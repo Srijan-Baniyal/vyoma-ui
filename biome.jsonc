@@ -1,9 +1,6 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-  "extends": [
-    "ultracite/biome/core",
-    "ultracite/biome/next"
-  ],
+  "extends": ["ultracite/biome/core", "ultracite/biome/next"],
   "linter": {
     "rules": {
       "style": {
@@ -13,10 +10,7 @@
   },
   "overrides": [
     {
-      "includes": [
-        "components/ui/**",
-        "components/WheelBase.tsx"
-      ],
+      "includes": ["components/ui/**", "components/WheelBase.tsx"],
       "linter": {
         "rules": {
           "performance": {

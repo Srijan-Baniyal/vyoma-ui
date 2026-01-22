@@ -28,11 +28,11 @@ export function PillShowcase() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background p-4 sm:p-8">
+    <div className="min-h-screen bg-linear-to-br from-background via-muted/20 to-background p-4 sm:p-8">
       <div className="mx-auto max-w-7xl space-y-10 sm:space-y-16">
         {/* Header */}
         <div className="space-y-3 text-center sm:space-y-4">
-          <h1 className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text font-bold text-3xl text-transparent sm:text-5xl">
+          <h1 className="bg-linear-to-r from-primary to-primary/60 bg-clip-text font-bold text-3xl text-transparent sm:text-5xl">
             Pill Component
           </h1>
           <p className="mx-auto max-w-2xl text-muted-foreground">

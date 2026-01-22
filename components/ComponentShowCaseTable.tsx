@@ -124,12 +124,12 @@ export default function ComponentShowCaseTable({
 
   if (components.length === 0) {
     return (
-      <Card className="fade-in-50 animate-in border-2 border-dashed bg-gradient-to-br from-slate-50/50 to-blue-50/30 duration-500 dark:from-slate-900/50 dark:to-blue-950/30">
+      <Card className="fade-in-50 animate-in border-2 border-dashed bg-linear-to-br from-slate-50/50 to-blue-50/30 duration-500 dark:from-slate-900/50 dark:to-blue-950/30">
         <CardContent className="p-8 text-center sm:p-12">
           <div className="zoom-in-50 mx-auto mb-6 flex h-20 w-20 animate-in items-center justify-center rounded-2xl shadow-lg delay-200 duration-700 sm:h-24 sm:w-24 dark:from-blue-900/30 dark:to-purple-900/30">
             <Code2 className="h-10 w-10 sm:h-12 sm:w-12" />
           </div>
-          <h3 className="slide-in-from-bottom-4 mb-3 animate-in bg-gradient-to-r from-slate-900 to-slate-600 bg-clip-text font-bold text-transparent text-xl delay-300 duration-500 sm:text-2xl dark:from-slate-100 dark:to-slate-400">
+          <h3 className="slide-in-from-bottom-4 mb-3 animate-in bg-linear-to-r from-slate-900 to-slate-600 bg-clip-text font-bold text-transparent text-xl delay-300 duration-500 sm:text-2xl dark:from-slate-100 dark:to-slate-400">
             No Components Found
           </h3>
           <p className="slide-in-from-bottom-4 mx-auto max-w-md animate-in text-muted-foreground text-sm delay-500 duration-500 sm:text-base">

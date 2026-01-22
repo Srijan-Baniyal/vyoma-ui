@@ -1,7 +1,18 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import * as THREE from "three";
+import {
+  AnimationMixer,
+  Clock,
+  Color,
+  DirectionalLight,
+  HemisphereLight,
+  type Mesh,
+  type Object3D,
+  PerspectiveCamera,
+  Scene,
+  WebGLRenderer,
+} from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
@@ -27,13 +38,13 @@ export default function Space({
     const backgroundColor = "transparent";
     const enableControls = true;
     //scene setup
-    const scene = new THREE.Scene();
+    const scene = new Scene();
     if (backgroundColor !== "transparent") {
-      scene.background = new THREE.Color(backgroundColor);
+      scene.background = new Color(backgroundColor);
     }
 
     //camera
-    const camera = new THREE.PerspectiveCamera(
+    const camera = new PerspectiveCamera(
       75,
       container.clientWidth / container.clientHeight,
       0.1,
@@ -43,7 +54,7 @@ export default function Space({
     camera.lookAt(0, 0, 0);
 
     //renderer
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    const renderer = new WebGLRenderer({ antialias: true, alpha: true });
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(
       container.clientWidth || 300,
@@ -68,11 +79,11 @@ export default function Space({
     resizeObserver.observe(container);
 
     //lighting
-    const hemiLight = new THREE.HemisphereLight(0xff_ff_ff, 0x44_44_44, 1.5);
+    const hemiLight = new HemisphereLight(0xff_ff_ff, 0x44_44_44, 1.5);
     hemiLight.position.set(0, 1, 0);
     scene.add(hemiLight);
 
-    const dirLight = new THREE.DirectionalLight(0xff_ff_ff, 2);
+    const dirLight = new DirectionalLight(0xff_ff_ff, 2);
     dirLight.position.set(5, 10, 10);
     dirLight.castShadow = true;
     dirLight.shadow.mapSize.set(2048, 2048);
@@ -89,9 +100,9 @@ export default function Space({
     controls.maxPolarAngle = Math.PI / 2.1;
     controls.enabled = enableControls;
 
-    const clock = new THREE.Clock();
-    let mixer: THREE.AnimationMixer | null = null;
-    let planet: THREE.Object3D | null = null;
+    const clock = new Clock();
+    let mixer: AnimationMixer | null = null;
+    let planet: Object3D | null = null;
     let animationFrameId: number;
 
     //GLTF Loader
@@ -106,19 +117,19 @@ export default function Space({
           astronaut.position.set(0, 0.1, 0);
 
           astronaut.traverse((child) => {
-            if ((child as THREE.Mesh).isMesh) {
-              (child as THREE.Mesh).castShadow = true;
-              (child as THREE.Mesh).receiveShadow = true;
+            if ((child as Mesh).isMesh) {
+              (child as Mesh).castShadow = true;
+              (child as Mesh).receiveShadow = true;
             }
           });
 
           scene.add(astronaut);
 
           if (gltf.animations.length > 0) {
-            mixer = new THREE.AnimationMixer(astronaut);
-            gltf.animations.forEach((clip) => {
+            mixer = new AnimationMixer(astronaut);
+            for (const clip of gltf.animations) {
               mixer?.clipAction(clip).play();
-            });
+            }
           }
         },
         undefined,
@@ -135,8 +146,8 @@ export default function Space({
           ground.scale.set(3, 3, 3);
 
           ground.traverse((child) => {
-            if ((child as THREE.Mesh).isMesh) {
-              (child as THREE.Mesh).receiveShadow = true;
+            if ((child as Mesh).isMesh) {
+              (child as Mesh).receiveShadow = true;
             }
           });
 
@@ -157,9 +168,9 @@ export default function Space({
         planet.rotation.y = Math.PI / 10;
 
         planet.traverse((child) => {
-          if ((child as THREE.Mesh).isMesh) {
-            (child as THREE.Mesh).receiveShadow = false;
-            (child as THREE.Mesh).castShadow = false;
+          if ((child as Mesh).isMesh) {
+            (child as Mesh).receiveShadow = false;
+            (child as Mesh).castShadow = false;
           }
         });
 
@@ -231,21 +242,21 @@ export default function Space({
       <div className="pointer-events-none absolute inset-0 z-20 flex flex-col text-white">
         <header className="w-full p-6">
           <nav className="pointer-events-auto flex items-center justify-end space-x-8 text-lg">
-            <a className="transition-colors hover:text-sky-300" href="#">
+            <a className="transition-colors hover:text-sky-300" href="/">
               Home
             </a>
-            <a className="transition-colors hover:text-sky-300" href="#">
+            <a className="transition-colors hover:text-sky-300" href="/about">
               About
             </a>
-            <a className="transition-colors hover:text-sky-300" href="#">
-              Projects
+            <a className="transition-colors hover:text-sky-300" href="/explore">
+              Explore
             </a>
-            <a className="transition-colors hover:text-sky-300" href="#">
+            <a className="transition-colors hover:text-sky-300" href="/contact">
               Contact
             </a>
           </nav>
         </header>
-        <main className="flex flex-grow flex-col items-center justify-end pb-16 text-center">
+        <main className="flex grow flex-col items-center justify-end pb-16 text-center">
           <h1 className="pointer-events-auto font-extrabold text-5xl uppercase tracking-wider">
             <span className="underline decoration-2 decoration-sky-400 underline-offset-8">
               Space Theme

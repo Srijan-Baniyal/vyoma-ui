@@ -168,12 +168,14 @@ const MagneticDock: React.FC = () => {
   return (
     <MouseContext.Provider value={pos}>
       <div className="flex min-h-screen w-full items-center justify-center bg-neutral-900 text-neutral-200">
+        {/* biome-ignore lint/a11y/noNoninteractiveElementInteractions: Dock container requires mouse tracking for magnetic effect */}
+        {/* biome-ignore lint/a11y/useSemanticElements: Region role is appropriate for this interactive dock container */}
         <div
-          aria-label="Magnetic dock navigation"
+          aria-label="Interactive dock navigation"
           className="flex h-24 items-end gap-4 rounded-2xl bg-neutral-800/50 px-4 pb-4"
           onMouseLeave={onMouseLeave}
           onMouseMove={onMouseMove}
-          role="toolbar"
+          role="region"
         >
           <DockIcon icon={<GithubIcon />} />
           <DockIcon icon={<LinkedinIcon />} />

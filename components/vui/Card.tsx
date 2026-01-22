@@ -36,7 +36,7 @@ function VuiCard({
   const isMobile = useIsMobile();
 
   return (
-    <Card className="h-full w-full overflow-hidden border-1 border-gray-500 bg-white/5 backdrop-blur-md">
+    <Card className="h-full w-full overflow-hidden border border-gray-500 bg-white/5 backdrop-blur-md">
       <Image
         alt={imageAlt}
         aria-hidden="true"
@@ -82,12 +82,12 @@ export default function CardShowcase() {
   const isMobile = useIsMobile();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background p-4 md:p-8">
+    <div className="min-h-screen bg-linear-to-br from-background via-muted/20 to-background p-4 md:p-8">
       <div className="mx-auto max-w-7xl space-y-8 md:space-y-16">
         {/* Hero Section */}
         <div className="space-y-4 text-center md:space-y-6">
           <div className="space-y-2">
-            <h1 className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text font-bold text-2xl text-transparent md:text-4xl lg:text-5xl">
+            <h1 className="bg-linear-to-r from-primary to-primary/60 bg-clip-text font-bold text-2xl text-transparent md:text-4xl lg:text-5xl">
               Card Component
             </h1>
             <p className="mx-auto max-w-2xl px-4 text-base text-muted-foreground md:text-xl">
@@ -101,7 +101,7 @@ export default function CardShowcase() {
             <div className="flex justify-center">
               <section
                 aria-label="Featured Card: Ideas Made Visuals"
-                className={`relative w-full ${isMobile ? "h-[300px] max-w-sm" : "h-[400px] max-w-xl md:h-[500px]"} mx-auto overflow-hidden rounded-3xl shadow-2xl`}
+                className={`relative w-full ${isMobile ? "h-75 max-w-sm" : "h-100 max-w-xl md:h-125"} mx-auto overflow-hidden rounded-3xl shadow-2xl`}
               >
                 <div aria-hidden="true" className="absolute inset-0">
                   <Image
@@ -144,10 +144,10 @@ export default function CardShowcase() {
                 </p>
               </div>
 
-              <div className="rounded-2xl border border-blue-200/30 bg-gradient-to-br from-blue-50/30 to-blue-100/20 p-4 dark:border-blue-800/20 dark:from-blue-950/20 dark:to-blue-900/10">
+              <div className="rounded-2xl border border-blue-200/30 bg-linear-to-br from-blue-50/30 to-blue-100/20 p-4 dark:border-blue-800/20 dark:from-blue-950/20 dark:to-blue-900/10">
                 <section
                   aria-label="Design Agency Card"
-                  className={`relative w-full ${isMobile ? "h-[250px]" : "h-[300px] md:h-[400px]"} overflow-hidden rounded-2xl shadow-xl`}
+                  className={`relative w-full ${isMobile ? "h-62.5" : "h-75 md:h-100"} overflow-hidden rounded-2xl shadow-xl`}
                 >
                   <div aria-hidden="true" className="absolute inset-0">
                     <Image
@@ -156,7 +156,7 @@ export default function CardShowcase() {
                       fill
                       src={GIRL}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-blue-900/40 to-purple-900/20" />
+                    <div className="absolute inset-0 bg-linear-to-t from-blue-900/40 to-purple-900/20" />
                   </div>
                   <div
                     className={`absolute ${isMobile ? "inset-2" : "inset-4"}`}
@@ -191,10 +191,10 @@ export default function CardShowcase() {
                 </p>
               </div>
 
-              <div className="rounded-2xl border border-green-200/30 bg-gradient-to-br from-green-50/30 to-emerald-100/20 p-4 dark:border-green-800/20 dark:from-green-950/20 dark:to-emerald-900/10">
+              <div className="rounded-2xl border border-green-200/30 bg-linear-to-br from-green-50/30 to-emerald-100/20 p-4 dark:border-green-800/20 dark:from-green-950/20 dark:to-emerald-900/10">
                 <section
                   aria-label="Tech Startup Card"
-                  className={`relative w-full ${isMobile ? "h-[250px]" : "h-[300px] md:h-[400px]"} overflow-hidden rounded-2xl shadow-xl`}
+                  className={`relative w-full ${isMobile ? "h-62.5" : "h-75 md:h-100"} overflow-hidden rounded-2xl shadow-xl`}
                 >
                   <div aria-hidden="true" className="absolute inset-0">
                     <Image
@@ -203,7 +203,7 @@ export default function CardShowcase() {
                       fill
                       src={GIRL}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-green-900/40 to-teal-900/20" />
+                    <div className="absolute inset-0 bg-linear-to-t from-green-900/40 to-teal-900/20" />
                   </div>
                   <div
                     className={`absolute ${isMobile ? "inset-2" : "inset-4"}`}
@@ -243,10 +243,10 @@ export default function CardShowcase() {
                 </p>
               </div>
 
-              <div className="rounded-2xl border border-purple-200/30 bg-gradient-to-br from-purple-50/30 to-violet-100/20 p-4 dark:border-purple-800/20 dark:from-purple-950/20 dark:to-violet-900/10">
+              <div className="rounded-2xl border border-purple-200/30 bg-linear-to-br from-purple-50/30 to-violet-100/20 p-4 dark:border-purple-800/20 dark:from-purple-950/20 dark:to-violet-900/10">
                 <section
                   aria-label="Lifestyle Brand Card"
-                  className={`relative w-full ${isMobile ? "h-[250px]" : "h-[300px] md:h-[400px]"} overflow-hidden rounded-2xl shadow-xl`}
+                  className={`relative w-full ${isMobile ? "h-62.5" : "h-75 md:h-100"} overflow-hidden rounded-2xl shadow-xl`}
                 >
                   <div aria-hidden="true" className="absolute inset-0">
                     <Image
@@ -255,7 +255,7 @@ export default function CardShowcase() {
                       fill
                       src={GIRL}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-purple-900/40 to-pink-900/20" />
+                    <div className="absolute inset-0 bg-linear-to-t from-purple-900/40 to-pink-900/20" />
                   </div>
                   <div
                     className={`absolute ${isMobile ? "inset-2" : "inset-4"}`}
@@ -302,10 +302,10 @@ export default function CardShowcase() {
                 Compact Layout
               </h3>
 
-              <div className="rounded-2xl border border-orange-200/30 bg-gradient-to-br from-orange-50/30 to-amber-100/20 p-4 md:p-6 dark:border-orange-800/20 dark:from-orange-950/20 dark:to-amber-900/10">
+              <div className="rounded-2xl border border-orange-200/30 bg-linear-to-br from-orange-50/30 to-amber-100/20 p-4 md:p-6 dark:border-orange-800/20 dark:from-orange-950/20 dark:to-amber-900/10">
                 <section
                   aria-label="Compact Card Layout"
-                  className={`relative w-full ${isMobile ? "h-[200px]" : "h-[250px] md:h-[300px]"} overflow-hidden rounded-xl shadow-lg`}
+                  className={`relative w-full ${isMobile ? "h-50" : "h-62.5 md:h-75"} overflow-hidden rounded-xl shadow-lg`}
                 >
                   <div aria-hidden="true" className="absolute inset-0">
                     <Image
@@ -343,10 +343,10 @@ export default function CardShowcase() {
                 Wide Format
               </h3>
 
-              <div className="rounded-2xl border border-rose-200/30 bg-gradient-to-br from-rose-50/30 to-pink-100/20 p-4 md:p-6 dark:border-rose-800/20 dark:from-rose-950/20 dark:to-pink-900/10">
+              <div className="rounded-2xl border border-rose-200/30 bg-linear-to-br from-rose-50/30 to-pink-100/20 p-4 md:p-6 dark:border-rose-800/20 dark:from-rose-950/20 dark:to-pink-900/10">
                 <section
                   aria-label="Wide Format Card"
-                  className={`relative w-full ${isMobile ? "h-[200px]" : "h-[250px] md:h-[300px]"} overflow-hidden rounded-xl shadow-lg`}
+                  className={`relative w-full ${isMobile ? "h-50" : "h-62.5 md:h-75"} overflow-hidden rounded-xl shadow-lg`}
                 >
                   <div aria-hidden="true" className="absolute inset-0">
                     <Image
@@ -355,7 +355,7 @@ export default function CardShowcase() {
                       fill
                       src={GIRL}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-r from-rose-900/40 to-transparent" />
+                    <div className="absolute inset-0 bg-linear-to-r from-rose-900/40 to-transparent" />
                   </div>
                   <div
                     className={`absolute ${isMobile ? "inset-2" : "inset-4"}`}
@@ -405,7 +405,7 @@ export function CardTheme() {
           fill
           src={GIRL}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-green-900/40 to-teal-900/20" />
+        <div className="absolute inset-0 bg-linear-to-t from-green-900/40 to-teal-900/20" />
       </div>
       <div className={`absolute ${isMobile ? "inset-2" : "inset-4"}`}>
         <VuiCard

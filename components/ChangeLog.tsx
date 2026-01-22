@@ -63,7 +63,7 @@ export default function ChangeLog() {
               }`}
             >
               {/* Interactive Buttons */}
-              <div className="rounded-xl border border-blue-200 bg-gradient-to-br from-blue-50 to-blue-100 p-4 dark:border-blue-700/50 dark:from-blue-900/20 dark:to-blue-800/20">
+              <div className="rounded-xl border border-blue-200 bg-linear-to-br from-blue-50 to-blue-100 p-4 dark:border-blue-700/50 dark:from-blue-900/20 dark:to-blue-800/20">
                 <div className="mb-3 flex items-center gap-2">
                   <Zap className="h-4 w-4 text-blue-600" />
                   <h5
@@ -88,7 +88,7 @@ export default function ChangeLog() {
               </div>
 
               {/* Text Animations */}
-              <div className="rounded-xl border border-green-200 bg-gradient-to-br from-green-50 to-green-100 p-4 dark:border-green-700/50 dark:from-green-900/20 dark:to-green-800/20">
+              <div className="rounded-xl border border-green-200 bg-linear-to-br from-green-50 to-green-100 p-4 dark:border-green-700/50 dark:from-green-900/20 dark:to-green-800/20">
                 <div className="mb-3 flex items-center gap-2">
                   <Sparkles className="h-4 w-4 text-green-600" />
                   <h5
@@ -112,7 +112,7 @@ export default function ChangeLog() {
               </div>
 
               {/* Layout Components */}
-              <div className="rounded-xl border border-purple-200 bg-gradient-to-br from-purple-50 to-purple-100 p-4 dark:border-purple-700/50 dark:from-purple-900/20 dark:to-purple-800/20">
+              <div className="rounded-xl border border-purple-200 bg-linear-to-br from-purple-50 to-purple-100 p-4 dark:border-purple-700/50 dark:from-purple-900/20 dark:to-purple-800/20">
                 <div className="mb-3 flex items-center gap-2">
                   <Package className="h-4 w-4 text-purple-600" />
                   <h5
@@ -137,7 +137,7 @@ export default function ChangeLog() {
               </div>
 
               {/* Form Elements */}
-              <div className="rounded-xl border border-orange-200 bg-gradient-to-br from-orange-50 to-orange-100 p-4 dark:border-orange-700/50 dark:from-orange-900/20 dark:to-orange-800/20">
+              <div className="rounded-xl border border-orange-200 bg-linear-to-br from-orange-50 to-orange-100 p-4 dark:border-orange-700/50 dark:from-orange-900/20 dark:to-orange-800/20">
                 <div className="mb-3 flex items-center gap-2">
                   <Code className="h-4 w-4 text-orange-600" />
                   <h5
@@ -158,7 +158,7 @@ export default function ChangeLog() {
                 </div>
               </div>
               {/* Navigation & Utils */}
-              <div className="rounded-xl border border-indigo-200 bg-gradient-to-br from-indigo-50 to-indigo-100 p-4 dark:border-indigo-700/50 dark:from-indigo-900/20 dark:to-indigo-800/20">
+              <div className="rounded-xl border border-indigo-200 bg-linear-to-br from-indigo-50 to-indigo-100 p-4 dark:border-indigo-700/50 dark:from-indigo-900/20 dark:to-indigo-800/20">
                 <div className="mb-3 flex items-center gap-2">
                   <Smartphone className="h-4 w-4 text-indigo-600" />
                   <h5
@@ -181,7 +181,7 @@ export default function ChangeLog() {
             </div>
           </div>
 
-          <div className="mt-8 rounded-xl border border-slate-200 bg-gradient-to-br from-slate-50 to-slate-100 p-6 dark:border-slate-700/50 dark:from-slate-900/50 dark:to-slate-800/50">
+          <div className="mt-8 rounded-xl border border-slate-200 bg-linear-to-br from-slate-50 to-slate-100 p-6 dark:border-slate-700/50 dark:from-slate-900/50 dark:to-slate-800/50">
             <h4
               className={`${
                 isMobile ? "text-lg" : "text-xl"
@@ -196,27 +196,27 @@ export default function ChangeLog() {
               } ${isMobile ? "text-sm" : "text-base"}`}
             >
               <div className="flex items-center gap-3 text-slate-700 dark:text-slate-300">
-                <Code className="h-4 w-4 flex-shrink-0 text-blue-600" />
+                <Code className="h-4 w-4 shrink-0 text-blue-600" />
                 <span>Full TypeScript support</span>
               </div>
               <div className="flex items-center gap-3 text-slate-700 dark:text-slate-300">
-                <Moon className="h-4 w-4 flex-shrink-0 text-indigo-600" />
+                <Moon className="h-4 w-4 shrink-0 text-indigo-600" />
                 <span>Complete dark mode compatibility</span>
               </div>
               <div className="flex items-center gap-3 text-slate-700 dark:text-slate-300">
-                <Zap className="h-4 w-4 flex-shrink-0 text-yellow-600" />
+                <Zap className="h-4 w-4 shrink-0 text-yellow-600" />
                 <span>Optimized performance</span>
               </div>
               <div className="flex items-center gap-3 text-slate-700 dark:text-slate-300">
-                <Smartphone className="h-4 w-4 flex-shrink-0 text-green-600" />
+                <Smartphone className="h-4 w-4 shrink-0 text-green-600" />
                 <span>Fully responsive design</span>
               </div>
               <div className="flex items-center gap-3 text-slate-700 dark:text-slate-300">
-                <Palette className="h-4 w-4 flex-shrink-0 text-purple-600" />
+                <Palette className="h-4 w-4 shrink-0 text-purple-600" />
                 <span>Customizable with Tailwind CSS</span>
               </div>
               <div className="flex items-center gap-3 text-slate-700 dark:text-slate-300">
-                <Package className="h-4 w-4 flex-shrink-0 text-orange-600" />
+                <Package className="h-4 w-4 shrink-0 text-orange-600" />
                 <span>Easy npm/yarn installation</span>
               </div>
             </div>

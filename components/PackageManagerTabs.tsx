@@ -137,7 +137,7 @@ export function PackageManagerTabs({
             {/* Active tab background */}
             {activeTab === pm.id && (
               <motion.div
-                className={`absolute inset-0 bg-gradient-to-r ${pm.color} rounded-lg`}
+                className={`absolute inset-0 bg-linear-to-r ${pm.color} rounded-lg`}
                 initial={false}
                 layoutId="activeTab"
                 transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
@@ -159,7 +159,7 @@ export function PackageManagerTabs({
             {/* Hover glow effect */}
             {activeTab !== pm.id && (
               <div
-                className={`absolute inset-0 bg-gradient-to-r ${pm.color} rounded-lg opacity-0 transition-opacity duration-300 hover:opacity-10`}
+                className={`absolute inset-0 bg-linear-to-r ${pm.color} rounded-lg opacity-0 transition-opacity duration-300 hover:opacity-10`}
               />
             )}
           </button>
@@ -178,16 +178,16 @@ export function PackageManagerTabs({
           <Card className="relative overflow-hidden border-0 bg-card/80 shadow-lg backdrop-blur-sm">
             {/* Animated gradient background */}
             <div
-              className={`absolute inset-0 bg-gradient-to-r ${activeManager.color} opacity-5`}
+              className={`absolute inset-0 bg-linear-to-r ${activeManager.color} opacity-5`}
             />
             <div
-              className={`absolute top-0 left-0 h-1 w-full bg-gradient-to-r ${activeManager.color}`}
+              className={`absolute top-0 left-0 h-1 w-full bg-linear-to-r ${activeManager.color}`}
             />
 
             <div className="relative p-6">
               <div className="mb-4 flex items-center gap-3">
                 <div
-                  className={`flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-r ${activeManager.color} text-white shadow-lg`}
+                  className={`flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-r ${activeManager.color} text-white shadow-lg`}
                 >
                   {activeManager.icon}
                 </div>
@@ -207,7 +207,7 @@ export function PackageManagerTabs({
               {activeManager.id === "yarn" && (
                 <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 p-3 dark:border-amber-800 dark:bg-amber-950/20">
                   <div className="flex items-start gap-2">
-                    <div className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900">
+                    <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900">
                       <span className="font-bold text-amber-600 text-xs dark:text-amber-400">
                         !
                       </span>

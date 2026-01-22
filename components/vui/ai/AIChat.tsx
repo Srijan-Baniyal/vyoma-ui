@@ -2,7 +2,7 @@
 
 import { AlertCircle, Bot, Loader2, Send, User } from "lucide-react";
 import type React from "react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
 // Types
@@ -60,9 +60,9 @@ export const AIChat: React.FC<AIChatProps> = ({
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   // Auto-scroll to bottom
-  const scrollToBottom = () => {
+  const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  }, []);
 
   useEffect(() => {
     scrollToBottom();

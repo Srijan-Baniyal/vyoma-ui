@@ -50,7 +50,7 @@ const components = [
     href: "/components/button",
     description: "Displays a button or a component that looks like a button.",
     icon: (
-      <div className="h-4 w-4 rounded bg-gradient-to-br from-blue-400 to-blue-600 shadow-sm" />
+      <div className="h-4 w-4 rounded bg-linear-to-br from-blue-400 to-blue-600 shadow-sm" />
     ),
   },
   {
@@ -58,7 +58,7 @@ const components = [
     href: "/components/card",
     description: "Displays a card with header, content, and footer.",
     icon: (
-      <div className="h-4 w-4 rounded bg-gradient-to-br from-green-400 to-green-600 shadow-sm" />
+      <div className="h-4 w-4 rounded bg-linear-to-br from-green-400 to-green-600 shadow-sm" />
     ),
   },
   {
@@ -67,7 +67,7 @@ const components = [
     description:
       "A window overlaid on either the primary window or another dialog window.",
     icon: (
-      <div className="h-4 w-4 rounded bg-gradient-to-br from-purple-400 to-purple-600 shadow-sm" />
+      <div className="h-4 w-4 rounded bg-linear-to-br from-purple-400 to-purple-600 shadow-sm" />
     ),
   },
   {
@@ -76,7 +76,7 @@ const components = [
     description:
       "Displays a form input field or a component that looks like an input field.",
     icon: (
-      <div className="h-4 w-4 rounded bg-gradient-to-br from-orange-400 to-orange-600 shadow-sm" />
+      <div className="h-4 w-4 rounded bg-linear-to-br from-orange-400 to-orange-600 shadow-sm" />
     ),
   },
   {
@@ -85,7 +85,7 @@ const components = [
     description:
       "Displays an indicator showing the completion progress of a task.",
     icon: (
-      <div className="h-4 w-4 rounded bg-gradient-to-br from-red-400 to-red-600 shadow-sm" />
+      <div className="h-4 w-4 rounded bg-linear-to-br from-red-400 to-red-600 shadow-sm" />
     ),
   },
   {
@@ -94,7 +94,7 @@ const components = [
     description:
       "A popup that displays information related to an element when hovered.",
     icon: (
-      <div className="h-4 w-4 rounded bg-gradient-to-br from-yellow-400 to-yellow-600 shadow-sm" />
+      <div className="h-4 w-4 rounded bg-linear-to-br from-yellow-400 to-yellow-600 shadow-sm" />
     ),
   },
 ];
@@ -291,11 +291,11 @@ function MobileNavItem({
         />
       </CollapsibleTrigger>
       <CollapsibleContent className="space-y-1 px-4 pb-2">
-        {items.map((item, index) => (
+        {items.map((item) => (
           <Link
             className="flex items-center gap-3 rounded-md px-4 py-2 text-sm transition-colors hover:bg-accent hover:text-accent-foreground"
             href={item.href}
-            key={index}
+            key={item.href}
             rel={item.external ? "noopener noreferrer" : undefined}
             target={item.external ? "_blank" : undefined}
           >
@@ -327,14 +327,14 @@ export default function NavigationShowcase() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-background via-muted/20 to-background">
+    <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-background via-muted/20 to-background">
       {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
         <div className="container mx-auto px-4">
           <div className="flex h-16 items-center justify-between">
             {/* Logo */}
             <Link className="group flex items-center space-x-2" href="/">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-primary/80 text-primary-foreground transition-transform duration-200 group-hover:scale-105">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-linear-to-br from-primary to-primary/80 text-primary-foreground transition-transform duration-200 group-hover:scale-105">
                 <SparklesIcon className="h-4 w-4" />
               </div>
               <span className="font-bold text-xl tracking-tight">VyomaUI</span>
@@ -350,10 +350,10 @@ export default function NavigationShowcase() {
                       Home
                     </NavigationMenuTrigger>
                     <NavigationMenuContent>
-                      <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+                      <ul className="grid gap-3 p-6 md:w-100 lg:w-125 lg:grid-cols-[.75fr_1fr]">
                         <li className="row-span-3">
                           <Link
-                            className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
+                            className="flex h-full w-full select-none flex-col justify-end rounded-md bg-linear-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
                             href="/"
                           >
                             <div className="mt-4 mb-2 font-medium text-lg">
@@ -402,7 +402,7 @@ export default function NavigationShowcase() {
                       Components
                     </NavigationMenuTrigger>
                     <NavigationMenuContent>
-                      <ul className="grid w-[400px] gap-3 p-6 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                      <ul className="grid w-100 gap-3 p-6 md:w-125 md:grid-cols-2 lg:w-150">
                         {components.map((component) => (
                           <ListItem
                             href={component.href}
@@ -423,7 +423,7 @@ export default function NavigationShowcase() {
                       Resources
                     </NavigationMenuTrigger>
                     <NavigationMenuContent>
-                      <ul className="grid w-[300px] gap-3 p-6">
+                      <ul className="grid w-75 gap-3 p-6">
                         {resources.map((resource) => (
                           <ListItem
                             href={resource.href}
@@ -444,7 +444,7 @@ export default function NavigationShowcase() {
                       Status
                     </NavigationMenuTrigger>
                     <NavigationMenuContent>
-                      <ul className="grid w-[280px] gap-2 p-6">
+                      <ul className="grid w-70 gap-2 p-6">
                         {statusItems.map((item) => (
                           <StatusItem
                             count={item.count}
@@ -464,7 +464,7 @@ export default function NavigationShowcase() {
                       Community
                     </NavigationMenuTrigger>
                     <NavigationMenuContent>
-                      <ul className="grid w-[260px] gap-3 p-6">
+                      <ul className="grid w-65 gap-3 p-6">
                         {community.map((item) => (
                           <ListItem
                             external={item.external}
@@ -516,10 +516,11 @@ export default function NavigationShowcase() {
                   <span className="sr-only">Toggle menu</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent className="w-[300px] sm:w-[400px]" side="right">
+              <SheetContent className="w-75 sm:w-100" side="right">
                 <SheetHeader>
                   <SheetTitle className="flex items-center gap-2">
-                    <div className="flex h-6 w-6 items-center justify-center rounded-md bg-gradient-to-br from-primary to-primary/80 text-primary-foreground">
+                    <div className="roundlineared-md flex h-6 w-6 items-center justify-center bg-linear-gradient-to-br from-primary to-primary/80 text-primary-foreground">
+                      {" "}
                       <SparklesIcon className="h-3 w-3" />
                     </div>
                     VyomaUI

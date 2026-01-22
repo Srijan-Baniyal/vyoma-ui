@@ -1,3 +1,4 @@
+// biome-ignore lint/performance/noNamespaceImport: TypeScript Compiler API requires namespace import
 import * as ts from "typescript";
 
 /**
@@ -630,6 +631,38 @@ export class TypeScriptASTParser {
   extractDefaultValuesFromNode(node: ts.Node): Record<string, unknown> {
     const defaultValues: Record<string, unknown> = {};
 
+    // Helper to extract from destructured parameters
+    const extractFromObjectBinding = (
+      bindingPattern: ts.ObjectBindingPattern
+    ) => {
+      for (const element of bindingPattern.elements) {
+        if (ts.isBindingElement(element) && element.initializer) {
+          const name = ts.isIdentifier(element.name)
+            ? element.name.text
+            : undefined;
+          if (name) {
+            defaultValues[name] = this.evaluateExpression(element.initializer);
+          }
+        }
+      }
+    };
+
+    // Helper to extract from parameter initializer
+    const extractFromParameterInitializer = (
+      initializer: ts.ObjectLiteralExpression
+    ) => {
+      for (const property of initializer.properties) {
+        if (ts.isPropertyAssignment(property)) {
+          const name = ts.isIdentifier(property.name)
+            ? property.name.text
+            : undefined;
+          if (name) {
+            defaultValues[name] = this.evaluateExpression(property.initializer);
+          }
+        }
+      }
+    };
+
     // Extract from function parameters
     const extractFromFunction = (
       func: ts.FunctionDeclaration | ts.ArrowFunction | ts.FunctionExpression
@@ -641,18 +674,7 @@ export class TypeScriptASTParser {
 
       // Handle destructured parameters with defaults
       if (ts.isObjectBindingPattern(firstParam.name)) {
-        for (const element of firstParam.name.elements) {
-          if (ts.isBindingElement(element) && element.initializer) {
-            const name = ts.isIdentifier(element.name)
-              ? element.name.text
-              : undefined;
-            if (name) {
-              defaultValues[name] = this.evaluateExpression(
-                element.initializer
-              );
-            }
-          }
-        }
+        extractFromObjectBinding(firstParam.name);
       }
 
       // Handle default parameter values
@@ -660,18 +682,7 @@ export class TypeScriptASTParser {
         firstParam.initializer &&
         ts.isObjectLiteralExpression(firstParam.initializer)
       ) {
-        for (const property of firstParam.initializer.properties) {
-          if (ts.isPropertyAssignment(property)) {
-            const name = ts.isIdentifier(property.name)
-              ? property.name.text
-              : undefined;
-            if (name) {
-              defaultValues[name] = this.evaluateExpression(
-                property.initializer
-              );
-            }
-          }
-        }
+        extractFromParameterInitializer(firstParam.initializer);
       }
     };
 
@@ -692,6 +703,7 @@ export class TypeScriptASTParser {
   /**
    * Evaluate a TypeScript expression to extract its value
    */
+  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Expression evaluation requires extensive type checking
   private evaluateExpression(expr: ts.Expression): unknown {
     if (ts.isStringLiteral(expr) || ts.isNoSubstitutionTemplateLiteral(expr)) {
       return expr.text;

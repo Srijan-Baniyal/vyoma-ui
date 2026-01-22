@@ -2,7 +2,10 @@
 
 import { type HTMLMotionProps, motion } from "framer-motion";
 import { useTheme } from "next-themes";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+
+const EMOJI_REGEX =
+  /[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/u;
 
 interface TextDecryptionProps extends HTMLMotionProps<"span"> {
   text: string;
@@ -85,41 +88,52 @@ function TextDecryption({
   const defaultEncryptedClassName = getThemeAwareEncryptedClasses();
   const defaultParentClassName = getThemeAwareParentClasses();
 
-  useEffect(() => {
-    let interval: NodeJS.Timeout;
-    let currentIteration = 0;
+  // Helper to get next index for center reveal
+  const getCenterRevealIndex = useCallback(
+    (revealedSet: Set<number>, textLength: number): number => {
+      const middle = Math.floor(textLength / 2);
+      const offset = Math.floor(revealedSet.size / 2);
+      const nextIndex =
+        revealedSet.size % 2 === 0 ? middle + offset : middle - offset - 1;
 
-    const getNextIndex = (revealedSet: Set<number>): number => {
+      if (
+        nextIndex >= 0 &&
+        nextIndex < textLength &&
+        !revealedSet.has(nextIndex)
+      ) {
+        return nextIndex;
+      }
+      for (let i = 0; i < textLength; i++) {
+        if (!revealedSet.has(i)) {
+          return i;
+        }
+      }
+      return 0;
+    },
+    []
+  );
+
+  // Helper to get next index based on reveal direction
+  const getNextIndex = useCallback(
+    (revealedSet: Set<number>): number => {
       const textLength = text.length;
       switch (revealDirection) {
         case "start":
           return revealedSet.size;
         case "end":
           return textLength - 1 - revealedSet.size;
-        case "center": {
-          const middle = Math.floor(textLength / 2);
-          const offset = Math.floor(revealedSet.size / 2);
-          const nextIndex =
-            revealedSet.size % 2 === 0 ? middle + offset : middle - offset - 1;
-
-          if (
-            nextIndex >= 0 &&
-            nextIndex < textLength &&
-            !revealedSet.has(nextIndex)
-          ) {
-            return nextIndex;
-          }
-          for (let i = 0; i < textLength; i++) {
-            if (!revealedSet.has(i)) {
-              return i;
-            }
-          }
-          return 0;
-        }
+        case "center":
+          return getCenterRevealIndex(revealedSet, textLength);
         default:
           return revealedSet.size;
       }
-    };
+    },
+    [text.length, revealDirection, getCenterRevealIndex]
+  );
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    let currentIteration = 0;
 
     const availableChars = useOriginalCharsOnly
       ? Array.from(new Set(text.split(""))).filter((char) => char !== " ")
@@ -127,9 +141,7 @@ function TextDecryption({
 
     // Helper function to check if a character is an emoji or special Unicode character
     const isEmojiOrSpecial = (char: string): boolean => {
-      const emojiRegex =
-        /[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/u;
-      return emojiRegex.test(char) || char.charCodeAt(0) > 127;
+      return EMOJI_REGEX.test(char) || char.charCodeAt(0) > 127;
     };
 
     // Use Array.from for proper Unicode character handling
@@ -192,57 +204,54 @@ function TextDecryption({
         .join("");
     };
 
+    const startLoopCycle = () => {
+      if (loop && animateOn === "view" && !isLooping) {
+        setIsLooping(true);
+        loopTimeoutRef.current = setTimeout(() => {
+          setRevealedIndices(new Set());
+          setIsHovering(false);
+          setIsLooping(false);
+          setTimeout(() => {
+            setIsHovering(true);
+          }, 100);
+        }, loopDelay);
+      }
+    };
+
+    const handleSequentialReveal = (prevRevealed: Set<number>) => {
+      if (prevRevealed.size < text.length) {
+        const nextIndex = getNextIndex(prevRevealed);
+        const newRevealed = new Set(prevRevealed);
+        newRevealed.add(nextIndex);
+        setDisplayText(shuffleText(text, newRevealed));
+        return newRevealed;
+      }
+      clearInterval(interval);
+      setIsScrambling(false);
+      startLoopCycle();
+      return prevRevealed;
+    };
+
+    const handleRandomReveal = (prevRevealed: Set<number>) => {
+      setDisplayText(shuffleText(text, prevRevealed));
+      currentIteration++;
+      if (currentIteration >= maxIterations) {
+        clearInterval(interval);
+        setIsScrambling(false);
+        setDisplayText(text);
+        startLoopCycle();
+      }
+      return prevRevealed;
+    };
+
     if (isHovering) {
       setIsScrambling(true);
       interval = setInterval(() => {
         setRevealedIndices((prevRevealed) => {
           if (sequential) {
-            if (prevRevealed.size < text.length) {
-              const nextIndex = getNextIndex(prevRevealed);
-              const newRevealed = new Set(prevRevealed);
-              newRevealed.add(nextIndex);
-              setDisplayText(shuffleText(text, newRevealed));
-              return newRevealed;
-            }
-            clearInterval(interval);
-            setIsScrambling(false);
-
-            // Start loop if enabled and on view animation
-            if (loop && animateOn === "view" && !isLooping) {
-              setIsLooping(true);
-              loopTimeoutRef.current = setTimeout(() => {
-                setRevealedIndices(new Set());
-                setIsHovering(false);
-                setIsLooping(false);
-                setTimeout(() => {
-                  setIsHovering(true);
-                }, 100);
-              }, loopDelay);
-            }
-
-            return prevRevealed;
+            return handleSequentialReveal(prevRevealed);
           }
-          setDisplayText(shuffleText(text, prevRevealed));
-          currentIteration++;
-          if (currentIteration >= maxIterations) {
-            clearInterval(interval);
-            setIsScrambling(false);
-            setDisplayText(text);
-
-            // Start loop if enabled and on view animation
-            if (loop && animateOn === "view" && !isLooping) {
-              setIsLooping(true);
-              loopTimeoutRef.current = setTimeout(() => {
-                setRevealedIndices(new Set());
-                setIsHovering(false);
-                setIsLooping(false);
-                setTimeout(() => {
-                  setIsHovering(true);
-                }, 100);
-              }, loopDelay);
-            }
-          }
-          return prevRevealed;
+          return handleRandomReveal(prevRevealed);
         });
       }, speed);
     } else {
@@ -265,13 +274,13 @@ function TextDecryption({
     speed,
     maxIterations,
     sequential,
-    revealDirection,
     characters,
     useOriginalCharsOnly,
     loop,
     loopDelay,
     animateOn,
     isLooping,
+    getNextIndex,
   ]);
 
   useEffect(() => {
@@ -280,14 +289,14 @@ function TextDecryption({
     }
 
     const observerCallback = (entries: IntersectionObserverEntry[]) => {
-      entries.forEach((entry) => {
+      for (const entry of entries) {
         if (entry.isIntersecting && (!hasAnimated || loop)) {
           setIsHovering(true);
           if (!loop) {
             setHasAnimated(true);
           }
         }
-      });
+      }
     };
 
     const observerOptions = {
@@ -357,15 +366,19 @@ function TextDecryption({
           const isRevealedOrDone =
             revealedIndices.has(index) || !isScrambling || !isHovering;
 
+          const getAnimateProps = () => {
+            if (!typewriterEffect) {
+              return undefined;
+            }
+            if (isRevealedOrDone) {
+              return { opacity: 1, scale: 1 };
+            }
+            return { opacity: 0.7, scale: 0.9 };
+          };
+
           return (
             <motion.span
-              animate={
-                typewriterEffect && isRevealedOrDone
-                  ? { opacity: 1, scale: 1 }
-                  : typewriterEffect
-                    ? { opacity: 0.7, scale: 0.9 }
-                    : undefined
-              }
+              animate={getAnimateProps()}
               className={`${
                 isRevealedOrDone ? defaultClassName : defaultEncryptedClassName
               } relative inline-block`}
@@ -429,9 +442,9 @@ export default function TextDecryptionShowcase() {
               />
             </div>
             <div className="rounded bg-muted p-3 font-mono text-muted-foreground text-xs">
-              {`<TextDecryption 
-  text="Hover over me to see the magic!" 
-  animateOn="hover" 
+              {`<TextDecryption
+  text="Hover over me to see the magic!"
+  animateOn="hover"
 />`}
             </div>
           </div>
@@ -458,8 +471,8 @@ export default function TextDecryptionShowcase() {
               />
             </div>
             <div className="rounded bg-muted p-3 font-mono text-muted-foreground text-xs">
-              {`<TextDecryption 
-  text="I decrypt automatically when you see me" 
+              {`<TextDecryption
+  text="I decrypt automatically when you see me"
   animateOn="view"
   loop={true}
   loopDelay={3000}
@@ -785,7 +798,7 @@ export default function TextDecryptionShowcase() {
         </div>
 
         <div className="relative overflow-hidden rounded-2xl border-2 border-primary bg-card p-12">
-          <div className="absolute inset-0 animate-pulse bg-gradient-to-r from-primary/5 to-blue-500/5" />
+          <div className="absolute inset-0 animate-pulse bg-linear-to-r from-primary/5 to-blue-500/5" />
           <div className="relative space-y-6 text-center">
             <TextDecryption
               animateOn="view"

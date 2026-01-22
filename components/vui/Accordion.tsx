@@ -75,7 +75,7 @@ export default function Accordion({
         // Tablet and up
         "sm:max-w-[90vw] sm:rounded-2xl",
         // Desktop
-        "lg:w-[600px] lg:max-w-[600px]",
+        "lg:w-150 lg:max-w-150",
         className
       )}
       initial={{ opacity: 0, y: 20, scale: 0.98 }}
@@ -97,7 +97,7 @@ export default function Accordion({
             {/* Decorative gradient line - hidden on mobile for cleaner look */}
             <motion.div
               animate={{ scaleX: 1, opacity: 1 }}
-              className="absolute top-0 left-0 hidden h-px w-full bg-gradient-to-r from-transparent via-primary/60 to-transparent sm:block"
+              className="absolute top-0 left-0 hidden h-px w-full bg-linear-to-r from-transparent via-primary/60 to-transparent sm:block"
               initial={{ scaleX: 0, opacity: 0 }}
               transition={{
                 delay: index * 0.15 + 0.4,
@@ -109,7 +109,7 @@ export default function Accordion({
             {/* Vertical accent line - simplified for mobile */}
             <motion.div
               animate={{ scaleY: 1, opacity: 1 }}
-              className="absolute top-0 left-2 h-full w-0.5 rounded-full bg-gradient-to-b from-primary/30 via-primary/50 to-primary/30 sm:left-4"
+              className="absolute top-0 left-2 h-full w-0.5 rounded-full bg-linear-to-b from-primary/30 via-primary/50 to-primary/30 sm:left-4"
               initial={{ scaleY: 0, opacity: 0 }}
               transition={{
                 delay: index * 0.15 + 0.6,
@@ -126,9 +126,9 @@ export default function Accordion({
                 className={cn(
                   "group relative flex w-full items-center justify-between gap-3",
                   // Mobile-optimized touch targets and spacing
-                  "min-h-[60px] py-5 pr-4 pl-6",
+                  "min-h-15 py-5 pr-4 pl-6",
                   // Tablet and up
-                  "sm:min-h-[72px] sm:py-6 sm:pr-6 sm:pl-10",
+                  "sm:min-h-18 sm:py-6 sm:pr-6 sm:pl-10",
                   // Desktop
                   "lg:pr-8 lg:pl-12",
                   "text-left font-medium text-foreground",
@@ -176,11 +176,11 @@ export default function Accordion({
                     rotate: isOpen ? 180 : 0,
                   }}
                   className={cn(
-                    "relative flex flex-shrink-0 items-center justify-center rounded-full bg-primary/10 transition-colors duration-200 group-hover:bg-primary/20 group-active:bg-primary/30",
+                    "relative flex shrink-0 items-center justify-center rounded-full bg-primary/10 transition-colors duration-200 group-hover:bg-primary/20 group-active:bg-primary/30",
                     // Mobile-optimized touch target
-                    "h-10 w-10 min-w-[40px]",
+                    "h-10 w-10 min-w-10",
                     // Tablet and up
-                    "sm:h-12 sm:w-12 sm:min-w-[48px]"
+                    "sm:h-12 sm:w-12 sm:min-w-12"
                   )}
                   initial={{ opacity: 0, scale: 0, rotate: -90 }}
                   transition={{
@@ -241,20 +241,20 @@ export default function Accordion({
                     }}
                   >
                     {/* Vertical accent line for content */}
-                    <div className="absolute top-0 left-2 h-full w-0.5 rounded-full bg-gradient-to-b from-primary/40 to-transparent sm:left-4" />
+                    <div className="absolute top-0 left-2 h-full w-0.5 rounded-full bg-linear-to-b from-primary/40 to-transparent sm:left-4" />
 
                     <div
                       className={cn(
                         "w-full overflow-hidden text-muted-foreground leading-relaxed",
                         // Mobile-first content spacing
-                        "min-h-[80px] pl-4 text-sm",
+                        "min-h-20 pl-4 text-sm",
                         // Tablet and up
-                        "sm:min-h-[100px] sm:pl-6 sm:text-base",
+                        "sm:min-h-25 sm:pl-6 sm:text-base",
                         // Desktop
                         "lg:text-base"
                       )}
                     >
-                      <div className="w-full overflow-hidden break-words">
+                      <div className="wrap-break-words w-full overflow-hidden">
                         {item.content}
                       </div>
                     </div>
@@ -271,7 +271,7 @@ export default function Accordion({
 
 export function AccordionShowcase() {
   return (
-    <div className="min-h-1.5 bg-gradient-to-br from-background via-muted/20 to-background p-4 sm:p-8">
+    <div className="min-h-1.5 bg-linear-to-br from-background via-muted/20 to-background p-4 sm:p-8">
       <div className="mx-auto max-w-5xl space-y-8 sm:space-y-16">
         <div className="space-y-4 text-center sm:space-y-6">
           <div className="relative rounded-2xl border border-border/50 bg-card/30 p-4 shadow-2xl backdrop-blur-sm sm:rounded-3xl sm:p-8">
@@ -334,19 +334,19 @@ export function AccordionShowcase() {
                         </p>
                         <ul className="ml-2 space-y-2 sm:ml-4">
                           <li className="flex items-center gap-2">
-                            <div className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-primary" />
+                            <div className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
                             <span className="text-muted-foreground text-xs sm:text-sm">
                               60px minimum touch targets
                             </span>
                           </li>
                           <li className="flex items-center gap-2">
-                            <div className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-primary" />
+                            <div className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
                             <span className="text-muted-foreground text-xs sm:text-sm">
                               Active state feedback
                             </span>
                           </li>
                           <li className="flex items-center gap-2">
-                            <div className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-primary" />
+                            <div className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
                             <span className="text-muted-foreground text-xs sm:text-sm">
                               Optimized spacing
                             </span>
@@ -424,19 +424,19 @@ export function AccordionTheme() {
                 </p>
                 <ul className="ml-2 space-y-2 sm:ml-4">
                   <li className="flex items-center gap-2">
-                    <div className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-primary" />
+                    <div className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
                     <span className="text-muted-foreground text-xs sm:text-sm">
                       WCAG 2.1 compliant touch targets
                     </span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <div className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-primary" />
+                    <div className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
                     <span className="text-muted-foreground text-xs sm:text-sm">
                       Enhanced focus indicators
                     </span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <div className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-primary" />
+                    <div className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
                     <span className="text-muted-foreground text-xs sm:text-sm">
                       Screen reader optimized
                     </span>

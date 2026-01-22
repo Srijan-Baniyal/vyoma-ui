@@ -50,7 +50,7 @@ export default function Skeleton({
     <motion.div
       animate={{ opacity: 1, scale: 1 }}
       className={cn(
-        "bg-gradient-to-r from-muted via-muted/70 to-muted",
+        "bg-linear-to-r from-muted via-muted/70 to-muted",
         "dark:from-gray-700 dark:via-gray-600 dark:to-gray-700",
         radiusClasses[radius],
         animation === "pulse" && "animate-pulse",
@@ -91,7 +91,7 @@ export function ProfileCardSkeleton() {
           }}
         >
           <Skeleton
-            className="flex-shrink-0"
+            className="shrink-0"
             height={80}
             radius="full"
             width={80}
@@ -135,23 +135,26 @@ export function ProfileCardSkeleton() {
         initial={{ opacity: 0, y: 10 }}
         transition={{ delay: 0.5, duration: 0.4 }}
       >
-        {[...new Array(3)].map((_, i) => (
-          <motion.div
-            animate={{ opacity: 1, scale: 1 }}
-            className="space-y-2 text-center"
-            initial={{ opacity: 0, scale: 0.8 }}
-            key={i}
-            transition={{ delay: 0.6 + i * 0.1, duration: 0.3 }}
-          >
-            <Skeleton height="1.5rem" radius="md" width="100%" />
-            <Skeleton
-              className="mx-auto"
-              height="0.875rem"
-              radius="md"
-              width="80%"
-            />
-          </motion.div>
-        ))}
+        {Array.from({ length: 3 }, (_, i) => {
+          const featureId = `feature-${i}`;
+          return (
+            <motion.div
+              animate={{ opacity: 1, scale: 1 }}
+              className="space-y-2 text-center"
+              initial={{ opacity: 0, scale: 0.8 }}
+              key={featureId}
+              transition={{ delay: 0.6 + i * 0.1, duration: 0.3 }}
+            >
+              <Skeleton height="1.5rem" radius="md" width="100%" />
+              <Skeleton
+                className="mx-auto"
+                height="0.875rem"
+                radius="md"
+                width="80%"
+              />
+            </motion.div>
+          );
+        })}
       </motion.div>
 
       {/* Tags/Skills section */}
@@ -162,12 +165,15 @@ export function ProfileCardSkeleton() {
         transition={{ delay: 0.9, duration: 0.4 }}
       >
         <div className="flex flex-wrap gap-2">
-          {[40, 60, 35, 50, 45].map((width, i) => (
+          {[40, 60, 35, 50, 45].map((width) => (
             <motion.div
               animate={{ opacity: 1, scale: 1 }}
               initial={{ opacity: 0, scale: 0 }}
-              key={i}
-              transition={{ delay: 1.0 + i * 0.1, duration: 0.3 }}
+              key={`skill-tag-${width}px`}
+              transition={{
+                delay: 1.0 + [40, 60, 35, 50, 45].indexOf(width) * 0.1,
+                duration: 0.3,
+              }}
             >
               <Skeleton height="1.5rem" radius="full" width={width} />
             </motion.div>

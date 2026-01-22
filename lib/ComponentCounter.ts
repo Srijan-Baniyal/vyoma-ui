@@ -24,24 +24,24 @@ export function countComponents(
 
   let totalCount = 0;
 
-  Object.entries(mapToUse).forEach(([categoryName, components]) => {
+  for (const [categoryName, components] of Object.entries(mapToUse)) {
     const componentCount = components.length;
 
     if (includeCategories && !includeCategories.includes(categoryName)) {
-      return;
+      continue;
     }
     if (excludeCategories.includes(categoryName)) {
-      return;
+      continue;
     }
     if (minComponentsInCategory && componentCount < minComponentsInCategory) {
-      return;
+      continue;
     }
     if (maxComponentsInCategory && componentCount > maxComponentsInCategory) {
-      return;
+      continue;
     }
 
     totalCount += componentCount;
-  });
+  }
 
   return greatestIntegerFunction(totalCount);
 }
@@ -67,24 +67,24 @@ export function getComponentCountBreakdown(
   } = options || {};
   const breakdown: Record<string, number> = {};
 
-  Object.entries(mapToUse).forEach(([categoryName, components]) => {
+  for (const [categoryName, components] of Object.entries(mapToUse)) {
     const componentCount = components.length;
 
     if (includeCategories && !includeCategories.includes(categoryName)) {
-      return;
+      continue;
     }
     if (excludeCategories.includes(categoryName)) {
-      return;
+      continue;
     }
     if (minComponentsInCategory && componentCount < minComponentsInCategory) {
-      return;
+      continue;
     }
     if (maxComponentsInCategory && componentCount > maxComponentsInCategory) {
-      return;
+      continue;
     }
 
     breakdown[categoryName] = greatestIntegerFunction(componentCount);
-  });
+  }
 
   return breakdown;
 }

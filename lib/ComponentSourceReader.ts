@@ -84,25 +84,29 @@ async function getComponentMappingImports(): Promise<Record<string, string>> {
       /import\s+\{\s*([^}]+)\s*\}\s+from\s+["'](@\/[^"']+)["']/g;
 
     // Process default imports
-    let match;
-    while ((match = defaultImportRegex.exec(mappingContent)) !== null) {
+    let match: RegExpExecArray | null;
+    match = defaultImportRegex.exec(mappingContent);
+    while (match !== null) {
       const [, componentName, importPath] = match;
       // Convert @/ path to actual file path
       const actualPath = `${importPath.replace("@/", "")}.tsx`;
       imports[componentName] = actualPath;
+      match = defaultImportRegex.exec(mappingContent);
     }
 
     // Process destructured imports
-    while ((match = destructuredImportRegex.exec(mappingContent)) !== null) {
+    match = destructuredImportRegex.exec(mappingContent);
+    while (match !== null) {
       const [, componentNames, importPath] = match;
       // Convert @/ path to actual file path
       const actualPath = `${importPath.replace("@/", "")}.tsx`;
 
       // Handle multiple destructured imports
       const names = componentNames.split(",").map((name) => name.trim());
-      names.forEach((name) => {
+      for (const name of names) {
         imports[name] = actualPath;
-      });
+      }
+      match = destructuredImportRegex.exec(mappingContent);
     }
 
     return imports;
@@ -147,10 +151,14 @@ async function findComponentFile(
           try {
             await readFile(join(process.cwd(), filePath), "utf-8");
             return filePath;
-          } catch {}
+          } catch {
+            // File doesn't exist, continue searching
+          }
         }
       }
-    } catch {}
+    } catch {
+      // Directory doesn't exist or can't be read, continue searching
+    }
   }
   return null;
 }
@@ -185,6 +193,7 @@ async function getComponentClassName(displayName: string): Promise<string> {
   }
 }
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Complex source code extraction with multiple fallback strategies
 export async function getComponentSourceCode(
   componentName: string
 ): Promise<string> {
@@ -265,7 +274,7 @@ export async function getComponentSourceCode(
     return `// ❌ Component source not found for "${componentName}"
 // Environment: ${environment}
 // Expected: Component should be in componentSourceCode.ts
-// 
+//
 // To fix this:
 // 1. Add the component to componentSourceCode.ts
 // 2. Or regenerate the source map

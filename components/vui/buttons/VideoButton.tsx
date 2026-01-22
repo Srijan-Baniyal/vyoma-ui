@@ -11,6 +11,7 @@ export default function Component() {
         className="group relative overflow-hidden rounded-2xl border-4 border-white shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-3xl focus:outline-none focus:ring-4 focus:ring-blue-500/50"
         onClick={() => console.log("Button clicked!")}
         style={{ width: "320px", height: "180px" }}
+        type="button"
       >
         {/* Video Background */}
         <video
@@ -41,7 +42,7 @@ export default function Component() {
 
         {/* Animated Border */}
         <div
-          className="absolute inset-0 -z-10 rounded-2xl border-2 border-transparent bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+          className="absolute inset-0 -z-10 rounded-2xl border-2 border-transparent bg-linear-to-r from-blue-500 via-purple-500 to-pink-500 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
           style={{ padding: "2px" }}
         >
           <div className="h-full w-full rounded-2xl bg-transparent" />

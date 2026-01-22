@@ -17,11 +17,11 @@ export default function FormShowcase() {
   const _isMobile = useIsMobile();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background p-4 md:p-8">
+    <div className="min-h-screen bg-linear-to-br from-background via-muted/20 to-background p-4 md:p-8">
       <div className="mx-auto max-w-5xl space-y-12 md:space-y-20">
         {/* Hero Section */}
         <div className="space-y-4 text-center md:space-y-6">
-          <h1 className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text font-bold text-2xl text-transparent md:text-4xl lg:text-5xl">
+          <h1 className="bg-linear-to-r from-primary to-primary/60 bg-clip-text font-bold text-2xl text-transparent md:text-4xl lg:text-5xl">
             Form Component
           </h1>
           <p className="mx-auto max-w-2xl px-4 text-base text-muted-foreground md:text-xl">
@@ -33,7 +33,7 @@ export default function FormShowcase() {
         {/* Demo Form */}
         <motion.div
           animate={{ opacity: 1, y: 0 }}
-          className="rounded-3xl border border-border/50 bg-gradient-to-br from-white/10 to-white/5 p-6 shadow-xl backdrop-blur-xl md:p-10 dark:from-gray-900/40 dark:to-gray-800/20"
+          className="rounded-3xl border border-border/50 bg-linear-to-br from-white/10 to-white/5 p-6 shadow-xl backdrop-blur-xl md:p-10 dark:from-gray-900/40 dark:to-gray-800/20"
           initial={{ opacity: 0, y: 40 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
@@ -80,7 +80,7 @@ export default function FormShowcase() {
               <div className="space-y-2">
                 <Label htmlFor="message">Message</Label>
                 <Textarea
-                  className="min-h-[120px] border border-white/20 bg-white/10 text-white placeholder:text-white/50 focus:ring-2 focus:ring-primary/50"
+                  className="min-h-30 border border-white/20 bg-white/10 text-white placeholder:text-white/50 focus:ring-2 focus:ring-primary/50"
                   id="message"
                   placeholder="Write your message here..."
                 />
@@ -145,7 +145,7 @@ function FormVariant({ title, desc, variant }: FormVariantProps) {
   };
 
   return (
-    <Card className="border border-border/30 bg-gradient-to-br from-white/5 to-white/10 shadow-lg backdrop-blur-md">
+    <Card className="border border-border/30 bg-linear-to-br from-white/5 to-white/10 shadow-lg backdrop-blur-md">
       <CardHeader>
         <CardTitle className="font-semibold text-lg text-primary">
           {title}

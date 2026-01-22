@@ -1,7 +1,18 @@
 "use client";
 
-import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
-import * as React from "react";
+import {
+  Indicator as CheckboxIndicator,
+  Root as CheckboxRoot,
+} from "@radix-ui/react-checkbox";
+import {
+  type ComponentPropsWithoutRef,
+  type ElementRef,
+  forwardRef,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from "react";
 import { Label } from "@/components/ui/label";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
@@ -16,17 +27,17 @@ const AnimatedCheckIcon = ({
   colorScheme?: "default" | "success" | "warning" | "error" | "purple" | "blue";
   size?: "sm" | "md" | "lg";
 }) => {
-  const pathRef = React.useRef<SVGPathElement>(null);
-  const [isChecked, setIsChecked] = React.useState(false);
+  const pathRef = useRef<SVGPathElement>(null);
+  const [isChecked, setIsChecked] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const checkboxElement = pathRef.current?.closest('[data-slot="checkbox"]');
     if (!checkboxElement) {
       return;
     }
 
     const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
+      for (const mutation of mutations) {
         if (
           mutation.type === "attributes" &&
           mutation.attributeName === "data-state"
@@ -35,7 +46,7 @@ const AnimatedCheckIcon = ({
             checkboxElement.getAttribute("data-state") === "checked";
           setIsChecked(isNowChecked);
         }
-      });
+      }
     });
 
     observer.observe(checkboxElement, { attributes: true });
@@ -122,6 +133,7 @@ const AnimatedCheckIcon = ({
       width={sizeProps.width}
       xmlns="http://www.w3.org/2000/svg"
     >
+      <title>Checkbox checkmark</title>
       <path d={sizeProps.path} ref={pathRef} style={getAnimationStyle()} />
     </svg>
   );
@@ -129,9 +141,9 @@ const AnimatedCheckIcon = ({
 
 // Refined ripple effect component
 const RippleEffect = ({ trigger }: { trigger: boolean }) => {
-  const [ripples, setRipples] = React.useState<number[]>([]);
+  const [ripples, setRipples] = useState<number[]>([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (trigger) {
       const newRipple = Date.now();
       setRipples((prev) => [...prev, newRipple]);
@@ -177,7 +189,7 @@ const RippleEffect = ({ trigger }: { trigger: boolean }) => {
 };
 
 interface CheckboxRefinedProps
-  extends React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root> {
+  extends ComponentPropsWithoutRef<typeof CheckboxRoot> {
   label: string;
   variant?: "default" | "smooth";
   size?: "sm" | "md" | "lg";
@@ -186,8 +198,8 @@ interface CheckboxRefinedProps
   showRipple?: boolean;
 }
 
-const CheckboxRefined = React.forwardRef<
-  React.ElementRef<typeof CheckboxPrimitive.Root>,
+const CheckboxRefined = forwardRef<
+  ElementRef<typeof CheckboxRoot>,
   CheckboxRefinedProps
 >(
   (
@@ -204,9 +216,9 @@ const CheckboxRefined = React.forwardRef<
     },
     ref
   ) => {
-    const uId = React.useId();
+    const uId = useId();
     const checkboxId = id || uId;
-    const [rippleTrigger, setRippleTrigger] = React.useState(false);
+    const [rippleTrigger, setRippleTrigger] = useState(false);
 
     const sizeClasses = {
       sm: "h-4 w-4",
@@ -238,7 +250,7 @@ const CheckboxRefined = React.forwardRef<
     return (
       <div className="group flex items-start gap-3">
         <div className="relative">
-          <CheckboxPrimitive.Root
+          <CheckboxRoot
             className={cn(
               "peer shrink-0 rounded-[6px] border border-gray-300 shadow-sm transition-all duration-200",
               "hover:border-primary hover:shadow-md focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50",
@@ -254,7 +266,7 @@ const CheckboxRefined = React.forwardRef<
             ref={ref}
             {...props}
           >
-            <CheckboxPrimitive.Indicator
+            <CheckboxIndicator
               className="flex items-center justify-center text-current"
               data-slot="checkbox-indicator"
             >
@@ -263,9 +275,9 @@ const CheckboxRefined = React.forwardRef<
                 size={size}
                 variant={variant}
               />
-            </CheckboxPrimitive.Indicator>
+            </CheckboxIndicator>
             {showRipple && <RippleEffect trigger={rippleTrigger} />}
-          </CheckboxPrimitive.Root>
+          </CheckboxRoot>
         </div>
         <div className="flex flex-col gap-1">
           <Label
@@ -289,8 +301,9 @@ CheckboxRefined.displayName = "CheckboxRefined";
 
 export { CheckboxRefined };
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Showcase component with extensive demo UI
 export function CheckboxRefinedShowcase() {
-  const [controlled, setControlled] = React.useState(false);
+  const [controlled, setControlled] = useState(false);
   const isMobile = useIsMobile();
 
   return (
@@ -366,7 +379,7 @@ export function CheckboxRefinedShowcase() {
           </div>
 
           <div className="relative">
-            <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-blue-500/20 to-purple-500/20 blur-xl" />
+            <div className="absolute inset-0 rounded-3xl bg-linear-to-r from-blue-500/20 to-purple-500/20 blur-xl" />
             <div className="relative rounded-3xl border border-white/10 bg-black/20 p-6 backdrop-blur-xl md:p-12">
               <div className="space-y-6 text-center md:space-y-8">
                 <h3
@@ -467,7 +480,7 @@ export function CheckboxRefinedShowcase() {
               >
                 <div className="space-y-3 md:space-y-4">
                   <div
-                    className={`h-2 bg-gradient-to-r md:h-3 ${item.color} rounded-full`}
+                    className={`h-2 bg-linear-to-r md:h-3 ${item.color} rounded-full`}
                   />
                   <CheckboxRefined
                     colorScheme={
@@ -553,7 +566,7 @@ export function CheckboxRefinedShowcase() {
               </p>
             </div>
 
-            <div className="rounded-2xl border border-white/10 bg-gradient-to-br from-white/10 to-white/5 p-4 backdrop-blur-xl md:p-8">
+            <div className="rounded-2xl border border-white/10 bg-linear-to-br from-white/10 to-white/5 p-4 backdrop-blur-xl md:p-8">
               <div className="space-y-4 text-center md:space-y-6">
                 <div className="rounded-xl bg-black/20 p-4 md:p-6">
                   <CheckboxRefined
@@ -571,14 +584,16 @@ export function CheckboxRefinedShowcase() {
 
                 <div className="flex flex-col justify-center gap-3 md:flex-row md:gap-4">
                   <button
-                    className={`${isMobile ? "px-4 py-2 text-sm" : "px-6 py-3"} rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 font-medium text-white shadow-lg transition-all duration-200 hover:scale-105 hover:from-emerald-600 hover:to-emerald-700 hover:shadow-emerald-500/25`}
+                    className={`${isMobile ? "px-4 py-2 text-sm" : "px-6 py-3"} rounded-xl bg-linear-to-r from-emerald-500 to-emerald-600 font-medium text-white shadow-lg transition-all duration-200 hover:scale-105 hover:from-emerald-600 hover:to-emerald-700 hover:shadow-emerald-500/25`}
                     onClick={() => setControlled(true)}
+                    type="button"
                   >
                     Activate
                   </button>
                   <button
-                    className={`${isMobile ? "px-4 py-2 text-sm" : "px-6 py-3"} rounded-xl bg-gradient-to-r from-slate-600 to-slate-700 font-medium text-white shadow-lg transition-all duration-200 hover:scale-105 hover:from-slate-700 hover:to-slate-800 hover:shadow-slate-500/25`}
+                    className={`${isMobile ? "px-4 py-2 text-sm" : "px-6 py-3"} rounded-xl bg-linear-to-r from-slate-600 to-slate-700 font-medium text-white shadow-lg transition-all duration-200 hover:scale-105 hover:from-slate-700 hover:to-slate-800 hover:shadow-slate-500/25`}
                     onClick={() => setControlled(false)}
+                    type="button"
                   >
                     Deactivate
                   </button>
@@ -666,7 +681,7 @@ export function CheckboxRefinedTheme() {
           >
             <div className="space-y-3 md:space-y-4">
               <div
-                className={`h-2 bg-gradient-to-r md:h-3 ${item.color} rounded-full`}
+                className={`h-2 bg-linear-to-r md:h-3 ${item.color} rounded-full`}
               />
               <CheckboxRefined
                 colorScheme={

@@ -55,6 +55,54 @@ export function FlipText({
     onHoverEnd?.();
   }, [onHoverEnd]);
 
+  // Helper functions for effect-specific styles
+  const getRotateStyle = useCallback(
+    (baseStyle: object) => ({
+      ...baseStyle,
+      transformStyle: "preserve-3d" as const,
+      transform: isHovered
+        ? "rotateX(360deg) scale(1.1)"
+        : "rotateX(0deg) scale(1)",
+      color: isHovered ? "rgb(59, 130, 246)" : "inherit",
+      textShadow:
+        isHovered && enableGlow ? "0 2px 8px rgba(59, 130, 246, 0.3)" : "none",
+    }),
+    [isHovered, enableGlow]
+  );
+
+  const getWaveStyle = useCallback(
+    (baseStyle: object, index: number) => ({
+      ...baseStyle,
+      transform: isHovered
+        ? `translateY(-${Math.sin(index * 0.5) * 8}px) rotate(${
+            Math.sin(index * 0.3) * 5
+          }deg)`
+        : "translateY(0px) rotate(0deg)",
+    }),
+    [isHovered]
+  );
+
+  const getSlideStyle = useCallback(
+    (baseStyle: object) => ({
+      ...baseStyle,
+      transform: isHovered
+        ? "translateY(-100%) scale(1.05)"
+        : "translateY(0) scale(1)",
+      opacity: isHovered ? 0 : 1,
+    }),
+    [isHovered]
+  );
+
+  const getBasicStyle = useCallback(
+    (baseStyle: object) => ({
+      ...baseStyle,
+      transform: isHovered ? "scale(1.1)" : "scale(1)",
+      color: isHovered ? "rgb(59, 130, 246)" : "inherit",
+      textShadow: isHovered && enableGlow ? "0 0 10px currentColor" : "none",
+    }),
+    [isHovered, enableGlow]
+  );
+
   // Get effect-specific styles for characters
   const getCharacterStyle = useCallback(
     (index: number) => {
@@ -72,46 +120,13 @@ export function FlipText({
 
       switch (effect) {
         case "rotate":
-          return {
-            ...baseStyle,
-            transformStyle: "preserve-3d" as const,
-            transform: isHovered
-              ? "rotateX(360deg) scale(1.1)"
-              : "rotateX(0deg) scale(1)",
-            color: isHovered ? "rgb(59, 130, 246)" : "inherit",
-            textShadow:
-              isHovered && enableGlow
-                ? "0 2px 8px rgba(59, 130, 246, 0.3)"
-                : "none",
-          };
-
+          return getRotateStyle(baseStyle);
         case "wave":
-          return {
-            ...baseStyle,
-            transform: isHovered
-              ? `translateY(-${Math.sin(index * 0.5) * 8}px) rotate(${
-                  Math.sin(index * 0.3) * 5
-                }deg)`
-              : "translateY(0px) rotate(0deg)",
-          };
-
+          return getWaveStyle(baseStyle, index);
         case "slide":
-          return {
-            ...baseStyle,
-            transform: isHovered
-              ? "translateY(-100%) scale(1.05)"
-              : "translateY(0) scale(1)",
-            opacity: isHovered ? 0 : 1,
-          };
-
-        default: // basic
-          return {
-            ...baseStyle,
-            transform: isHovered ? "scale(1.1)" : "scale(1)",
-            color: isHovered ? "rgb(59, 130, 246)" : "inherit",
-            textShadow:
-              isHovered && enableGlow ? "0 0 10px currentColor" : "none",
-          };
+          return getSlideStyle(baseStyle);
+        default:
+          return getBasicStyle(baseStyle);
       }
     },
     [
@@ -120,8 +135,11 @@ export function FlipText({
       duration,
       delay,
       staggerDelay,
-      enableGlow,
       shouldReduceMotion,
+      getRotateStyle,
+      getWaveStyle,
+      getSlideStyle,
+      getBasicStyle,
     ]
   );
 
@@ -154,17 +172,19 @@ export function FlipText({
     hoverText && isHovered && effect === "slide" ? hoverText : children;
 
   return (
+    // biome-ignore lint/a11y/noStaticElementInteractions: FlipText requires mouse interaction for text flip animation effect
     <span
       className={`inline-block cursor-pointer ${className}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      role="presentation"
       style={getContainerStyle()}
       {...accessibilityProps}
     >
       {displayText.split("").map((char, index) => (
         <span
           className="inline-block origin-center"
-          key={index}
+          key={`${char}-${index}-${displayText}`}
           style={getCharacterStyle(index)}
         >
           {char === " " && preserveSpaces ? "\u00A0" : char}
@@ -187,7 +207,7 @@ export function FlipText({
           {hoverText.split("").map((char, index) => (
             <span
               className="inline-block"
-              key={`hover-${index}`}
+              key={`hover-${char}-${index}-${hoverText}`}
               style={{
                 transitionDelay: `${delay + index * staggerDelay}ms`,
               }}

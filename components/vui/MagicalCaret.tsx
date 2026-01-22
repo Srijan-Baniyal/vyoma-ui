@@ -1,20 +1,21 @@
 "use client";
+
 import type React from "react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-export default function MagicalCaret() {
-  const [text, setText] = useState("Let's make");
-  const [isFocused, setIsFocused] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
-  const [caretPosition, setCaretPosition] = useState(0);
-  const [caretHeight, setCaretHeight] = useState(72);
-  const [hasStartedTyping, setHasStartedTyping] = useState(false);
+// Helper: Generate stable particle positions
+const generateParticles = () =>
+  Array.from({ length: 20 }, (_, i) => ({
+    id: `particle-${i}`,
+    left: Math.random() * 100,
+    top: Math.random() * 100,
+    delay: Math.random() * 2,
+  }));
+
+// Helper: Set up mouse tracking
+const useMouseTracking = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const inputRef = useRef<HTMLInputElement>(null);
-  const measureRef = useRef<HTMLSpanElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
 
-  // Track mouse for interactive effects
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
@@ -23,7 +24,19 @@ export default function MagicalCaret() {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
-  // Enhanced caret positioning with sub-pixel precision
+  return mousePosition;
+};
+
+// Helper: Update caret position with sub-pixel precision
+const useCaretPosition = (
+  text: string,
+  hasStartedTyping: boolean,
+  inputRef: React.RefObject<HTMLInputElement | null>,
+  measureRef: React.RefObject<HTMLSpanElement | null>
+) => {
+  const [caretPosition, setCaretPosition] = useState(0);
+  const [caretHeight, setCaretHeight] = useState(72);
+
   const updateCaretPosition = useCallback(() => {
     if (!(measureRef.current && inputRef.current) || hasStartedTyping) {
       return;
@@ -31,7 +44,6 @@ export default function MagicalCaret() {
 
     const input = inputRef.current;
     const measure = measureRef.current;
-
     const cursorPos = input.selectionStart || 0;
     const textBeforeCaret = text.substring(0, cursorPos);
 
@@ -45,7 +57,7 @@ export default function MagicalCaret() {
 
     setCaretPosition(textWidth);
     setCaretHeight(newCaretHeight);
-  }, [text, hasStartedTyping]);
+  }, [text, hasStartedTyping, inputRef, measureRef]);
 
   // Event handling
   useEffect(() => {
@@ -73,19 +85,41 @@ export default function MagicalCaret() {
       });
     };
 
-    events.forEach((event) => {
+    for (const event of events) {
       input.addEventListener(event, handleUpdate);
-    });
+    }
 
     document.addEventListener("selectionchange", handleUpdate);
 
     return () => {
-      events.forEach((event) => {
+      for (const event of events) {
         input.removeEventListener(event, handleUpdate);
-      });
+      }
       document.removeEventListener("selectionchange", handleUpdate);
     };
-  }, [updateCaretPosition, hasStartedTyping]);
+  }, [updateCaretPosition, hasStartedTyping, inputRef]);
+
+  return { caretPosition, caretHeight, updateCaretPosition };
+};
+
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Showcase component with complex animation and interaction logic
+export default function MagicalCaret() {
+  const [text, setText] = useState("Let's make");
+  const [isFocused, setIsFocused] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [hasStartedTyping, setHasStartedTyping] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const measureRef = useRef<HTMLSpanElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const particles = useMemo(generateParticles, []);
+  const mousePosition = useMouseTracking();
+  const { caretPosition, caretHeight, updateCaretPosition } = useCaretPosition(
+    text,
+    hasStartedTyping,
+    inputRef,
+    measureRef
+  );
 
   useEffect(() => {
     if (!hasStartedTyping) {
@@ -204,7 +238,19 @@ export default function MagicalCaret() {
   };
 
   // Calculate dynamic effects
-  const glowIntensity = isFocused ? 1 : isHovered ? 0.7 : 0.4;
+  let glowIntensity = 0.4;
+  if (isFocused) {
+    glowIntensity = 1;
+  } else if (isHovered) {
+    glowIntensity = 0.7;
+  }
+
+  let scaleValue = 1;
+  if (isFocused) {
+    scaleValue = 1.02;
+  } else if (isHovered) {
+    scaleValue = 1.01;
+  }
 
   return (
     <div className="relative min-h-screen overflow-hidden">
@@ -213,17 +259,17 @@ export default function MagicalCaret() {
         className="absolute inset-0 transition-all duration-1000"
         style={{
           background: `
-            radial-gradient(circle at ${mousePosition.x * 0.1}% ${mousePosition.y * 0.1}%, 
-              rgba(99, 102, 241, 0.1) 0%, 
+            radial-gradient(circle at ${mousePosition.x * 0.1}% ${mousePosition.y * 0.1}%,
+              rgba(99, 102, 241, 0.1) 0%,
               transparent 50%),
-            radial-gradient(circle at ${100 - mousePosition.x * 0.05}% ${100 - mousePosition.y * 0.05}%, 
-              rgba(168, 85, 247, 0.08) 0%, 
+            radial-gradient(circle at ${100 - mousePosition.x * 0.05}% ${100 - mousePosition.y * 0.05}%,
+              rgba(168, 85, 247, 0.08) 0%,
               transparent 50%),
-            linear-gradient(135deg, 
-              #0f172a 0%, 
-              #1e293b 25%, 
-              #334155 50%, 
-              #1e293b 75%, 
+            linear-gradient(135deg,
+              #0f172a 0%,
+              #1e293b 25%,
+              #334155 50%,
+              #1e293b 75%,
               #0f172a 100%)
           `,
         }}
@@ -231,15 +277,14 @@ export default function MagicalCaret() {
 
       {/* Floating particles */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        {[...new Array(20)].map((_, i) => (
+        {particles.map((particle) => (
           <div
             className="absolute h-1 w-1 animate-pulse rounded-full bg-white/10"
-            key={i}
+            key={particle.id}
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 3}s`,
-              animationDuration: `${2 + Math.random() * 3}s`,
+              left: `${particle.left}%`,
+              top: `${particle.top}%`,
+              animationDelay: `${particle.delay}s`,
             }}
           />
         ))}
@@ -248,19 +293,22 @@ export default function MagicalCaret() {
       <div className="relative z-10 flex min-h-screen flex-col items-center justify-center p-8">
         {/* Main text area with premium styling */}
         <div className="mb-16 w-full max-w-6xl">
+          {/* biome-ignore lint/a11y/noNoninteractiveElementInteractions: Visual effect container requires mouse interaction */}
+          {/* biome-ignore lint/a11y/useSemanticElements: Region role is appropriate for this interactive visual container */}
           <div
+            aria-label="Interactive text area"
             className="group relative transition-all duration-500 ease-out"
-            onClick={() => inputRef.current?.focus()}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             ref={containerRef}
+            role="region"
           >
             {/* Backdrop with advanced glassmorphism */}
             <div
               className="absolute inset-0 rounded-3xl transition-all duration-500"
               style={{
                 background: `
-                  linear-gradient(135deg, 
+                  linear-gradient(135deg,
                     rgba(255, 255, 255, ${0.05 + (isFocused ? 0.05 : 0)}) 0%,
                     rgba(255, 255, 255, ${0.02 + (isFocused ? 0.03 : 0)}) 100%)
                 `,
@@ -271,8 +319,7 @@ export default function MagicalCaret() {
                   0 ${isFocused ? 40 : 20}px ${isFocused ? 80 : 40}px -10px rgba(0, 0, 0, 0.3),
                   inset 0 1px 0 rgba(255, 255, 255, 0.1)
                 `,
-                transform: `scale(${isFocused ? 1.02 : isHovered ? 1.01 : 1}) 
-                           translateY(${isFocused ? -2 : 0}px)`,
+                transform: `scale(${scaleValue}) translateY(${isFocused ? -2 : 0}px)`,
               }}
             />
 
@@ -354,7 +401,7 @@ export default function MagicalCaret() {
                       top: `${-caretHeight * 0.75}px`,
                       left: "-2px",
                       background: `
-                        radial-gradient(ellipse 90% 70% at 0% 50%, 
+                        radial-gradient(ellipse 90% 70% at 0% 50%,
                           rgba(255, 235, 200, ${0.8 * glowIntensity}) 0%,
                           rgba(255, 220, 180, ${0.6 * glowIntensity}) 10%,
                           rgba(255, 200, 150, ${0.4 * glowIntensity}) 25%,
@@ -378,7 +425,7 @@ export default function MagicalCaret() {
                       top: `${-caretHeight}px`,
                       left: "-2px",
                       background: `
-                        radial-gradient(ellipse 100% 60% at 0% 50%, 
+                        radial-gradient(ellipse 100% 60% at 0% 50%,
                           rgba(255, 220, 180, ${0.5 * glowIntensity}) 0%,
                           rgba(255, 200, 150, ${0.3 * glowIntensity}) 15%,
                           rgba(255, 180, 120, ${0.2 * glowIntensity}) 30%,
@@ -433,10 +480,10 @@ export default function MagicalCaret() {
             <div className="relative flex items-center gap-6 p-6">
               {/* Avatar with glow */}
               <div className="relative">
-                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-slate-500 to-slate-700 shadow-lg">
-                  <div className="h-10 w-10 rounded-full bg-gradient-to-br from-slate-300 to-slate-500" />
+                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-linear-to-br from-slate-500 to-slate-700 shadow-lg">
+                  <div className="h-10 w-10 rounded-full bg-linear-to-br from-slate-300 to-slate-500" />
                 </div>
-                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-400/20 to-purple-400/20 blur-sm" />
+                <div className="absolute inset-0 rounded-full bg-linear-to-br from-blue-400/20 to-purple-400/20 blur-sm" />
               </div>
 
               {/* Link icon */}
@@ -472,16 +519,19 @@ export default function MagicalCaret() {
             {/* Reset button */}
             {hasStartedTyping && (
               <button
-                className="group relative inline-flex items-center gap-2 rounded-full border border-blue-400/30 bg-gradient-to-r from-blue-500/20 to-purple-500/20 px-6 py-3 font-medium text-blue-300 text-sm backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:border-blue-400/50 hover:from-blue-500/30 hover:to-purple-500/30 hover:text-blue-200 hover:shadow-blue-500/25 hover:shadow-lg active:scale-95"
+                className="group relative inline-flex items-center gap-2 rounded-full border border-blue-400/30 bg-linear-to-r from-blue-500/20 to-purple-500/20 px-6 py-3 font-medium text-blue-300 text-sm backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:border-blue-400/50 hover:from-blue-500/30 hover:to-purple-500/30 hover:text-blue-200 hover:shadow-blue-500/25 hover:shadow-lg active:scale-95"
                 onClick={handleReset}
+                type="button"
               >
-                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-400/10 to-purple-400/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                <div className="absolute inset-0 rounded-full bg-linear-to-r from-blue-400/10 to-purple-400/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                 <svg
+                  aria-label="Reset icon"
                   className="h-4 w-4 transition-transform duration-300 group-hover:rotate-180"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
                 >
+                  <title>Reset</title>
                   <path
                     d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
                     strokeLinecap="round"
@@ -511,7 +561,7 @@ export default function MagicalCaret() {
             opacity: 0;
           }
         }
-        
+
         .animate-caret-blink {
           animation: caret-blink 1s infinite;
         }

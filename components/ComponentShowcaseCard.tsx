@@ -77,7 +77,7 @@ export function ComponentShowcaseCard({
 }: ComponentShowcaseCardProps) {
   return (
     <Card
-      className={`group slide-in-from-bottom-8 fade-in-0 animate-in overflow-hidden border-0 bg-gradient-to-br from-white to-slate-50/50 shadow-lg backdrop-blur-sm transition-all duration-500 ease-out hover:shadow-2xl dark:from-slate-900 dark:to-slate-800/50 ${
+      className={`group slide-in-from-bottom-8 fade-in-0 animate-in overflow-hidden border-0 bg-linear-to-br from-white to-slate-50/50 shadow-lg backdrop-blur-sm transition-all duration-500 ease-out hover:shadow-2xl dark:from-slate-900 dark:to-slate-800/50 ${
         fullscreenIndex === index
           ? "fixed inset-2 z-50 scale-100 rounded-xl shadow-2xl sm:inset-4"
           : "hover:-translate-y-1 hover:scale-[1.01]"
@@ -88,7 +88,7 @@ export function ComponentShowcaseCard({
       }}
     >
       <CardHeader
-        className={`border-b bg-gradient-to-r from-slate-50/80 via-white to-blue-50/50 transition-all duration-300 dark:from-slate-800/80 dark:via-slate-900 dark:to-blue-950/50 ${
+        className={`border-b bg-linear-to-r from-slate-50/80 via-white to-blue-50/50 transition-all duration-300 dark:from-slate-800/80 dark:via-slate-900 dark:to-blue-950/50 ${
           isMobile ? "p-3" : "p-4 sm:p-6"
         }`}
       >
@@ -155,8 +155,8 @@ function CardHeaderContent({
     <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
       <div className="min-w-0 flex-1 space-y-3">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
-          <CardTitle className="flex items-center gap-2 bg-gradient-to-r from-slate-900 via-blue-800 to-purple-700 bg-clip-text text-transparent text-xl transition-colors duration-200 sm:text-2xl dark:from-slate-100 dark:via-blue-200 dark:to-purple-300">
-            <span className="break-words">{componentName}</span>
+          <CardTitle className="flex items-center gap-2 bg-linear-to-r from-slate-900 via-blue-800 to-purple-700 bg-clip-text text-transparent text-xl transition-colors duration-200 sm:text-2xl dark:from-slate-100 dark:via-blue-200 dark:to-purple-300">
+            <span className="wrap-break-words">{componentName}</span>
           </CardTitle>
         </div>
         <div className="space-y-2">
@@ -205,7 +205,7 @@ function CardHeaderContent({
           </div>
         </Button>
         <Button
-          className="shrink-0 rounded-xl border-blue-200 bg-gradient-to-r from-blue-50 to-purple-50 transition-all duration-200 hover:scale-105 hover:from-blue-100 hover:to-purple-100 hover:shadow-md dark:border-blue-800 dark:from-blue-950/50 dark:to-purple-950/50 dark:hover:from-blue-900/50 dark:hover:to-purple-900/50"
+          className="shrink-0 rounded-xl border-blue-200 bg-linear-to-r from-blue-50 to-purple-50 transition-all duration-200 hover:scale-105 hover:from-blue-100 hover:to-purple-100 hover:shadow-md dark:border-blue-800 dark:from-blue-950/50 dark:to-purple-950/50 dark:hover:from-blue-900/50 dark:hover:to-purple-900/50"
           disabled={isRefreshing}
           onClick={onRefresh}
           size={isMobile ? "sm" : "sm"}
@@ -251,7 +251,7 @@ function ComponentTabs({
 }) {
   return (
     <Tabs className="w-full" defaultValue="preview">
-      <div className="border-b bg-gradient-to-r from-slate-50/50 to-blue-50/30 dark:from-slate-800/50 dark:to-blue-950/30">
+      <div className="border-b bg-linear-to-r from-slate-50/50 to-blue-50/30 dark:from-slate-800/50 dark:to-blue-950/30">
         <TabsList
           className={`${isMobile ? "h-10" : "h-12 sm:h-14"} w-full justify-start overflow-x-auto rounded-none bg-transparent p-0`}
         >
@@ -259,7 +259,7 @@ function ComponentTabs({
             className={`rounded-none border-transparent border-b-2 data-[state=active]:border-blue-500 data-[state=active]:bg-white data-[state=active]:shadow-sm dark:data-[state=active]:bg-slate-900 ${isMobile ? "h-10 px-3" : "h-12 px-4 sm:h-14 sm:px-8"} ${isMobile ? "text-xs" : "text-xs sm:text-sm"} group relative overflow-hidden whitespace-nowrap font-medium transition-all duration-300 hover:-translate-y-0.5`}
             value="preview"
           >
-            <div className="absolute inset-0 translate-y-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 transition-transform duration-300 group-data-[state=active]:translate-y-0" />
+            <div className="absolute inset-0 translate-y-full bg-linear-to-r from-blue-500/10 to-purple-500/10 transition-transform duration-300 group-data-[state=active]:translate-y-0" />
             <Eye className="relative z-10 mr-1 h-3 w-3 sm:mr-2 sm:h-4 sm:w-4" />
             <span className="relative z-10">Preview</span>
           </TabsTrigger>
@@ -267,7 +267,7 @@ function ComponentTabs({
             className={`rounded-none border-transparent border-b-2 data-[state=active]:border-blue-500 data-[state=active]:bg-white data-[state=active]:shadow-sm dark:data-[state=active]:bg-slate-900 ${isMobile ? "h-10 px-3" : "h-12 px-4 sm:h-14 sm:px-8"} ${isMobile ? "text-xs" : "text-xs sm:text-sm"} group relative overflow-hidden whitespace-nowrap font-medium transition-all duration-300 hover:-translate-y-0.5`}
             value="code"
           >
-            <div className="absolute inset-0 translate-y-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 transition-transform duration-300 group-data-[state=active]:translate-y-0" />
+            <div className="absolute inset-0 translate-y-full bg-linear-to-r from-blue-500/10 to-purple-500/10 transition-transform duration-300 group-data-[state=active]:translate-y-0" />
             <Terminal className="relative z-10 mr-1 h-3 w-3 sm:mr-2 sm:h-4 sm:w-4" />
             <span className="relative z-10">Code</span>
           </TabsTrigger>
@@ -275,7 +275,7 @@ function ComponentTabs({
             className={`rounded-none border-transparent border-b-2 data-[state=active]:border-blue-500 data-[state=active]:bg-white data-[state=active]:shadow-sm dark:data-[state=active]:bg-slate-900 ${isMobile ? "h-10 px-3" : "h-12 px-4 sm:h-14 sm:px-8"} ${isMobile ? "text-xs" : "text-xs sm:text-sm"} group relative overflow-hidden whitespace-nowrap font-medium transition-all duration-300 hover:-translate-y-0.5`}
             value="props"
           >
-            <div className="absolute inset-0 translate-y-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 transition-transform duration-300 group-data-[state=active]:translate-y-0" />
+            <div className="absolute inset-0 translate-y-full bg-linear-to-r from-blue-500/10 to-purple-500/10 transition-transform duration-300 group-data-[state=active]:translate-y-0" />
             <Info className="relative z-10 mr-1 h-3 w-3 sm:mr-2 sm:h-4 sm:w-4" />
             <span className="relative z-10">Props</span>
           </TabsTrigger>
@@ -340,7 +340,7 @@ function PreviewTab({
             </h4>
           </div>
           <Badge
-            className="zoom-in-50 w-fit animate-in border-blue-200 bg-gradient-to-r from-blue-50 to-purple-50 text-xs duration-300 dark:border-blue-800 dark:from-blue-950/50 dark:to-purple-950/50"
+            className="zoom-in-50 w-fit animate-in border-blue-200 bg-linear-to-r from-blue-50 to-purple-50 text-xs duration-300 dark:border-blue-800 dark:from-blue-950/50 dark:to-purple-950/50"
             variant="outline"
           >
             Refreshed: {refreshKey} times
@@ -348,8 +348,8 @@ function PreviewTab({
         </div>
 
         <div className="group relative">
-          <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 opacity-0 blur-xl transition-all duration-700 ease-out group-hover:opacity-100" />
-          <div className="relative overflow-hidden rounded-2xl border-2 border-slate-200 border-dashed bg-gradient-to-br from-white via-slate-50/50 to-blue-50/30 backdrop-blur-sm transition-all duration-300 group-hover:border-blue-300 group-hover:shadow-xl dark:border-slate-700 dark:from-slate-900 dark:via-slate-800/50 dark:to-blue-950/30 dark:group-hover:border-blue-600">
+          <div className="absolute inset-0 rounded-2xl bg-linear-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 opacity-0 blur-xl transition-all duration-700 ease-out group-hover:opacity-100" />
+          <div className="relative overflow-hidden rounded-2xl border-2 border-slate-200 border-dashed bg-linear-to-br from-white via-slate-50/50 to-blue-50/30 backdrop-blur-sm transition-all duration-300 group-hover:border-blue-300 group-hover:shadow-xl dark:border-slate-700 dark:from-slate-900 dark:via-slate-800/50 dark:to-blue-950/30 dark:group-hover:border-blue-600">
             <div
               className={`zoom-in-50 fade-in-0 w-full animate-in transition-all duration-500 ${isMobile ? "p-3" : "p-4 sm:p-8"}`}
               key={refreshKey}
@@ -389,16 +389,16 @@ function CodeTab({
       value="code"
     >
       <div className="relative">
-        <div className="flex flex-col justify-between gap-3 border-b bg-gradient-to-r from-slate-50 to-blue-50 p-4 transition-colors duration-200 sm:flex-row sm:items-center sm:p-6 dark:from-slate-900 dark:to-blue-950">
+        <div className="flex flex-col justify-between gap-3 border-b bg-linear-to-r from-slate-50 to-blue-50 p-4 transition-colors duration-200 sm:flex-row sm:items-center sm:p-6 dark:from-slate-900 dark:to-blue-950">
           <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             <h4 className="flex items-center gap-2 font-semibold text-sm">
-              <div className="rounded bg-gradient-to-br from-blue-500 to-purple-600 p-1">
+              <div className="rounded bg-linear-to-br from-blue-500 to-purple-600 p-1">
                 <Code2 className="h-3 w-3 text-white" />
               </div>
               Source Code
             </h4>
             <Badge
-              className="zoom-in-50 animate-in bg-gradient-to-r from-blue-100 to-purple-100 text-xs delay-100 duration-300 dark:from-blue-900/50 dark:to-purple-900/50"
+              className="zoom-in-50 animate-in bg-linear-to-r from-blue-100 to-purple-100 text-xs delay-100 duration-300 dark:from-blue-900/50 dark:to-purple-900/50"
               variant="secondary"
             >
               TypeScript
@@ -413,8 +413,8 @@ function CodeTab({
           <Button
             className={`h-9 rounded-xl shadow-sm transition-all duration-300 hover:scale-105 hover:shadow-md ${
               copiedIndex === index
-                ? "bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700"
-                : "bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
+                ? "bg-linear-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700"
+                : "bg-linear-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
             }`}
             onClick={() => onCopyCode(codeString)}
             size="sm"
@@ -443,7 +443,7 @@ function CodeTab({
             <>
               <div
                 className={`overflow-auto ${
-                  isMobile ? "max-h-64" : "max-h-96 sm:max-h-[600px]"
+                  isMobile ? "max-h-64" : "max-h-96 sm:max-h-150"
                 }`}
               >
                 <SyntaxHighlighter
@@ -529,12 +529,12 @@ function PropsTab({
         <div className="space-y-6">
           {/* Props Header */}
           <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <h4 className="bg-gradient-to-r from-slate-900 to-blue-700 bg-clip-text font-semibold text-lg text-transparent dark:from-slate-100 dark:to-blue-300">
+            <h4 className="bg-linear-to-r from-slate-900 to-blue-700 bg-clip-text font-semibold text-lg text-transparent dark:from-slate-100 dark:to-blue-300">
               Component Props
             </h4>
             <div className="flex flex-wrap gap-2">
               <Badge
-                className="zoom-in-50 animate-in border-blue-200 bg-gradient-to-r from-blue-50 to-purple-50 text-xs delay-100 duration-300 dark:border-blue-800 dark:from-blue-950/50 dark:to-purple-950/50"
+                className="zoom-in-50 animate-in border-blue-200 bg-linear-to-r from-blue-50 to-purple-50 text-xs delay-100 duration-300 dark:border-blue-800 dark:from-blue-950/50 dark:to-purple-950/50"
                 variant="outline"
               >
                 {propsInfo?.props?.length
@@ -559,7 +559,7 @@ function PropsTab({
               </Badge>
               {propsInfo?.propsInterfaceName && (
                 <Badge
-                  className="zoom-in-50 animate-in bg-gradient-to-r from-purple-100 to-pink-100 text-xs delay-200 duration-300 dark:from-purple-900/50 dark:to-pink-900/50"
+                  className="zoom-in-50 animate-in bg-linear-to-r from-purple-100 to-pink-100 text-xs delay-200 duration-300 dark:from-purple-900/50 dark:to-pink-900/50"
                   variant="secondary"
                 >
                   {propsInfo.propsInterfaceName}
@@ -570,7 +570,7 @@ function PropsTab({
 
           {/* Component Description */}
           {propsInfo?.description && (
-            <div className="slide-in-from-top-4 animate-in rounded-xl border border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50 p-4 duration-500 sm:p-6 dark:border-blue-800 dark:from-blue-950/30 dark:to-indigo-950/30">
+            <div className="slide-in-from-top-4 animate-in rounded-xl border border-blue-200 bg-linear-to-br from-blue-50 to-indigo-50 p-4 duration-500 sm:p-6 dark:border-blue-800 dark:from-blue-950/30 dark:to-indigo-950/30">
               <h5 className="mb-3 flex items-center gap-2 font-medium text-blue-900 text-sm dark:text-blue-100">
                 <Info className="h-4 w-4" />
                 Component Description
@@ -657,7 +657,7 @@ ${propsInfo.props
   return (
     <div className="mb-8 space-y-4">
       <h5 className="flex items-center gap-2 font-medium text-md">
-        <div className="rounded bg-gradient-to-br from-green-500 to-emerald-600 p-1">
+        <div className="rounded bg-linear-to-br from-green-500 to-emerald-600 p-1">
           <Code2 className="h-3 w-3 text-white" />
         </div>
         Interface Definition
@@ -689,11 +689,11 @@ ${propsInfo.props
             )}
           </Button>
         </div>
-        <div className="overflow-hidden rounded-xl border bg-gradient-to-br from-slate-50 to-white shadow-lg dark:from-slate-950 dark:to-slate-900">
-          <div className="border-b bg-gradient-to-r from-slate-100 to-blue-100 px-4 py-3 dark:from-slate-900 dark:to-blue-950">
+        <div className="overflow-hidden rounded-xl border bg-linear-to-br from-slate-50 to-white shadow-lg dark:from-slate-950 dark:to-slate-900">
+          <div className="border-b bg-linear-to-r from-slate-100 to-blue-100 px-4 py-3 dark:from-slate-900 dark:to-blue-950">
             <div className="flex items-center gap-2">
               <Badge
-                className="bg-gradient-to-r from-blue-100 to-purple-100 font-mono text-xs dark:from-blue-900/50 dark:to-purple-900/50"
+                className="bg-linear-to-r from-blue-100 to-purple-100 font-mono text-xs dark:from-blue-900/50 dark:to-purple-900/50"
                 variant="secondary"
               >
                 TypeScript
@@ -780,7 +780,7 @@ function DetailedPropsInfo({ propsInfo }: { propsInfo: ComponentPropsInfo }) {
   return (
     <div className="space-y-4">
       <h5 className="flex items-center gap-2 font-medium text-md">
-        <div className="rounded bg-gradient-to-br from-purple-500 to-pink-600 p-1">
+        <div className="rounded bg-linear-to-br from-purple-500 to-pink-600 p-1">
           <Sparkles className="h-3 w-3 text-white" />
         </div>
         Detailed Props Information
@@ -789,7 +789,7 @@ function DetailedPropsInfo({ propsInfo }: { propsInfo: ComponentPropsInfo }) {
       <div className="grid gap-4">
         {propsInfo.props.map((prop, propIndex) => (
           <div
-            className="group slide-in-from-left-4 fade-in-0 animate-in rounded-xl border bg-gradient-to-br from-white to-slate-50/50 p-4 shadow-sm transition-all duration-300 hover:scale-[1.02] hover:from-blue-50/50 hover:to-purple-50/30 hover:shadow-lg sm:p-6 dark:from-slate-900 dark:to-slate-800/50 dark:hover:from-blue-950/30 dark:hover:to-purple-950/20"
+            className="group slide-in-from-left-4 fade-in-0 animate-in rounded-xl border bg-linear-to-br from-white to-slate-50/50 p-4 shadow-sm transition-all duration-300 hover:scale-[1.02] hover:from-blue-50/50 hover:to-purple-50/30 hover:shadow-lg sm:p-6 dark:from-slate-900 dark:to-slate-800/50 dark:hover:from-blue-950/30 dark:hover:to-purple-950/20"
             key={prop.name}
             style={{
               animationDelay: `${propIndex * 100}ms`,
@@ -935,7 +935,7 @@ function DefaultPropsInfo({
   return (
     <div className="space-y-4">
       <h5 className="flex items-center gap-2 font-medium text-md">
-        <div className="rounded bg-gradient-to-br from-orange-500 to-red-600 p-1">
+        <div className="rounded bg-linear-to-br from-orange-500 to-red-600 p-1">
           <Terminal className="h-3 w-3 text-white" />
         </div>
         Default Props (Fallback)
@@ -944,7 +944,7 @@ function DefaultPropsInfo({
       <div className="grid gap-3">
         {Object.entries(defaultProps).map(([key, value], propIndex) => (
           <div
-            className="group slide-in-from-left-4 fade-in-0 animate-in rounded-lg border bg-gradient-to-br from-white to-slate-50/50 p-4 transition-all duration-300 hover:scale-[1.02] hover:from-orange-50/50 hover:to-red-50/30 hover:shadow-md dark:from-slate-900 dark:to-slate-800/50 dark:hover:from-orange-950/30 dark:hover:to-red-950/20"
+            className="group slide-in-from-left-4 fade-in-0 animate-in rounded-lg border bg-linear-to-br from-white to-slate-50/50 p-4 transition-all duration-300 hover:scale-[1.02] hover:from-orange-50/50 hover:to-red-50/30 hover:shadow-md dark:from-slate-900 dark:to-slate-800/50 dark:hover:from-orange-950/30 dark:hover:to-red-950/20"
             key={key}
             style={{
               animationDelay: `${propIndex * 100}ms`,
@@ -986,7 +986,7 @@ function DefaultPropsInfo({
 
 function ExtendsInfo({ extendsFrom }: { extendsFrom: string[] }) {
   return (
-    <div className="slide-in-from-bottom-4 animate-in rounded-xl border border-green-200 bg-gradient-to-br from-green-50 to-emerald-50 p-4 delay-500 duration-500 sm:p-6 dark:border-green-800 dark:from-green-950/30 dark:to-emerald-950/30">
+    <div className="slide-in-from-bottom-4 animate-in rounded-xl border border-green-200 bg-linear-to-br from-green-50 to-emerald-50 p-4 delay-500 duration-500 sm:p-6 dark:border-green-800 dark:from-green-950/30 dark:to-emerald-950/30">
       <h5 className="mb-3 flex items-center gap-2 font-medium text-green-900 text-sm dark:text-green-100">
         <Code2 className="h-4 w-4" />
         Extends
@@ -1008,7 +1008,7 @@ function ExtendsInfo({ extendsFrom }: { extendsFrom: string[] }) {
 
 function ExamplesInfo({ examples }: { examples: string[] }) {
   return (
-    <div className="slide-in-from-bottom-4 animate-in rounded-xl border border-purple-200 bg-gradient-to-br from-purple-50 to-pink-50 p-4 delay-600 duration-500 sm:p-6 dark:border-purple-800 dark:from-purple-950/30 dark:to-pink-950/30">
+    <div className="slide-in-from-bottom-4 animate-in rounded-xl border border-purple-200 bg-linear-to-br from-purple-50 to-pink-50 p-4 delay-600 duration-500 sm:p-6 dark:border-purple-800 dark:from-purple-950/30 dark:to-pink-950/30">
       <h5 className="mb-4 flex items-center gap-2 font-medium text-purple-900 text-sm dark:text-purple-100">
         <Sparkles className="h-4 w-4" />
         Examples
@@ -1029,10 +1029,10 @@ function ExamplesInfo({ examples }: { examples: string[] }) {
 function NoPropsInfo() {
   return (
     <div className="fade-in-50 zoom-in-95 animate-in py-8 text-center duration-500 sm:py-12">
-      <div className="zoom-in-50 mx-auto mb-4 flex h-16 w-16 animate-in items-center justify-center rounded-2xl bg-gradient-to-br from-blue-100 to-purple-100 shadow-lg delay-200 duration-700 sm:mb-6 sm:h-20 sm:w-20 dark:from-blue-900/30 dark:to-purple-900/30">
+      <div className="zoom-in-50 mx-auto mb-4 flex h-16 w-16 animate-in items-center justify-center rounded-2xl bg-linear-to-br from-blue-100 to-purple-100 shadow-lg delay-200 duration-700 sm:mb-6 sm:h-20 sm:w-20 dark:from-blue-900/30 dark:to-purple-900/30">
         <Info className="h-6 w-6 text-blue-600 sm:h-8 sm:w-8 dark:text-blue-400" />
       </div>
-      <h5 className="slide-in-from-bottom-4 mb-2 animate-in bg-gradient-to-r from-slate-900 to-blue-700 bg-clip-text font-semibold text-lg text-transparent delay-300 duration-500 sm:mb-3 sm:text-xl dark:from-slate-100 dark:to-blue-300">
+      <h5 className="slide-in-from-bottom-4 mb-2 animate-in bg-linear-to-r from-slate-900 to-blue-700 bg-clip-text font-semibold text-lg text-transparent delay-300 duration-500 sm:mb-3 sm:text-xl dark:from-slate-100 dark:to-blue-300">
         No Props Required
       </h5>
       <p className="slide-in-from-bottom-4 mx-auto max-w-md animate-in text-muted-foreground text-sm delay-500 duration-500 sm:text-base">

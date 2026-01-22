@@ -18,7 +18,7 @@ export default function DrawingLinesShowcase() {
         {Array.from({ length: 30 }).map((_, i) => (
           <div
             className="absolute h-px bg-gray-600 opacity-40"
-            key={`h-${i}`}
+            key={`horizontal-line-${i * 40}`}
             style={{
               top: `${i * 40}px`,
               left: 0,
@@ -36,7 +36,7 @@ export default function DrawingLinesShowcase() {
         {Array.from({ length: 50 }).map((_, i) => (
           <div
             className="absolute w-px bg-gray-600 opacity-40"
-            key={`v-${i}`}
+            key={`vertical-line-${i * 40}`}
             style={{
               left: `${i * 40}px`,
               top: 0,
@@ -64,10 +64,16 @@ export default function DrawingLinesShowcase() {
             grid that emerges from multiple directions in perfect harmony.
           </p>
           <div className="flex flex-col justify-center gap-4 sm:flex-row">
-            <button className="rounded-lg bg-white px-8 py-3 font-medium text-black transition-colors duration-200 hover:bg-gray-200">
+            <button
+              className="rounded-lg bg-white px-8 py-3 font-medium text-black transition-colors duration-200 hover:bg-gray-200"
+              type="button"
+            >
               Get Started
             </button>
-            <button className="rounded-lg border border-gray-600 px-8 py-3 font-medium text-white transition-colors duration-200 hover:border-gray-400">
+            <button
+              className="rounded-lg border border-gray-600 px-8 py-3 font-medium text-white transition-colors duration-200 hover:border-gray-400"
+              type="button"
+            >
               Learn More
             </button>
           </div>

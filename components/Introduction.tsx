@@ -34,7 +34,7 @@ export default function Introduction() {
         "Every component respects space, creating natural breathing room and visual hierarchy.",
       color: "from-yellow-500/20 to-orange-500/10",
       borderColor: "border-yellow-500/20",
-      iconBg: "bg-gradient-to-br from-yellow-500/20 to-orange-500/10",
+      iconBg: "bg-linear-to-br from-yellow-500/20 to-orange-500/10",
       iconColor: "text-yellow-600",
     },
     {
@@ -44,7 +44,7 @@ export default function Introduction() {
         "Each component serves a specific purpose with clear, predictable behavior.",
       color: "from-blue-500/20 to-cyan-500/10",
       borderColor: "border-blue-500/20",
-      iconBg: "bg-gradient-to-br from-blue-500/20 to-cyan-500/10",
+      iconBg: "bg-linear-to-br from-blue-500/20 to-cyan-500/10",
       iconColor: "text-blue-600",
     },
     {
@@ -54,7 +54,7 @@ export default function Introduction() {
         "Unified design language that scales across your entire application.",
       color: "from-purple-500/20 to-pink-500/10",
       borderColor: "border-purple-500/20",
-      iconBg: "bg-gradient-to-br from-purple-500/20 to-pink-500/10",
+      iconBg: "bg-linear-to-br from-purple-500/20 to-pink-500/10",
       iconColor: "text-purple-600",
     },
     {
@@ -64,7 +64,7 @@ export default function Introduction() {
         "Built with TypeScript, well-documented, and designed for productivity.",
       color: "from-green-500/20 to-emerald-500/10",
       borderColor: "border-green-500/20",
-      iconBg: "bg-gradient-to-br from-green-500/20 to-emerald-500/10",
+      iconBg: "bg-linear-to-br from-green-500/20 to-emerald-500/10",
       iconColor: "text-green-600",
     },
   ];
@@ -80,7 +80,7 @@ export default function Introduction() {
   ];
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-background via-background to-primary/5">
+    <div className="relative min-h-screen overflow-hidden bg-linear-to-br from-background via-background to-primary/5">
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/4 -left-40 h-96 w-96 animate-pulse rounded-full bg-primary/10 blur-3xl" />
@@ -95,7 +95,7 @@ export default function Introduction() {
       </div>
 
       {/* Grid pattern */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:48px_48px]" />
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-size[48px_48px]" />
 
       <div className="relative z-10 mx-auto max-w-6xl space-y-16 px-6 py-16">
         {/* Introduction Header */}
@@ -116,11 +116,11 @@ export default function Introduction() {
             </Pill>
 
             <h1 className="mb-6 font-black text-5xl tracking-tight md:text-7xl">
-              <span className="bg-gradient-to-r from-foreground via-foreground to-foreground/70 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-foreground via-foreground to-foreground/70 bg-clip-text text-transparent">
                 Welcome to
               </span>
               <br />
-              <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-primary to-primary/60 bg-clip-text text-transparent">
                 VUI Design System
               </span>
             </h1>
@@ -149,12 +149,12 @@ export default function Introduction() {
 
         {/* What is VUI */}
         <Card className="relative overflow-hidden border-0 bg-card/80 shadow-2xl backdrop-blur-xl">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-secondary/5" />
-          <div className="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-primary/50 to-secondary/50" />
+          <div className="absolute inset-0 bg-linear-to-r from-primary/5 via-transparent to-secondary/5" />
+          <div className="absolute top-0 left-0 h-1 w-full bg-linear-to-r from-primary/50 to-secondary/50" />
 
           <div className="relative p-8 md:p-12">
             <div className="mb-8 flex items-start gap-6">
-              <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/20 to-primary/10 shadow-lg">
+              <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-primary/20 bg-linear-to-br from-primary/20 to-primary/10 shadow-lg">
                 <Eye className="h-8 w-8 text-primary" />
               </div>
               <div className="flex-1">
@@ -180,9 +180,9 @@ export default function Introduction() {
                 effortless.
               </p>
 
-              <Card className="border-blue-200/50 bg-gradient-to-r from-blue-50/50 to-indigo-50/50 p-6 dark:border-blue-800/50 dark:from-blue-950/20 dark:to-indigo-950/20">
+              <Card className="border-blue-200/50 bg-linear-to-r from-blue-50/50 to-indigo-50/50 p-6 dark:border-blue-800/50 dark:from-blue-950/20 dark:to-indigo-950/20">
                 <div className="flex items-start gap-4">
-                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900/30">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900/30">
                     <Lightbulb className="h-5 w-5 text-blue-600" />
                   </div>
                   <div>
@@ -213,7 +213,7 @@ export default function Introduction() {
         <div className="space-y-8">
           <div className="text-center">
             <h2 className="mb-4 font-bold text-4xl">
-              <span className="bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
                 Design Principles
               </span>
             </h2>
@@ -230,10 +230,10 @@ export default function Introduction() {
                 key={principle.title}
               >
                 <div
-                  className={`absolute inset-0 bg-gradient-to-r ${principle.color}`}
+                  className={`absolute inset-0 bg-linear-to-r ${principle.color}`}
                 />
                 <div
-                  className={`absolute top-0 left-0 h-1 w-full bg-gradient-to-r ${principle.color
+                  className={`absolute top-0 left-0 h-1 w-full bg-linear-to-r ${principle.color
                     .replace("/20", "")
                     .replace("/10", "")}`}
                 />
@@ -241,7 +241,7 @@ export default function Introduction() {
                 <div className="relative p-8">
                   <div className="flex items-start gap-4">
                     <div
-                      className={`h-12 w-12 rounded-xl ${principle.iconBg} ${principle.borderColor} flex flex-shrink-0 items-center justify-center border shadow-lg`}
+                      className={`h-12 w-12 rounded-xl ${principle.iconBg} ${principle.borderColor} flex shrink-0 items-center justify-center border shadow-lg`}
                     >
                       <span className={principle.iconColor}>
                         {principle.icon}
@@ -266,7 +266,7 @@ export default function Introduction() {
         <div className="space-y-8">
           <div className="text-center">
             <h2 className="mb-4 font-bold text-4xl">
-              <span className="bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
                 Why VUI over shadcn/ui?
               </span>
             </h2>
@@ -278,12 +278,12 @@ export default function Introduction() {
 
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
             <Card className="relative overflow-hidden border-0 bg-card/80 shadow-2xl backdrop-blur-xl">
-              <div className="absolute inset-0 bg-gradient-to-r from-red-500/5 via-transparent to-orange-500/5" />
-              <div className="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-red-500/50 to-orange-500/50" />
+              <div className="absolute inset-0 bg-linear-to-r from-red-500/5 via-transparent to-orange-500/5" />
+              <div className="absolute top-0 left-0 h-1 w-full bg-linear-to-r from-red-500/50 to-orange-500/50" />
 
               <div className="relative p-8">
                 <div className="mb-6 flex items-start gap-6">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-red-500/20 bg-gradient-to-br from-red-500/20 to-orange-500/10 shadow-lg">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-red-500/20 bg-linear-to-br from-red-500/20 to-orange-500/10 shadow-lg">
                     <span className="font-bold text-red-600">📦</span>
                   </div>
                   <div>
@@ -318,12 +318,12 @@ export default function Introduction() {
             </Card>
 
             <Card className="relative overflow-hidden border-0 bg-card/80 shadow-2xl backdrop-blur-xl">
-              <div className="absolute inset-0 bg-gradient-to-r from-green-500/5 via-transparent to-emerald-500/5" />
-              <div className="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-green-500/50 to-emerald-500/50" />
+              <div className="absolute inset-0 bg-linear-to-r from-green-500/5 via-transparent to-emerald-500/5" />
+              <div className="absolute top-0 left-0 h-1 w-full bg-linear-to-r from-green-500/50 to-emerald-500/50" />
 
               <div className="relative p-8">
                 <div className="mb-6 flex items-start gap-6">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-green-500/20 bg-gradient-to-br from-green-500/20 to-emerald-500/10 shadow-lg">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-green-500/20 bg-linear-to-br from-green-500/20 to-emerald-500/10 shadow-lg">
                     <span className="font-bold text-green-600">✨</span>
                   </div>
                   <div>
@@ -336,21 +336,21 @@ export default function Introduction() {
 
                 <ul className="space-y-3 text-muted-foreground text-sm">
                   <li className="flex items-start gap-3">
-                    <CheckCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-600" />
+                    <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-green-600" />
                     <span>
                       Pre-configured design system with spatial wisdom
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <CheckCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-600" />
+                    <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-green-600" />
                     <span>Opinionated choices reduce decision fatigue</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <CheckCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-600" />
+                    <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-green-600" />
                     <span>Advanced layouts and component compositions</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <CheckCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-600" />
+                    <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-green-600" />
                     <span>Comprehensive examples and best practices</span>
                   </li>
                 </ul>
@@ -361,14 +361,14 @@ export default function Introduction() {
 
         {/* What You Get */}
         <Card className="relative overflow-hidden border-0 bg-card/80 shadow-2xl backdrop-blur-xl">
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-transparent to-purple-500/5" />
-          <div className="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-blue-500/50 to-purple-500/50" />
+          <div className="absolute inset-0 bg-linear-to-r from-blue-500/5 via-transparent to-purple-500/5" />
+          <div className="absolute top-0 left-0 h-1 w-full bg-linear-to-r from-blue-500/50 to-purple-500/50" />
 
           <div className="relative p-8 md:p-12">
             <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-2">
               <div>
                 <div className="mb-8 flex items-start gap-6">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-green-500/20 bg-gradient-to-br from-green-500/20 to-emerald-500/10 shadow-lg">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-green-500/20 bg-linear-to-br from-green-500/20 to-emerald-500/10 shadow-lg">
                     <CheckCircle className="h-8 w-8 text-green-600" />
                   </div>
                   <div className="flex-1">
@@ -385,14 +385,14 @@ export default function Introduction() {
                       className="flex items-center gap-4 rounded-lg bg-background/50 p-3 backdrop-blur-sm"
                       key={item}
                     >
-                      <CheckCircle className="h-5 w-5 flex-shrink-0 text-green-600" />
+                      <CheckCircle className="h-5 w-5 shrink-0 text-green-600" />
                       <span className="text-muted-foreground">{item}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <Card className="border-2 border-dashed bg-gradient-to-br from-muted/50 to-muted/20 p-8">
+              <Card className="border-2 border-dashed bg-linear-to-br from-muted/50 to-muted/20 p-8">
                 <h3 className="mb-6 flex items-center gap-3 font-semibold text-lg">
                   <Layers className="h-6 w-6 text-primary" />
                   Component Categories
@@ -448,7 +448,7 @@ export default function Introduction() {
         <div className="space-y-8">
           <div className="text-center">
             <h2 className="mb-4 font-bold text-4xl">
-              <span className="bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
                 Ready to Get Started?
               </span>
             </h2>
@@ -461,11 +461,11 @@ export default function Introduction() {
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
             <Card className="group relative overflow-hidden border-0 bg-card/80 text-center shadow-2xl backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-3xl">
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-transparent to-blue-500/5" />
-              <div className="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-blue-500/50 to-blue-500/50" />
+              <div className="absolute inset-0 bg-linear-to-r from-blue-500/5 via-transparent to-blue-500/5" />
+              <div className="absolute top-0 left-0 h-1 w-full bg-linear-to-r from-blue-500/50 to-blue-500/50" />
 
               <div className="relative p-8">
-                <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-blue-500/20 bg-gradient-to-br from-blue-500/20 to-blue-500/10 shadow-lg">
+                <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-blue-500/20 bg-linear-to-br from-blue-500/20 to-blue-500/10 shadow-lg">
                   <span className="font-bold text-2xl text-blue-600">1</span>
                 </div>
                 <h3 className="mb-3 font-semibold text-xl">Install</h3>
@@ -476,11 +476,11 @@ export default function Introduction() {
             </Card>
 
             <Card className="group relative overflow-hidden border-0 bg-card/80 text-center shadow-2xl backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-3xl">
-              <div className="absolute inset-0 bg-gradient-to-r from-green-500/5 via-transparent to-green-500/5" />
-              <div className="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-green-500/50 to-green-500/50" />
+              <div className="absolute inset-0 bg-linear-to-r from-green-500/5 via-transparent to-green-500/5" />
+              <div className="absolute top-0 left-0 h-1 w-full bg-linear-to-r from-green-500/50 to-green-500/50" />
 
               <div className="relative p-8">
-                <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-green-500/20 bg-gradient-to-br from-green-500/20 to-green-500/10 shadow-lg">
+                <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-green-500/20 bg-linear-to-br from-green-500/20 to-green-500/10 shadow-lg">
                   <span className="font-bold text-2xl text-green-600">2</span>
                 </div>
                 <h3 className="mb-3 font-semibold text-xl">Configure</h3>
@@ -491,11 +491,11 @@ export default function Introduction() {
             </Card>
 
             <Card className="group relative overflow-hidden border-0 bg-card/80 text-center shadow-2xl backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-3xl">
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 via-transparent to-purple-500/5" />
-              <div className="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-purple-500/50 to-purple-500/50" />
+              <div className="absolute inset-0 bg-linear-to-r from-purple-500/5 via-transparent to-purple-500/5" />
+              <div className="absolute top-0 left-0 h-1 w-full bg-linear-to-r from-purple-500/50 to-purple-500/50" />
 
               <div className="relative p-8">
-                <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-purple-500/20 bg-gradient-to-br from-purple-500/20 to-purple-500/10 shadow-lg">
+                <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-purple-500/20 bg-linear-to-br from-purple-500/20 to-purple-500/10 shadow-lg">
                   <span className="font-bold text-2xl text-purple-600">3</span>
                 </div>
                 <h3 className="mb-3 font-semibold text-xl">Build</h3>
@@ -519,12 +519,12 @@ export default function Introduction() {
 
         {/* Next Steps */}
         <Card className="relative overflow-hidden border-0 bg-card/80 shadow-2xl backdrop-blur-xl">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-secondary/5" />
-          <div className="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-primary/50 to-secondary/50" />
+          <div className="absolute inset-0 bg-linear-to-r from-primary/5 via-transparent to-secondary/5" />
+          <div className="absolute top-0 left-0 h-1 w-full bg-linear-to-r from-primary/50 to-secondary/50" />
 
           <div className="relative p-8 text-center md:p-12">
             <div className="mb-6 flex items-center justify-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-primary/20 bg-gradient-to-br from-primary/20 to-primary/10 shadow-lg">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-primary/20 bg-linear-to-br from-primary/20 to-primary/10 shadow-lg">
                 <Star className="h-6 w-6 text-primary" />
               </div>
               <h2 className="font-bold text-3xl">What&apos;s Next?</h2>

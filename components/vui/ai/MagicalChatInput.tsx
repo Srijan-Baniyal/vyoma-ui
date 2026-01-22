@@ -108,7 +108,7 @@ export const AIInput = ({ className, ...props }: AIInputProps) => (
       "[&::-webkit-scrollbar]:hidden [&::-webkit-scrollbar]:w-0",
       "[-ms-overflow-style:none] [scrollbar-width:none]",
       "[&_*]:scrollbar-none [&_*::-webkit-scrollbar]:hidden",
-      "[&_*]:[-ms-overflow-style:none] [&_*]:[scrollbar-width:none]",
+      "**:[-ms-overflow-style:none] **:[scrollbar-width:none]",
       className
     )}
     {...props}
@@ -188,7 +188,7 @@ export const AIInputToolbar = ({
   <div
     className={cn(
       "flex items-center justify-between px-2.5 py-2 sm:px-3 sm:py-2",
-      "bg-gradient-to-r from-background/40 via-background/60 to-background/40",
+      "bg-linear-to-r from-background/40 via-background/60 to-background/40",
       "backdrop-blur-md",
       motionSafe,
       className
@@ -364,7 +364,7 @@ export const AIInputSubmit = ({
       aria-label="Send message"
       className={cn(
         "rounded-xl rounded-br-2xl border border-transparent",
-        "bg-gradient-to-r from-primary via-primary/90 to-primary",
+        "bg-linear-to-r from-primary via-primary/90 to-primary",
         "text-primary-foreground",
         "shadow-md hover:shadow-lg",
         "group/submit",
@@ -373,7 +373,7 @@ export const AIInputSubmit = ({
         size === "icon" ? "h-11 w-11 sm:h-11 sm:w-11" : "",
         subtleFocus,
         status === "error" &&
-          "bg-gradient-to-r from-destructive via-destructive to-destructive",
+          "bg-linear-to-r from-destructive via-destructive to-destructive",
         className
       )}
       disabled={isDisabled}
@@ -409,7 +409,7 @@ export const AIInputModelSelectTrigger = ({
       "active:scale-95",
       "backdrop-blur-sm",
       subtleFocus,
-      "min-w-[120px] px-2.5 py-2 sm:min-w-[140px]",
+      "min-w-30 px-2.5 py-2 sm:min-w-25",
       className
     )}
     {...props}
@@ -427,7 +427,7 @@ export const AIInputModelSelectContent = ({
     className={cn(
       "rounded-xl",
       glassPanel,
-      "max-h-[260px] sm:max-h-[300px]",
+      "max-h-65 sm:max-h-75",
       "overflow-hidden overflow-y-auto",
       "no-scrollbar",
       motionSafe,
@@ -490,7 +490,7 @@ export default function MagicalChatInput() {
       return;
     }
 
-    alert(`You entered: ${text}`);
+    console.log(`You entered: ${text}`);
     setStatus("submitted");
     setTimeout(() => setStatus("streaming"), 200);
     setTimeout(() => setStatus("ready"), 1800);
@@ -547,7 +547,7 @@ export default function MagicalChatInput() {
           "opacity-60 sm:opacity-80"
         )}
       >
-        <div className="absolute inset-0 m-auto h-[40%] max-w-5xl rounded-[48px] bg-gradient-to-r from-primary/15 via-purple-500/15 to-primary/15 blur-2xl sm:h-[50%] sm:blur-3xl" />
+        <div className="absolute inset-0 m-auto h-[40%] max-w-5xl rounded-[48px] bg-linear-to-r from-primary/15 via-purple-500/15 to-primary/15 blur-2xl sm:h-[50%] sm:blur-3xl" />
       </div>
 
       <AIInput
@@ -575,7 +575,7 @@ export default function MagicalChatInput() {
         <AIInputToolbar
           className={cn(
             "items-stretch gap-2",
-            "bg-gradient-to-r from-background/50 via-background/65 to-background/50",
+            "bg-linear-to-r from-background/50 via-background/65 to-background/50",
             text.length > 0 && "backdrop-blur-xl"
           )}
         >
@@ -609,7 +609,7 @@ export default function MagicalChatInput() {
             </AIInputToggleButton>
 
             <AIInputModelSelect onValueChange={setModel} value={model}>
-              <AIInputModelSelectTrigger className="min-w-[116px] sm:min-w-[140px]">
+              <AIInputModelSelectTrigger className="min-w-29 sm:min-w-35">
                 <AIInputModelSelectValue />
               </AIInputModelSelectTrigger>
               <AIInputModelSelectContent>

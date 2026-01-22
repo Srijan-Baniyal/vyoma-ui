@@ -20,7 +20,7 @@ export default function Footer() {
   }
 
   return (
-    <footer className="w-full border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <footer className="w-full border-t bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/6">
       <div className="container mx-auto px-4 py-12 md:px-6 md:py-16">
         {/* Main footer content */}
         <div className="mb-12 grid grid-cols-1 gap-8 sm:grid-cols-2 md:mb-16 md:gap-12 lg:grid-cols-4">
@@ -223,7 +223,7 @@ export default function Footer() {
 
         {/* Large brand text */}
         <div className="mt-12 flex w-full items-center justify-center md:mt-16">
-          <h1 className="select-none bg-gradient-to-b from-foreground/10 to-foreground/5 bg-clip-text text-center font-black text-3xl text-transparent leading-none sm:text-4xl md:text-6xl lg:text-8xl xl:text-[8rem]">
+          <h1 className="select-none bg-linear-to-b from-foreground/10 to-foreground/5 bg-clip-text text-center font-black text-3xl text-transparent leading-none sm:text-4xl md:text-6xl lg:text-8xl xl:text-[8rem]">
             VYOMA UI
           </h1>
         </div>

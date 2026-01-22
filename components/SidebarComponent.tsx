@@ -299,7 +299,7 @@ export default function SidebarComponent({ children }: SidebarComponentProps) {
                   <motion.div
                     animate={isActive ? { scale: [1, 1.2, 1] } : {}}
                     className={cn(
-                      "size-2 flex-shrink-0 rounded-full",
+                      "size-2 shrink-0 rounded-full",
                       isActive
                         ? "bg-primary shadow-sm"
                         : "bg-muted-foreground/30 group-hover:bg-muted-foreground/50"
@@ -310,7 +310,7 @@ export default function SidebarComponent({ children }: SidebarComponentProps) {
                   {isActive && (
                     <motion.div
                       animate={{ opacity: 1 }}
-                      className="absolute inset-0 rounded-lg bg-gradient-to-r from-primary/5 to-transparent"
+                      className="absolute inset-0 rounded-lg bg-linear-to-r from-primary/5 to-transparent"
                       initial={{ opacity: 0 }}
                       transition={{ duration: 0.2 }}
                     />
@@ -319,7 +319,7 @@ export default function SidebarComponent({ children }: SidebarComponentProps) {
               </SidebarMenuButton>
             </TooltipTrigger>
             <TooltipContent
-              className="max-w-[220px] border bg-background p-3 shadow-lg"
+              className="max-w-55 border bg-background p-3 shadow-lg"
               side="right"
               sideOffset={8}
             >
@@ -350,14 +350,14 @@ export default function SidebarComponent({ children }: SidebarComponentProps) {
       type="button"
     >
       <SidebarProvider>
-        <Sidebar className="z-40 border-r bg-background/98 shadow-sm backdrop-blur-md supports-[backdrop-filter]:bg-background/95">
+        <Sidebar className="z-40 border-r bg-background/98 shadow-sm backdrop-blur-md supports-backdrop-filter:bg-background/95">
           <SidebarHeader className="border-border/50 border-b p-0">
             <div className="flex items-center justify-between p-4">
               <Link
                 className="group -m-1 flex items-center gap-3 rounded-lg p-1 transition-all duration-200 hover:bg-accent/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 href="/"
               >
-                <div className="flex aspect-square size-12 items-center justify-center rounded-xl border border-primary/20 bg-gradient-to-br from-primary/10 to-primary/5 transition-all duration-200 group-hover:border-primary/30">
+                <div className="flex aspect-square size-12 items-center justify-center rounded-xl border border-primary/20 bg-linear-to-br from-primary/10 to-primary/5 transition-all duration-200 group-hover:border-primary/30">
                   <Image
                     alt="Vyoma UI Logo"
                     className="transition-transform duration-200 group-hover:scale-110"
@@ -497,7 +497,7 @@ export default function SidebarComponent({ children }: SidebarComponentProps) {
         </Sidebar>
 
         <SidebarInset className="flex min-h-screen flex-col">
-          <header className="sticky top-0 z-50 flex h-16 shrink-0 items-center gap-2 border-border/50 border-b bg-background/98 px-4 shadow-sm backdrop-blur-md supports-[backdrop-filter]:bg-background/95">
+          <header className="sticky top-0 z-50 flex h-16 shrink-0 items-center gap-2 border-border/50 border-b bg-background/98 px-4 shadow-sm backdrop-blur-md supports-backdrop-filter:bg-background/95">
             <SidebarTrigger className="mr-2 h-9 w-9 md:hidden" />
             <SidebarTrigger className="-ml-1 hidden transition-colors duration-200 hover:bg-accent/70 md:flex" />
             <Separator

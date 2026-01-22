@@ -74,60 +74,67 @@ const TypingText = ({
     let currentTextIndex = 0;
     let hasStarted = false;
 
+    const handleDeletingPhase = (currentText: string, animate: () => void) => {
+      setDisplayText(currentText.substring(0, currentIndex));
+      currentIndex--;
+
+      if (currentIndex < 0) {
+        isDeleting = false;
+        onDeletingComplete?.();
+
+        if (currentTextIndex === texts.length - 1 && !loop) {
+          setIsAnimating(false);
+          return;
+        }
+
+        currentTextIndex = (currentTextIndex + 1) % texts.length;
+        onTypingStart?.();
+        timeout = setTimeout(animate, waitTime);
+      } else {
+        timeout = setTimeout(animate, deleteSpeed);
+      }
+    };
+
+    const handleTypingPhase = (currentText: string, animate: () => void) => {
+      setDisplayText(currentText.substring(0, currentIndex + 1));
+      currentIndex++;
+
+      if (currentIndex === currentText.length) {
+        onTypingComplete?.();
+
+        if (texts.length > 1 && loop) {
+          onDeletingStart?.();
+          isDeleting = true;
+          timeout = setTimeout(animate, waitTime);
+        } else {
+          setIsAnimating(false);
+        }
+      } else {
+        timeout = setTimeout(animate, speed);
+      }
+    };
+
+    const handleInitialDelay = (animate: () => void) => {
+      hasStarted = true;
+      onTypingStart?.();
+      if (initialDelay > 0) {
+        timeout = setTimeout(animate, initialDelay);
+        return true;
+      }
+      return false;
+    };
+
     const animate = () => {
       const currentText = texts[currentTextIndex];
 
-      // Handle initial delay
-      if (!hasStarted) {
-        hasStarted = true;
-        onTypingStart?.();
-        if (initialDelay > 0) {
-          timeout = setTimeout(animate, initialDelay);
-          return;
-        }
+      if (!hasStarted && handleInitialDelay(animate)) {
+        return;
       }
 
       if (isDeleting) {
-        // Deleting phase
-        setDisplayText(currentText.substring(0, currentIndex));
-        currentIndex--;
-
-        if (currentIndex < 0) {
-          // Finished deleting
-          isDeleting = false;
-          onDeletingComplete?.();
-
-          // Move to next text
-          if (currentTextIndex === texts.length - 1 && !loop) {
-            setIsAnimating(false);
-            return;
-          }
-
-          currentTextIndex = (currentTextIndex + 1) % texts.length;
-          onTypingStart?.();
-          timeout = setTimeout(animate, waitTime);
-        } else {
-          timeout = setTimeout(animate, deleteSpeed);
-        }
+        handleDeletingPhase(currentText, animate);
       } else {
-        // Typing phase
-        setDisplayText(currentText.substring(0, currentIndex + 1));
-        currentIndex++;
-
-        if (currentIndex === currentText.length) {
-          // Finished typing current text
-          onTypingComplete?.();
-
-          if (texts.length > 1 && loop) {
-            onDeletingStart?.();
-            isDeleting = true;
-            timeout = setTimeout(animate, waitTime);
-          } else {
-            setIsAnimating(false);
-          }
-        } else {
-          timeout = setTimeout(animate, speed);
-        }
+        handleTypingPhase(currentText, animate);
       }
     };
 
@@ -181,7 +188,7 @@ export default TypingText;
 
 export function TypingTextShowcase() {
   return (
-    <div className="min-h-5 bg-gradient-to-br from-background via-muted/20 to-background p-8">
+    <div className="min-h-5 bg-linear-to-br from-background via-muted/20 to-background p-8">
       <div className="mx-auto max-w-6xl space-y-12">
         {/* Hero Section */}
         <div className="space-y-6 text-center">
@@ -215,7 +222,7 @@ export function TypingTextShowcase() {
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {/* Professional Use Case */}
-            <div className="group rounded-2xl border border-blue-200/50 bg-gradient-to-br from-blue-50/50 to-blue-100/30 p-6 transition-all duration-300 hover:shadow-lg dark:border-blue-800/30 dark:from-blue-950/30 dark:to-blue-900/20">
+            <div className="group rounded-2xl border border-blue-200/50 bg-linear-to-br from-blue-50/50 to-blue-100/30 p-6 transition-all duration-300 hover:shadow-lg dark:border-blue-800/30 dark:from-blue-950/30 dark:to-blue-900/20">
               <div className="space-y-3">
                 <h3 className="font-semibold text-blue-700 text-lg dark:text-blue-300">
                   Professional
@@ -243,7 +250,7 @@ export function TypingTextShowcase() {
             </div>
 
             {/* Fast & Energetic */}
-            <div className="group rounded-2xl border border-green-200/50 bg-gradient-to-br from-green-50/50 to-emerald-100/30 p-6 transition-all duration-300 hover:shadow-lg dark:border-green-800/30 dark:from-green-950/30 dark:to-emerald-900/20">
+            <div className="group rounded-2xl border border-green-200/50 bg-linear-to-br from-green-50/50 to-emerald-100/30 p-6 transition-all duration-300 hover:shadow-lg dark:border-green-800/30 dark:from-green-950/30 dark:to-emerald-900/20">
               <div className="space-y-3">
                 <h3 className="font-semibold text-green-700 text-lg dark:text-green-300">
                   Lightning Fast
@@ -268,7 +275,7 @@ export function TypingTextShowcase() {
             </div>
 
             {/* Elegant & Slow */}
-            <div className="group rounded-2xl border border-purple-200/50 bg-gradient-to-br from-purple-50/50 to-violet-100/30 p-6 transition-all duration-300 hover:shadow-lg dark:border-purple-800/30 dark:from-purple-950/30 dark:to-violet-900/20">
+            <div className="group rounded-2xl border border-purple-200/50 bg-linear-to-br from-purple-50/50 to-violet-100/30 p-6 transition-all duration-300 hover:shadow-lg dark:border-purple-800/30 dark:from-purple-950/30 dark:to-violet-900/20">
               <div className="space-y-3">
                 <h3 className="font-semibold text-lg text-purple-700 dark:text-purple-300">
                   Elegant
@@ -294,7 +301,7 @@ export function TypingTextShowcase() {
             </div>
 
             {/* Code Style */}
-            <div className="group rounded-2xl border border-slate-200/50 bg-gradient-to-br from-slate-50/50 to-gray-100/30 p-6 transition-all duration-300 hover:shadow-lg dark:border-slate-800/30 dark:from-slate-950/30 dark:to-gray-900/20">
+            <div className="group rounded-2xl border border-slate-200/50 bg-linear-to-br from-slate-50/50 to-gray-100/30 p-6 transition-all duration-300 hover:shadow-lg dark:border-slate-800/30 dark:from-slate-950/30 dark:to-gray-900/20">
               <div className="space-y-3">
                 <h3 className="font-semibold text-lg text-slate-700 dark:text-slate-300">
                   Code Terminal
@@ -322,7 +329,7 @@ export function TypingTextShowcase() {
             </div>
 
             {/* No Cursor */}
-            <div className="group rounded-2xl border border-orange-200/50 bg-gradient-to-br from-orange-50/50 to-amber-100/30 p-6 transition-all duration-300 hover:shadow-lg dark:border-orange-800/30 dark:from-orange-950/30 dark:to-amber-900/20">
+            <div className="group rounded-2xl border border-orange-200/50 bg-linear-to-br from-orange-50/50 to-amber-100/30 p-6 transition-all duration-300 hover:shadow-lg dark:border-orange-800/30 dark:from-orange-950/30 dark:to-amber-900/20">
               <div className="space-y-3">
                 <h3 className="font-semibold text-lg text-orange-700 dark:text-orange-300">
                   Clean & Minimal
@@ -346,7 +353,7 @@ export function TypingTextShowcase() {
             </div>
 
             {/* Custom Styled */}
-            <div className="group rounded-2xl border border-rose-200/50 bg-gradient-to-br from-rose-50/50 to-pink-100/30 p-6 transition-all duration-300 hover:shadow-lg dark:border-rose-800/30 dark:from-rose-950/30 dark:to-pink-900/20">
+            <div className="group rounded-2xl border border-rose-200/50 bg-linear-to-br from-rose-50/50 to-pink-100/30 p-6 transition-all duration-300 hover:shadow-lg dark:border-rose-800/30 dark:from-rose-950/30 dark:to-pink-900/20">
               <div className="space-y-3">
                 <h3 className="font-semibold text-lg text-rose-700 dark:text-rose-300">
                   Creative Cursor

@@ -48,7 +48,7 @@ export default function Showcase() {
     <div className="mx-auto w-full max-w-7xl px-4 py-12">
       {/* Header Section */}
       <div className="mb-12 text-center">
-        <h2 className="mb-4 animate-gradient-x bg-gradient-to-r from-primary to-secondary bg-clip-text font-extrabold text-3xl text-transparent md:text-5xl">
+        <h2 className="mb-4 animate-gradient-x bg-linear-to-r from-primary to-secondary bg-clip-text font-extrabold text-3xl text-transparent md:text-5xl">
           Projects in Production
         </h2>
         <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
@@ -87,7 +87,7 @@ export default function Showcase() {
                       {project.category}
                     </Badge>
                   </div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+                  <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
                 </div>
               </CardHeader>
               <CardContent className="p-6">
@@ -127,7 +127,7 @@ export default function Showcase() {
       )}
 
       {/* Call to Action Section */}
-      <div className="mt-8 rounded-2xl border border-primary/10 bg-gradient-to-r from-primary/20 to-secondary/10 p-8 text-center shadow-lg md:p-14">
+      <div className="mt-8 rounded-2xl border border-primary/10 bg-linear-to-r from-primary/20 to-secondary/10 p-8 text-center shadow-lg md:p-14">
         <div className="mx-auto max-w-3xl">
           <h3 className="mb-4 flex items-center justify-center gap-2 font-extrabold text-2xl md:text-3xl">
             <span className="inline-block animate-wiggle">✨</span>

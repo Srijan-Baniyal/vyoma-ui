@@ -287,7 +287,7 @@ function ImageDialog({
             </motion.button>
 
             {/* Image Container with Loading State */}
-            <div className="relative aspect-[4/3] w-full bg-gray-100 dark:bg-gray-800">
+            <div className="relative aspect-4/3 w-full bg-gray-100 dark:bg-gray-800">
               {!imageLoaded && (
                 <div className="absolute inset-0 flex items-center justify-center">
                   <motion.div
@@ -319,7 +319,7 @@ function ImageDialog({
               </motion.div>
 
               {/* Image Overlay Gradient */}
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+              <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/20 via-transparent to-transparent" />
             </div>
 
             {/* Enhanced Image Info */}
@@ -455,6 +455,7 @@ export default function BentoGrid() {
     <div className="space-y-4 sm:space-y-6 lg:space-y-8">
       <div className="grid auto-rows-[150px] grid-cols-2 gap-2 sm:auto-rows-[180px] sm:grid-cols-4 sm:gap-3 md:grid-cols-4 lg:auto-rows-[200px] lg:grid-cols-6 lg:gap-4">
         <AnimatePresence mode="wait">
+          {/* biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Complex grid item rendering with animations */}
           {gridItems.map((item, index) => {
             const image = staticImages[index];
             if (!image) {
@@ -507,7 +508,7 @@ export default function BentoGrid() {
                 {/* Enhanced Overlay with gradient animation */}
                 <motion.div
                   animate={{ opacity: isHovered ? 1 : 0 }}
-                  className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"
+                  className="absolute inset-0 bg-linear-to-t from-black/80 via-black/30 to-transparent"
                   initial={{ opacity: 0 }}
                   transition={{ duration: 0.3, ease: "easeInOut" }}
                 />
@@ -552,7 +553,7 @@ export default function BentoGrid() {
                       initial={{ opacity: 0, y: 10 }}
                       transition={{ delay: isHovered ? 0.3 : 0, duration: 0.3 }}
                     >
-                      <div className="flex flex-shrink-0 items-center space-x-1 sm:space-x-2">
+                      <div className="flex shrink-0 items-center space-x-1 sm:space-x-2">
                         <motion.span
                           className="flex items-center rounded-full border border-white/20 bg-white/20 px-1.5 py-0.5 text-xs backdrop-blur-md sm:px-2 sm:py-1"
                           transition={{ duration: 0.2 }}
@@ -591,7 +592,7 @@ export default function BentoGrid() {
                           scale: isHovered ? [1, 1.02, 1] : 1,
                           opacity: isHovered ? [0.9, 1, 0.95] : 0.9,
                         }}
-                        className="flex-shrink-0 whitespace-nowrap rounded-full border border-white/40 bg-white/30 px-1.5 py-0.5 font-medium text-xs backdrop-blur-md sm:px-2 sm:py-1"
+                        className="shrink-0 whitespace-nowrap rounded-full border border-white/40 bg-white/30 px-1.5 py-0.5 font-medium text-xs backdrop-blur-md sm:px-2 sm:py-1"
                         transition={{
                           duration: 1.5,
                           repeat: isHovered ? Number.POSITIVE_INFINITY : 0,
@@ -636,7 +637,7 @@ export default function BentoGrid() {
                   animate={{
                     x: isHovered ? "100%" : "-100%",
                   }}
-                  className="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                  className="pointer-events-none absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent"
                   initial={{ x: "-100%" }}
                   transition={{
                     duration: 1.2,
@@ -702,6 +703,7 @@ export function BentoGridTheme() {
     <>
       <div className="grid auto-rows-[150px] grid-cols-5 gap-2 sm:auto-rows-[180px] sm:grid-cols-6 sm:gap-3 md:grid-cols-7 lg:auto-rows-[200px] lg:grid-cols-8 lg:gap-4">
         <AnimatePresence mode="wait">
+          {/* biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Complex grid item rendering with animations */}
           {gridItems2.map((item, index) => {
             const image = staticImages[index];
             if (!image) {
@@ -752,7 +754,7 @@ export function BentoGridTheme() {
                 {/* Enhanced Overlay with gradient animation */}
                 <motion.div
                   animate={{ opacity: isHovered ? 1 : 0 }}
-                  className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"
+                  className="absolute inset-0 bg-linear-to-t from-black/80 via-black/30 to-transparent"
                   initial={{ opacity: 0 }}
                   transition={{ duration: 0.3, ease: "easeInOut" }}
                 />
@@ -797,7 +799,7 @@ export function BentoGridTheme() {
                       initial={{ opacity: 0, y: 10 }}
                       transition={{ delay: isHovered ? 0.3 : 0, duration: 0.3 }}
                     >
-                      <div className="flex flex-shrink-0 items-center space-x-1 sm:space-x-2">
+                      <div className="flex shrink-0 items-center space-x-1 sm:space-x-2">
                         <motion.span
                           className="flex items-center rounded-full border border-white/20 bg-white/20 px-1.5 py-0.5 text-xs backdrop-blur-md sm:px-2 sm:py-1"
                           transition={{ duration: 0.2 }}
@@ -836,7 +838,7 @@ export function BentoGridTheme() {
                           scale: isHovered ? [1, 1.02, 1] : 1,
                           opacity: isHovered ? [0.9, 1, 0.95] : 0.9,
                         }}
-                        className="flex-shrink-0 whitespace-nowrap rounded-full border border-white/40 bg-white/30 px-1.5 py-0.5 font-medium text-xs backdrop-blur-md sm:px-2 sm:py-1"
+                        className="shrink-0 whitespace-nowrap rounded-full border border-white/40 bg-white/30 px-1.5 py-0.5 font-medium text-xs backdrop-blur-md sm:px-2 sm:py-1"
                         transition={{
                           duration: 1.5,
                           repeat: isHovered ? Number.POSITIVE_INFINITY : 0,
@@ -881,7 +883,7 @@ export function BentoGridTheme() {
                   animate={{
                     x: isHovered ? "100%" : "-100%",
                   }}
-                  className="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                  className="pointer-events-none absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent"
                   initial={{ x: "-100%" }}
                   transition={{
                     duration: 1.2,

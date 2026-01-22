@@ -49,7 +49,7 @@ function ComponentPreview({
     return (
       <div className="flex h-full w-full items-center justify-center text-muted-foreground">
         <div className="text-center">
-          <div className="mx-auto mb-3 h-12 w-12 rounded-full bg-gradient-to-r from-primary/20 to-secondary/20" />
+          <div className="mx-auto mb-3 h-12 w-12 rounded-full bg-linear-to-r from-primary/20 to-secondary/20" />
           <p className="font-medium text-sm">{name}</p>
           <p className="text-sm opacity-60">Preview</p>
         </div>
@@ -74,10 +74,10 @@ export default function ThemeSwitcher() {
     );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+    <div className="min-h-screen bg-linear-to-br from-background via-background to-muted/20">
       <div className="container mx-auto max-w-7xl px-3 py-6 sm:px-4 sm:py-8 lg:px-6">
         <div className="mb-8 text-center">
-          <h1 className="mb-3 bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text font-bold text-2xl text-transparent tracking-tight sm:text-4xl md:text-5xl lg:text-6xl">
+          <h1 className="mb-3 bg-linear-to-r from-primary via-secondary to-primary bg-clip-text font-bold text-2xl text-transparent tracking-tight sm:text-4xl md:text-5xl lg:text-6xl">
             VUI Component Gallery
           </h1>
           <p className="mx-auto mb-4 max-w-2xl px-4 text-muted-foreground text-sm sm:text-base">
@@ -110,10 +110,10 @@ export default function ThemeSwitcher() {
                   </Badge>
                 </div>
 
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                <div className="absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-secondary/5 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
                 <div className="relative flex-1 overflow-hidden">
-                  <div className="absolute inset-0 m-3 rounded-lg bg-gradient-to-br from-muted/10 to-muted/5 transition-all duration-300 group-hover:from-muted/20 group-hover:to-muted/10">
+                  <div className="absolute inset-0 m-3 rounded-lg bg-linear-to-br from-muted/10 to-muted/5 transition-all duration-300 group-hover:from-muted/20 group-hover:to-muted/10">
                     <ComponentPreview
                       component={ComponentToRender}
                       isActive={activeCard === index}
@@ -122,7 +122,7 @@ export default function ThemeSwitcher() {
                   </div>
                 </div>
 
-                <div className="absolute right-0 bottom-0 left-0 bg-gradient-to-t from-card via-card/90 to-transparent p-4">
+                <div className="absolute right-0 bottom-0 left-0 bg-linear-to-t from-card via-card/90 to-transparent p-4">
                   <div className="flex items-center justify-between">
                     <div className="min-w-0 flex-1">
                       <h3 className="truncate font-medium text-foreground text-sm sm:text-base">

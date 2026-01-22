@@ -45,7 +45,7 @@ export default function StoryBehind() {
         "Frustrated with repetitive design decisions and inconsistent UI patterns, the idea of VUI was born during late-night coding sessions.",
       color: "from-yellow-500/20 to-orange-500/10",
       borderColor: "border-yellow-500/20",
-      iconBg: "bg-gradient-to-br from-yellow-500/20 to-orange-500/10",
+      iconBg: "bg-linear-to-br from-yellow-500/20 to-orange-500/10",
       iconColor: "text-yellow-600",
     },
     {
@@ -56,7 +56,7 @@ export default function StoryBehind() {
         "Building upon shadcn/ui's excellent foundation while addressing its design gaps and enhancing developer experience.",
       color: "from-blue-500/20 to-cyan-500/10",
       borderColor: "border-blue-500/20",
-      iconBg: "bg-gradient-to-br from-blue-500/20 to-cyan-500/10",
+      iconBg: "bg-linear-to-br from-blue-500/20 to-cyan-500/10",
       iconColor: "text-blue-600",
     },
     {
@@ -67,7 +67,7 @@ export default function StoryBehind() {
         "Countless hours refining every pixel, testing every interaction, and crafting a design system that developers would love to use.",
       color: "from-pink-500/20 to-red-500/10",
       borderColor: "border-pink-500/20",
-      iconBg: "bg-gradient-to-br from-pink-500/20 to-red-500/10",
+      iconBg: "bg-linear-to-br from-pink-500/20 to-red-500/10",
       iconColor: "text-pink-600",
     },
     {
@@ -78,7 +78,7 @@ export default function StoryBehind() {
         "VUI goes live, empowering developers worldwide to build beautiful interfaces with confidence and speed.",
       color: "from-purple-500/20 to-indigo-500/10",
       borderColor: "border-purple-500/20",
-      iconBg: "bg-gradient-to-br from-purple-500/20 to-indigo-500/10",
+      iconBg: "bg-linear-to-br from-purple-500/20 to-indigo-500/10",
       iconColor: "text-purple-600",
     },
   ];
@@ -115,7 +115,7 @@ export default function StoryBehind() {
   ];
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-background via-background to-primary/5">
+    <div className="relative min-h-screen overflow-hidden bg-linear-to-br from-background via-background to-primary/5">
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/4 -left-40 h-96 w-96 animate-pulse rounded-full bg-primary/10 blur-3xl" />
@@ -130,7 +130,7 @@ export default function StoryBehind() {
       </div>
 
       {/* Grid pattern */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:48px_48px]" />
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-size:[48px_48px]"/>
 
       <div className="relative z-10 mx-auto max-w-6xl space-y-16 px-6 py-16">
         {/* Hero Section */}
@@ -151,11 +151,11 @@ export default function StoryBehind() {
             </Pill>
 
             <h1 className="mb-6 font-black text-5xl tracking-tight md:text-7xl">
-              <span className="bg-gradient-to-r from-foreground via-foreground to-foreground/70 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-foreground via-foreground to-foreground/70 bg-clip-text text-transparent">
                 The Story
               </span>
               <br />
-              <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-primary to-primary/60 bg-clip-text text-transparent">
                 Behind VUI
               </span>
             </h1>
@@ -184,12 +184,12 @@ export default function StoryBehind() {
 
         {/* The Problem */}
         <Card className="relative overflow-hidden border-0 bg-card/80 shadow-2xl backdrop-blur-xl">
-          <div className="absolute inset-0 bg-gradient-to-r from-red-500/5 via-transparent to-orange-500/5" />
-          <div className="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-red-500/50 to-orange-500/50" />
+          <div className="absolute inset-0 bg-linear-to-r from-red-500/5 via-transparent to-orange-500/5" />
+          <div className="absolute top-0 left-0 h-1 w-full bg-linear-to-r from-red-500/50 to-orange-500/50" />
 
           <div className="relative p-8 md:p-12">
             <div className="mb-8 flex items-start gap-6">
-              <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-red-500/20 bg-gradient-to-br from-red-500/20 to-orange-500/10 shadow-lg">
+              <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-red-500/20 bg-linear-to-br from-red-500/20 to-orange-500/10 shadow-lg">
                 <Target className="h-8 w-8 text-red-600" />
               </div>
               <div className="flex-1">
@@ -215,9 +215,9 @@ export default function StoryBehind() {
 
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2" />
 
-              <Card className="border-yellow-200/50 bg-gradient-to-r from-yellow-50/50 to-amber-50/50 p-6 dark:border-yellow-800/50 dark:from-yellow-950/20 dark:to-amber-950/20">
+              <Card className="border-yellow-200/50 bg-linear-to-r from-yellow-50/50 to-amber-50/50 p-6 dark:border-yellow-800/50 dark:from-yellow-950/20 dark:to-amber-950/20">
                 <div className="flex items-start gap-4">
-                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-yellow-100 dark:bg-yellow-900/30">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-yellow-100 dark:bg-yellow-900/30">
                     <Lightbulb className="h-5 w-5 text-yellow-600" />
                   </div>
                   <div>
@@ -241,7 +241,7 @@ export default function StoryBehind() {
         <div className="space-y-8">
           <div className="text-center">
             <h2 className="mb-4 font-bold text-4xl">
-              <span className="bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
                 The Development Journey
               </span>
             </h2>
@@ -252,7 +252,7 @@ export default function StoryBehind() {
 
           <div className="relative">
             {/* Timeline line */}
-            <div className="absolute top-16 bottom-16 left-8 hidden w-px bg-gradient-to-b from-primary/50 via-primary/30 to-primary/50 md:block" />
+            <div className="absolute top-16 bottom-16 left-8 hidden w-px bg-linear-to-b from-primary/50 via-primary/30 to-primary/50 md:block" />
 
             <div className="space-y-8">
               {journeySteps.map((step) => (
@@ -261,21 +261,21 @@ export default function StoryBehind() {
                   key={step.title}
                 >
                   <div
-                    className={`absolute inset-0 bg-gradient-to-r ${step.color}`}
+                    className={`absolute inset-0 bg-linear-to-r ${step.color}`}
                   />
                   <div
-                    className={`absolute top-0 left-0 h-1 w-full bg-gradient-to-r ${step.color
+                    className={`absolute top-0 left-0 h-1 w-full bg-linear-to-r ${step.color
                       .replace("/20", "")
                       .replace("/10", "")}`}
                   />
 
                   <div className="relative p-8 md:pl-24">
                     {/* Timeline dot */}
-                    <div className="absolute top-8 left-6 hidden h-4 w-4 rounded-full border-4 border-background bg-gradient-to-r from-primary to-primary/60 shadow-lg md:block" />
+                    <div className="absolute top-8 left-6 hidden h-4 w-4 rounded-full border-4 border-background bg-linear-to-r from-primary to-primary/60 shadow-lg md:block" />
 
                     <div className="flex items-start gap-6">
                       <div
-                        className={`h-12 w-12 rounded-xl ${step.iconBg} ${step.borderColor} flex flex-shrink-0 items-center justify-center border shadow-lg md:hidden`}
+                        className={`h-12 w-12 rounded-xl ${step.iconBg} ${step.borderColor} flex shrink-0 items-center justify-center border shadow-lg md:hidden`}
                       >
                         <span className={step.iconColor}>{step.icon}</span>
                       </div>
@@ -302,12 +302,12 @@ export default function StoryBehind() {
 
         {/* Design Philosophy */}
         <Card className="relative overflow-hidden border-0 bg-card/80 shadow-2xl backdrop-blur-xl">
-          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 via-transparent to-blue-500/5" />
-          <div className="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-purple-500/50 to-blue-500/50" />
+          <div className="absolute inset-0 bg-linear-to-r from-purple-500/5 via-transparent to-blue-500/5" />
+          <div className="absolute top-0 left-0 h-1 w-full bg-linear-to-r from-purple-500/50 to-blue-500/50" />
 
           <div className="relative p-8 md:p-12">
             <div className="mb-8 flex items-start gap-6">
-              <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-purple-500/20 bg-gradient-to-br from-purple-500/20 to-blue-500/10 shadow-lg">
+              <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-purple-500/20 bg-linear-to-br from-purple-500/20 to-blue-500/10 shadow-lg">
                 <Palette className="h-8 w-8 text-purple-600" />
               </div>
               <div className="flex-1">
@@ -381,7 +381,7 @@ export default function StoryBehind() {
         <div className="space-y-8">
           <div className="text-center">
             <h2 className="mb-4 font-bold text-4xl">
-              <span className="bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
                 The Impact So Far
               </span>
             </h2>
@@ -397,10 +397,10 @@ export default function StoryBehind() {
                 key={impact.label}
               >
                 <div
-                  className={`absolute inset-0 bg-gradient-to-r ${impact.color}`}
+                  className={`absolute inset-0 bg-linear-to-r ${impact.color}`}
                 />
                 <div
-                  className={`absolute top-0 left-0 h-1 w-full bg-gradient-to-r ${impact.color
+                  className={`absolute top-0 left-0 h-1 w-full bg-linear-to-r ${impact.color
                     .replace("/20", "")
                     .replace("/10", "")}`}
                 />
@@ -408,12 +408,12 @@ export default function StoryBehind() {
                 <div className="relative p-8">
                   <div className="mb-4 flex items-center justify-center">
                     <div
-                      className={`h-16 w-16 rounded-2xl bg-gradient-to-br ${impact.color} flex items-center justify-center border border-primary/20 shadow-lg`}
+                      className={`h-16 w-16 rounded-2xl bg-linear-to-br ${impact.color} flex items-center justify-center border border-primary/20 shadow-lg`}
                     >
                       {impact.icon}
                     </div>
                   </div>
-                  <div className="mb-2 bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text font-black text-3xl text-transparent">
+                  <div className="mb-2 bg-linear-to-r from-foreground to-foreground/70 bg-clip-text font-black text-3xl text-transparent">
                     {impact.metric}
                   </div>
                   <h3 className="mb-2 font-semibold text-lg">{impact.label}</h3>
@@ -428,12 +428,12 @@ export default function StoryBehind() {
 
         {/* The Future */}
         <Card className="relative overflow-hidden border-0 bg-card/80 shadow-2xl backdrop-blur-xl">
-          <div className="absolute inset-0 bg-gradient-to-r from-green-500/5 via-transparent to-emerald-500/5" />
-          <div className="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-green-500/50 to-emerald-500/50" />
+          <div className="absolute inset-0 bg-linear-to-r from-green-500/5 via-transparent to-emerald-500/5" />
+          <div className="absolute top-0 left-0 h-1 w-full bg-linear-to-r from-green-500/50 to-emerald-500/50" />
 
           <div className="relative p-8 text-center md:p-12">
             <div className="mb-6 flex items-center justify-center gap-3">
-              <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-green-500/20 bg-gradient-to-br from-green-500/20 to-emerald-500/10 shadow-lg">
+              <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-green-500/20 bg-linear-to-br from-green-500/20 to-emerald-500/10 shadow-lg">
                 <TrendingUp className="h-8 w-8 text-green-600" />
               </div>
               <h2 className="font-bold text-3xl">What&apos;s Next?</h2>
@@ -508,12 +508,12 @@ export default function StoryBehind() {
 
         {/* Personal Note */}
         <Card className="relative overflow-hidden border-0 bg-card/80 shadow-2xl backdrop-blur-xl">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-secondary/5" />
-          <div className="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-primary/50 to-secondary/50" />
+          <div className="absolute inset-0 bg-linear-to-r from-primary/5 via-transparent to-secondary/5" />
+          <div className="absolute top-0 left-0 h-1 w-full bg-linear-to-r from-primary/50 to-secondary/50" />
 
           <div className="relative p-8 md:p-12">
             <div className="mb-8 flex items-start gap-6">
-              <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/20 to-primary/10 shadow-lg">
+              <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-primary/20 bg-linear-to-br from-primary/20 to-primary/10 shadow-lg">
                 <Heart className="h-8 w-8 text-primary" />
               </div>
               <div className="flex-1">
@@ -541,7 +541,7 @@ export default function StoryBehind() {
               </blockquote>
 
               <div className="flex items-center gap-4 pt-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-primary/20 to-primary/10">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-linear-to-br from-primary/20 to-primary/10">
                   <Image
                     alt="Srijan Baniyal"
                     className="rounded-full"

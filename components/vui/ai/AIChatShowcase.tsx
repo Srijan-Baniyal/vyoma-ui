@@ -43,7 +43,7 @@ export default function MyChat() {
     <div className="space-y-8">
       {/* Header */}
       <div className="space-y-4 text-center">
-        <h1 className="bg-gradient-to-r from-primary to-secondary bg-clip-text font-bold text-4xl text-transparent">
+        <h1 className="bg-linear-to-r from-primary to-secondary bg-clip-text font-bold text-4xl text-transparent">
           AI Chat Component
         </h1>
         <p className="mx-auto max-w-2xl text-muted-foreground">
@@ -182,8 +182,8 @@ export default function MyChat() {
             title: "Responsive",
             desc: "Works perfectly on mobile and desktop",
           },
-        ].map((feature, i) => (
-          <div className={cn("rounded-xl p-4", glassPanel)} key={i}>
+        ].map((feature) => (
+          <div className={cn("rounded-xl p-4", glassPanel)} key={feature.title}>
             <h4 className="mb-2 font-semibold">{feature.title}</h4>
             <p className="text-muted-foreground text-sm">{feature.desc}</p>
           </div>

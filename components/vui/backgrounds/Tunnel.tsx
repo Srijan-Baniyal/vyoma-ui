@@ -1,7 +1,15 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import * as THREE from "three";
+import {
+  Mesh,
+  OrthographicCamera,
+  PlaneGeometry,
+  Scene,
+  ShaderMaterial,
+  Vector2,
+  WebGLRenderer,
+} from "three";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 export default function TunnelShowcase() {
@@ -13,18 +21,16 @@ export default function TunnelShowcase() {
       return;
     }
     const canvas = canvasRef.current;
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+    const renderer = new WebGLRenderer({ canvas, antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-
-    // Set up shader material
-    const shaderMaterial = new THREE.ShaderMaterial({
+    const scene = new Scene();
+    const camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
+    const shaderMaterial = new ShaderMaterial({
       uniforms: {
         iTime: { value: 0 },
         iResolution: {
-          value: new THREE.Vector3(window.innerWidth, window.innerHeight, 1),
+          value: new Vector2(window.innerWidth, window.innerHeight),
         },
       },
       vertexShader: `
@@ -49,13 +55,13 @@ export default function TunnelShowcase() {
 
                 //Square of x
                 float sq(float x) {
-                    return x*x;   
+                    return x*x;
                 }
 
                 //Angular repeat
                 vec2 AngRep(vec2 uv, float angle) {
                     vec2 polar = vec2(atan(uv.y, uv.x), length(uv));
-                    polar.x = mod(polar.x + angle / 2.0, angle) - angle / 2.0; 
+                    polar.x = mod(polar.x + angle / 2.0, angle) - angle / 2.0;
                     return polar.y * vec2(cos(polar.x), sin(polar.x));
                 }
 
@@ -73,41 +79,41 @@ export default function TunnelShowcase() {
                 //Tunnel/Camera path
                 vec2 TunnelPath(float x) {
                     vec2 offs = vec2(0, 0);
-                    
+
                     offs.x = 0.2 * sin(TAU * x * 0.5) + 0.4 * sin(TAU * x * 0.2 + 0.3);
                     offs.y = 0.3 * cos(TAU * x * 0.3) + 0.2 * cos(TAU * x * 0.1);
-                    
+
                     offs *= smoothstep(1.0, 4.0, x);
-                    
+
                     return offs;
                 }
 
                 void main() {
                     vec2 res = iResolution.xy / iResolution.y;
                     vec2 uv = gl_FragCoord.xy / iResolution.y;
-                    
+
                     uv -= res/2.0;
-                    
+
                     vec3 color = vec3(0);
-                    
+
                     float repAngle = TAU / float(RING_POINTS);
                     float pointSize = POINT_SIZE/2.0/iResolution.y;
-                    
+
                     float camZ = iTime * SPEED;
                     vec2 camOffs = TunnelPath(camZ);
-                    
+
                     for(int i = 1; i <= TUNNEL_LAYERS; i++) {
                         float pz = 1.0 - (float(i) / float(TUNNEL_LAYERS));
-                        
+
                         //Scroll the points towards the screen
                         pz -= mod(camZ, 4.0 / float(TUNNEL_LAYERS));
-                        
+
                         //Layer x/y offset
                         vec2 offs = TunnelPath(camZ + pz) - camOffs;
-                        
+
                         //Radius of the current ring
                         float ringRad = 0.15 * (1.0 / sq(pz * 0.8 + 0.4));
-                        
+
                         //Only draw points when uv is close to the ring.
                         if(abs(length(uv + offs) - ringRad) < pointSize * 1.5) {
                             //Angular repeated uv coords
@@ -118,22 +124,22 @@ export default function TunnelShowcase() {
 
                             //Stripes
                             vec3 ptColor = (mod(float(i / 2), 2.0) == 0.0) ? POINT_COLOR_A : POINT_COLOR_B;
-                            
+
                             //Distance fade
                             float shade = (1.0-pz);
 
                             color = MixShape(pdist, ptColor * shade, color);
                         }
                     }
-                    
+
                     gl_FragColor = vec4(color, 1.0);
                 }
             `,
     });
 
     // Create a plane to render the shader on
-    const geometry = new THREE.PlaneGeometry(2, 2);
-    const mesh = new THREE.Mesh(geometry, shaderMaterial);
+    const geometry = new PlaneGeometry(2, 2);
+    const mesh = new Mesh(geometry, shaderMaterial);
     scene.add(mesh);
 
     // Animation variables
@@ -145,9 +151,9 @@ export default function TunnelShowcase() {
     function animate(time: number) {
       animationId = requestAnimationFrame(animate);
 
-      time *= 0.001; // Convert to seconds
-      const deltaTime = time - lastTime;
-      lastTime = time;
+      const timeInSeconds = time * 0.001; // Convert to seconds
+      const deltaTime = timeInSeconds - lastTime;
+      lastTime = timeInSeconds;
 
       shaderMaterial.uniforms.iTime.value += deltaTime * speedMultiplier;
 
@@ -157,10 +163,9 @@ export default function TunnelShowcase() {
     // Handle window resize
     function handleResize() {
       renderer.setSize(window.innerWidth, window.innerHeight);
-      shaderMaterial.uniforms.iResolution.value.set(
+      shaderMaterial.uniforms.iResolution.value = new Vector2(
         window.innerWidth,
-        window.innerHeight,
-        1
+        window.innerHeight
       );
     }
     window.addEventListener("resize", handleResize);
@@ -192,12 +197,12 @@ export default function TunnelShowcase() {
         >
           <div className="inline-block">
             <h1
-              className={`${isMobile ? "text-3xl" : "text-6xl md:text-8xl"} animate-pulse bg-gradient-to-r from-white via-gray-200 to-white bg-clip-text font-black text-transparent tracking-tighter`}
+              className={`${isMobile ? "text-3xl" : "text-6xl md:text-8xl"} animate-pulse bg-linear-to-r from-white via-gray-200 to-white bg-clip-text font-black text-transparent tracking-tighter`}
             >
               TUNNEL
             </h1>
             <div
-              className={`h-1 w-full bg-gradient-to-r from-transparent via-white to-transparent ${isMobile ? "mt-2" : "mt-4"} animate-pulse`}
+              className={`h-1 w-full bg-linear-to-r from-transparent via-white to-transparent ${isMobile ? "mt-2" : "mt-4"} animate-pulse`}
             />
           </div>
 
@@ -225,7 +230,7 @@ export function TunnelTheme() {
       return;
     }
     const canvas = canvasRef.current;
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+    const renderer = new WebGLRenderer({ canvas, antialias: true });
 
     // Get container dimensions instead of window dimensions
     const container = canvas.parentElement;
@@ -238,15 +243,15 @@ export function TunnelTheme() {
 
     renderer.setSize(width, height);
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+    const scene = new Scene();
+    const camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
     // Set up shader material with the same shader as TunnelShowcase
-    const shaderMaterial = new THREE.ShaderMaterial({
+    const shaderMaterial = new ShaderMaterial({
       uniforms: {
         iTime: { value: 0 },
         iResolution: {
-          value: new THREE.Vector3(width, height, 1),
+          value: new Vector2(width, height),
         },
       },
       vertexShader: `
@@ -271,13 +276,13 @@ export function TunnelTheme() {
 
                 //Square of x
                 float sq(float x) {
-                    return x*x;   
+                    return x*x;
                 }
 
                 //Angular repeat
                 vec2 AngRep(vec2 uv, float angle) {
                     vec2 polar = vec2(atan(uv.y, uv.x), length(uv));
-                    polar.x = mod(polar.x + angle / 2.0, angle) - angle / 2.0; 
+                    polar.x = mod(polar.x + angle / 2.0, angle) - angle / 2.0;
                     return polar.y * vec2(cos(polar.x), sin(polar.x));
                 }
 
@@ -295,41 +300,41 @@ export function TunnelTheme() {
                 //Tunnel/Camera path
                 vec2 TunnelPath(float x) {
                     vec2 offs = vec2(0, 0);
-                    
+
                     offs.x = 0.2 * sin(TAU * x * 0.5) + 0.4 * sin(TAU * x * 0.2 + 0.3);
                     offs.y = 0.3 * cos(TAU * x * 0.3) + 0.2 * cos(TAU * x * 0.1);
-                    
+
                     offs *= smoothstep(1.0, 4.0, x);
-                    
+
                     return offs;
                 }
 
                 void main() {
                     vec2 res = iResolution.xy / iResolution.y;
                     vec2 uv = gl_FragCoord.xy / iResolution.y;
-                    
+
                     uv -= res/2.0;
-                    
+
                     vec3 color = vec3(0);
-                    
+
                     float repAngle = TAU / float(RING_POINTS);
                     float pointSize = POINT_SIZE/2.0/iResolution.y;
-                    
+
                     float camZ = iTime * SPEED;
                     vec2 camOffs = TunnelPath(camZ);
-                    
+
                     for(int i = 1; i <= TUNNEL_LAYERS; i++) {
                         float pz = 1.0 - (float(i) / float(TUNNEL_LAYERS));
-                        
+
                         //Scroll the points towards the screen
                         pz -= mod(camZ, 4.0 / float(TUNNEL_LAYERS));
-                        
+
                         //Layer x/y offset
                         vec2 offs = TunnelPath(camZ + pz) - camOffs;
-                        
+
                         //Radius of the current ring
                         float ringRad = 0.15 * (1.0 / sq(pz * 0.8 + 0.4));
-                        
+
                         //Only draw points when uv is close to the ring.
                         if(abs(length(uv + offs) - ringRad) < pointSize * 1.5) {
                             //Angular repeated uv coords
@@ -340,22 +345,22 @@ export function TunnelTheme() {
 
                             //Stripes
                             vec3 ptColor = (mod(float(i / 2), 2.0) == 0.0) ? POINT_COLOR_A : POINT_COLOR_B;
-                            
+
                             //Distance fade
                             float shade = (1.0-pz);
 
                             color = MixShape(pdist, ptColor * shade, color);
                         }
                     }
-                    
+
                     gl_FragColor = vec4(color, 1.0);
                 }
             `,
     });
 
     // Create a plane to render the shader on
-    const geometry = new THREE.PlaneGeometry(2, 2);
-    const mesh = new THREE.Mesh(geometry, shaderMaterial);
+    const geometry = new PlaneGeometry(2, 2);
+    const mesh = new Mesh(geometry, shaderMaterial);
     scene.add(mesh);
 
     // Animation variables
@@ -366,9 +371,9 @@ export function TunnelTheme() {
     // Animation loop
     function animate(time: number) {
       animationId = requestAnimationFrame(animate);
-      time *= 0.001;
-      const deltaTime = time - lastTime;
-      lastTime = time;
+      const timeInSeconds = time * 0.001;
+      const deltaTime = timeInSeconds - lastTime;
+      lastTime = timeInSeconds;
       shaderMaterial.uniforms.iTime.value += deltaTime * speedMultiplier;
       renderer.render(scene, camera);
     }
@@ -381,7 +386,7 @@ export function TunnelTheme() {
       const newWidth = container.clientWidth;
       const newHeight = container.clientHeight;
       renderer.setSize(newWidth, newHeight);
-      shaderMaterial.uniforms.iResolution.value.set(newWidth, newHeight, 1);
+      shaderMaterial.uniforms.iResolution.value = new Vector2(width, height);
     }
 
     const resizeObserver = new ResizeObserver(handleResize);

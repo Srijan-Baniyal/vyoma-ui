@@ -67,7 +67,7 @@ export function ButtonShowcase({ className }: ButtonShowcaseProps) {
         <div className="grid grid-cols-1 justify-items-center gap-8 md:grid-cols-2 lg:grid-cols-3">
           <div className="flex flex-col items-center space-y-4">
             <MagneticButton distance={0.6}>
-              <Button className="rounded-lg bg-gradient-to-r from-indigo-500 to-purple-600 px-8 py-3 font-medium text-white transition-all duration-300 hover:from-indigo-600 hover:to-purple-700">
+              <Button className="rounded-lg bg-linear-to-r from-indigo-500 to-purple-600 px-8 py-3 font-medium text-white transition-all duration-300 hover:from-indigo-600 hover:to-purple-700">
                 Magnetic Button
               </Button>
             </MagneticButton>
@@ -117,7 +117,7 @@ export function ButtonShowcase({ className }: ButtonShowcaseProps) {
           </div>
 
           <div className="flex flex-col items-center space-y-4">
-            <ShinyButton className="border-pink-500/20 bg-gradient-to-r from-pink-500 to-violet-500 px-8 py-3">
+            <ShinyButton className="border-pink-500/20 bg-linear-to-r from-pink-500 to-violet-500 px-8 py-3">
               Shiny Button
             </ShinyButton>
             <span className="text-center text-muted-foreground text-xs">
@@ -195,7 +195,7 @@ export function ButtonTheme() {
   return (
     <div className="flex flex-col items-center space-y-4">
       <MagneticButton distance={0.6}>
-        <Button className="rounded-lg bg-gradient-to-r from-indigo-500 to-purple-600 px-8 py-3 font-medium text-white transition-all duration-300 hover:from-indigo-600 hover:to-purple-700">
+        <Button className="rounded-lg bg-linear-to-r from-indigo-500 to-purple-600 px-8 py-3 font-medium text-white transition-all duration-300 hover:from-indigo-600 hover:to-purple-700">
           Magnetic Button
         </Button>
       </MagneticButton>

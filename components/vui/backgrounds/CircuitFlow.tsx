@@ -69,14 +69,24 @@ export default function CircuitFlow() {
       node.animate(keyframes, timing);
     };
 
-    lines.forEach((line, i) => animateLine(line, i * 200));
-    circles.forEach((circle, i) => animateNode(circle, i * 200));
+    for (let i = 0; i < lines.length; i++) {
+      animateLine(lines[i], i * 200);
+    }
+    for (let i = 0; i < circles.length; i++) {
+      animateNode(circles[i], i * 200);
+    }
 
     return () => {
-      lines.forEach((line) => line.getAnimations().forEach((a) => a.cancel()));
-      circles.forEach((circle) =>
-        circle.getAnimations().forEach((a) => a.cancel())
-      );
+      for (const line of lines) {
+        for (const a of line.getAnimations()) {
+          a.cancel();
+        }
+      }
+      for (const circle of circles) {
+        for (const a of circle.getAnimations()) {
+          a.cancel();
+        }
+      }
     };
   }, []);
 
@@ -89,6 +99,7 @@ export default function CircuitFlow() {
         ref={svgRef}
         viewBox="0 0 1200 800"
       >
+        <title>Circuit animation background</title>
         <defs>
           <filter id="glow">
             <feGaussianBlur result="coloredBlur" stdDeviation="2" />
@@ -147,10 +158,10 @@ export default function CircuitFlow() {
           { x1: 300, y1: 150, x2: 300, y2: 400 },
           { x1: 600, y1: 120, x2: 600, y2: 300 },
           { x1: 850, y1: 200, x2: 850, y2: 500 },
-        ].map((l, i) => (
+        ].map((l) => (
           <line
             className="circuit-line"
-            key={i}
+            key={`line-${l.x1}-${l.y1}-${l.x2}-${l.y2}`}
             {...l}
             filter="url(#glow)"
             opacity="0.6"
@@ -183,14 +194,14 @@ export default function CircuitFlow() {
           [600, 720],
           [800, 680],
           [1000, 750],
-        ].map(([cx, cy], i) => (
+        ].map(([cx, cy]) => (
           <circle
             className="circuit-node"
             cx={cx}
             cy={cy}
             fill={colors.primary}
             filter="url(#glow)"
-            key={i}
+            key={`node-${cx}-${cy}`}
             r="4"
           />
         ))}
@@ -223,6 +234,7 @@ export default function CircuitFlow() {
                 ? `0 0 30px ${colors.primary}, 0 0 60px ${colors.primary}80`
                 : `0 0 15px ${colors.primary}40`,
             }}
+            type="button"
           >
             <span>Select a Theme</span>
             <svg
@@ -233,6 +245,7 @@ export default function CircuitFlow() {
               stroke="currentColor"
               viewBox="0 0 24 24"
             >
+              <title>Toggle dropdown</title>
               <path
                 d="M19 14l-7 7m0 0l-7-7m7 7V3"
                 strokeLinecap="round"
@@ -267,6 +280,7 @@ export default function CircuitFlow() {
                       color: color === c ? "#000" : colorMap[c].primary,
                       borderBottom: `1px solid ${colorMap[c].primary}40`,
                     }}
+                    type="button"
                   >
                     <span className="capitalize">{c}</span>
                     {color === c && <span>✓</span>}

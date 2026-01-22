@@ -120,22 +120,24 @@ function MobileTooltipDemo({
       size={size}
       variant={variant}
     >
-      <div
+      <button
         className="cursor-pointer"
         onBlur={() => setIsOpen(false)}
         onClick={() => setIsOpen(!isOpen)}
+        type="button"
       >
         {children}
-      </div>
+      </button>
     </ToolTip>
   );
 }
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Showcase component with extensive demo UI
 export default function ToolTipShowcase() {
   const isMobile = useIsMobile();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background p-4 md:p-8">
+    <div className="min-h-screen bg-linear-to-br from-background via-muted/20 to-background p-4 md:p-8">
       <div className="mx-auto max-w-7xl space-y-8 md:space-y-16">
         {/* Hero Section */}
         <div className="space-y-4 text-center md:space-y-6">
@@ -156,6 +158,7 @@ export default function ToolTipShowcase() {
               >
                 <button
                   className={`${isMobile ? "px-4 py-2 text-sm" : "px-6 py-3"} rounded-lg bg-primary font-medium text-primary-foreground transition-colors hover:bg-primary/90`}
+                  type="button"
                 >
                   Default Style
                 </button>
@@ -166,7 +169,8 @@ export default function ToolTipShowcase() {
                 variant="gradient"
               >
                 <button
-                  className={`${isMobile ? "px-4 py-2 text-sm" : "px-6 py-3"} rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 font-medium text-white transition-all hover:from-purple-600 hover:to-pink-600`}
+                  className={`${isMobile ? "px-4 py-2 text-sm" : "px-6 py-3"} rounded-lg bg-linear-to-r from-purple-500 to-pink-500 font-medium text-white transition-all hover:from-purple-600 hover:to-pink-600`}
+                  type="button"
                 >
                   Gradient Magic
                 </button>
@@ -178,6 +182,7 @@ export default function ToolTipShowcase() {
               >
                 <button
                   className={`${isMobile ? "px-4 py-2 text-sm" : "px-6 py-3"} rounded-lg border border-border bg-background/20 font-medium backdrop-blur-sm transition-all hover:bg-background/30`}
+                  type="button"
                 >
                   Glass Effect
                 </button>
@@ -206,7 +211,7 @@ export default function ToolTipShowcase() {
                   Theme-adaptive styling
                 </p>
               </div>
-              <div className="rounded-2xl border border-blue-200/30 bg-gradient-to-br from-blue-50/30 to-blue-100/20 p-4 md:p-6 dark:border-blue-800/20 dark:from-blue-950/20 dark:to-blue-900/10">
+              <div className="rounded-2xl border border-blue-200/30 bg-linear-to-br from-blue-50/30 to-blue-100/20 p-4 md:p-6 dark:border-blue-800/20 dark:from-blue-950/20 dark:to-blue-900/10">
                 <div className="text-center">
                   <MobileTooltipDemo
                     content="Clean default styling that adapts to your theme"
@@ -214,6 +219,7 @@ export default function ToolTipShowcase() {
                   >
                     <button
                       className={`${isMobile ? "px-4 py-2 text-sm" : "px-6 py-3"} rounded-lg bg-primary font-medium text-primary-foreground transition-colors hover:bg-primary/90`}
+                      type="button"
                     >
                       {isMobile ? "Tap for Default" : "Hover for Default"}
                     </button>
@@ -232,7 +238,7 @@ export default function ToolTipShowcase() {
                   Always dark theme
                 </p>
               </div>
-              <div className="rounded-2xl border border-gray-200/30 bg-gradient-to-br from-gray-50/30 to-gray-100/20 p-4 md:p-6 dark:border-gray-800/20 dark:from-gray-950/20 dark:to-gray-900/10">
+              <div className="rounded-2xl border border-gray-200/30 bg-linear-to-br from-gray-50/30 to-gray-100/20 p-4 md:p-6 dark:border-gray-800/20 dark:from-gray-950/20 dark:to-gray-900/10">
                 <div className="text-center">
                   <MobileTooltipDemo
                     content="Dark themed tooltip for modern interfaces"
@@ -241,6 +247,7 @@ export default function ToolTipShowcase() {
                   >
                     <button
                       className={`${isMobile ? "px-4 py-2 text-sm" : "px-6 py-3"} rounded-lg bg-gray-800 font-medium text-white transition-colors hover:bg-gray-900`}
+                      type="button"
                     >
                       {isMobile ? "Tap for Dark" : "Hover for Dark"}
                     </button>
@@ -259,7 +266,7 @@ export default function ToolTipShowcase() {
                   Vibrant gradient styling
                 </p>
               </div>
-              <div className="rounded-2xl border border-purple-200/30 bg-gradient-to-br from-purple-50/30 to-pink-100/20 p-4 md:p-6 dark:border-purple-800/20 dark:from-purple-950/20 dark:to-pink-900/10">
+              <div className="rounded-2xl border border-purple-200/30 bg-linear-to-br from-purple-50/30 to-pink-100/20 p-4 md:p-6 dark:border-purple-800/20 dark:from-purple-950/20 dark:to-pink-900/10">
                 <div className="text-center">
                   <MobileTooltipDemo
                     content="Beautiful gradient styling with vibrant colors"
@@ -267,7 +274,8 @@ export default function ToolTipShowcase() {
                     variant="gradient"
                   >
                     <button
-                      className={`${isMobile ? "px-4 py-2 text-sm" : "px-6 py-3"} rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 font-medium text-white transition-all hover:from-purple-600 hover:to-pink-600`}
+                      className={`${isMobile ? "px-4 py-2 text-sm" : "px-6 py-3"} rounded-lg bg-linear-to-r from-purple-500 to-pink-500 font-medium text-white transition-all hover:from-purple-600 hover:to-pink-600`}
+                      type="button"
                     >
                       {isMobile ? "Tap for Gradient" : "Hover for Gradient"}
                     </button>
@@ -286,7 +294,7 @@ export default function ToolTipShowcase() {
                   Glassmorphism effect
                 </p>
               </div>
-              <div className="rounded-2xl border border-cyan-200/30 bg-gradient-to-br from-cyan-50/30 to-blue-100/20 p-4 md:p-6 dark:border-cyan-800/20 dark:from-cyan-950/20 dark:to-blue-900/10">
+              <div className="rounded-2xl border border-cyan-200/30 bg-linear-to-br from-cyan-50/30 to-blue-100/20 p-4 md:p-6 dark:border-cyan-800/20 dark:from-cyan-950/20 dark:to-blue-900/10">
                 <div className="text-center">
                   <MobileTooltipDemo
                     content="Glassmorphism effect with backdrop blur"
@@ -295,6 +303,7 @@ export default function ToolTipShowcase() {
                   >
                     <button
                       className={`${isMobile ? "px-4 py-2 text-sm" : "px-6 py-3"} rounded-lg border border-border bg-background/20 font-medium backdrop-blur-sm transition-all hover:bg-background/30`}
+                      type="button"
                     >
                       {isMobile ? "Tap for Glass" : "Hover for Glass"}
                     </button>
@@ -306,14 +315,14 @@ export default function ToolTipShowcase() {
             {/* Colorful Variant */}
             <div className="space-y-4">
               <div className="space-y-2 text-center">
-                <h3 className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text font-semibold text-lg text-rainbow text-transparent md:text-xl">
+                <h3 className="bg-linear-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text font-semibold text-lg text-rainbow text-transparent md:text-xl">
                   Colorful
                 </h3>
                 <p className="text-muted-foreground text-xs md:text-sm">
                   Multi-color gradient
                 </p>
               </div>
-              <div className="rounded-2xl border border-blue-200/30 border-gradient-to-r bg-gradient-to-br from-blue-50/30 via-purple-50/20 to-pink-100/20 p-4 md:p-6 dark:border-blue-800/20 dark:from-blue-950/20 dark:via-purple-950/10 dark:to-pink-900/10">
+              <div className="rounded-2xl border border-blue-200/30 border-linear-to-r bg-linear-to-br from-blue-50/30 via-purple-50/20 to-pink-100/20 p-4 md:p-6 dark:border-blue-800/20 dark:from-blue-950/20 dark:via-purple-950/10 dark:to-pink-900/10">
                 <div className="text-center">
                   <MobileTooltipDemo
                     content="Vibrant multi-color gradient design"
@@ -321,7 +330,8 @@ export default function ToolTipShowcase() {
                     variant="colorful"
                   >
                     <button
-                      className={`${isMobile ? "px-4 py-2 text-sm" : "px-6 py-3"} rounded-lg bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 font-medium text-white transition-transform hover:scale-105`}
+                      className={`${isMobile ? "px-4 py-2 text-sm" : "px-6 py-3"} rounded-lg bg-linear-to-r from-blue-500 via-purple-500 to-pink-500 font-medium text-white transition-transform hover:scale-105`}
+                      type="button"
                     >
                       {isMobile ? "Tap for Colorful" : "Hover for Colorful"}
                     </button>
@@ -341,7 +351,7 @@ export default function ToolTipShowcase() {
             </p>
           </div>
 
-          <div className="rounded-3xl border border-border/50 bg-gradient-to-br from-muted/50 to-muted/30 p-8 md:p-16">
+          <div className="rounded-3xl border border-border/50 bg-linear-to-br from-muted/50 to-muted/30 p-8 md:p-16">
             <div className="flex flex-col items-center space-y-8 md:space-y-12">
               <MobileTooltipDemo
                 content="Tooltip positioned at the top"
@@ -351,6 +361,7 @@ export default function ToolTipShowcase() {
               >
                 <button
                   className={`${isMobile ? "px-4 py-2 text-sm" : "px-6 py-3"} rounded-lg bg-blue-500 text-white shadow-lg transition-colors hover:bg-blue-600`}
+                  type="button"
                 >
                   Top Position
                 </button>
@@ -365,6 +376,7 @@ export default function ToolTipShowcase() {
                 >
                   <button
                     className={`${isMobile ? "px-4 py-2 text-sm" : "px-6 py-3"} rounded-lg bg-green-500 text-white shadow-lg transition-colors hover:bg-green-600`}
+                    type="button"
                   >
                     Left Position
                   </button>
@@ -378,6 +390,7 @@ export default function ToolTipShowcase() {
                 >
                   <button
                     className={`${isMobile ? "px-4 py-2 text-sm" : "px-6 py-3"} rounded-lg bg-purple-500 text-white shadow-lg transition-colors hover:bg-purple-600`}
+                    type="button"
                   >
                     Right Position
                   </button>
@@ -392,6 +405,7 @@ export default function ToolTipShowcase() {
               >
                 <button
                   className={`${isMobile ? "px-4 py-2 text-sm" : "px-6 py-3"} rounded-lg bg-pink-500 text-white shadow-lg transition-colors hover:bg-pink-600`}
+                  type="button"
                 >
                   Bottom Position
                 </button>
@@ -414,7 +428,7 @@ export default function ToolTipShowcase() {
               <h3 className="font-semibold text-base text-orange-700 md:text-lg dark:text-orange-300">
                 Small
               </h3>
-              <div className="rounded-2xl border border-orange-200/30 bg-gradient-to-br from-orange-50/30 to-amber-100/20 p-4 md:p-6 dark:border-orange-800/20 dark:from-orange-950/20 dark:to-amber-900/10">
+              <div className="rounded-2xl border border-orange-200/30 bg-linear-to-br from-orange-50/30 to-amber-100/20 p-4 md:p-6 dark:border-orange-800/20 dark:from-orange-950/20 dark:to-amber-900/10">
                 <MobileTooltipDemo
                   content="Small tooltip"
                   size="sm"
@@ -422,6 +436,7 @@ export default function ToolTipShowcase() {
                 >
                   <button
                     className={`${isMobile ? "px-3 py-2 text-xs" : "px-4 py-2"} rounded-lg bg-muted text-muted-foreground transition-colors hover:bg-muted/80`}
+                    type="button"
                   >
                     Small Size
                   </button>
@@ -433,7 +448,7 @@ export default function ToolTipShowcase() {
               <h3 className="font-semibold text-base text-blue-700 md:text-lg dark:text-blue-300">
                 Medium
               </h3>
-              <div className="rounded-2xl border border-blue-200/30 bg-gradient-to-br from-blue-50/30 to-blue-100/20 p-4 md:p-6 dark:border-blue-800/20 dark:from-blue-950/20 dark:to-blue-900/10">
+              <div className="rounded-2xl border border-blue-200/30 bg-linear-to-br from-blue-50/30 to-blue-100/20 p-4 md:p-6 dark:border-blue-800/20 dark:from-blue-950/20 dark:to-blue-900/10">
                 <MobileTooltipDemo
                   content="Medium sized tooltip with more content"
                   size="md"
@@ -441,6 +456,7 @@ export default function ToolTipShowcase() {
                 >
                   <button
                     className={`${isMobile ? "px-4 py-2 text-sm" : "px-6 py-3"} rounded-lg bg-primary text-primary-foreground transition-colors hover:bg-primary/90`}
+                    type="button"
                   >
                     Medium Size
                   </button>
@@ -452,7 +468,7 @@ export default function ToolTipShowcase() {
               <h3 className="font-semibold text-base text-purple-700 md:text-lg dark:text-purple-300">
                 Large
               </h3>
-              <div className="rounded-2xl border border-purple-200/30 bg-gradient-to-br from-purple-50/30 to-violet-100/20 p-4 md:p-6 dark:border-purple-800/20 dark:from-purple-950/20 dark:to-violet-900/10">
+              <div className="rounded-2xl border border-purple-200/30 bg-linear-to-br from-purple-50/30 to-violet-100/20 p-4 md:p-6 dark:border-purple-800/20 dark:from-purple-950/20 dark:to-violet-900/10">
                 <MobileTooltipDemo
                   content="Large tooltip with even more detailed content and comprehensive information"
                   size={isMobile ? "md" : "lg"}
@@ -460,6 +476,7 @@ export default function ToolTipShowcase() {
                 >
                   <button
                     className={`${isMobile ? "px-4 py-2 text-sm" : "px-8 py-4 text-lg"} rounded-lg bg-secondary text-secondary-foreground transition-colors hover:bg-secondary/80`}
+                    type="button"
                   >
                     Large Size
                   </button>
@@ -485,7 +502,7 @@ export default function ToolTipShowcase() {
               <h3 className="font-semibold text-base text-blue-700 md:text-lg dark:text-blue-300">
                 User Profile
               </h3>
-              <div className="rounded-2xl border border-blue-200/30 bg-gradient-to-br from-blue-50/30 to-blue-100/20 p-4 md:p-6 dark:border-blue-800/20 dark:from-blue-950/20 dark:to-blue-900/10">
+              <div className="rounded-2xl border border-blue-200/30 bg-linear-to-br from-blue-50/30 to-blue-100/20 p-4 md:p-6 dark:border-blue-800/20 dark:from-blue-950/20 dark:to-blue-900/10">
                 <MobileTooltipDemo
                   content={
                     <div className="space-y-2">
@@ -501,7 +518,7 @@ export default function ToolTipShowcase() {
                   variant="dark"
                 >
                   <div
-                    className={`${isMobile ? "h-12 w-12" : "h-16 w-16"} mx-auto flex cursor-pointer items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-purple-500 font-semibold text-white transition-transform hover:scale-110 ${isMobile ? "text-sm" : ""}`}
+                    className={`${isMobile ? "h-12 w-12" : "h-16 w-16"} mx-auto flex cursor-pointer items-center justify-center rounded-full bg-linear-to-r from-blue-500 to-purple-500 font-semibold text-white transition-transform hover:scale-110 ${isMobile ? "text-sm" : ""}`}
                   >
                     JD
                   </div>
@@ -513,7 +530,7 @@ export default function ToolTipShowcase() {
               <h3 className="font-semibold text-base text-green-700 md:text-lg dark:text-green-300">
                 Status Indicator
               </h3>
-              <div className="rounded-2xl border border-green-200/30 bg-gradient-to-br from-green-50/30 to-emerald-100/20 p-4 md:p-6 dark:border-green-800/20 dark:from-green-950/20 dark:to-emerald-900/10">
+              <div className="rounded-2xl border border-green-200/30 bg-linear-to-br from-green-50/30 to-emerald-100/20 p-4 md:p-6 dark:border-green-800/20 dark:from-green-950/20 dark:to-emerald-900/10">
                 <div className="flex justify-center">
                   <MobileTooltipDemo
                     content={
@@ -541,7 +558,7 @@ export default function ToolTipShowcase() {
               <h3 className="font-semibold text-base text-purple-700 md:text-lg dark:text-purple-300">
                 Progress Tracker
               </h3>
-              <div className="rounded-2xl border border-purple-200/30 bg-gradient-to-br from-purple-50/30 to-violet-100/20 p-4 md:p-6 dark:border-purple-800/20 dark:from-purple-950/20 dark:to-violet-900/10">
+              <div className="rounded-2xl border border-purple-200/30 bg-linear-to-br from-purple-50/30 to-violet-100/20 p-4 md:p-6 dark:border-purple-800/20 dark:from-purple-950/20 dark:to-violet-900/10">
                 <MobileTooltipDemo
                   content={
                     <div className="space-y-2">
@@ -549,7 +566,7 @@ export default function ToolTipShowcase() {
                       <div
                         className={`${isMobile ? "h-1.5 w-24" : "h-2 w-32"} overflow-hidden rounded-full bg-gray-200`}
                       >
-                        <div className="h-full w-3/4 rounded-full bg-gradient-to-r from-green-400 to-blue-500" />
+                        <div className="h-full w-3/4 rounded-full bg-linear-to-r from-green-400 to-blue-500" />
                       </div>
                       <div className="text-xs opacity-75">
                         3 of 4 tasks completed
@@ -598,6 +615,7 @@ export function ToolTipTheme() {
           >
             <button
               className={`${isMobile ? "px-4 py-2 text-sm" : "px-6 py-3"} rounded-lg bg-primary font-medium text-primary-foreground transition-colors hover:bg-primary/90`}
+              type="button"
             >
               Default Style
             </button>
@@ -608,7 +626,8 @@ export function ToolTipTheme() {
             variant="gradient"
           >
             <button
-              className={`${isMobile ? "px-4 py-2 text-sm" : "px-6 py-3"} rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 font-medium text-white transition-all hover:from-purple-600 hover:to-pink-600`}
+              className={`${isMobile ? "px-4 py-2 text-sm" : "px-6 py-3"} rounded-lg bg-linear-to-r from-purple-500 to-pink-500 font-medium text-white transition-all hover:from-purple-600 hover:to-pink-600`}
+              type="button"
             >
               Gradient Magic
             </button>
@@ -620,6 +639,7 @@ export function ToolTipTheme() {
           >
             <button
               className={`${isMobile ? "px-4 py-2 text-sm" : "px-6 py-3"} rounded-lg border border-border bg-background/20 font-medium backdrop-blur-sm transition-all hover:bg-background/30`}
+              type="button"
             >
               Glass Effect
             </button>

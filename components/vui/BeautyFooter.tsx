@@ -4,13 +4,13 @@ import Link from "next/link";
 
 export default function BeautifulFooterShowcase() {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-rose-400 via-fuchsia-500 to-slate-900">
+    <div className="relative min-h-screen overflow-hidden bg-linear-to-br from-rose-400 via-fuchsia-500 to-slate-900">
       {/* Amplified artistic overlay gradients for maximum depth */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-purple-900/20 to-transparent" />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-pink-500/20 to-transparent" />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-bl from-amber-300/30 via-transparent to-purple-900/40" />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-rose-500/25 via-transparent to-cyan-400/15" />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-fuchsia-600/15 to-transparent" />
+      <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/40 via-purple-900/20 to-transparent" />
+      <div className="pointer-events-none absolute inset-0 bg-linear-to-r from-transparent via-pink-500/20 to-transparent" />
+      <div className="pointer-events-none absolute inset-0 bg-linear-to-bl from-amber-300/30 via-transparent to-purple-900/40" />
+      <div className="pointer-events-none absolute inset-0 bg-linear-to-tr from-rose-500/25 via-transparent to-cyan-400/15" />
+      <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-transparent via-fuchsia-600/15 to-transparent" />
       <div className="pointer-events-none absolute inset-0 bg-radial from-amber-400/20 via-transparent to-transparent" />
 
       {/* Glaring light effects */}
@@ -20,8 +20,8 @@ export default function BeautifulFooterShowcase() {
       <div className="pointer-events-none absolute right-1/3 bottom-1/4 h-64 w-64 rounded-full bg-radial from-cyan-400/15 via-cyan-400/5 to-transparent blur-3xl" />
 
       {/* Additional glamour layers */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-tl from-rose-600/20 via-transparent to-indigo-500/20" />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-transparent via-amber-500/10 to-purple-800/25" />
+      <div className="pointer-events-none absolute inset-0 bg-linear-to-tl from-rose-600/20 via-transparent to-indigo-500/20" />
+      <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-transparent via-amber-500/10 to-purple-800/25" />
 
       {/* Artistic noise texture overlay */}
       <div

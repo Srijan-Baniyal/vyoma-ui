@@ -8,6 +8,9 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
+const WHITESPACE_REGEX = /(\s+)/;
+const WHITESPACE_TEST_REGEX = /\s/;
+
 interface WaveVariant extends TargetAndTransition {
   y?: number[];
   rotate?: number[];
@@ -277,13 +280,13 @@ const WavingText = ({
   // Properly handles emojis and Unicode characters
   const splitTextIntoUnits = (text: string): string[] => {
     if (animateAsWords) {
-      return preserveSpaces ? text.split(/(\s+)/) : text.split(" ");
+      return preserveSpaces ? text.split(WHITESPACE_REGEX) : text.split(" ");
     }
     // Use Array.from() or spread operator to properly handle Unicode characters including emojis
     const characters = Array.from(text);
     return preserveSpaces
       ? characters
-      : characters.filter((char) => !/\s/.test(char));
+      : characters.filter((char) => !WHITESPACE_TEST_REGEX.test(char));
   };
 
   const textUnits = splitTextIntoUnits(currentText);
@@ -310,7 +313,10 @@ const WavingText = ({
 
         if (isSpace && preserveSpaces) {
           return (
-            <span className="whitespace-pre" key={`space-${index}`}>
+            <span
+              className="whitespace-pre"
+              key={`space-${unit}-${index}-${currentText}`}
+            >
               {unit}
             </span>
           );
@@ -349,7 +355,7 @@ export default WavingText;
 // Showcase Component
 export function WavingTextShowcase() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background p-8">
+    <div className="min-h-screen bg-linear-to-br from-background via-muted/20 to-background p-8">
       <div className="mx-auto max-w-7xl space-y-16">
         {/* Variant Showcase */}
         <section className="space-y-8">
@@ -453,7 +459,7 @@ export function WavingTextShowcase() {
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {/* Continuous */}
-            <div className="rounded-2xl border border-green-200/50 bg-gradient-to-br from-green-50/50 to-emerald-100/30 p-6 dark:border-green-800/30 dark:from-green-950/30 dark:to-emerald-900/20">
+            <div className="rounded-2xl border border-green-200/50 bg-linear-to-br from-green-50/50 to-emerald-100/30 p-6 dark:border-green-800/30 dark:from-green-950/30 dark:to-emerald-900/20">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <h3 className="font-semibold text-green-700 text-lg dark:text-green-300">
@@ -480,7 +486,7 @@ export function WavingTextShowcase() {
             </div>
 
             {/* Hover */}
-            <div className="rounded-2xl border border-blue-200/50 bg-gradient-to-br from-blue-50/50 to-blue-100/30 p-6 dark:border-blue-800/30 dark:from-blue-950/30 dark:to-blue-900/20">
+            <div className="rounded-2xl border border-blue-200/50 bg-linear-to-br from-blue-50/50 to-blue-100/30 p-6 dark:border-blue-800/30 dark:from-blue-950/30 dark:to-blue-900/20">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <h3 className="font-semibold text-blue-700 text-lg dark:text-blue-300">
@@ -507,7 +513,7 @@ export function WavingTextShowcase() {
             </div>
 
             {/* View */}
-            <div className="rounded-2xl border border-purple-200/50 bg-gradient-to-br from-purple-50/50 to-violet-100/30 p-6 dark:border-purple-800/30 dark:from-purple-950/30 dark:to-violet-900/20">
+            <div className="rounded-2xl border border-purple-200/50 bg-linear-to-br from-purple-50/50 to-violet-100/30 p-6 dark:border-purple-800/30 dark:from-purple-950/30 dark:to-violet-900/20">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <h3 className="font-semibold text-lg text-purple-700 dark:text-purple-300">
@@ -560,10 +566,10 @@ export function WavingTextShowcase() {
                   />
                 </div>
                 <div className="rounded bg-muted p-3 font-mono text-muted-foreground text-sm">
-                  {`<WavingText 
-  text="Each word waves separately!" 
-  animateAsWords={true} 
-  stagger={0.3} 
+                  {`<WavingText
+  text="Each word waves separately!"
+  animateAsWords={true}
+  stagger={0.3}
 />`}
                 </div>
               </div>
@@ -586,9 +592,9 @@ export function WavingTextShowcase() {
                   />
                 </div>
                 <div className="rounded bg-muted p-3 font-mono text-muted-foreground text-sm">
-                  {`<WavingText 
-  text={["First Message", "Second Message", "Third Message"]} 
-  variant="dance" 
+                  {`<WavingText
+  text={["First Message", "Second Message", "Third Message"]}
+  variant="dance"
 />`}
                 </div>
               </div>
@@ -637,15 +643,15 @@ export function WavingTextShowcase() {
                   </div>
                 </div>
                 <div className="rounded bg-muted p-3 font-mono text-muted-foreground text-sm">
-                  {`<WavingText 
-  text="Left to Right" 
-  direction="forward" 
-  stagger={0.15} 
+                  {`<WavingText
+  text="Left to Right"
+  direction="forward"
+  stagger={0.15}
 />
-<WavingText 
-  text="Right to Left" 
-  direction="reverse" 
-  stagger={0.15} 
+<WavingText
+  text="Right to Left"
+  direction="reverse"
+  stagger={0.15}
 />`}
                 </div>
               </div>
@@ -659,7 +665,7 @@ export function WavingTextShowcase() {
                 </h3>
                 <div className="flex h-60 items-center justify-center">
                   <WavingText
-                    className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text font-bold text-2xl text-transparent"
+                    className="bg-linear-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text font-bold text-2xl text-transparent"
                     intensity="strong"
                     speed={2}
                     stagger={0.1}
@@ -669,11 +675,11 @@ export function WavingTextShowcase() {
                   />
                 </div>
                 <div className="rounded bg-muted p-3 font-mono text-muted-foreground text-sm">
-                  {`<WavingText 
-  text="🌊 Styled Waves 🌊" 
-  className="text-transparent bg-gradient-to-r 
-    from-blue-500 via-purple-500 to-pink-500 
-    bg-clip-text font-bold text-2xl" 
+                  {`<WavingText
+  text="🌊 Styled Waves 🌊"
+  className="text-transparent bg-linear-to-r
+    from-blue-500 via-purple-500 to-pink-500
+    bg-clip-text font-bold text-2xl"
 />`}
                 </div>
               </div>

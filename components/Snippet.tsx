@@ -39,20 +39,20 @@ export function Snippet({
       } ${
         width
           ? "max-w-none"
-          : "max-w-[300px] sm:max-w-[400px] md:max-w-[500px] lg:max-w-[740px]"
+          : "max-w-75 sm:max-w-100 md:max-w-125 lg:max-w-185"
       }`}
     >
       <div className="flex min-w-0 flex-1 items-center gap-3">
         {showIndicator && (
           <div
-            className={`h-2 w-2 rounded-full ${indicatorColors[variant]} flex-shrink-0 opacity-60 transition-opacity group-hover:opacity-100`}
+            className={`h-2 w-2 rounded-full ${indicatorColors[variant]} shrink-0 opacity-60 transition-opacity group-hover:opacity-100`}
           />
         )}
         <div className="flex min-w-0 flex-1 items-center">
           <code className="flex-1 select-all overflow-hidden whitespace-nowrap font-mono text-foreground/90 text-sm">
             {text}
           </code>
-          <div className="ml-3 flex-shrink-0">
+          <div className="ml-3 shrink-0">
             <Copy content={text} />
           </div>
         </div>

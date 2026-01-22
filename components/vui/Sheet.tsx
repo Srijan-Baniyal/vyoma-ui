@@ -12,7 +12,16 @@ import {
   X,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import * as React from "react";
+import {
+  type ComponentProps,
+  type ComponentPropsWithoutRef,
+  type ComponentRef,
+  type FC,
+  forwardRef,
+  type ReactNode,
+  useCallback,
+  useState,
+} from "react";
 import {
   Sheet as BaseSheet,
   SheetClose as BaseSheetClose,
@@ -40,7 +49,7 @@ export interface VUISheetProps {
   /** Custom className for the sheet content */
   className?: string;
   /** Children content */
-  children?: React.ReactNode;
+  children?: ReactNode;
   /** Custom animation duration */
   animationDuration?: number;
 }
@@ -50,24 +59,56 @@ export interface VUISheetProps {
  */
 const animationVariants = {
   content: {
-    initial: (side: string) => ({
-      opacity: 0,
-      y: side === "top" ? -30 : side === "bottom" ? 30 : 0,
-      x: side === "left" ? -30 : side === "right" ? 30 : 0,
-      scale: 0.96,
-    }),
+    initial: (side: string) => {
+      let yValue = 0;
+      if (side === "top") {
+        yValue = -30;
+      } else if (side === "bottom") {
+        yValue = 30;
+      }
+
+      let xValue = 0;
+      if (side === "left") {
+        xValue = -30;
+      } else if (side === "right") {
+        xValue = 30;
+      }
+
+      return {
+        opacity: 0,
+        y: yValue,
+        x: xValue,
+        scale: 0.96,
+      };
+    },
     animate: {
       opacity: 1,
       y: 0,
       x: 0,
       scale: 1,
     },
-    exit: (side: string) => ({
-      opacity: 0,
-      y: side === "top" ? -15 : side === "bottom" ? 15 : 0,
-      x: side === "left" ? -15 : side === "right" ? 15 : 0,
-      scale: 0.98,
-    }),
+    exit: (side: string) => {
+      let yValue = 0;
+      if (side === "top") {
+        yValue = -15;
+      } else if (side === "bottom") {
+        yValue = 15;
+      }
+
+      let xValue = 0;
+      if (side === "left") {
+        xValue = -15;
+      } else if (side === "right") {
+        xValue = 15;
+      }
+
+      return {
+        opacity: 0,
+        y: yValue,
+        x: xValue,
+        scale: 0.98,
+      };
+    },
   },
   gradientBorder: {
     initial: (side: string) => ({
@@ -100,9 +141,9 @@ const animationVariants = {
 /**
  * Enhanced Sheet Content with VUI styling
  */
-const VUISheetContent = React.forwardRef<
-  React.ComponentRef<typeof BaseSheetContent>,
-  React.ComponentPropsWithoutRef<typeof BaseSheetContent> & VUISheetProps
+const VUISheetContent = forwardRef<
+  ComponentRef<typeof BaseSheetContent>,
+  ComponentPropsWithoutRef<typeof BaseSheetContent> & VUISheetProps
 >(
   (
     {
@@ -117,7 +158,7 @@ const VUISheetContent = React.forwardRef<
     },
     ref
   ) => {
-    const getSizeClasses = React.useCallback(() => {
+    const getSizeClasses = useCallback(() => {
       const sizeMap = {
         sm: side === "right" || side === "left" ? "w-64 sm:max-w-sm" : "h-64",
         md: side === "right" || side === "left" ? "w-80 sm:max-w-md" : "h-80",
@@ -134,7 +175,7 @@ const VUISheetContent = React.forwardRef<
       return sizeMap[size] || sizeMap.md;
     }, [side, size]);
 
-    const getBorderClasses = React.useCallback(() => {
+    const getBorderClasses = useCallback(() => {
       const borderMap = {
         right: "border-l-0",
         left: "border-r-0",
@@ -144,7 +185,7 @@ const VUISheetContent = React.forwardRef<
       return borderMap[side];
     }, [side]);
 
-    const getGradientPosition = React.useCallback(() => {
+    const getGradientPosition = useCallback(() => {
       const positionMap = {
         right: "left-0 top-0 w-1 h-full",
         left: "right-0 top-0 w-1 h-full",
@@ -183,7 +224,7 @@ const VUISheetContent = React.forwardRef<
             <motion.div
               animate="animate"
               className={cn(
-                "absolute z-10 bg-gradient-to-r from-primary/60 via-primary to-primary/60",
+                "absolute z-10 bg-linear-to-r from-primary/60 via-primary to-primary/60",
                 getGradientPosition()
               )}
               custom={side}
@@ -256,13 +297,13 @@ VUISheetContent.displayName = "VUISheetContent";
 /**
  * Enhanced Sheet Header with animation
  */
-const VUISheetHeader = React.forwardRef<
-  React.ComponentRef<typeof BaseSheetHeader>,
-  React.ComponentPropsWithoutRef<typeof BaseSheetHeader>
+const VUISheetHeader = forwardRef<
+  ComponentRef<typeof BaseSheetHeader>,
+  ComponentPropsWithoutRef<typeof BaseSheetHeader>
 >(({ className, children, ...props }, ref) => (
   <BaseSheetHeader
     className={cn(
-      "border-border/30 border-b bg-gradient-to-r from-background/50 to-background/30 px-6 py-4 backdrop-blur-sm",
+      "border-border/30 border-b bg-linear-to-r from-background/50 to-background/30 px-6 py-4 backdrop-blur-sm",
       className
     )}
     ref={ref}
@@ -287,13 +328,13 @@ VUISheetHeader.displayName = "VUISheetHeader";
 /**
  * Enhanced Sheet Footer with animation
  */
-const VUISheetFooter = React.forwardRef<
-  React.ComponentRef<typeof BaseSheetFooter>,
-  React.ComponentPropsWithoutRef<typeof BaseSheetFooter>
+const VUISheetFooter = forwardRef<
+  ComponentRef<typeof BaseSheetFooter>,
+  ComponentPropsWithoutRef<typeof BaseSheetFooter>
 >(({ className, children, ...props }, ref) => (
   <BaseSheetFooter
     className={cn(
-      "border-border/30 border-t bg-gradient-to-r from-background/30 to-background/50 px-6 py-4 backdrop-blur-sm",
+      "border-border/30 border-t bg-linear-to-r from-background/30 to-background/50 px-6 py-4 backdrop-blur-sm",
       className
     )}
     ref={ref}
@@ -316,11 +357,11 @@ const VUISheetFooter = React.forwardRef<
 VUISheetFooter.displayName = "VUISheetFooter";
 
 /**
- * Enhanced Sheet Title with gradient effect
+ * Enhanced Sheet Title with linear effect
  */
-const VUISheetTitle = React.forwardRef<
-  React.ComponentRef<typeof BaseSheetTitle>,
-  React.ComponentPropsWithoutRef<typeof BaseSheetTitle> & {
+const VUISheetTitle = forwardRef<
+  ComponentRef<typeof BaseSheetTitle>,
+  ComponentPropsWithoutRef<typeof BaseSheetTitle> & {
     gradient?: boolean;
   }
 >(({ className, gradient = true, children, ...props }, ref) => (
@@ -337,7 +378,7 @@ const VUISheetTitle = React.forwardRef<
       className={cn(
         "font-semibold text-xl tracking-tight",
         gradient &&
-          "bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent",
+          "bg-linear-to-r from-foreground to-foreground/70 bg-clip-text text-transparent",
         className
       )}
       ref={ref}
@@ -353,9 +394,9 @@ VUISheetTitle.displayName = "VUISheetTitle";
 /**
  * Enhanced Sheet Description with subtle animation
  */
-const VUISheetDescription = React.forwardRef<
-  React.ComponentRef<typeof BaseSheetDescription>,
-  React.ComponentPropsWithoutRef<typeof BaseSheetDescription>
+const VUISheetDescription = forwardRef<
+  ComponentRef<typeof BaseSheetDescription>,
+  ComponentPropsWithoutRef<typeof BaseSheetDescription>
 >(({ className, children, ...props }, ref) => (
   <motion.div
     animate={{ opacity: 1, y: 0 }}
@@ -381,9 +422,9 @@ VUISheetDescription.displayName = "VUISheetDescription";
 /**
  * Enhanced Sheet Trigger with hover effects
  */
-const VUISheetTrigger = React.forwardRef<
-  React.ComponentRef<typeof BaseSheetTrigger>,
-  React.ComponentPropsWithoutRef<typeof BaseSheetTrigger>
+const VUISheetTrigger = forwardRef<
+  ComponentRef<typeof BaseSheetTrigger>,
+  ComponentPropsWithoutRef<typeof BaseSheetTrigger>
 >(({ className, children, ...props }, ref) => (
   <BaseSheetTrigger className={cn("group", className)} ref={ref} {...props}>
     <motion.div
@@ -406,9 +447,9 @@ VUISheetTrigger.displayName = "VUISheetTrigger";
 /**
  * VUI Sheet Body for content area
  */
-const VUISheetBody = React.forwardRef<
+const VUISheetBody = forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
+  ComponentPropsWithoutRef<"div">
 >(({ className, children, ...props }, ref) => (
   <div
     className={cn("flex-1 overflow-auto px-6 py-4", className)}
@@ -440,7 +481,6 @@ const VUISheet = BaseSheet;
 export {
   VUISheet as Sheet,
   VUISheetTrigger as SheetTrigger,
-  BaseSheetClose as SheetClose,
   VUISheetContent as SheetContent,
   VUISheetHeader as SheetHeader,
   VUISheetFooter as SheetFooter,
@@ -449,12 +489,15 @@ export {
   VUISheetBody as SheetBody,
 };
 
+// Direct alias to avoid barrel file export
+export const SheetClose = BaseSheetClose;
+
 /**
  * Enhanced Button Component for consistent styling
  */
-const EnhancedButton = React.forwardRef<
+const EnhancedButton = forwardRef<
   HTMLButtonElement,
-  React.ComponentProps<typeof motion.button> & {
+  ComponentProps<typeof motion.button> & {
     variant?: "primary" | "secondary" | "outline" | "ghost";
     size?: "sm" | "md" | "lg";
   }
@@ -513,8 +556,8 @@ EnhancedButton.displayName = "EnhancedButton";
 /**
  * Feature Card Component
  */
-const FeatureCard: React.FC<{
-  icon: React.ReactNode;
+const FeatureCard: FC<{
+  icon: ReactNode;
   title: string;
   description: string;
   color: string;
@@ -538,8 +581,8 @@ const FeatureCard: React.FC<{
 /**
  * Navigation Item Component
  */
-const NavItem: React.FC<{
-  icon: React.ReactNode;
+const NavItem: FC<{
+  icon: ReactNode;
   label: string;
   href?: string;
   onClick?: () => void;
@@ -563,13 +606,13 @@ const NavItem: React.FC<{
 /**
  * Toggle Switch Component
  */
-const ToggleSwitch: React.FC<{
+const ToggleSwitch: FC<{
   label: string;
   checked?: boolean;
   onChange?: (checked: boolean) => void;
 }> = ({ label, checked = false, onChange }) => (
   <div className="flex items-center justify-between">
-    <label className="font-medium text-sm">{label}</label>
+    <span className="font-medium text-sm">{label}</span>
     <motion.button
       className={cn(
         "h-6 w-11 rounded-full p-1 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50",
@@ -592,11 +635,11 @@ const ToggleSwitch: React.FC<{
  * Demonstrates various sheet configurations and features
  */
 export function VUISheetShowcase() {
-  const [notifications, setNotifications] = React.useState(true);
-  const [darkMode, setDarkMode] = React.useState(false);
+  const [notifications, setNotifications] = useState(true);
+  const [darkMode, setDarkMode] = useState(false);
 
   return (
-    <div className="min-h-5 bg-gradient-to-br from-background via-background to-muted/30 p-4 md:p-8">
+    <div className="min-h-5 bg-linear-to-br from-background via-background to-muted/30 p-4 md:p-8">
       <div className="mx-auto max-w-6xl items-center justify-center space-y-12">
         {/* Sheet Variations */}
         <div className="space-y-12">
@@ -646,21 +689,23 @@ export function VUISheetShowcase() {
                               key={feature}
                               transition={{ delay: 0.1 * index }}
                             >
-                              <div className="h-2 w-2 flex-shrink-0 rounded-full bg-primary" />
+                              <div className="h-2 w-2 shrink-0 rounded-full bg-primary" />
                               {feature}
                             </motion.li>
                           ))}
                         </ul>
                       </div>
                       <div className="space-y-3">
-                        <label className="block font-medium text-sm">
-                          Sample Form Field
+                        <label className="block space-y-1">
+                          <span className="font-medium text-sm">
+                            Sample Form Field
+                          </span>
+                          <input
+                            className="w-full rounded-md border border-border bg-background px-3 py-2 transition-all focus:border-transparent focus:ring-2 focus:ring-primary"
+                            placeholder="Enter some text..."
+                            type="text"
+                          />
                         </label>
-                        <input
-                          className="w-full rounded-md border border-border bg-background px-3 py-2 transition-all focus:border-transparent focus:ring-2 focus:ring-primary"
-                          placeholder="Enter some text..."
-                          type="text"
-                        />
                       </div>
                     </div>
                   </VUISheetBody>

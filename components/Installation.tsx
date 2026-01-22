@@ -6,7 +6,7 @@ import { getDynamicStats } from "@/lib/ComponentCounter";
 
 export default function Installation() {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-background via-background to-primary/5">
+    <div className="relative min-h-screen overflow-hidden bg-linear-to-br from-background via-background to-primary/5">
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/4 -left-40 h-96 w-96 animate-pulse rounded-full bg-primary/10 blur-3xl" />
@@ -17,7 +17,7 @@ export default function Installation() {
       </div>
 
       {/* Grid pattern */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:48px_48px]" />
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-size-[48px_48px]" />
 
       <div className="relative z-10 mx-auto max-w-6xl space-y-16 px-6 py-16">
         {/* Header */}
@@ -27,11 +27,11 @@ export default function Installation() {
           </Pill>
 
           <h1 className="font-black text-5xl tracking-tight md:text-7xl">
-            <span className="bg-gradient-to-r from-foreground via-foreground to-foreground/70 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-foreground via-foreground to-foreground/70 bg-clip-text text-transparent">
               Get Started with
             </span>
             <br />
-            <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-primary to-primary/60 bg-clip-text text-transparent">
               Vyoma UI
             </span>
           </h1>
@@ -48,12 +48,12 @@ export default function Installation() {
           {/* Step 1 */}
           <div className="group">
             <Card className="relative overflow-hidden border-0 bg-card/80 shadow-2xl backdrop-blur-xl">
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-secondary/5" />
-              <div className="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-primary/50 to-secondary/50" />
+              <div className="absolute inset-0 bg-linear-to-r from-primary/5 via-transparent to-secondary/5" />
+              <div className="absolute top-0 left-0 h-1 w-full bg-linear-to-r from-primary/50 to-secondary/50" />
 
               <div className="relative p-8 md:p-12">
                 <div className="mb-8 flex items-start gap-6">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/20 to-primary/10 shadow-lg">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-primary/20 bg-linear-to-br from-primary/20 to-primary/10 shadow-lg">
                     <span className="font-black text-2xl text-primary">1</span>
                   </div>
                   <div className="flex-1">
@@ -77,9 +77,9 @@ export default function Installation() {
                   <div className="space-y-4">
                     <PackageManagerTabs command="create-next-app@latest my-vyoma-app --typescript --tailwind --eslint" />
 
-                    <Card className="border-green-200/50 bg-gradient-to-r from-green-50/50 to-emerald-50/50 p-6 dark:border-green-800/50 dark:from-green-950/20 dark:to-emerald-950/20">
+                    <Card className="border-green-200/50 bg-linear-to-r from-green-50/50 to-emerald-50/50 p-6 dark:border-green-800/50 dark:from-green-950/20 dark:to-emerald-950/20">
                       <div className="flex items-start gap-4">
-                        <CheckCircle className="mt-0.5 h-6 w-6 flex-shrink-0 text-green-600" />
+                        <CheckCircle className="mt-0.5 h-6 w-6 shrink-0 text-green-600" />
                         <div>
                           <h3 className="mb-3 font-semibold text-green-900 dark:text-green-100">
                             Recommended Configuration
@@ -122,12 +122,12 @@ export default function Installation() {
           {/* Step 2 */}
           <div className="group">
             <Card className="relative overflow-hidden border-0 bg-card/80 shadow-2xl backdrop-blur-xl">
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-transparent to-purple-500/5" />
-              <div className="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-blue-500/50 to-purple-500/50" />
+              <div className="absolute inset-0 bg-linear-to-r from-blue-500/5 via-transparent to-purple-500/5" />
+              <div className="absolute top-0 left-0 h-1 w-full bg-linear-to-r from-blue-500/50 to-purple-500/50" />
 
               <div className="relative p-8 md:p-12">
                 <div className="mb-8 flex items-start gap-6">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-blue-500/20 bg-gradient-to-br from-blue-500/20 to-purple-500/10 shadow-lg">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-blue-500/20 bg-linear-to-br from-blue-500/20 to-purple-500/10 shadow-lg">
                     <span className="font-black text-2xl text-blue-600">2</span>
                   </div>
                   <div className="flex-1">
@@ -159,12 +159,12 @@ export default function Installation() {
           {/* Step 3 */}
           <div className="group">
             <Card className="relative overflow-hidden border-0 bg-card/80 shadow-2xl backdrop-blur-xl">
-              <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 via-transparent to-red-500/5" />
-              <div className="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-orange-500/50 to-red-500/50" />
+              <div className="absolute inset-0 bg-linear-to-r from-orange-500/5 via-transparent to-red-500/5" />
+              <div className="absolute top-0 left-0 h-1 w-full bg-linear-to-r from-orange-500/50 to-red-500/50" />
 
               <div className="relative p-8 md:p-12">
                 <div className="mb-8 flex items-start gap-6">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-orange-500/20 bg-gradient-to-br from-orange-500/20 to-red-500/10 shadow-lg">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-orange-500/20 bg-linear-to-br from-orange-500/20 to-red-500/10 shadow-lg">
                     <span className="font-black text-2xl text-orange-600">
                       3
                     </span>
@@ -190,7 +190,7 @@ export default function Installation() {
                     file with the perfect settings for your project.
                   </p>
 
-                  <Card className="border-2 border-dashed bg-gradient-to-br from-muted/50 to-muted/20 p-6">
+                  <Card className="border-2 border-dashed bg-linear-to-br from-muted/50 to-muted/20 p-6">
                     <div className="space-y-4 font-mono text-sm">
                       <div className="flex items-center gap-4 rounded bg-background/50 p-3">
                         <span className="font-semibold text-orange-500">?</span>
@@ -228,13 +228,13 @@ export default function Installation() {
 
           {/* Step 4 */}
           <div className="group">
-            <Card className="relative overflow-hidden border-0 bg-gradient-to-br from-green-50/50 to-emerald-50/50 shadow-2xl backdrop-blur-xl dark:from-green-950/20 dark:to-emerald-950/20">
-              <div className="absolute inset-0 bg-gradient-to-r from-green-500/5 via-transparent to-emerald-500/5" />
-              <div className="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-green-500 to-emerald-500" />
+            <Card className="relative overflow-hidden border-0 bg-linear-to-br from-green-50/50 to-emerald-50/50 shadow-2xl backdrop-blur-xl dark:from-green-950/20 dark:to-emerald-950/20">
+              <div className="absolute inset-0 bg-linear-to-r from-green-500/5 via-transparent to-emerald-500/5" />
+              <div className="absolute top-0 left-0 h-1 w-full bg-linear-to-r from-green-500 to-emerald-500" />
 
               <div className="relative p-8 md:p-12">
                 <div className="mb-8 flex items-start gap-6">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-green-500/30 bg-gradient-to-br from-green-500/30 to-emerald-500/20 shadow-lg">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-green-500/30 bg-linear-to-br from-green-500/30 to-emerald-500/20 shadow-lg">
                     <Rocket className="h-8 w-8 text-green-600" />
                   </div>
                   <div className="flex-1">

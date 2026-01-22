@@ -103,7 +103,7 @@ export default function HeroSection() {
   }, [isMobile]);
 
   return (
-    <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-background via-background to-secondary/20 pt-20 md:pt-24">
+    <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-linear-to-br from-background via-background to-secondary/20 pt-20 md:pt-24">
       {/* Mobile-Optimized Animated Grid Background */}
       <div className="absolute inset-0 overflow-hidden opacity-20 md:opacity-30">
         <div
@@ -117,7 +117,7 @@ export default function HeroSection() {
                 isMobile ? "duration-700" : "duration-1000"
               } ${
                 filled
-                  ? "scale-100 bg-gradient-to-br from-primary/40 to-secondary/40 shadow-lg"
+                  ? "scale-100 bg-linear-to-br from-primary/40 to-secondary/40 shadow-lg"
                   : "scale-75 bg-transparent"
               }`}
               key={`grid-cell-${index}-${filled ? "filled" : "empty"}`}
@@ -143,22 +143,22 @@ export default function HeroSection() {
             </Pill>
 
             <h1 className="px-2 font-black text-3xl leading-[0.9] tracking-tight sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl">
-              <span className="bg-gradient-to-r from-foreground via-foreground to-foreground/70 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-foreground via-foreground to-foreground/70 bg-clip-text text-transparent">
                 TRULY BEYOND
               </span>
               <br />
-              <span className="bg-gradient-to-r from-primary via-primary to-primary/60 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-primary via-primary to-primary/60 bg-clip-text text-transparent">
                 UI DESIGN
               </span>
             </h1>
 
             <p className="mx-auto max-w-3xl px-4 text-base text-muted-foreground leading-relaxed sm:text-lg md:text-xl lg:text-2xl">
               A modern UI design system crafted with{" "}
-              <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text font-semibold text-foreground">
+              <span className="bg-linear-to-r from-primary to-secondary bg-clip-text font-semibold text-foreground">
                 spatial wisdom
               </span>{" "}
               and{" "}
-              <span className="bg-gradient-to-r from-secondary to-primary bg-clip-text font-semibold text-foreground">
+              <span className="bg-linear-to-r from-secondary to-primary bg-clip-text font-semibold text-foreground">
                 thoughtful design
               </span>
               . Build beautiful interfaces that feel natural and intuitive.
@@ -223,7 +223,7 @@ export default function HeroSection() {
           {/* Stats */}
           <div className="flex items-center justify-center gap-8 px-4 text-center md:gap-16">
             <div>
-              <div className="mb-1 bg-gradient-to-r from-primary to-secondary bg-clip-text font-bold text-foreground text-xl sm:text-2xl md:text-3xl">
+              <div className="mb-1 bg-linear-to-r from-primary to-secondary bg-clip-text font-bold text-foreground text-xl sm:text-2xl md:text-3xl">
                 <CountUp
                   delay={0.5}
                   duration={2.5}
@@ -237,9 +237,9 @@ export default function HeroSection() {
                 Components
               </div>
             </div>
-            <div className="h-8 w-px bg-gradient-to-b from-transparent via-border to-transparent md:h-12" />
+            <div className="h-8 w-px bg-linear-to-b from-transparent via-border to-transparent md:h-12" />
             <div>
-              <div className="mb-1 bg-gradient-to-r from-secondary to-primary bg-clip-text font-bold text-foreground text-xl sm:text-2xl md:text-3xl">
+              <div className="mb-1 bg-linear-to-r from-secondary to-primary bg-clip-text font-bold text-foreground text-xl sm:text-2xl md:text-3xl">
                 <CountUp
                   colorTransition
                   delay={1}
@@ -254,16 +254,16 @@ export default function HeroSection() {
                 TypeScript
               </div>
             </div>
-            <div className="h-8 w-px bg-gradient-to-b from-transparent via-border to-transparent md:h-12" />
+            <div className="h-8 w-px bg-linear-to-b from-transparent via-border to-transparent md:h-12" />
             <div>
-              <div className="mb-1 bg-gradient-to-r from-primary to-secondary bg-clip-text font-bold text-foreground text-xl sm:text-2xl md:text-3xl">
+              <div className="mb-1 bg-linear-to-r from-primary to-secondary bg-clip-text font-bold text-foreground text-xl sm:text-2xl md:text-3xl">
                 <CountUp
                   delay={1.5}
                   duration={2}
                   format="compact"
                   hoverEffect
                   renderValue={() => (
-                    <span className="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 bg-clip-text text-transparent">
+                    <span className="bg-linear-to-r from-purple-500 via-pink-500 to-red-500 bg-clip-text text-transparent">
                       ∞
                     </span>
                   )}

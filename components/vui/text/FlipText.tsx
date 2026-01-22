@@ -177,7 +177,6 @@ export function FlipText({
       className={`inline-block cursor-pointer ${className}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      role="presentation"
       style={getContainerStyle()}
       {...accessibilityProps}
     >

@@ -90,12 +90,7 @@ export function ProfileCardSkeleton() {
             stiffness: 200,
           }}
         >
-          <Skeleton
-            className="shrink-0"
-            height={80}
-            radius="full"
-            width={80}
-          />
+          <Skeleton className="shrink-0" height={80} radius="full" width={80} />
         </motion.div>
 
         <div className="flex-1 space-y-3">

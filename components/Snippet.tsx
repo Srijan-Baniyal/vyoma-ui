@@ -37,9 +37,7 @@ export function Snippet({
       className={`group relative flex w-full flex-nowrap p-3 transition-all duration-200 ${
         variantStyles[variant]
       } ${
-        width
-          ? "max-w-none"
-          : "max-w-75 sm:max-w-100 md:max-w-125 lg:max-w-185"
+        width ? "max-w-none" : "max-w-75 sm:max-w-100 md:max-w-125 lg:max-w-185"
       }`}
     >
       <div className="flex min-w-0 flex-1 items-center gap-3">

@@ -172,6 +172,7 @@ export function FlipText({
     hoverText && isHovered && effect === "slide" ? hoverText : children;
 
   return (
+    // biome-ignore lint/a11y/noNoninteractiveElementInteractions: FlipText requires mouse interaction for text flip animation effect
     // biome-ignore lint/a11y/noStaticElementInteractions: FlipText requires mouse interaction for text flip animation effect
     <span
       className={`inline-block cursor-pointer ${className}`}

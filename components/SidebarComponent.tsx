@@ -177,13 +177,6 @@ export default function SidebarComponent({ children }: SidebarComponentProps) {
     document.documentElement.classList.toggle("dark", newDarkMode);
   }, [isDarkMode]);
 
-  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-    if (e.key === "Escape") {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-  }, []);
-
   const toggleCategory = useCallback((category: string) => {
     setOpenCategories((prev) => {
       const newState = {
@@ -343,11 +336,9 @@ export default function SidebarComponent({ children }: SidebarComponentProps) {
   SidebarMenuItemComponent.displayName = "SidebarMenuItemComponent";
 
   return (
-    <button
+    <div
       className="w-full text-left"
-      onKeyDown={handleKeyDown}
       style={{ all: "unset", display: "block", width: "100%" }}
-      type="button"
     >
       <SidebarProvider>
         <Sidebar className="z-40 border-r bg-background/98 shadow-sm backdrop-blur-md supports-backdrop-filter:bg-background/95">
@@ -534,6 +525,6 @@ export default function SidebarComponent({ children }: SidebarComponentProps) {
           <Footer />
         </SidebarInset>
       </SidebarProvider>
-    </button>
+    </div>
   );
 }

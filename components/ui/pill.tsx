@@ -50,10 +50,10 @@ const statusVariants = cva("rounded-full", {
 export interface PillProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof pillVariants> {
-  icon?: React.ReactNode;
-  children: React.ReactNode;
-  status?: VariantProps<typeof statusVariants>["status"];
   asChild?: boolean;
+  children: React.ReactNode;
+  icon?: React.ReactNode;
+  status?: VariantProps<typeof statusVariants>["status"];
 }
 
 const Pill = React.forwardRef<HTMLDivElement, PillProps>(

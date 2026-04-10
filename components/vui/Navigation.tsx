@@ -1,22 +1,22 @@
 "use client";
 
 import {
-  BookOpenIcon,
-  ChevronDownIcon,
-  CircleCheckIcon,
-  CircleHelpIcon,
-  CircleIcon,
-  CodeIcon,
-  ExternalLinkIcon,
-  GithubIcon,
-  HeartIcon,
-  MenuIcon,
-  MessageCircleIcon,
-  PaletteIcon,
-  RocketIcon,
-  SparklesIcon,
-  TwitterIcon,
-} from "lucide-react";
+  IconBook2 as BookOpenIcon,
+  IconChevronDown as ChevronDownIcon,
+  IconCircleCheck as CircleCheckIcon,
+  IconHelpCircle as CircleHelpIcon,
+  IconCircle as CircleIcon,
+  IconCode as CodeIcon,
+  IconExternalLink as ExternalLinkIcon,
+  IconGift as GiftIcon,
+  IconHeart as HeartIcon,
+  IconMenu2 as MenuIcon,
+  IconMessageCircle as MessageCircleIcon,
+  IconPalette as PaletteIcon,
+  IconRocket as RocketIcon,
+  IconSparkles as SparklesIcon,
+  IconClockHour4 as TimerIcon,
+} from "@tabler/icons-react";
 import Link from "next/link";
 import type * as React from "react";
 import { useState } from "react";
@@ -160,14 +160,14 @@ const community = [
     title: "GitHub",
     href: "https://github.com",
     description: "Star us on GitHub and contribute",
-    icon: <GithubIcon className="h-4 w-4 text-gray-700 dark:text-gray-300" />,
+    icon: <GiftIcon className="h-4 w-4 text-gray-700 dark:text-gray-300" />,
     external: true,
   },
   {
     title: "Twitter",
     href: "https://twitter.com",
     description: "Follow us for updates and news",
-    icon: <TwitterIcon className="h-4 w-4 text-blue-500 dark:text-blue-400" />,
+    icon: <TimerIcon className="h-4 w-4 text-blue-500 dark:text-blue-400" />,
     external: true,
   },
   {

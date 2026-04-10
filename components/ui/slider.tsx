@@ -5,14 +5,14 @@ import { cn } from "@/lib/utils";
 import { Label } from "./label";
 
 interface SliderProps {
-  value: number;
-  onChange: (value: number) => void;
-  min?: number;
-  max?: number;
-  step?: number;
-  label?: string;
-  unit?: string;
   className?: string;
+  label?: string;
+  max?: number;
+  min?: number;
+  onChange: (value: number) => void;
+  step?: number;
+  unit?: string;
+  value: number;
 }
 
 export function Slider({

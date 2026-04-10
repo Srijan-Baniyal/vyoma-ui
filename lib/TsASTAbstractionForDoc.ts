@@ -5,14 +5,14 @@ import * as ts from "typescript";
  * Represents a single prop definition extracted from TypeScript AST
  */
 export interface PropDefinition {
-  name: string;
-  type: string;
-  required: boolean;
   defaultValue?: unknown;
   description?: string;
-  tags?: string[];
   enumValues?: string[];
   isUnion?: boolean;
+  name: string;
+  required: boolean;
+  tags?: string[];
+  type: string;
   unionTypes?: string[];
 }
 
@@ -21,21 +21,21 @@ export interface PropDefinition {
  */
 export interface ComponentPropsInfo {
   componentName: string;
-  propsInterfaceName?: string;
-  props: PropDefinition[];
   description?: string;
   examples?: string[];
   extendsFrom?: string[];
+  props: PropDefinition[];
+  propsInterfaceName?: string;
 }
 
 /**
  * Configuration for AST parsing
  */
 export interface ParseOptions {
-  includePrivateProps?: boolean;
   extractExamples?: boolean;
-  resolveUnions?: boolean;
+  includePrivateProps?: boolean;
   maxDepth?: number;
+  resolveUnions?: boolean;
 }
 
 /**

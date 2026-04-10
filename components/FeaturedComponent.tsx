@@ -1,18 +1,23 @@
 "use client";
 
+import {
+  IconArrowRight as ArrowRight,
+  IconCircleDot as CircleDot,
+  IconGrid3x3 as Grid3x3,
+  IconMessage as MessageSquare,
+} from "@tabler/icons-react";
 import { motion } from "framer-motion";
-import { ArrowRight, CircleDot, Grid3x3, MessageSquare } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/components/ui/buttonShadcn";
 
 // Data model for featured items
 interface FeaturedItem {
-  name: string;
+  accent: "purple" | "blue" | "amber";
   description: string;
   icon: React.ReactElement;
+  name: string;
   route: string;
-  accent: "purple" | "blue" | "amber";
 }
 
 const items: FeaturedItem[] = [

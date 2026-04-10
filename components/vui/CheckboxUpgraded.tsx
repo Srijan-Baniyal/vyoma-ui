@@ -190,12 +190,12 @@ const RippleEffect = ({ trigger }: { trigger: boolean }) => {
 
 interface CheckboxRefinedProps
   extends ComponentPropsWithoutRef<typeof CheckboxRoot> {
-  label: string;
-  variant?: "default" | "smooth";
-  size?: "sm" | "md" | "lg";
   colorScheme?: "default" | "success" | "warning" | "error" | "purple" | "blue";
   description?: string;
+  label: string;
   showRipple?: boolean;
+  size?: "sm" | "md" | "lg";
+  variant?: "default" | "smooth";
 }
 
 const CheckboxRefined = forwardRef<

@@ -1,17 +1,17 @@
 "use client";
 
 import {
-  Code,
-  Gift,
-  Moon,
-  Package,
-  Palette,
-  Rocket,
-  Smartphone,
-  Sparkles,
-  Star,
-  Zap,
-} from "lucide-react";
+  IconCode as Code,
+  IconGift as Gift,
+  IconMoon as Moon,
+  IconPackage as Package,
+  IconPalette as Palette,
+  IconRocket as Rocket,
+  IconDeviceMobile as Smartphone,
+  IconSparkles as Sparkles,
+  IconStar as Star,
+  IconBolt as Zap,
+} from "@tabler/icons-react";
 import { Timeline } from "@/components/ui/TimeLine";
 import { useIsMobile } from "@/hooks/use-mobile";
 

@@ -39,5 +39,5 @@ function WheelPicker({
   );
 }
 
-export { WheelPicker, WheelPickerWrapper };
 export type { WheelPickerClassNames, WheelPickerOption };
+export { WheelPicker, WheelPickerWrapper };

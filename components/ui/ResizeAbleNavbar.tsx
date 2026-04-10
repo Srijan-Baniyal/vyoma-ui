@@ -24,11 +24,11 @@ interface NavBodyProps {
 }
 
 interface NavItemsProps {
+  className?: string;
   items: {
     name: string;
     link: string;
   }[];
-  className?: string;
   onItemClick?: () => void;
 }
 

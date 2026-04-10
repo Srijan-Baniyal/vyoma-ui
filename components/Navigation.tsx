@@ -1,6 +1,6 @@
 "use client";
 
-import { Star } from "lucide-react";
+import { IconStar as Star } from "@tabler/icons-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
@@ -91,13 +91,13 @@ export default function Navigation() {
             target="_blank"
           >
             <Star className="mr-2 h-4 w-4 fill-current" />
-            {stars !== null ? (
+            {stars === null ? (
+              "Star on GitHub"
+            ) : (
               <>
                 <span className="font-semibold">{formatStarCount(stars)}</span>
                 <span className="ml-1">stars</span>
               </>
-            ) : (
-              "Star on GitHub"
             )}
           </Link>
         </div>
@@ -143,15 +143,15 @@ export default function Navigation() {
               target="_blank"
             >
               <Star className="mr-2 h-4 w-4 fill-current" />
-              {stars !== null ? (
+              {stars === null ? (
+                "Star on GitHub"
+              ) : (
                 <>
                   <span className="font-semibold">
                     {formatStarCount(stars)}
                   </span>
                   <span className="ml-1">stars</span>
                 </>
-              ) : (
-                "Star on GitHub"
               )}
             </Link>
           </div>

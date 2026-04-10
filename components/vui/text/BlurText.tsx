@@ -9,19 +9,19 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
 interface BlurTextProps {
-  text?: string;
-  delay?: number;
-  className?: string;
   animateBy?: "words" | "letters";
-  direction?: "top" | "bottom";
-  threshold?: number;
-  rootMargin?: string;
   animationFrom?: Record<string, string | number>;
   animationTo?: Record<string, string | number>[];
+  autoPlay?: boolean;
+  className?: string;
+  delay?: number;
+  direction?: "top" | "bottom";
   easing?: FramerEasing | FramerEasing[];
   onAnimationComplete?: () => void;
+  rootMargin?: string;
   stepDuration?: number;
-  autoPlay?: boolean;
+  text?: string;
+  threshold?: number;
 }
 
 const buildKeyframes = (

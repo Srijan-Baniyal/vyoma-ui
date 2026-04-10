@@ -1,20 +1,14 @@
 "use client";
 
 import { ThemeProvider as NextThemesProvider } from "next-themes";
-import { useEffect, useState } from "react";
+import type { ComponentProps } from "react";
+
+type ThemeProviderProps = ComponentProps<typeof NextThemesProvider>;
 
 export default function ThemeProvider({
   children,
-}: {
-  children: React.ReactNode;
-}) {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-  if (!mounted) {
-    return null;
-  }
+  ...props
+}: ThemeProviderProps) {
   return (
     <NextThemesProvider
       attribute="class"
@@ -22,6 +16,7 @@ export default function ThemeProvider({
       disableTransitionOnChange
       enableSystem
       storageKey="vyoma-ui-theme"
+      {...props}
     >
       {children}
     </NextThemesProvider>

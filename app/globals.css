@@ -4,8 +4,8 @@
 @custom-variant dark (&:is(.dark *));
 
 ::selection {
-  background-color: oklch(0.7 0.15 200);
   color: oklch(1 0 0);
+  background-color: oklch(0.7 0.15 200);
 }
 
 :root {
@@ -171,10 +171,10 @@
   }
 
   body {
-    @apply bg-background text-foreground antialiased;
     font-feature-settings:
       "rlig" 1,
       "calt" 1;
+    @apply bg-background text-foreground antialiased;
   }
 
   /* Custom scrollbar */
@@ -197,8 +197,8 @@
 
   /* Firefox scrollbar */
   * {
-    scrollbar-width: thin;
     scrollbar-color: hsl(var(--border)) transparent;
+    scrollbar-width: thin;
   }
 
   /* Improved focus styles */
@@ -233,15 +233,15 @@
   }
 
   input[type="range"]::-webkit-slider-thumb {
+    width: 16px;
+    height: 16px;
     -webkit-appearance: none;
     appearance: none;
-    height: 16px;
-    width: 16px;
-    border-radius: 50%;
-    background: hsl(var(--primary));
     cursor: pointer;
-    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    background: hsl(var(--primary));
     border: 2px solid hsl(var(--background));
+    border-radius: 50%;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   }
 
   input[type="range"]::-webkit-slider-thumb:hover {
@@ -251,12 +251,12 @@
   }
 
   input[type="range"]::-moz-range-thumb {
-    height: 16px;
     width: 16px;
-    border-radius: 50%;
-    background: hsl(var(--primary));
+    height: 16px;
     cursor: pointer;
+    background: hsl(var(--primary));
     border: 2px solid hsl(var(--background));
+    border-radius: 50%;
     box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   }
 

@@ -12,17 +12,17 @@ import {
 } from "@/contexts/PackageManagerContext";
 
 interface PackageManagerTab {
+  color: string;
+  command: string;
+  description?: string;
+  icon: React.ReactNode;
   id: string;
   name: string;
-  icon: React.ReactNode;
-  command: string;
-  color: string;
-  description?: string;
 }
 
 interface PackageManagerTabsProps {
-  command: string;
   className?: string;
+  command: string;
 }
 
 const getYarnCommand = (command: string) => {

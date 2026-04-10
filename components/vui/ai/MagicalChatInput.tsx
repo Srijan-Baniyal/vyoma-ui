@@ -1,15 +1,15 @@
 "use client";
 
 import {
-  FlaskConicalIcon,
-  GlobeIcon,
-  Loader2Icon,
-  MicIcon,
-  PlusIcon,
-  SendIcon,
-  SquareIcon,
-  XIcon,
-} from "lucide-react";
+  IconFlask as FlaskConicalIcon,
+  IconGlobe as GlobeIcon,
+  IconLoader2 as Loader2Icon,
+  IconMicrophone as MicIcon,
+  IconPlus as PlusIcon,
+  IconSend as SendIcon,
+  IconSquare as SquareIcon,
+  IconX as XIcon,
+} from "@tabler/icons-react";
 import type {
   ComponentProps,
   HTMLAttributes,
@@ -36,8 +36,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 
 interface UseAutoResizeTextareaProps {
-  minHeight: number;
   maxHeight?: number;
+  minHeight: number;
 }
 
 const useAutoResizeTextarea = ({

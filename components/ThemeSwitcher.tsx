@@ -27,16 +27,16 @@ function ComponentPreview({
       >
         <div
           className={`relative h-full w-full p-4 ${
-            name.toLowerCase() !== "bento grid"
-              ? "flex items-center justify-center"
-              : ""
+            name.toLowerCase() === "bento grid"
+              ? ""
+              : "flex items-center justify-center"
           }`}
         >
           <div
             className={`max-h-full max-w-full ${
-              name.toLowerCase() !== "bento grid"
-                ? "flex items-center justify-center"
-                : ""
+              name.toLowerCase() === "bento grid"
+                ? ""
+                : "flex items-center justify-center"
             }`}
           >
             <Component />

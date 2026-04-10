@@ -3,9 +3,9 @@ import { cn } from "@/lib/utils";
 
 export interface AnimatedGradientTextProps
   extends ComponentPropsWithoutRef<"div"> {
-  speed?: number;
   colorFrom?: string;
   colorTo?: string;
+  speed?: number;
 }
 
 export function AnimatedGradientText({

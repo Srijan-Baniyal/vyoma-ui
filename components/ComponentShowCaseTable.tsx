@@ -1,7 +1,7 @@
 "use client";
 
+import { IconCode as Code2 } from "@tabler/icons-react";
 import parser from "html-react-parser";
-import { Code2 } from "lucide-react";
 import type React from "react";
 import { useCallback, useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -10,11 +10,11 @@ import type { ComponentPropsInfo } from "@/lib/TsASTAbstractionForDoc";
 import { ComponentShowcaseCard } from "./ComponentShowcaseCard";
 
 interface ComponentShowcaseProps {
-  componentName: string;
-  description?: string | React.JSX.Element | React.JSX.Element[];
-  component: React.ComponentType<Record<string, unknown>>;
-  defaultProps?: Record<string, unknown>;
   codeString: string;
+  component: React.ComponentType<Record<string, unknown>>;
+  componentName: string;
+  defaultProps?: Record<string, unknown>;
+  description?: string | React.JSX.Element | React.JSX.Element[];
   propsInfo?: ComponentPropsInfo | null;
 }
 

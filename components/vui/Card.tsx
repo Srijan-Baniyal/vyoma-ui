@@ -12,11 +12,11 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import GIRL from "@/public/BG.jpg";
 
 interface VuiCardProps {
-  imageSrc: StaticImageData | string;
-  imageAlt: string;
   category?: string;
-  title?: string;
   description?: React.ReactNode;
+  imageAlt: string;
+  imageSrc: StaticImageData | string;
+  title?: string;
 }
 
 function VuiCard({

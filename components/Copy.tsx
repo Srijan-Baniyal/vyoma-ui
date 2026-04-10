@@ -1,6 +1,9 @@
 "use client";
 
-import { Check, Clipboard } from "lucide-react";
+import {
+  IconCheck as Check,
+  IconClipboard as Clipboard,
+} from "@tabler/icons-react";
 import { useState } from "react";
 import { Button } from "./ui/buttonShadcn";
 

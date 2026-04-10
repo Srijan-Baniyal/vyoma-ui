@@ -58,12 +58,12 @@ import {
 } from "@/components/vui/WheelPicker";
 
 export interface ComponentEntry {
-  name: string;
   component: React.ComponentType;
-  theme?: React.ComponentType;
-  route: string;
-  path: string | undefined;
   description: string;
+  name: string;
+  path: string | undefined;
+  route: string;
+  theme?: React.ComponentType;
 }
 
 export interface ComponentCategoryMap {

@@ -5,26 +5,26 @@ import { useEffect, useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
 
 interface CursorAnimationVariants extends Variants {
-  initial: Variants["initial"];
   animate: Variants["animate"];
+  initial: Variants["initial"];
 }
 interface TypingTextProps {
-  text: string | string[];
-  speed?: number;
-  initialDelay?: number;
-  waitTime?: number;
-  deleteSpeed?: number;
-  loop?: boolean;
   className?: string;
-  showCursor?: boolean;
-  hideCursorOnType?: boolean;
-  cursorChar?: string | React.ReactNode;
   cursorAnimationVariants?: CursorAnimationVariants;
+  cursorChar?: string | React.ReactNode;
   cursorClassName?: string;
-  onTypingStart?: () => void;
-  onTypingComplete?: () => void;
-  onDeletingStart?: () => void;
+  deleteSpeed?: number;
+  hideCursorOnType?: boolean;
+  initialDelay?: number;
+  loop?: boolean;
   onDeletingComplete?: () => void;
+  onDeletingStart?: () => void;
+  onTypingComplete?: () => void;
+  onTypingStart?: () => void;
+  showCursor?: boolean;
+  speed?: number;
+  text: string | string[];
+  waitTime?: number;
 }
 
 /**

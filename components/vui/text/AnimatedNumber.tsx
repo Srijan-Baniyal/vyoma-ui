@@ -4,10 +4,10 @@ import NumberFlow from "@number-flow/react";
 import { useEffect, useState } from "react";
 
 interface CountdownProps {
-  endDate: Date;
-  startDate?: Date;
   className?: string;
   compactPreview?: boolean;
+  endDate: Date;
+  startDate?: Date;
 }
 
 interface TimeLeft {

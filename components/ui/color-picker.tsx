@@ -6,10 +6,10 @@ import { Input } from "./input";
 import { Label } from "./label";
 
 interface ColorPickerProps {
-  value: string;
-  onChange: (value: string) => void;
-  label?: string;
   className?: string;
+  label?: string;
+  onChange: (value: string) => void;
+  value: string;
 }
 
 // Regex patterns at top level for performance

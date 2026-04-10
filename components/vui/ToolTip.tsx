@@ -12,15 +12,15 @@ import { cn } from "@/lib/utils";
 
 interface ToolTipProps {
   children: React.ReactNode;
+  className?: string;
   content: React.ReactNode;
-  side?: "top" | "bottom" | "left" | "right";
-  variant?: "default" | "dark" | "gradient" | "glass" | "colorful";
-  size?: "sm" | "md" | "lg";
   delayDuration?: number;
   disabled?: boolean;
-  className?: string;
-  maxWidth?: string;
   forceOpen?: boolean;
+  maxWidth?: string;
+  side?: "top" | "bottom" | "left" | "right";
+  size?: "sm" | "md" | "lg";
+  variant?: "default" | "dark" | "gradient" | "glass" | "colorful";
 }
 
 function ToolTip({

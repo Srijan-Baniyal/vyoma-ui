@@ -1,6 +1,11 @@
 "use client";
 
-import { ArrowRight, Layers, Sparkles, Zap } from "lucide-react";
+import {
+  IconArrowRight as ArrowRight,
+  IconStack2 as Layers,
+  IconSparkles as Sparkles,
+  IconBolt as Zap,
+} from "@tabler/icons-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/buttonShadcn";

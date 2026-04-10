@@ -127,8 +127,8 @@ export default function FormShowcase() {
 }
 
 interface FormVariantProps {
-  title: string;
   desc: string;
+  title: string;
   variant: "floating" | "outlined" | "glass";
 }
 

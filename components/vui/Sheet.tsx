@@ -1,16 +1,16 @@
 "use client";
 
 import {
-  BarChart3,
-  Camera,
-  FileText,
-  Home,
-  ImageIcon,
-  Menu,
-  Settings,
-  Users,
-  X,
-} from "lucide-react";
+  IconChartBar as BarChart3,
+  IconCamera as Camera,
+  IconFileText as FileText,
+  IconHome as Home,
+  IconPhoto as ImageIcon,
+  IconMenu2 as Menu,
+  IconSettings as Settings,
+  IconUsers as Users,
+  IconX as X,
+} from "@tabler/icons-react";
 import { AnimatePresence, motion } from "motion/react";
 import {
   type ComponentProps,
@@ -38,20 +38,20 @@ import { cn } from "@/lib/utils";
  * Enhanced VUI Sheet Properties
  */
 export interface VUISheetProps {
-  /** Which side of the screen the sheet slides from */
-  side?: "top" | "right" | "bottom" | "left";
-  /** Size variant for the sheet */
-  size?: "sm" | "md" | "lg" | "xl" | "full";
+  /** Custom animation duration */
+  animationDuration?: number;
+  /** Children content */
+  children?: ReactNode;
+  /** Custom className for the sheet content */
+  className?: string;
   /** Enable glassmorphism effect */
   glassmorphism?: boolean;
   /** Show gradient border accent */
   showGradientBorder?: boolean;
-  /** Custom className for the sheet content */
-  className?: string;
-  /** Children content */
-  children?: ReactNode;
-  /** Custom animation duration */
-  animationDuration?: number;
+  /** Which side of the screen the sheet slides from */
+  side?: "top" | "right" | "bottom" | "left";
+  /** Size variant for the sheet */
+  size?: "sm" | "md" | "lg" | "xl" | "full";
 }
 
 /**
@@ -480,13 +480,13 @@ const VUISheet = BaseSheet;
 // Export all components
 export {
   VUISheet as Sheet,
-  VUISheetTrigger as SheetTrigger,
-  VUISheetContent as SheetContent,
-  VUISheetHeader as SheetHeader,
-  VUISheetFooter as SheetFooter,
-  VUISheetTitle as SheetTitle,
-  VUISheetDescription as SheetDescription,
   VUISheetBody as SheetBody,
+  VUISheetContent as SheetContent,
+  VUISheetDescription as SheetDescription,
+  VUISheetFooter as SheetFooter,
+  VUISheetHeader as SheetHeader,
+  VUISheetTitle as SheetTitle,
+  VUISheetTrigger as SheetTrigger,
 };
 
 // Direct alias to avoid barrel file export

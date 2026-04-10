@@ -6,8 +6,8 @@ import {
 interface FilterOptions {
   excludeCategories?: string[];
   includeCategories?: string[];
-  minComponentsInCategory?: number;
   maxComponentsInCategory?: number;
+  minComponentsInCategory?: number;
 }
 
 export function countComponents(

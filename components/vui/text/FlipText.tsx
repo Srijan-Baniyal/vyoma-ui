@@ -5,20 +5,20 @@ import { useCallback, useState } from "react";
 type FlipEffect = "basic" | "rotate" | "wave" | "slide";
 
 interface FlipTextProps {
-  children: string;
-  effect?: FlipEffect;
-  className?: string;
-  style?: React.CSSProperties;
-  duration?: number;
-  delay?: number;
-  staggerDelay?: number;
-  hoverText?: string;
-  enableGlow?: boolean;
-  preserveSpaces?: boolean;
   ariaLabel?: string;
-  reducedMotion?: boolean;
-  onHoverStart?: () => void;
+  children: string;
+  className?: string;
+  delay?: number;
+  duration?: number;
+  effect?: FlipEffect;
+  enableGlow?: boolean;
+  hoverText?: string;
   onHoverEnd?: () => void;
+  onHoverStart?: () => void;
+  preserveSpaces?: boolean;
+  reducedMotion?: boolean;
+  staggerDelay?: number;
+  style?: React.CSSProperties;
 }
 
 export function FlipText({

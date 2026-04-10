@@ -14,50 +14,50 @@ type NumberFormat =
 type AnimationEffect = "none" | "fade" | "slide" | "bounce" | "elastic";
 
 interface CountUpProps {
-  // Core functionality
-  to: number;
-  from?: number;
-  direction?: "up" | "down";
-  delay?: number;
-  duration?: number;
-
-  // Styling
-  className?: string;
-  style?: React.CSSProperties;
-
-  // Animation controls
-  startWhen?: boolean;
-  effect?: AnimationEffect;
-  stiffness?: number;
-  damping?: number;
-
-  // Formatting
-  format?: NumberFormat;
-  separator?: string;
-  prefix?: string;
-  suffix?: string;
-  decimals?: number;
-  locale?: string;
-  currency?: string;
-
-  // Advanced features
-  enableGlow?: boolean;
-  colorTransition?: boolean;
-  hoverEffect?: boolean;
+  announceValue?: boolean;
 
   // Accessibility
   ariaLabel?: string;
-  announceValue?: boolean;
-  reducedMotion?: boolean;
+
+  // Styling
+  className?: string;
+  colorTransition?: boolean;
+  currency?: string;
+  damping?: number;
+  debug?: boolean;
+  decimals?: number;
+  delay?: number;
+  direction?: "up" | "down";
+  duration?: number;
+  effect?: AnimationEffect;
+
+  // Advanced features
+  enableGlow?: boolean;
+
+  // Formatting
+  format?: NumberFormat;
+  from?: number;
+  hoverEffect?: boolean;
+  locale?: string;
+  onEnd?: () => void;
 
   // Callbacks
   onStart?: () => void;
-  onEnd?: () => void;
   onUpdate?: (value: number) => void;
+  prefix?: string;
+  reducedMotion?: boolean;
 
   // Advanced customization
   renderValue?: (value: number, formattedValue: string) => React.ReactNode;
-  debug?: boolean;
+  separator?: string;
+
+  // Animation controls
+  startWhen?: boolean;
+  stiffness?: number;
+  style?: React.CSSProperties;
+  suffix?: string;
+  // Core functionality
+  to: number;
 }
 
 export function CountUp({

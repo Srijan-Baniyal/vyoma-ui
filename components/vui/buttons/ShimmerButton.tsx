@@ -6,13 +6,13 @@ import React, {
 import { cn } from "@/lib/utils";
 
 export interface ShimmerButtonProps extends ComponentPropsWithoutRef<"button"> {
-  shimmerColor?: string;
-  shimmerSize?: string;
-  borderRadius?: string;
-  shimmerDuration?: string;
   background?: string;
-  className?: string;
+  borderRadius?: string;
   children?: React.ReactNode;
+  className?: string;
+  shimmerColor?: string;
+  shimmerDuration?: string;
+  shimmerSize?: string;
 }
 
 export const ShimmerButton = React.forwardRef<

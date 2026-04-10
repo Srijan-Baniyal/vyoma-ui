@@ -10,33 +10,33 @@ import { cn } from "@/lib/utils";
  */
 export interface AccordionItem {
   /**
-   * Unique identifier for the item. Required for proper ARIA wiring and state management
+   * Body content revealed when the item is expanded. Accepts any React node
    */
-  id: string;
+  content: React.ReactNode;
   /**
    * Header content shown in the trigger button (e.g., a string or any React node)
    */
   header: React.ReactNode;
   /**
-   * Body content revealed when the item is expanded. Accepts any React node
+   * Unique identifier for the item. Required for proper ARIA wiring and state management
    */
-  content: React.ReactNode;
+  id: string;
 }
 
 export interface AccordionProps {
-  /**
-   * Array of accordion items to render
-   */
-  items: AccordionItem[];
   allowMultiple?: boolean;
+  /**
+   * Additional class names for the root element
+   */
+  className?: string;
   /**
    * Array of item IDs that should be open by default
    */
   defaultOpenIds?: string[];
   /**
-   * Additional class names for the root element
+   * Array of accordion items to render
    */
-  className?: string;
+  items: AccordionItem[];
 }
 
 /**

@@ -5,9 +5,9 @@ import { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 
 interface CelestialFlowTextProps {
-  text: string;
   className?: string;
   delay?: number;
+  text: string;
 }
 
 export default function CelestialFlowText({

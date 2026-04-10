@@ -1,4 +1,10 @@
-import { CheckCircle, Code, Rocket, Settings, Terminal } from "lucide-react";
+import {
+  IconCircleCheck as CheckCircle,
+  IconCode as Code,
+  IconRocket as Rocket,
+  IconSettings as Settings,
+  IconTerminal2 as Terminal,
+} from "@tabler/icons-react";
 import { PackageManagerTabs } from "@/components/PackageManagerTabs";
 import { Card } from "@/components/ui/card";
 import { Pill } from "@/components/ui/pill";

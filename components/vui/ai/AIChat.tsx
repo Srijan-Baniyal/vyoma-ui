@@ -1,28 +1,34 @@
 "use client";
 
-import { AlertCircle, Bot, Loader2, Send, User } from "lucide-react";
+import {
+  IconAlertCircle as AlertCircle,
+  IconRobot as Bot,
+  IconLoader2 as Loader2,
+  IconSend as Send,
+  IconUser as User,
+} from "@tabler/icons-react";
 import type React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
 // Types
 interface Message {
-  id: string;
   content: string;
+  id: string;
   role: "user" | "assistant";
   timestamp: Date;
 }
 
 interface AIChatProps {
   apiKey: string;
-  model?: string;
-  placeholder?: string;
   className?: string;
   maxHeight?: string;
-  systemPrompt?: string;
+  model?: string;
+  onError?: (error: string) => void;
   onMessageSent?: (message: string) => void;
   onResponseReceived?: (response: string) => void;
-  onError?: (error: string) => void;
+  placeholder?: string;
+  systemPrompt?: string;
 }
 
 interface OpenAIResponse {

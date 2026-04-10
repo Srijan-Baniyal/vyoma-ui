@@ -17,9 +17,9 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
 interface SpaceProps {
-  planetPath?: string;
   astronautPath?: string;
   groundPath?: string;
+  planetPath?: string;
 }
 
 export default function Space({

@@ -1,7 +1,12 @@
 // AIChatShowcase.tsx
 "use client";
 
-import { Check, Code, Copy, Eye } from "lucide-react";
+import {
+  IconCheck as Check,
+  IconCode as Code,
+  IconCopy as Copy,
+  IconEye as Eye,
+} from "@tabler/icons-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/buttonShadcn";
 import { cn } from "@/lib/utils";

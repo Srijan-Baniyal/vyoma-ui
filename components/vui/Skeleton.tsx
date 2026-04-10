@@ -6,9 +6,13 @@ import { cn } from "@/lib/utils";
 
 export interface SkeletonProps {
   /**
-   * Width of the skeleton element. Can be a string (CSS value) or number (pixels)
+   * Animation type for the skeleton loading effect
    */
-  width?: string | number;
+  animation?: "pulse" | "wave" | "none";
+  /**
+   * Additional class names for the skeleton element
+   */
+  className?: string;
   /**
    * Height of the skeleton element. Can be a string (CSS value) or number (pixels)
    */
@@ -18,13 +22,9 @@ export interface SkeletonProps {
    */
   radius?: "none" | "sm" | "md" | "lg" | "xl" | "full";
   /**
-   * Animation type for the skeleton loading effect
+   * Width of the skeleton element. Can be a string (CSS value) or number (pixels)
    */
-  animation?: "pulse" | "wave" | "none";
-  /**
-   * Additional class names for the skeleton element
-   */
-  className?: string;
+  width?: string | number;
 }
 
 /**

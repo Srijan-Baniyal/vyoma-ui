@@ -1,18 +1,18 @@
 "use client";
 
 import {
-  ArrowRight,
-  BookOpen,
-  CheckCircle,
-  Cpu,
-  Eye,
-  Layers,
-  Lightbulb,
-  Ruler,
-  Sparkles,
-  Star,
-  Target,
-} from "lucide-react";
+  IconArrowRight as ArrowRight,
+  IconBook2 as BookOpen,
+  IconCircleCheck as CheckCircle,
+  IconCpu as Cpu,
+  IconEye as Eye,
+  IconStack2 as Layers,
+  IconBulb as Lightbulb,
+  IconRulerMeasure as Ruler,
+  IconSparkles as Sparkles,
+  IconStar as Star,
+  IconTarget as Target,
+} from "@tabler/icons-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/buttonShadcn";

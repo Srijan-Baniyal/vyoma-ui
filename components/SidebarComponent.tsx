@@ -1,16 +1,16 @@
 "use client";
 
+import {
+  IconChevronRight as ChevronRight,
+  IconExternalLink as ExternalLink,
+  IconHome as Home,
+  IconMoon as Moon,
+  IconSearch as Search,
+  IconSun as Sun,
+  IconX as X,
+} from "@tabler/icons-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import parser from "html-react-parser";
-import {
-  ChevronRight,
-  ExternalLink,
-  Home,
-  Moon,
-  Search,
-  Sun,
-  X,
-} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -239,7 +239,7 @@ export default function SidebarComponent({ children }: SidebarComponentProps) {
     <Breadcrumb>
       <BreadcrumbList>
         {breadcrumbs.map((breadcrumb, index) => (
-          <React.Fragment key={`${breadcrumb.href}-${index}`}>
+          <React.Fragment key={`${breadcrumb.href}-${breadcrumb.label}`}>
             <BreadcrumbItem>
               {breadcrumb.isActive ? (
                 <BreadcrumbPage className="flex items-center gap-1.5 font-medium text-primary">
@@ -336,10 +336,7 @@ export default function SidebarComponent({ children }: SidebarComponentProps) {
   SidebarMenuItemComponent.displayName = "SidebarMenuItemComponent";
 
   return (
-    <div
-      className="w-full text-left"
-      style={{ all: "unset", display: "block", width: "100%" }}
-    >
+    <div className="block w-full text-left [all:unset]">
       <SidebarProvider>
         <Sidebar className="z-40 border-r bg-background/98 shadow-sm backdrop-blur-md supports-backdrop-filter:bg-background/95">
           <SidebarHeader className="border-border/50 border-b p-0">

@@ -1,13 +1,13 @@
 "use client";
 
 import {
-  ArrowRight,
-  Calendar,
-  CheckCircle,
-  Clock,
-  Sparkles,
-  Tag,
-} from "lucide-react";
+  IconArrowRight as ArrowRight,
+  IconCalendar as Calendar,
+  IconCircleCheck as CheckCircle,
+  IconClock as Clock,
+  IconSparkles as Sparkles,
+  IconTag as Tag,
+} from "@tabler/icons-react";
 import { motion, useInView } from "motion/react";
 import type React from "react";
 import { useRef } from "react";
@@ -15,18 +15,18 @@ import { Card } from "@/components/ui/card";
 import { Pill } from "@/components/ui/pill";
 
 interface TimelineEntry {
-  title: string;
+  color?: string;
   content: React.ReactNode;
   date?: string;
   icon?: React.ReactNode;
   tag?: string;
-  color?: string;
+  title: string;
 }
 
 interface TimelineProps {
   data: TimelineEntry[];
-  title?: string;
   subtitle?: string;
+  title?: string;
 }
 
 const TimelineItem = ({

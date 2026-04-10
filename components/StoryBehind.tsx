@@ -1,26 +1,26 @@
 "use client";
 
 import {
-  ArrowRight,
-  Award,
-  Building,
-  Clock,
-  Code,
-  Coffee,
-  Cpu,
-  Eye,
-  Globe,
-  Heart,
-  Lightbulb,
-  Palette,
-  Rocket,
-  Sparkles,
-  Star,
-  Target,
-  TrendingUp,
-  Users,
-  Zap,
-} from "lucide-react";
+  IconArrowRight as ArrowRight,
+  IconAward as Award,
+  IconBuilding as Building,
+  IconClock as Clock,
+  IconCode as Code,
+  IconCoffee as Coffee,
+  IconCpu as Cpu,
+  IconEye as Eye,
+  IconGlobe as Globe,
+  IconHeart as Heart,
+  IconBulb as Lightbulb,
+  IconPalette as Palette,
+  IconRocket as Rocket,
+  IconSparkles as Sparkles,
+  IconStar as Star,
+  IconTarget as Target,
+  IconTrendingUp as TrendingUp,
+  IconUsers as Users,
+  IconBolt as Zap,
+} from "@tabler/icons-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";

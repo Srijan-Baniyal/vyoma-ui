@@ -1,19 +1,19 @@
 "use client";
 
 import {
-  Check,
-  ChevronDown,
-  ChevronUp,
-  Code2,
-  Copy,
-  Eye,
-  Info,
-  Maximize2,
-  Minimize2,
-  RefreshCw,
-  Sparkles,
-  Terminal,
-} from "lucide-react";
+  IconCheck as Check,
+  IconChevronDown as ChevronDown,
+  IconChevronUp as ChevronUp,
+  IconCodeCircle2 as Code2,
+  IconCopy as Copy,
+  IconEye as Eye,
+  IconInfoCircle as Info,
+  IconMaximize as Maximize2,
+  IconMinimize as Minimize2,
+  IconRefresh as RefreshCw,
+  IconSparkles as Sparkles,
+  IconTerminal2 as Terminal,
+} from "@tabler/icons-react";
 import type React from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { Badge } from "@/components/ui/badge";
@@ -30,27 +30,27 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { ComponentPropsInfo } from "@/lib/TsASTAbstractionForDoc";
 
 interface ComponentShowcaseCardProps {
-  componentName: string;
-  description?: string | React.JSX.Element | React.JSX.Element[];
-  component: React.ComponentType<Record<string, unknown>>;
-  defaultProps?: Record<string, unknown>;
   codeString: string;
-  propsInfo?: ComponentPropsInfo | null;
-  index: number;
-  refreshKey: number;
-  isExpanded: boolean;
-  isTruncated: boolean;
+  component: React.ComponentType<Record<string, unknown>>;
+  componentName: string;
+  copiedIndex: number | null;
+  defaultProps?: Record<string, unknown>;
+  description?: string | React.JSX.Element | React.JSX.Element[];
   descriptionContent: string | React.JSX.Element | React.JSX.Element[];
   displayDescription: string | React.JSX.Element | React.JSX.Element[];
   fullscreenIndex: number | null;
-  copiedIndex: number | null;
-  isRefreshing: boolean;
+  index: number;
   isClient: boolean;
+  isExpanded: boolean;
   isMobile: boolean;
+  isRefreshing: boolean;
+  isTruncated: boolean;
+  onCopyCode: (code: string) => void;
+  onRefresh: () => void;
   onToggleDescription: () => void;
   onToggleFullscreen: () => void;
-  onRefresh: () => void;
-  onCopyCode: (code: string) => void;
+  propsInfo?: ComponentPropsInfo | null;
+  refreshKey: number;
 }
 
 export function ComponentShowcaseCard({

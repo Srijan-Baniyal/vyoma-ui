@@ -4,10 +4,10 @@ import Copy from "@/components/Copy";
 import { Card } from "@/components/ui/card";
 
 interface SnippetProps {
-  text: string;
-  width?: string;
-  variant?: "default" | "success" | "warning" | "info";
   showIndicator?: boolean;
+  text: string;
+  variant?: "default" | "success" | "warning" | "info";
+  width?: string;
 }
 
 export function Snippet({

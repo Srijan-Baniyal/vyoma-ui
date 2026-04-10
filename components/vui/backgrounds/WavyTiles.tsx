@@ -5,6 +5,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 
 declare global {
   interface Window {
+    THREE: object;
     VANTA: {
       WAVES: (config: {
         el: HTMLElement;
@@ -57,7 +58,6 @@ declare global {
         destroy: () => void;
       };
     };
-    THREE: object;
   }
 }
 

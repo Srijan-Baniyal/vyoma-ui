@@ -1,6 +1,9 @@
 "use client";
 
-import { ExternalLink, Mail } from "lucide-react";
+import {
+  IconExternalLink as ExternalLink,
+  IconMail as Mail,
+} from "@tabler/icons-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
@@ -14,13 +17,13 @@ import {
 } from "@/components/ui/card";
 
 interface Project {
-  id: number;
-  name: string;
-  description: string;
-  image: string;
-  url: string;
   category: string;
+  description: string;
+  id: number;
+  image: string;
+  name: string;
   technologies: string[];
+  url: string;
 }
 
 const showcaseProjects: Project[] = [];

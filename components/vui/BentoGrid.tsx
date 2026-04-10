@@ -1,7 +1,12 @@
 "use client";
 
+import {
+  IconDownload as Download,
+  IconHeart as Heart,
+  IconUser as User,
+  IconX as X,
+} from "@tabler/icons-react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Download, Heart, User, X } from "lucide-react";
 import Image from "next/image";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/buttonShadcn";

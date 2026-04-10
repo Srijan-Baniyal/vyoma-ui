@@ -5,12 +5,12 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
 interface BeforeAfterSliderProps {
-  beforeImage: string;
   afterImage: string;
-  beforeLabel?: string;
   afterLabel?: string;
-  initialPosition?: number;
+  beforeImage: string;
+  beforeLabel?: string;
   className?: string;
+  initialPosition?: number;
   onPositionChange?: (position: number) => void;
 }
 

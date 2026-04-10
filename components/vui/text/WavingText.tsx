@@ -12,14 +12,29 @@ const WHITESPACE_REGEX = /(\s+)/;
 const WHITESPACE_TEST_REGEX = /\s/;
 
 interface WaveVariant extends TargetAndTransition {
-  y?: number[];
   rotate?: number[];
   scale?: number[];
   x?: number[];
+  y?: number[];
 }
 
 interface WavingTextProps extends Omit<HTMLMotionProps<"div">, "children"> {
+  animateAsWords?: boolean;
+  className?: string;
+  containerClassName?: string;
+  customWave?: WaveVariant;
+  direction?: "forward" | "reverse" | "alternate";
+  duration?: number;
+  intensity?: "subtle" | "normal" | "strong" | "extreme";
+  letterClassName?: string;
+  loop?: boolean;
+  onAnimationComplete?: () => void;
+  onAnimationStart?: () => void;
+  preserveSpaces?: boolean;
+  speed?: number;
+  stagger?: number;
   text: string | string[];
+  trigger?: "none" | "hover" | "view" | "continuous";
   variant?:
     | "sine"
     | "bounce"
@@ -29,27 +44,12 @@ interface WavingTextProps extends Omit<HTMLMotionProps<"div">, "children"> {
     | "float"
     | "dance"
     | "quantum";
-  intensity?: "subtle" | "normal" | "strong" | "extreme";
-  speed?: number;
-  direction?: "forward" | "reverse" | "alternate";
-  stagger?: number;
-  trigger?: "none" | "hover" | "view" | "continuous";
-  loop?: boolean;
-  className?: string;
-  letterClassName?: string;
-  wordClassName?: string;
-  containerClassName?: string;
-  animateAsWords?: boolean;
-  preserveSpaces?: boolean;
   viewTriggerOptions?: {
     threshold?: number;
     rootMargin?: string;
     triggerOnce?: boolean;
   };
-  customWave?: WaveVariant;
-  duration?: number;
-  onAnimationStart?: () => void;
-  onAnimationComplete?: () => void;
+  wordClassName?: string;
 }
 
 // Predefined wave variants with different intensities

@@ -1,6 +1,11 @@
 "use client";
 
-import { Github, Heart, Linkedin, Twitter } from "lucide-react";
+import {
+  IconBrandGithub as Github,
+  IconHeart as Heart,
+  IconBrandLinkedin as Linkedin,
+  IconBrandX as Twitter,
+} from "@tabler/icons-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/buttonShadcn";

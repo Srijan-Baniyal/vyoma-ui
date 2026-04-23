@@ -85,9 +85,9 @@ fi
 
 # Run tests and build
 print_status "Running tests and build..."
-yarn install --frozen-lockfile
-yarn lint
-yarn build
+bun install --frozen-lockfile
+bun run lint
+bun run build
 
 print_success "Build completed successfully!"
 

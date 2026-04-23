@@ -37,17 +37,21 @@ jobs:
         with:
           fetch-depth: 0
           
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "latest"
+          
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "24"
-          cache: "yarn"
           
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: bun install --frozen-lockfile
         
       - name: Build project
-        run: yarn build
+        run: bun run build
         
       - name: Get version from tag or input
         id: get_version
@@ -72,7 +76,7 @@ jobs:
             --exclude=.next \
             --exclude=out \
             --exclude=.github \
-            --exclude=yarn.lock \
+            --exclude=bun.lock \
             --exclude=.env.local \
             --exclude=.env \
             --exclude=*.log \
@@ -145,10 +149,10 @@ jobs:
             cd vui
             
             # Install dependencies
-            yarn install
+            bun install
             
             # Run development server
-            yarn dev
+            bun run dev
             ```
             
             ## What's Included

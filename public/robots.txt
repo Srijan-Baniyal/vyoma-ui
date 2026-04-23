@@ -1,3 +1,5 @@
+Content-Signal: ai-train=no, search=yes, ai-input=no
+
 User-agent: *
 Allow: /
 

@@ -35,28 +35,35 @@ export default function CelestialFlowText({
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [x, y]);
 
+  const characterOccurrences = new Map<string, number>();
+
   return (
     <motion.div
       className={cn(className)}
       ref={ref}
       style={{ perspective: 1000 }}
     >
-      {text.split("").map((char, i) => (
-        <motion.span
-          animate={{ opacity: 1, y: 0 }}
-          className="relative inline-block animate-gradient select-none bg-linear-to-r bg-size-[400%_400%] from-violet-400 via-pink-400 to-cyan-400 bg-clip-text font-bold text-5xl text-transparent tracking-wide drop-shadow-[0_0_10px_rgba(200,200,255,0.6)] md:text-7xl dark:from-amber-400 dark:via-pink-400 dark:to-purple-500"
-          initial={{ opacity: 0, y: 25 }}
-          key={`${char}-${i}-${text}`}
-          transition={{
-            delay: i * delay,
-            type: "spring",
-            stiffness: 150,
-            damping: 12,
-          }}
-        >
-          {char === " " ? "\u00A0" : char}
-        </motion.span>
-      ))}
+      {text.split("").map((char, i) => {
+        const occurrence = (characterOccurrences.get(char) ?? 0) + 1;
+        characterOccurrences.set(char, occurrence);
+
+        return (
+          <motion.span
+            animate={{ opacity: 1, y: 0 }}
+            className="relative inline-block animate-gradient select-none bg-linear-to-r bg-size-[400%_400%] from-violet-400 via-pink-400 to-cyan-400 bg-clip-text font-bold text-5xl text-transparent tracking-wide drop-shadow-[0_0_10px_rgba(200,200,255,0.6)] md:text-7xl dark:from-amber-400 dark:via-pink-400 dark:to-purple-500"
+            initial={{ opacity: 0, y: 25 }}
+            key={`${char}-${occurrence}-${text}`}
+            transition={{
+              delay: i * delay,
+              type: "spring",
+              stiffness: 150,
+              damping: 12,
+            }}
+          >
+            {char === " " ? "\u00A0" : char}
+          </motion.span>
+        );
+      })}
     </motion.div>
   );
 }

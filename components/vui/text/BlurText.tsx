@@ -109,11 +109,14 @@ const BlurText: React.FC<BlurTextProps> = ({
   const times = Array.from({ length: stepCount }, (_, i) =>
     stepCount === 1 ? 0 : i / (stepCount - 1)
   );
+  const segmentOccurrences = new Map<string, number>();
 
   return (
     <p className={cn("flex flex-wrap blur-text", className)} ref={ref}>
       {mounted ? (
         elements.map((segment, index) => {
+          const occurrence = (segmentOccurrences.get(segment) ?? 0) + 1;
+          segmentOccurrences.set(segment, occurrence);
           const animateKeyframes = buildKeyframes(fromSnapshot, toSnapshots);
 
           const spanTransition: Transition = {
@@ -127,7 +130,7 @@ const BlurText: React.FC<BlurTextProps> = ({
             <motion.span
               animate={inView ? animateKeyframes : fromSnapshot}
               initial={fromSnapshot}
-              key={`${segment}-${index}-${text}`}
+              key={`${segment}-${occurrence}-${text}`}
               onAnimationComplete={
                 index === elements.length - 1 ? onAnimationComplete : undefined
               }

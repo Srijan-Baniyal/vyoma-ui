@@ -230,8 +230,8 @@ export function WavyTilesShowcase() {
   const isMobile = useIsMobile();
 
   useEffect(() => {
-    const loadScript = (src: string): Promise<void> => {
-      return new Promise((resolve, reject) => {
+    const loadScript = (src: string): Promise<void> =>
+      new Promise((resolve, reject) => {
         const script = document.createElement("script");
         script.src = src;
         script.onload = () => resolve();
@@ -239,7 +239,6 @@ export function WavyTilesShowcase() {
         document.head.appendChild(script);
         setTimeout(() => reject(), 5000);
       });
-    };
 
     const loadThreeJS = async () => {
       if (!window.THREE) {

@@ -75,7 +75,7 @@ const TypingText = ({
     let hasStarted = false;
 
     const handleDeletingPhase = (currentText: string, animate: () => void) => {
-      setDisplayText(currentText.substring(0, currentIndex));
+      setDisplayText(currentText.slice(0, currentIndex));
       currentIndex--;
 
       if (currentIndex < 0) {
@@ -96,7 +96,7 @@ const TypingText = ({
     };
 
     const handleTypingPhase = (currentText: string, animate: () => void) => {
-      setDisplayText(currentText.substring(0, currentIndex + 1));
+      setDisplayText(currentText.slice(0, currentIndex + 1));
       currentIndex++;
 
       if (currentIndex === currentText.length) {

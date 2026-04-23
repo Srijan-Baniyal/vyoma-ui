@@ -170,6 +170,8 @@ export function FlipText({
 
   const displayText =
     hoverText && isHovered && effect === "slide" ? hoverText : children;
+  const displayCharacterOccurrences = new Map<string, number>();
+  const hoverCharacterOccurrences = new Map<string, number>();
 
   return (
     // biome-ignore lint/a11y/noNoninteractiveElementInteractions: FlipText requires mouse interaction for text flip animation effect
@@ -181,15 +183,20 @@ export function FlipText({
       style={getContainerStyle()}
       {...accessibilityProps}
     >
-      {displayText.split("").map((char, index) => (
-        <span
-          className="inline-block origin-center"
-          key={`${char}-${index}-${displayText}`}
-          style={getCharacterStyle(index)}
-        >
-          {char === " " && preserveSpaces ? "\u00A0" : char}
-        </span>
-      ))}
+      {displayText.split("").map((char, index) => {
+        const occurrence = (displayCharacterOccurrences.get(char) ?? 0) + 1;
+        displayCharacterOccurrences.set(char, occurrence);
+
+        return (
+          <span
+            className="inline-block origin-center"
+            key={`${char}-${occurrence}-${displayText}`}
+            style={getCharacterStyle(index)}
+          >
+            {char === " " && preserveSpaces ? "\u00A0" : char}
+          </span>
+        );
+      })}
 
       {/* Hover text for slide effect */}
       {effect === "slide" && hoverText && (
@@ -204,17 +211,22 @@ export function FlipText({
             transitionDelay: `${delay}ms`,
           }}
         >
-          {hoverText.split("").map((char, index) => (
-            <span
-              className="inline-block"
-              key={`hover-${char}-${index}-${hoverText}`}
-              style={{
-                transitionDelay: `${delay + index * staggerDelay}ms`,
-              }}
-            >
-              {char === " " && preserveSpaces ? "\u00A0" : char}
-            </span>
-          ))}
+          {hoverText.split("").map((char, index) => {
+            const occurrence = (hoverCharacterOccurrences.get(char) ?? 0) + 1;
+            hoverCharacterOccurrences.set(char, occurrence);
+
+            return (
+              <span
+                className="inline-block"
+                key={`hover-${char}-${occurrence}-${hoverText}`}
+                style={{
+                  transitionDelay: `${delay + index * staggerDelay}ms`,
+                }}
+              >
+                {char === " " && preserveSpaces ? "\u00A0" : char}
+              </span>
+            );
+          })}
         </span>
       )}
     </span>

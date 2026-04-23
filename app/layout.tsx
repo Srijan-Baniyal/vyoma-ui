@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import WebMcpProvider from "@/components/WebMcpProvider";
 import { PackageManagerProvider } from "@/contexts/PackageManagerContext";
 import ThemeProvider from "@/providers/ThemeProvider";
 
@@ -112,6 +113,7 @@ export default function RootLayout({
         <ThemeProvider>
           <PackageManagerProvider>{children}</PackageManagerProvider>
         </ThemeProvider>
+        <WebMcpProvider />
         <Analytics />
         <SpeedInsights />
       </body>

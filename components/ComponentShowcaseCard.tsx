@@ -844,10 +844,10 @@ function DetailedPropsInfo({ propsInfo }: { propsInfo: ComponentPropsInfo }) {
                           Options:
                         </span>
                         <div className="flex flex-wrap gap-1">
-                          {prop.unionTypes.map((unionType, idx) => (
+                          {prop.unionTypes.map((unionType) => (
                             <Badge
                               className="font-mono text-xs"
-                              key={`${prop.name}-union-${idx}`}
+                              key={`${prop.name}-union-${unionType}`}
                               variant="outline"
                             >
                               {unionType}
@@ -863,10 +863,10 @@ function DetailedPropsInfo({ propsInfo }: { propsInfo: ComponentPropsInfo }) {
                           Values:
                         </span>
                         <div className="flex flex-wrap gap-1">
-                          {prop.enumValues.map((enumValue, idx) => (
+                          {prop.enumValues.map((enumValue) => (
                             <Badge
                               className="font-mono text-xs"
-                              key={`${prop.name}-enum-${idx}`}
+                              key={`${prop.name}-enum-${enumValue}`}
                               variant="secondary"
                             >
                               {enumValue}
@@ -906,10 +906,10 @@ function DetailedPropsInfo({ propsInfo }: { propsInfo: ComponentPropsInfo }) {
               {prop.tags && prop.tags.length > 0 && (
                 <div className="flex flex-wrap items-center gap-2 pt-2">
                   <span className="text-muted-foreground text-xs">Tags:</span>
-                  {prop.tags.map((tag, idx) => (
+                  {prop.tags.map((tag) => (
                     <Badge
                       className="text-xs"
-                      key={`${prop.name}-tag-${idx}`}
+                      key={`${prop.name}-tag-${tag}`}
                       variant="outline"
                     >
                       @{tag}

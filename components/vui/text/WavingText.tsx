@@ -233,9 +233,7 @@ const WavingText = ({
   };
 
   // Get initial state (neutral position)
-  const getInitialVariant = () => {
-    return { y: 0, x: 0, scale: 1, rotate: 0 };
-  };
+  const getInitialVariant = () => ({ y: 0, x: 0, scale: 1, rotate: 0 });
 
   // Determine if animation should play
   const shouldAnimate = () => {
@@ -291,6 +289,7 @@ const WavingText = ({
 
   const textUnits = splitTextIntoUnits(currentText);
   const animationVariant = getAnimationVariant();
+  const unitOccurrences = new Map<string, number>();
 
   const hoverProps =
     trigger === "hover"
@@ -308,6 +307,8 @@ const WavingText = ({
       {...props}
     >
       {textUnits.map((unit, index) => {
+        const occurrence = (unitOccurrences.get(unit) ?? 0) + 1;
+        unitOccurrences.set(unit, occurrence);
         const isSpace = unit.trim() === "";
         const shouldSkipAnimation = isSpace && !preserveSpaces;
 
@@ -315,7 +316,7 @@ const WavingText = ({
           return (
             <span
               className="whitespace-pre"
-              key={`space-${unit}-${index}-${currentText}`}
+              key={`space-${unit}-${occurrence}-${currentText}`}
             >
               {unit}
             </span>
@@ -335,7 +336,7 @@ const WavingText = ({
               className
             )}
             initial={getInitialVariant()}
-            key={`${currentTextIndex}-${index}-${unit}`}
+            key={`${currentTextIndex}-${unit}-${occurrence}`}
             onAnimationComplete={index === 0 ? onAnimationComplete : undefined}
             style={{
               transformOrigin: "center center",

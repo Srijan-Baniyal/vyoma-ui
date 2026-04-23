@@ -140,14 +140,11 @@ function TextDecryption({
       : characters.split("");
 
     // Helper function to check if a character is an emoji or special Unicode character
-    const isEmojiOrSpecial = (char: string): boolean => {
-      return EMOJI_REGEX.test(char) || char.charCodeAt(0) > 127;
-    };
+    const isEmojiOrSpecial = (char: string): boolean =>
+      EMOJI_REGEX.test(char) || char.charCodeAt(0) > 127;
 
     // Use Array.from for proper Unicode character handling
-    const getTextChars = (text: string): string[] => {
-      return Array.from(text);
-    };
+    const getTextChars = (text: string): string[] => Array.from(text);
 
     const shuffleText = (
       originalText: string,
@@ -346,6 +343,7 @@ function TextDecryption({
   ]
     .filter(Boolean)
     .join(" ");
+  const characterOccurrences = new Map<string, number>();
 
   return (
     <motion.span
@@ -363,12 +361,14 @@ function TextDecryption({
       {/* Visual text with scramble effect */}
       <span aria-hidden="true" className="relative">
         {Array.from(displayText).map((char, index) => {
+          const occurrence = (characterOccurrences.get(char) ?? 0) + 1;
+          characterOccurrences.set(char, occurrence);
           const isRevealedOrDone =
             revealedIndices.has(index) || !isScrambling || !isHovering;
 
           const getAnimateProps = () => {
             if (!typewriterEffect) {
-              return undefined;
+              return;
             }
             if (isRevealedOrDone) {
               return { opacity: 1, scale: 1 };
@@ -385,7 +385,7 @@ function TextDecryption({
               initial={
                 typewriterEffect ? { opacity: 0, scale: 0.8 } : undefined
               }
-              key={`${index}-${char}`}
+              key={`${char}-${occurrence}-${displayText}`}
               transition={{
                 duration: 0.2,
                 delay: typewriterEffect ? index * 0.05 : 0,

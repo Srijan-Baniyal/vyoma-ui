@@ -80,51 +80,49 @@ export const Navbar = ({ children, className }: NavbarProps) => {
   );
 };
 
-export const NavBody = ({ children, className, visible }: NavBodyProps) => {
-  return (
-    <motion.div
-      animate={{
-        backdropFilter: visible ? "blur(20px)" : "none",
-        boxShadow: visible
-          ? "0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04)"
-          : "blur(0px)",
-        width: visible ? "45%" : "100%",
-        height: visible ? "100%" : "100%",
-        y: visible ? 12 : 0,
-        scale: visible ? 0.98 : 1,
-      }}
-      className={cn(
-        "relative z-60 mx-auto hidden w-full max-w-7xl items-center px-6 py-3 lg:grid lg:grid-cols-3",
-        visible
-          ? "rounded-2xl border border-white/20 bg-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.08)] dark:border-white/10 dark:bg-black/10 dark:shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
-          : "border-0",
-        className
-      )}
-      style={{
-        minWidth: "800px",
-        backgroundColor: visible
-          ? "rgba(255, 255, 255, 0.1)"
-          : "rgba(255, 255, 255, 0)",
-      }}
-      transition={{
-        type: "spring",
-        stiffness: 300,
-        damping: 40,
-        mass: 0.8,
-      }}
-    >
-      <div className="flex justify-start">
-        {React.Children.toArray(children)[0]}
-      </div>
-      <div className="flex justify-center">
-        {React.Children.toArray(children)[1]}
-      </div>
-      <div className="flex justify-end">
-        {React.Children.toArray(children)[2]}
-      </div>
-    </motion.div>
-  );
-};
+export const NavBody = ({ children, className, visible }: NavBodyProps) => (
+  <motion.div
+    animate={{
+      backdropFilter: visible ? "blur(20px)" : "none",
+      boxShadow: visible
+        ? "0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04)"
+        : "blur(0px)",
+      width: visible ? "45%" : "100%",
+      height: visible ? "100%" : "100%",
+      y: visible ? 12 : 0,
+      scale: visible ? 0.98 : 1,
+    }}
+    className={cn(
+      "relative z-60 mx-auto hidden w-full max-w-7xl items-center px-6 py-3 lg:grid lg:grid-cols-3",
+      visible
+        ? "rounded-2xl border border-white/20 bg-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.08)] dark:border-white/10 dark:bg-black/10 dark:shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
+        : "border-0",
+      className
+    )}
+    style={{
+      minWidth: "800px",
+      backgroundColor: visible
+        ? "rgba(255, 255, 255, 0.1)"
+        : "rgba(255, 255, 255, 0)",
+    }}
+    transition={{
+      type: "spring",
+      stiffness: 300,
+      damping: 40,
+      mass: 0.8,
+    }}
+  >
+    <div className="flex justify-start">
+      {React.Children.toArray(children)[0]}
+    </div>
+    <div className="flex justify-center">
+      {React.Children.toArray(children)[1]}
+    </div>
+    <div className="flex justify-end">
+      {React.Children.toArray(children)[2]}
+    </div>
+  </motion.div>
+);
 
 export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
   const [hovered, setHovered] = useState<number | null>(null);
@@ -166,100 +164,94 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
   );
 };
 
-export const MobileNav = ({ children, className, visible }: MobileNavProps) => {
-  return (
-    <motion.div
-      animate={{
-        backdropFilter: visible ? "blur(20px)" : "none",
-        boxShadow: visible
-          ? "0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04)"
-          : "none",
-        width: visible ? "95%" : "100%",
-        height: visible ? "100%" : "100%",
-        paddingRight: visible ? "16px" : "12px",
-        paddingLeft: visible ? "16px" : "12px",
-        borderRadius: visible ? "16px" : "0px",
-        y: visible ? 16 : 0,
-        scale: visible ? 0.98 : 0.98,
-      }}
-      className={cn(
-        "relative z-50 mx-auto flex w-full max-w-[calc(100vw-1rem)] flex-col items-center justify-between py-3 lg:hidden",
-        visible
-          ? "border border-white/20 bg-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.08)] dark:border-white/10 dark:bg-black/10 dark:shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
-          : "border-0",
-        className
-      )}
-      style={{
-        backgroundColor: visible
-          ? "rgba(255, 255, 255, 0.1)"
-          : "rgba(255, 255, 255, 0)",
-      }}
-      transition={{
-        type: "spring",
-        stiffness: 300,
-        damping: 40,
-        mass: 0.8,
-      }}
-    >
-      {children}
-    </motion.div>
-  );
-};
+export const MobileNav = ({ children, className, visible }: MobileNavProps) => (
+  <motion.div
+    animate={{
+      backdropFilter: visible ? "blur(20px)" : "none",
+      boxShadow: visible
+        ? "0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04)"
+        : "none",
+      width: visible ? "95%" : "100%",
+      height: visible ? "100%" : "100%",
+      paddingRight: visible ? "16px" : "12px",
+      paddingLeft: visible ? "16px" : "12px",
+      borderRadius: visible ? "16px" : "0px",
+      y: visible ? 16 : 0,
+      scale: visible ? 0.98 : 0.98,
+    }}
+    className={cn(
+      "relative z-50 mx-auto flex w-full max-w-[calc(100vw-1rem)] flex-col items-center justify-between py-3 lg:hidden",
+      visible
+        ? "border border-white/20 bg-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.08)] dark:border-white/10 dark:bg-black/10 dark:shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
+        : "border-0",
+      className
+    )}
+    style={{
+      backgroundColor: visible
+        ? "rgba(255, 255, 255, 0.1)"
+        : "rgba(255, 255, 255, 0)",
+    }}
+    transition={{
+      type: "spring",
+      stiffness: 300,
+      damping: 40,
+      mass: 0.8,
+    }}
+  >
+    {children}
+  </motion.div>
+);
 
 export const MobileNavHeader = ({
   children,
   className,
-}: MobileNavHeaderProps) => {
-  return (
-    <div
-      className={cn(
-        "flex w-full flex-row items-center justify-between px-2",
-        className
-      )}
-    >
-      {children}
-    </div>
-  );
-};
+}: MobileNavHeaderProps) => (
+  <div
+    className={cn(
+      "flex w-full flex-row items-center justify-between px-2",
+      className
+    )}
+  >
+    {children}
+  </div>
+);
 
 export const MobileNavMenu = ({
   children,
   className,
   isOpen,
-}: MobileNavMenuProps) => {
-  return (
-    <AnimatePresence mode="sync">
-      {isOpen && (
-        <motion.div
-          animate={{
-            backdropFilter: "blur(20px)",
-            boxShadow:
-              "0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.02)",
-            width: "95%",
-            height: "100%",
-            paddingRight: "16px",
-            paddingLeft: "12px",
-            borderRadius: "16px",
-            scale: 0.98,
-          }}
-          className={cn(
-            "relative z-50 mx-auto flex w-full max-w-[calc(100vw-1rem)] flex-col items-center justify-between py-3 lg:hidden",
-            "border border-white/20 bg-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.08)] dark:border-white/10 dark:bg-black/10 dark:shadow-[0_8px_32px_rgba(0,0,0,0.3)]",
-            className
-          )}
-          transition={{
-            type: "spring",
-            stiffness: 300,
-            damping: 40,
-            mass: 0.8,
-          }}
-        >
-          {children}
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-};
+}: MobileNavMenuProps) => (
+  <AnimatePresence mode="sync">
+    {isOpen && (
+      <motion.div
+        animate={{
+          backdropFilter: "blur(20px)",
+          boxShadow:
+            "0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.02)",
+          width: "95%",
+          height: "100%",
+          paddingRight: "16px",
+          paddingLeft: "12px",
+          borderRadius: "16px",
+          scale: 0.98,
+        }}
+        className={cn(
+          "relative z-50 mx-auto flex w-full max-w-[calc(100vw-1rem)] flex-col items-center justify-between py-3 lg:hidden",
+          "border border-white/20 bg-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.08)] dark:border-white/10 dark:bg-black/10 dark:shadow-[0_8px_32px_rgba(0,0,0,0.3)]",
+          className
+        )}
+        transition={{
+          type: "spring",
+          stiffness: 300,
+          damping: 40,
+          mass: 0.8,
+        }}
+      >
+        {children}
+      </motion.div>
+    )}
+  </AnimatePresence>
+);
 
 export const MobileNavToggle = ({
   isOpen,
@@ -267,72 +259,68 @@ export const MobileNavToggle = ({
 }: {
   isOpen: boolean;
   onClick: () => void;
-}) => {
-  return (
-    <motion.button
-      className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/20 backdrop-blur-sm transition-colors hover:bg-white/10 dark:border-white/10 dark:hover:bg-white/5"
-      onClick={onClick}
-      transition={{ duration: 0.1 }}
-      whileTap={{ scale: 0.9 }}
-    >
-      <AnimatePresence mode="wait">
-        {isOpen ? (
-          <motion.div
-            animate={{ rotate: 0, opacity: 1 }}
-            exit={{ rotate: 90, opacity: 0 }}
-            initial={{ rotate: -90, opacity: 0 }}
-            key="close"
-            transition={{ duration: 0.15 }}
-          >
-            <IconX className="h-5 w-5 text-neutral-700 dark:text-neutral-300" />
-          </motion.div>
-        ) : (
-          <motion.div
-            animate={{ rotate: 0, opacity: 1 }}
-            exit={{ rotate: -90, opacity: 0 }}
-            initial={{ rotate: 90, opacity: 0 }}
-            key="menu"
-            transition={{ duration: 0.15 }}
-          >
-            <IconMenu2 className="h-5 w-5 text-neutral-700 dark:text-neutral-300" />
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.button>
-  );
-};
+}) => (
+  <motion.button
+    className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/20 backdrop-blur-sm transition-colors hover:bg-white/10 dark:border-white/10 dark:hover:bg-white/5"
+    onClick={onClick}
+    transition={{ duration: 0.1 }}
+    whileTap={{ scale: 0.9 }}
+  >
+    <AnimatePresence mode="wait">
+      {isOpen ? (
+        <motion.div
+          animate={{ rotate: 0, opacity: 1 }}
+          exit={{ rotate: 90, opacity: 0 }}
+          initial={{ rotate: -90, opacity: 0 }}
+          key="close"
+          transition={{ duration: 0.15 }}
+        >
+          <IconX className="h-5 w-5 text-neutral-700 dark:text-neutral-300" />
+        </motion.div>
+      ) : (
+        <motion.div
+          animate={{ rotate: 0, opacity: 1 }}
+          exit={{ rotate: -90, opacity: 0 }}
+          initial={{ rotate: 90, opacity: 0 }}
+          key="menu"
+          transition={{ duration: 0.15 }}
+        >
+          <IconMenu2 className="h-5 w-5 text-neutral-700 dark:text-neutral-300" />
+        </motion.div>
+      )}
+    </AnimatePresence>
+  </motion.button>
+);
 
-export const NavbarLogo = () => {
-  return (
-    <motion.a
-      className="relative z-20 flex items-center space-x-3 px-2 py-1 font-normal text-sm"
-      href="/"
-      transition={{ duration: 0.15 }}
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
+export const NavbarLogo = () => (
+  <motion.a
+    className="relative z-20 flex items-center space-x-3 px-2 py-1 font-normal text-sm"
+    href="/"
+    transition={{ duration: 0.15 }}
+    whileHover={{ scale: 1.02 }}
+    whileTap={{ scale: 0.98 }}
+  >
+    <motion.div
+      className="flex items-center justify-center"
+      transition={{ duration: 0.2 }}
+      whileHover={{ rotate: 5 }}
     >
-      <motion.div
-        className="flex items-center justify-center"
-        transition={{ duration: 0.2 }}
-        whileHover={{ rotate: 5 }}
-      >
-        <div className="flex h-10 w-10 items-center justify-center rounded-lg shadow-lg">
-          <Image
-            alt="Vyoma UI"
-            height={40}
-            priority
-            quality={100}
-            src={VyomaUI}
-            width={40}
-          />
-        </div>
-      </motion.div>
-      <span className="font-semibold text-lg text-neutral-800 dark:text-white">
-        Vyoma UI
-      </span>
-    </motion.a>
-  );
-};
+      <div className="flex h-10 w-10 items-center justify-center rounded-lg shadow-lg">
+        <Image
+          alt="Vyoma UI"
+          height={40}
+          priority
+          quality={100}
+          src={VyomaUI}
+          width={40}
+        />
+      </div>
+    </motion.div>
+    <span className="font-semibold text-lg text-neutral-800 dark:text-white">
+      Vyoma UI
+    </span>
+  </motion.a>
+);
 
 export const NavbarButton = ({
   href,

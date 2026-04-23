@@ -221,7 +221,7 @@ export const componentPropsMap: Record<string, Record<string, unknown>> = ${JSON
     console.log("\n🔍 Verification:");
     for (const [name, code] of Object.entries(sourceMap)) {
       const firstLine = code.split("\n")[0];
-      console.log(`  ${name}: ${firstLine.substring(0, 50)}...`);
+      console.log(`  ${name}: ${firstLine.slice(0, 50)}...`);
     }
   } catch (error) {
     console.error("❌ Error generating source map:", error);

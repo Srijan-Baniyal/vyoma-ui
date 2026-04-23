@@ -45,7 +45,7 @@ const useCaretPosition = (
     const input = inputRef.current;
     const measure = measureRef.current;
     const cursorPos = input.selectionStart || 0;
-    const textBeforeCaret = text.substring(0, cursorPos);
+    const textBeforeCaret = text.slice(0, cursorPos);
 
     measure.textContent = textBeforeCaret;
     const rect = measure.getBoundingClientRect();

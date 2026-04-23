@@ -116,7 +116,7 @@ export default function HeroSection() {
             isMobile ? "grid-cols-12" : "grid-cols-20"
           }`}
         >
-          {gridCells.map((filled, index) => (
+          {Array.from(gridCells.entries()).map(([cellIndex, filled]) => (
             <div
               className={`aspect-square rounded-sm transition-all ease-out ${
                 isMobile ? "duration-700" : "duration-1000"
@@ -125,10 +125,10 @@ export default function HeroSection() {
                   ? "scale-100 bg-linear-to-br from-primary/40 to-secondary/40 shadow-lg"
                   : "scale-75 bg-transparent"
               }`}
-              key={`grid-cell-${index}-${filled ? "filled" : "empty"}`}
+              key={`grid-cell-${cellIndex}-${filled ? "filled" : "empty"}`}
               style={{
-                animationDelay: `${index * (isMobile ? 15 : 20)}ms`,
-                transitionDelay: `${index * (isMobile ? 8 : 10)}ms`,
+                animationDelay: `${cellIndex * (isMobile ? 15 : 20)}ms`,
+                transitionDelay: `${cellIndex * (isMobile ? 8 : 10)}ms`,
               }}
             />
           ))}

@@ -2,6 +2,15 @@
 
 import { useEffect, useState } from "react";
 
+const horizontalLineOffsets = Array.from(
+  { length: 30 },
+  (_, lineNumber) => lineNumber * 40
+);
+const verticalLineOffsets = Array.from(
+  { length: 50 },
+  (_, lineNumber) => lineNumber * 40
+);
+
 export default function DrawingLinesShowcase() {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -15,38 +24,46 @@ export default function DrawingLinesShowcase() {
     <div className="relative min-h-screen w-full overflow-hidden bg-black">
       {/* Horizontal lines animating from left and right */}
       <div className="absolute inset-0 z-0">
-        {Array.from({ length: 30 }).map((_, i) => (
-          <div
-            className="absolute h-px bg-gray-600 opacity-40"
-            key={`horizontal-line-${i * 40}`}
-            style={{
-              top: `${i * 40}px`,
-              left: 0,
-              right: 0,
-              transformOrigin: i % 2 === 0 ? "left" : "right",
-              transform: isVisible ? "scaleX(1)" : "scaleX(0)",
-              transition: `transform ${1.8 + Math.sin(i * 0.1) * 0.3}s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${i * 0.04 + Math.random() * 0.02}s`,
-            }}
-          />
-        ))}
+        {horizontalLineOffsets.map((offset) => {
+          const lineNumber = offset / 40;
+
+          return (
+            <div
+              className="absolute h-px bg-gray-600 opacity-40"
+              key={`horizontal-line-${offset}`}
+              style={{
+                top: `${offset}px`,
+                left: 0,
+                right: 0,
+                transformOrigin: lineNumber % 2 === 0 ? "left" : "right",
+                transform: isVisible ? "scaleX(1)" : "scaleX(0)",
+                transition: `transform ${1.8 + Math.sin(lineNumber * 0.1) * 0.3}s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${lineNumber * 0.04 + Math.random() * 0.02}s`,
+              }}
+            />
+          );
+        })}
       </div>
 
       {/* Vertical lines animating from top and bottom */}
       <div className="absolute inset-0 z-0">
-        {Array.from({ length: 50 }).map((_, i) => (
-          <div
-            className="absolute w-px bg-gray-600 opacity-40"
-            key={`vertical-line-${i * 40}`}
-            style={{
-              left: `${i * 40}px`,
-              top: 0,
-              bottom: 0,
-              transformOrigin: i % 2 === 0 ? "top" : "bottom",
-              transform: isVisible ? "scaleY(1)" : "scaleY(0)",
-              transition: `transform ${1.6 + Math.sin(i * 0.15) * 0.4}s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${i * 0.025 + Math.random() * 0.015}s`,
-            }}
-          />
-        ))}
+        {verticalLineOffsets.map((offset) => {
+          const lineNumber = offset / 40;
+
+          return (
+            <div
+              className="absolute w-px bg-gray-600 opacity-40"
+              key={`vertical-line-${offset}`}
+              style={{
+                left: `${offset}px`,
+                top: 0,
+                bottom: 0,
+                transformOrigin: lineNumber % 2 === 0 ? "top" : "bottom",
+                transform: isVisible ? "scaleY(1)" : "scaleY(0)",
+                transition: `transform ${1.6 + Math.sin(lineNumber * 0.15) * 0.4}s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${lineNumber * 0.025 + Math.random() * 0.015}s`,
+              }}
+            />
+          );
+        })}
       </div>
 
       {/* Content */}

@@ -252,7 +252,7 @@ export class TypeScriptASTParser {
     if (ts.isClassDeclaration(node)) {
       return node.name?.text;
     }
-    return undefined;
+    return;
   }
 
   /**
@@ -348,7 +348,7 @@ export class TypeScriptASTParser {
       return this.findPropsType(component.initializer);
     }
 
-    return undefined;
+    return;
   }
 
   /**
@@ -470,7 +470,7 @@ export class TypeScriptASTParser {
     if (ts.isStringLiteral(prop.name)) {
       return prop.name.text;
     }
-    return undefined;
+    return;
   }
 
   /**
@@ -551,7 +551,7 @@ export class TypeScriptASTParser {
       }
     }
 
-    return undefined;
+    return;
   }
 
   /**
@@ -721,7 +721,7 @@ export class TypeScriptASTParser {
       return null;
     }
     if (expr.kind === ts.SyntaxKind.UndefinedKeyword) {
-      return undefined;
+      return;
     }
     if (ts.isArrayLiteralExpression(expr)) {
       return expr.elements.map((e) => this.evaluateExpression(e));

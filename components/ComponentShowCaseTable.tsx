@@ -151,6 +151,7 @@ export default function ComponentShowCaseTable({
               : comp.description || "No description available",
             25
           );
+        const refreshKey = refreshKeys[index] || 0;
         const isExpanded = expandedDescriptions[index];
         const displayDescription = (() => {
           if (!isExpanded) {
@@ -179,13 +180,13 @@ export default function ComponentShowCaseTable({
             isMobile={isMobile}
             isRefreshing={isRefreshing}
             isTruncated={isTruncated}
-            key={`${comp.componentName}-${refreshKeys[index] || 0}-${index}`}
+            key={`${comp.componentName}-${refreshKey}`}
             onCopyCode={(code) => handleCopyCode(code, index)}
             onRefresh={() => handleRefresh(index)}
             onToggleDescription={() => toggleDescription(index)}
             onToggleFullscreen={() => toggleFullscreen(index)}
             propsInfo={comp.propsInfo}
-            refreshKey={refreshKeys[index] || 0}
+            refreshKey={refreshKey}
           />
         );
       })}

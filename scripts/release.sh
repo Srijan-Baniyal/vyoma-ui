@@ -37,9 +37,9 @@ if [ -z "$1" ]; then
     echo "Example: $0 1.3.1"
     echo ""
     echo "Available shortcuts:"
-    echo "  yarn release:patch  - Increment patch version (1.3.0 → 1.3.1)"
-    echo "  yarn release:minor  - Increment minor version (1.3.0 → 1.4.0)"
-    echo "  yarn release:major  - Increment major version (1.3.0 → 2.0.0)"
+    echo "  bun run release:patch  - Increment patch version (1.3.0 → 1.3.1)"
+    echo "  bun run release:minor  - Increment minor version (1.3.0 → 1.4.0)"
+    echo "  bun run release:major  - Increment major version (1.3.0 → 2.0.0)"
     exit 1
 fi
 

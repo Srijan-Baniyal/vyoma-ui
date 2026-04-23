@@ -44,7 +44,7 @@ Getting started with Vyoma UI is simple. You can either clone the repository to 
 ```bash
 # Clone and run locally
 git clone https://github.com/Srijan-Baniyal/vui.git
-cd vui && pnpm install && pnpm dev
+cd vui && bun install && bun run dev
 ```
 
 Visit `http://localhost:3000` to see all components in action.
@@ -52,8 +52,8 @@ Visit `http://localhost:3000` to see all components in action.
 ### Installing in Your Project
 
 ```bash
-# Using pnpm
-pnpm add vui
+# Using bun
+bun add vui
 ```
 
 ```jsx
@@ -119,12 +119,12 @@ We'd love your help making Vyoma UI even better!
 2. Install dependencies:
 
    ```bash
-   cd vyoma-ui && yarn install
+   cd vyoma-ui && bun install
    ```
 
 3. Start the development server:
    ```bash
-   yarn dev
+   bun run dev
    ```
 
 **[Read our Contributing Guide →](CONTRIBUTING.md)**

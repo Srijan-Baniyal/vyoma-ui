@@ -44,7 +44,7 @@ Styling:         Tailwind CSS 4.1.18
 Animation:       Framer Motion (motion) + GSAP 3.14.2
 Primitives:      Radix UI
 Linting:         Biome 2.3.11 (ultracite/biome config)
-Package Manager: pnpm (preferred), yarn, npm
+Package Manager: bun (preferred), yarn, npm, pnpm
 ```
 
 ---
@@ -293,9 +293,9 @@ Every component MUST have:
 
 ```bash
 # Before committing
-pnpm lint              # Run Biome linter
-pnpm build            # Ensure no build errors
-pnpm dev              # Manual testing
+bun run lint              # Run Biome linter
+bun run build            # Ensure no build errors
+bun run dev              # Manual testing
 ```
 
 **Commit Messages:**
@@ -515,9 +515,9 @@ element.style.transform = `translateY(${offset}px)`;
 ### Version Bumps
 
 ```bash
-pnpm version:patch  # 1.5.0 → 1.5.1 (bug fixes)
-pnpm version:minor  # 1.5.0 → 1.6.0 (new features)
-pnpm version:major  # 1.5.0 → 2.0.0 (breaking changes)
+bun run release:patch  # 1.5.0 → 1.5.1 (bug fixes)
+bun run release:minor  # 1.5.0 → 1.6.0 (new features)
+bun run release:major  # 1.5.0 → 2.0.0 (breaking changes)
 ```
 
 ### Changelog Format

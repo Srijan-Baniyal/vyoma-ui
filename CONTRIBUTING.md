@@ -42,11 +42,11 @@ We believe that everyone can contribute to making Vyoma UI better! Here are some
 git clone https://github.com/your-username/vui.git
 cd vui
 
-# Install dependencies (we use yarn)
-yarn install
+# Install dependencies (we use bun)
+bun install
 
 # Start the development server
-yarn dev
+bun run dev
 ```
 
 ### 2. Create Your Branch
@@ -69,13 +69,13 @@ git checkout -b fix/bug-description
 
 ```bash
 # Run the development server and test manually
-yarn dev
+bun run dev
 
 # Build to ensure no build errors
-yarn build
+bun run build
 
 # Run linting
-yarn lint
+bun run lint
 ```
 
 ## 📋 Code Guidelines

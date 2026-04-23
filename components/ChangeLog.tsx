@@ -217,7 +217,7 @@ export default function ChangeLog() {
               </div>
               <div className="flex items-center gap-3 text-slate-700 dark:text-slate-300">
                 <Package className="h-4 w-4 shrink-0 text-orange-600" />
-                <span>Easy npm/yarn installation</span>
+                <span>Easy npm/bun installation</span>
               </div>
             </div>
           </div>

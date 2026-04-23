@@ -86,7 +86,7 @@ export const componentMap: ComponentCategoryMap = {
       route: "/get-started/installation",
       path: undefined,
       description:
-        "⚡ <b>Quick Setup Guide</b> - Install VUI in your project with <code>npm</code>, <code>yarn</code>, or <code>pnpm</code>. Includes <b>TypeScript support</b> and <b>tree-shaking</b> for optimal bundle size.",
+        "⚡ <b>Quick Setup Guide</b> - Install VUI in your project with <code>npm</code>, <code>bun</code>, or <code>pnpm</code>. Includes <b>TypeScript support</b> and <b>tree-shaking</b> for optimal bundle size.",
     },
     {
       name: "Story Behind",

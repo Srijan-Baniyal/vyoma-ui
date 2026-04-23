@@ -1,6 +1,6 @@
 {
   "name": "vui",
-  "version": "1.3.2",
+  "version": "1.5.0",
   "private": false,
   "type": "module",
   "author": "Srijan Baniyal",
@@ -10,7 +10,7 @@
     "prebuild": "node scripts/GenerateSourceMap.js && node scripts/GenerateSitemap.js",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "biome check .",
     "release": "./scripts/release.sh",
     "release:patch": "./scripts/release.sh $(node -p \"require('./package.json').version.replace(/\\d+$/, m => +m + 1)\")",
     "release:minor": "./scripts/release.sh $(node -p \"const v = require('./package.json').version.split('.'); v[1] = +v[1] + 1; v[2] = 0; v.join('.')\")",

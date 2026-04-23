@@ -319,7 +319,7 @@ export function TypingTextShowcase() {
                     speed={70}
                     text={[
                       "$ npm install awesome-ui",
-                      "$ yarn add beautiful-components",
+                      "$ bun add beautiful-components",
                       "$ pnpm install modern-design",
                     ]}
                     waitTime={2500}

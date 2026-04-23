@@ -515,9 +515,9 @@ element.style.transform = `translateY(${offset}px)`;
 ### Version Bumps
 
 ```bash
-pnpm version:patch  # 1.3.2 → 1.3.3 (bug fixes)
-pnpm version:minor  # 1.3.2 → 1.4.0 (new features)
-pnpm version:major  # 1.3.2 → 2.0.0 (breaking changes)
+pnpm version:patch  # 1.5.0 → 1.5.1 (bug fixes)
+pnpm version:minor  # 1.5.0 → 1.6.0 (new features)
+pnpm version:major  # 1.5.0 → 2.0.0 (breaking changes)
 ```
 
 ### Changelog Format

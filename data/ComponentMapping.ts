@@ -12,6 +12,7 @@ import { ButtonShowcase, ButtonTheme } from "@/components/vui/Button";
 import CircuitFlow from "@/components/vui/backgrounds/CircuitFlow";
 import DrawingLinesShowcase from "@/components/vui/backgrounds/DrawingLines";
 import HexagonalShowcase from "@/components/vui/backgrounds/Hexagonal";
+import ParticleBackgroundShowcase from "@/components/vui/backgrounds/ParticleBackground";
 import ShinyParticleGalaxyShowcase from "@/components/vui/backgrounds/ShinyParticleGalaxy";
 import SpaceShowcase from "@/components/vui/backgrounds/Space";
 import TunnelShowcase from "@/components/vui/backgrounds/Tunnel";
@@ -180,7 +181,14 @@ export const componentMap: ComponentCategoryMap = {
       description:
         "✨ <b>Shiny Particle Galaxy</b> - Stunning galaxy animation with twinkling stars, motion depth, and smooth particle effects. Great for hero sections.",
     },
-    // ✅ Your new background entry
+    {
+      name: "Particle Background",
+      component: ParticleBackgroundShowcase,
+      route: "/backgrounds/particle-background",
+      path: "components/vui/backgrounds/ParticleBackground.tsx",
+      description:
+        "🫧 <b>Particle Background</b> - Lightweight animated particle field with configurable controls and smooth canvas rendering.",
+    },
   ],
   Components: [
     {

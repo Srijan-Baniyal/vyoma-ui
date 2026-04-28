@@ -63,6 +63,8 @@ export default function HeroSection() {
     const cells = new Array(totalCells).fill(false);
     setGridCells(cells);
 
+    let fillIntervalId: ReturnType<typeof setInterval> | null = null;
+
     // Progressive grid animation with mobile optimization
     const animateGrid = () => {
       const filledCells = 0;
@@ -80,7 +82,7 @@ export default function HeroSection() {
 
       const filledCellsRef = { current: filledCells };
 
-      const fillInterval = setInterval(() => {
+      fillIntervalId = setInterval(() => {
         setGridCells((prev) => {
           // Mobile: fewer cells per iteration for smoother animation
           const cellsToFill = isMobile ? 1 : 2 + Math.floor(Math.random() * 3);
@@ -92,8 +94,8 @@ export default function HeroSection() {
             filledCellsRef
           );
 
-          if (filledCellsRef.current >= targetCells) {
-            clearInterval(fillInterval);
+          if (filledCellsRef.current >= targetCells && fillIntervalId) {
+            clearInterval(fillIntervalId);
           }
 
           return newCells;
@@ -104,7 +106,12 @@ export default function HeroSection() {
     // Mobile: quicker start, Desktop: varied delay
     const startDelay = isMobile ? 200 : 50 + Math.random() * 1000;
     const timer = setTimeout(animateGrid, startDelay);
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      if (fillIntervalId) {
+        clearInterval(fillIntervalId);
+      }
+    };
   }, [isMobile]);
 
   return (
